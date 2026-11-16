@@ -1,0 +1,224 @@
+#SpicyLyricsPage .ContentBox > canvas.lp-canvas {
+  position: absolute; inset: 0; width: 100%; height: 100%;
+  z-index: 1; pointer-events: none; mix-blend-mode: screen;
+  opacity: 0; transition: opacity .6s ease, filter .3s ease;
+}
+#SpicyLyricsPage .ViewControls .ViewControl.lp-button svg { width: 50%; height: 50%; }
+#SpicyLyricsPage .ViewControls .ViewControl.lp-button:not(.lp-active) { opacity: .6; }
+
+:is(#SpicyLyricsPage, .lp-modal-wrap) .lp-panel {
+  position: absolute; z-index: 60; top: 72px; right: 24px; width: 330px; box-sizing: border-box;
+  max-height: calc(100% - 110px); display: flex; flex-direction: column; overflow: hidden;
+  border-radius: 20px; color: #fff; font-family: inherit; font-size: 13px; line-height: 1.35;
+  background: rgba(20, 20, 27, .94); /* no backdrop blur: re-blurring the live visual every frame was heavy */
+  visibility: hidden;
+  box-shadow: 0 24px 60px -16px rgba(0,0,0,.7), inset 0 0 0 1px rgba(255,255,255,.08);
+  opacity: 0; transform: translateY(-8px) scale(.97); transform-origin: top right; pointer-events: none;
+  transition: opacity .2s ease, transform .22s cubic-bezier(.2,.8,.2,1), background .2s, box-shadow .2s, visibility 0s linear .22s;
+}
+#SpicyLyricsPage.ViewControlsPosition_Bottom .lp-panel { top: auto; bottom: 72px; transform-origin: bottom right; }
+/* Small popout: a sheet along the bottom, so the visual stays visible above it. */
+.spicy-pip-wrapper :is(#SpicyLyricsPage, .lp-modal-wrap) .lp-panel {
+  top: auto; bottom: 8px; left: 8px; right: 8px; width: auto; max-height: min(58vh, 430px);
+  font-size: 12px; border-radius: 16px; transform-origin: bottom center;
+}
+:is(#SpicyLyricsPage, .lp-modal-wrap) .lp-panel.lp-open { opacity: 1; transform: none; pointer-events: auto; visibility: visible; transition-delay: 0s; }
+:is(#SpicyLyricsPage, .lp-modal-wrap) .lp-panel .lp-hidden { display: none !important; }
+:is(#SpicyLyricsPage, .lp-modal-wrap) .lp-panel button { font: inherit; }
+
+:is(#SpicyLyricsPage, .lp-modal-wrap) .lp-panel .lp-top { flex: none; padding: 12px 12px 10px; transition: opacity .15s; }
+:is(#SpicyLyricsPage, .lp-modal-wrap) .lp-panel .lp-body {
+  flex: 1 1 auto; min-height: 0; overflow-y: auto; overscroll-behavior: contain; padding: 0 12px 12px;
+  scrollbar-width: thin; scrollbar-color: rgba(255,255,255,.2) transparent; scroll-behavior: smooth;
+}
+:is(#SpicyLyricsPage, .lp-modal-wrap) .lp-panel .lp-head { display: flex; align-items: center; gap: 6px; margin-bottom: 10px; }
+.spicy-pip-wrapper :is(#SpicyLyricsPage, .lp-modal-wrap) .lp-panel .lp-head { margin-bottom: 8px; }
+:is(#SpicyLyricsPage, .lp-modal-wrap) .lp-panel .lp-title { display: flex; align-items: center; gap: 10px; min-width: 0; flex: 1; }
+:is(#SpicyLyricsPage, .lp-modal-wrap) .lp-panel .lp-logo {
+  flex: none; width: 30px; height: 30px; border-radius: 9px; display: grid; place-items: center; color: #fff;
+  background: linear-gradient(135deg, var(--lp-accent, #888), rgba(255,255,255,.15));
+}
+.spicy-pip-wrapper :is(#SpicyLyricsPage, .lp-modal-wrap) .lp-panel .lp-logo { width: 24px; height: 24px; border-radius: 7px; }
+:is(#SpicyLyricsPage, .lp-modal-wrap) .lp-panel .lp-logo svg { width: 18px; height: 18px; fill: currentColor; }
+:is(#SpicyLyricsPage, .lp-modal-wrap) .lp-panel h3 { margin: 0; font-size: 15px; font-weight: 700; }
+.spicy-pip-wrapper :is(#SpicyLyricsPage, .lp-modal-wrap) .lp-panel h3 { font-size: 13px; }
+:is(#SpicyLyricsPage, .lp-modal-wrap) .lp-panel .lp-sub { margin-top: 1px; font-size: 11px; color: rgba(255,255,255,.55); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+:is(#SpicyLyricsPage, .lp-modal-wrap) .lp-panel .lp-pill { flex: none; display: flex; align-items: center; gap: 6px; padding: 4px 9px; border-radius: 99px; background: rgba(255,255,255,.08); font-size: 11px; color: rgba(255,255,255,.8); }
+:is(#SpicyLyricsPage, .lp-modal-wrap) .lp-panel .lp-dot { width: 7px; height: 7px; border-radius: 50%; background: #888; }
+:is(#SpicyLyricsPage, .lp-modal-wrap) .lp-panel .lp-dot.lp-live { background: #3ddc84; box-shadow: 0 0 8px #3ddc84; }
+:is(#SpicyLyricsPage, .lp-modal-wrap) .lp-panel .lp-dot.lp-offline { background: #f5a524; }
+:is(#SpicyLyricsPage, .lp-modal-wrap) .lp-panel .lp-icon-btn {
+  flex: none; width: 26px; height: 26px; border: 0; border-radius: 8px; padding: 5px; cursor: pointer;
+  background: transparent; color: rgba(255,255,255,.6); transition: background .15s, color .15s;
+}
+:is(#SpicyLyricsPage, .lp-modal-wrap) .lp-panel .lp-icon-btn svg { width: 100%; height: 100%; fill: none; display: block; }
+:is(#SpicyLyricsPage, .lp-modal-wrap) .lp-panel .lp-icon-btn:hover { background: rgba(255,255,255,.1); color: #fff; }
+
+:is(#SpicyLyricsPage, .lp-modal-wrap) .lp-panel .lp-tabs { display: flex; gap: 2px; padding: 3px; border-radius: 12px; background: rgba(255,255,255,.06); }
+:is(#SpicyLyricsPage, .lp-modal-wrap) .lp-panel .lp-tabs button {
+  flex: 1; border: 0; padding: 7px 0; border-radius: 9px; cursor: pointer; background: transparent;
+  color: rgba(255,255,255,.62); font-size: 12px; font-weight: 600; transition: background .15s, color .15s;
+}
+:is(#SpicyLyricsPage, .lp-modal-wrap) .lp-panel .lp-tabs button:hover { color: #fff; }
+:is(#SpicyLyricsPage, .lp-modal-wrap) .lp-panel .lp-tabs button.lp-sel { background: rgba(255,255,255,.16); color: #fff; }
+:is(#SpicyLyricsPage, .lp-modal-wrap) .lp-panel .lp-page { animation: lp-in .2s ease; }
+@keyframes lp-in { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: none; } }
+
+/* Minimised: just the title bar. */
+:is(#SpicyLyricsPage, .lp-modal-wrap) .lp-panel.lp-mini .lp-body, :is(#SpicyLyricsPage, .lp-modal-wrap) .lp-panel.lp-mini .lp-tabs { display: none; }
+:is(#SpicyLyricsPage, .lp-modal-wrap) .lp-panel.lp-mini .lp-head { margin-bottom: 0; }
+
+/* Peek: while dragging a slider, only that slider stays visible. */
+:is(#SpicyLyricsPage, .lp-modal-wrap) .lp-panel.lp-peek {
+  background: transparent; box-shadow: none;
+}
+:is(#SpicyLyricsPage, .lp-modal-wrap) .lp-panel.lp-peek .lp-top,
+:is(#SpicyLyricsPage, .lp-modal-wrap) .lp-panel.lp-peek .lp-group,
+:is(#SpicyLyricsPage, .lp-modal-wrap) .lp-panel.lp-peek .lp-row,
+:is(#SpicyLyricsPage, .lp-modal-wrap) .lp-panel.lp-peek .lp-note,
+:is(#SpicyLyricsPage, .lp-modal-wrap) .lp-panel.lp-peek .lp-reset,
+:is(#SpicyLyricsPage, .lp-modal-wrap) .lp-panel.lp-peek .lp-hint { opacity: 0; transition: opacity .15s; }
+:is(#SpicyLyricsPage, .lp-modal-wrap) .lp-panel.lp-peek .lp-group:has(.lp-active-row) { opacity: 1; background: transparent; }
+:is(#SpicyLyricsPage, .lp-modal-wrap) .lp-panel.lp-peek .lp-group:has(.lp-active-row) .lp-gtitle { opacity: 0; }
+:is(#SpicyLyricsPage, .lp-modal-wrap) .lp-panel.lp-peek .lp-row.lp-active-row {
+  opacity: 1; padding: 8px 10px; margin: 0 -10px; border-radius: 12px;
+  background: rgba(14,14,20,.9);
+}
+
+/* Style cards */
+:is(#SpicyLyricsPage, .lp-modal-wrap) .lp-panel .lp-cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; }
+:is(#SpicyLyricsPage, .lp-modal-wrap) .lp-panel .lp-cards .lp-cat { grid-column: 1 / -1; font-size: 10.5px; letter-spacing: .08em; text-transform: uppercase; color: rgba(255,255,255,.5); margin: 6px 2px 0; }
+:is(#SpicyLyricsPage, .lp-modal-wrap) .lp-panel .lp-cards .lp-cat:first-child { margin-top: 0; }
+:is(#SpicyLyricsPage, .lp-modal-wrap) .lp-panel .lp-cards button {
+  display: flex; flex-direction: column; align-items: center; gap: 6px; padding: 12px 4px 9px; min-width: 0;
+  border: 0; border-radius: 12px; cursor: pointer; background: rgba(255,255,255,.05); color: rgba(255,255,255,.7);
+  box-shadow: inset 0 0 0 1px rgba(255,255,255,.04); transition: background .15s, color .15s, transform .15s;
+}
+:is(#SpicyLyricsPage, .lp-modal-wrap) .lp-panel .lp-cards button:hover { background: rgba(255,255,255,.1); color: #fff; transform: translateY(-1px); }
+:is(#SpicyLyricsPage, .lp-modal-wrap) .lp-panel .lp-cards button svg { width: 24px; height: 24px; }
+:is(#SpicyLyricsPage, .lp-modal-wrap) .lp-panel .lp-cards button span { font-size: 11.5px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 100%; }
+:is(#SpicyLyricsPage, .lp-modal-wrap) .lp-panel .lp-cards button.lp-sel {
+  color: #fff; background: color-mix(in srgb, var(--lp-accent, #fff) 28%, rgba(255,255,255,.06));
+  box-shadow: inset 0 0 0 1.5px color-mix(in srgb, var(--lp-accent, #fff) 70%, transparent);
+}
+:is(#SpicyLyricsPage, .lp-modal-wrap) .lp-panel .lp-hint { margin: 10px 2px 0; font-size: 12px; color: rgba(255,255,255,.62); min-height: 32px; }
+
+/* Groups, rows, controls */
+:is(#SpicyLyricsPage, .lp-modal-wrap) .lp-panel .lp-group { padding: 10px 12px 12px; margin-bottom: 8px; border-radius: 14px; background: rgba(255,255,255,.045); }
+:is(#SpicyLyricsPage, .lp-modal-wrap) .lp-panel .lp-gtitle { font-size: 11px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: rgba(255,255,255,.5); margin-bottom: 6px; }
+:is(#SpicyLyricsPage, .lp-modal-wrap) .lp-panel .lp-row { margin-top: 8px; }
+:is(#SpicyLyricsPage, .lp-modal-wrap) .lp-panel .lp-label { margin: 8px 0 5px; display: flex; justify-content: space-between; font-size: 12px; color: rgba(255,255,255,.8); }
+:is(#SpicyLyricsPage, .lp-modal-wrap) .lp-panel .lp-row .lp-label { margin-top: 0; }
+:is(#SpicyLyricsPage, .lp-modal-wrap) .lp-panel .lp-val { color: rgba(255,255,255,.5); font-variant-numeric: tabular-nums; }
+:is(#SpicyLyricsPage, .lp-modal-wrap) .lp-panel .lp-seg { display: flex; gap: 3px; padding: 3px; border-radius: 11px; background: rgba(0,0,0,.25); }
+:is(#SpicyLyricsPage, .lp-modal-wrap) .lp-panel .lp-seg button {
+  flex: 1; border: 0; border-radius: 8px; padding: 6px 2px; cursor: pointer; min-width: 0;
+  background: transparent; color: rgba(255,255,255,.7); font-size: 12px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+:is(#SpicyLyricsPage, .lp-modal-wrap) .lp-panel .lp-seg button:hover { color: #fff; }
+:is(#SpicyLyricsPage, .lp-modal-wrap) .lp-panel .lp-seg button.lp-sel { background: rgba(255,255,255,.18); color: #fff; }
+:is(#SpicyLyricsPage, .lp-modal-wrap) .lp-panel input[type=range] { width: 100%; accent-color: var(--lp-accent, #fff); margin: 0; height: 16px; }
+:is(#SpicyLyricsPage, .lp-modal-wrap) .lp-panel .lp-colors { display: flex; gap: 10px; margin-top: 10px; }
+:is(#SpicyLyricsPage, .lp-modal-wrap) .lp-panel .lp-colors label { flex: 1; display: flex; align-items: center; gap: 8px; font-size: 12px; color: rgba(255,255,255,.75); }
+:is(#SpicyLyricsPage, .lp-modal-wrap) .lp-panel input[type=color] { width: 30px; height: 24px; border: 0; padding: 0; background: none; border-radius: 6px; cursor: pointer; }
+:is(#SpicyLyricsPage, .lp-modal-wrap) .lp-panel .lp-toggle { display: flex; justify-content: space-between; align-items: center; gap: 12px; padding: 7px 0; cursor: pointer; }
+:is(#SpicyLyricsPage, .lp-modal-wrap) .lp-panel .lp-tname { display: block; font-size: 13px; }
+:is(#SpicyLyricsPage, .lp-modal-wrap) .lp-panel .lp-tdesc { display: block; font-size: 11px; color: rgba(255,255,255,.5); margin-top: 1px; }
+:is(#SpicyLyricsPage, .lp-modal-wrap) .lp-panel .lp-toggle input { appearance: none; -webkit-appearance: none; width: 34px; height: 20px; border-radius: 20px; background: rgba(255,255,255,.18); position: relative; cursor: pointer; transition: background .2s; flex: none; margin: 0; }
+:is(#SpicyLyricsPage, .lp-modal-wrap) .lp-panel .lp-toggle input::after { content: ""; position: absolute; top: 2px; left: 2px; width: 16px; height: 16px; border-radius: 50%; background: #fff; transition: transform .2s; }
+:is(#SpicyLyricsPage, .lp-modal-wrap) .lp-panel .lp-toggle input:checked { background: var(--lp-accent, #3ddc84); }
+:is(#SpicyLyricsPage, .lp-modal-wrap) .lp-panel .lp-toggle input:checked::after { transform: translateX(14px); }
+:is(#SpicyLyricsPage, .lp-modal-wrap) .lp-panel .lp-note, :is(#SpicyLyricsPage, .lp-modal-wrap) .lp-panel .lp-status-text { font-size: 12px; color: rgba(255,255,255,.6); }
+:is(#SpicyLyricsPage, .lp-modal-wrap) .lp-panel .lp-note { margin: 2px 4px; }
+:is(#SpicyLyricsPage, .lp-modal-wrap) .lp-panel .lp-needs-style.lp-off { opacity: .35; pointer-events: none; }
+:is(#SpicyLyricsPage, .lp-modal-wrap) .lp-panel .lp-reset { width: 100%; margin-top: 4px; border: 0; padding: 9px; border-radius: 12px; cursor: pointer; background: rgba(255,255,255,.07); color: rgba(255,255,255,.8); }
+:is(#SpicyLyricsPage, .lp-modal-wrap) .lp-panel .lp-btnrow { display: flex; gap: 6px; }
+:is(#SpicyLyricsPage, .lp-modal-wrap) .lp-panel .lp-btnrow .lp-reset { flex: 1; }
+:is(#SpicyLyricsPage, .lp-modal-wrap) .lp-panel .lp-get-helper { background: rgba(255,255,255,.9); color: #111; font-weight: 600; }
+:is(#SpicyLyricsPage, .lp-modal-wrap) .lp-panel .lp-reset:hover { background: rgba(255,90,90,.18); color: #fff; }
+:is(#SpicyLyricsPage, .lp-modal-wrap) .lp-panel .lp-beatrow { display: flex; align-items: center; gap: 10px; margin-top: 6px; }
+:is(#SpicyLyricsPage, .lp-modal-wrap) .lp-panel .lp-tap { flex: none; border: 0; padding: 9px 14px; border-radius: 12px; cursor: pointer; background: rgba(255,255,255,.1); color: #fff; font-weight: 600; }
+:is(#SpicyLyricsPage, .lp-modal-wrap) .lp-panel .lp-tap:active { background: rgba(160,130,255,.45); transform: scale(.97); }
+:is(#SpicyLyricsPage, .lp-modal-wrap) .lp-panel .lp-beatinfo { font-size: 11.5px; color: rgba(255,255,255,.6); line-height: 1.3; }
+
+/* Small panel: text-only tabs. */
+:is(#SpicyLyricsPage, .lp-modal-wrap) .lp-panel:not(.lp-modal) .lp-tabs svg { display: none; }
+.spicy-pip-wrapper #SpicyLyricsPage .lp-panel .lp-expand { display: none; }
+
+/* Full settings window (profile menu / expand button). */
+.lp-modal-wrap {
+  position: fixed; inset: 0; z-index: 10000; display: grid; place-items: center; padding: 16px;
+  background: rgba(0,0,0,.55); backdrop-filter: blur(6px); animation: lp-fade .18s ease;
+}
+.lp-modal-wrap.lp-closing { opacity: 0; transition: opacity .18s ease; }
+@keyframes lp-fade { from { opacity: 0; } to { opacity: 1; } }
+:is(#SpicyLyricsPage, .lp-modal-wrap) .lp-panel.lp-modal {
+  position: relative; inset: auto; top: auto; right: auto; width: min(940px, 100%); height: min(680px, calc(100vh - 32px)); max-height: none;
+  display: grid; grid-template-columns: 236px 1fr; font-size: 14px; border-radius: 22px;
+  background:
+    radial-gradient(ellipse 70% 55% at 80% -10%, color-mix(in srgb, var(--lp-accent, #e8356f) 30%, transparent), transparent 70%),
+    radial-gradient(ellipse 60% 50% at 0% 110%, color-mix(in srgb, var(--lp-accent, #e8356f) 14%, transparent), transparent 70%),
+    linear-gradient(160deg, #1e1b2b, #121119);
+  box-shadow: 0 40px 100px -20px rgba(0,0,0,.8), inset 0 0 0 1px rgba(255,255,255,.09);
+  animation: lp-pop .22s cubic-bezier(.2,.8,.2,1);
+}
+@keyframes lp-pop { from { opacity: 0; transform: scale(.97) translateY(6px); } to { opacity: 1; transform: none; } }
+:is(#SpicyLyricsPage, .lp-modal-wrap) .lp-panel.lp-modal .lp-top {
+  display: flex; flex-direction: column; min-height: 0; padding: 22px 14px 16px;
+  background: rgba(0,0,0,.2); border-right: 1px solid rgba(255,255,255,.06);
+}
+:is(#SpicyLyricsPage, .lp-modal-wrap) .lp-panel.lp-modal .lp-head { margin: 0 8px; }
+:is(#SpicyLyricsPage, .lp-modal-wrap) .lp-panel.lp-modal .lp-title { gap: 8px; }
+:is(#SpicyLyricsPage, .lp-modal-wrap) .lp-panel.lp-modal .lp-logo { width: 22px; height: 22px; border-radius: 7px; }
+:is(#SpicyLyricsPage, .lp-modal-wrap) .lp-panel.lp-modal .lp-logo svg { width: 14px; height: 14px; }
+:is(#SpicyLyricsPage, .lp-modal-wrap) .lp-panel.lp-modal .lp-brand { font-size: 13px; font-weight: 600; color: rgba(255,255,255,.75); }
+:is(#SpicyLyricsPage, .lp-modal-wrap) .lp-panel.lp-modal .lp-mtitle { margin: 6px 8px 18px; font-size: 26px; font-weight: 800; letter-spacing: -.01em; }
+:is(#SpicyLyricsPage, .lp-modal-wrap) .lp-panel.lp-modal .lp-tabs { flex-direction: column; gap: 2px; padding: 0; background: none; }
+:is(#SpicyLyricsPage, .lp-modal-wrap) .lp-panel.lp-modal .lp-tabs button {
+  flex: none; display: flex; align-items: center; gap: 12px; padding: 9px 12px; text-align: left;
+  font-size: 14px; font-weight: 500; color: rgba(255,255,255,.72);
+}
+:is(#SpicyLyricsPage, .lp-modal-wrap) .lp-panel.lp-modal .lp-tabs button:hover { background: rgba(255,255,255,.06); }
+:is(#SpicyLyricsPage, .lp-modal-wrap) .lp-panel.lp-modal .lp-tabs button.lp-sel { background: rgba(255,255,255,.12); color: #fff; }
+:is(#SpicyLyricsPage, .lp-modal-wrap) .lp-panel.lp-modal .lp-tabs svg { width: 18px; height: 18px; flex: none; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+:is(#SpicyLyricsPage, .lp-modal-wrap) .lp-panel.lp-modal .lp-navsep { height: 1px; margin: 10px 8px; background: rgba(255,255,255,.08); }
+:is(#SpicyLyricsPage, .lp-modal-wrap) .lp-panel.lp-modal .lp-top > .lp-pill { margin: auto 8px 0; align-self: flex-start; }
+:is(#SpicyLyricsPage, .lp-modal-wrap) .lp-panel.lp-modal .lp-body { padding: 0 28px 28px; }
+:is(#SpicyLyricsPage, .lp-modal-wrap) .lp-panel.lp-modal .lp-phead { display: flex; align-items: center; justify-content: space-between; padding: 24px 0 16px; }
+:is(#SpicyLyricsPage, .lp-modal-wrap) .lp-panel.lp-modal .lp-ptitle { margin: 0; font-size: 28px; font-weight: 800; letter-spacing: -.01em; }
+:is(#SpicyLyricsPage, .lp-modal-wrap) .lp-panel.lp-modal .lp-close { width: 36px; height: 36px; padding: 9px; border-radius: 50%; background: rgba(255,255,255,.08); color: #fff; }
+:is(#SpicyLyricsPage, .lp-modal-wrap) .lp-panel.lp-modal .lp-group {
+  padding: 16px 18px 18px; margin-bottom: 14px; border-radius: 16px;
+  background: rgba(255,255,255,.04); box-shadow: inset 0 0 0 1px rgba(255,255,255,.07);
+}
+:is(#SpicyLyricsPage, .lp-modal-wrap) .lp-panel.lp-modal .lp-gtitle { font-size: 12px; margin-bottom: 8px; }
+:is(#SpicyLyricsPage, .lp-modal-wrap) .lp-panel.lp-modal .lp-label, :is(#SpicyLyricsPage, .lp-modal-wrap) .lp-panel.lp-modal .lp-seg button { font-size: 13px; }
+:is(#SpicyLyricsPage, .lp-modal-wrap) .lp-panel.lp-modal .lp-tname { font-size: 14px; }
+:is(#SpicyLyricsPage, .lp-modal-wrap) .lp-panel.lp-modal .lp-tdesc, :is(#SpicyLyricsPage, .lp-modal-wrap) .lp-panel.lp-modal .lp-note, :is(#SpicyLyricsPage, .lp-modal-wrap) .lp-panel.lp-modal .lp-status-text { font-size: 12.5px; }
+:is(#SpicyLyricsPage, .lp-modal-wrap) .lp-panel.lp-modal .lp-cards { grid-template-columns: repeat(auto-fill, minmax(118px, 1fr)); gap: 8px; }
+:is(#SpicyLyricsPage, .lp-modal-wrap) .lp-panel.lp-modal .lp-cards .lp-cat { margin-top: 12px; font-size: 11.5px; }
+:is(#SpicyLyricsPage, .lp-modal-wrap) .lp-panel.lp-modal .lp-cards button { padding: 18px 6px 13px; gap: 9px; border-radius: 14px; }
+:is(#SpicyLyricsPage, .lp-modal-wrap) .lp-panel.lp-modal .lp-cards button svg { width: 30px; height: 30px; }
+:is(#SpicyLyricsPage, .lp-modal-wrap) .lp-panel.lp-modal .lp-cards button span { font-size: 13px; }
+:is(#SpicyLyricsPage, .lp-modal-wrap) .lp-panel.lp-modal .lp-hint { font-size: 13px; }
+:is(#SpicyLyricsPage, .lp-modal-wrap) .lp-panel.lp-modal .lp-links { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
+:is(#SpicyLyricsPage, .lp-modal-wrap) .lp-panel.lp-modal .lp-links a { padding: 8px 14px; border-radius: 10px; background: rgba(255,255,255,.08); color: #fff; text-decoration: none; font-size: 13px; font-weight: 600; }
+:is(#SpicyLyricsPage, .lp-modal-wrap) .lp-panel.lp-modal .lp-links a:hover { background: rgba(255,255,255,.15); }
+@media (max-width: 680px) {
+  :is(#SpicyLyricsPage, .lp-modal-wrap) .lp-panel.lp-modal { grid-template-columns: 1fr; grid-template-rows: auto 1fr; }
+  :is(#SpicyLyricsPage, .lp-modal-wrap) .lp-panel.lp-modal .lp-top { border-right: 0; border-bottom: 1px solid rgba(255,255,255,.06); padding: 14px; }
+  :is(#SpicyLyricsPage, .lp-modal-wrap) .lp-panel.lp-modal .lp-mtitle, :is(#SpicyLyricsPage, .lp-modal-wrap) .lp-panel.lp-modal .lp-navsep, :is(#SpicyLyricsPage, .lp-modal-wrap) .lp-panel.lp-modal .lp-top > .lp-pill { display: none; }
+  :is(#SpicyLyricsPage, .lp-modal-wrap) .lp-panel.lp-modal .lp-tabs { flex-direction: row; flex-wrap: wrap; margin-top: 10px; }
+}
+
+/* First-time note about the helper */
+#SpicyLyricsPage .lp-notice { position: absolute; top: 64px; right: 16px; z-index: 60; width: 300px; padding: 14px 16px; border-radius: 16px; background: rgba(22,22,28,.92); border: 1px solid rgba(255,255,255,.1); box-shadow: 0 12px 40px rgba(0,0,0,.45); color: rgba(255,255,255,.85); font-size: 13px; line-height: 1.45; backdrop-filter: blur(20px); animation: lp-notice-in .25s ease-out; }
+#SpicyLyricsPage .lp-notice-title { display: flex; align-items: center; gap: 8px; font-weight: 700; color: #fff; margin-bottom: 6px; }
+#SpicyLyricsPage .lp-notice-title svg { width: 16px; height: 16px; fill: currentColor; }
+#SpicyLyricsPage .lp-notice p { margin: 0 0 12px; }
+#SpicyLyricsPage .lp-notice-row { display: flex; gap: 8px; }
+#SpicyLyricsPage .lp-notice button { flex: 1; border: 0; padding: 9px 10px; border-radius: 10px; cursor: pointer; font-weight: 600; font-size: 13px; }
+#SpicyLyricsPage .lp-notice-go { background: #fff; color: #111; }
+#SpicyLyricsPage .lp-notice-no { background: rgba(255,255,255,.08); color: rgba(255,255,255,.8); }
+@keyframes lp-notice-in { from { opacity: 0; transform: translateY(-6px); } to { opacity: 1; transform: none; } }
+#SpicyLyricsPage .lp-notice .lp-notice-never { display: block; width: 100%; margin-top: 8px; padding: 2px; background: none; color: rgba(255,255,255,.45); font-weight: 500; font-size: 12px; }

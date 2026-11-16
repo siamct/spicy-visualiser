@@ -1,0 +1,22 @@
+[
+  {
+    "name": "Spicy Visualiser",
+    "description": "(WIP) Music visualiser for Spicy Lyrics, 19 styles with album colours. Needs its small helper (Windows) to hear the music: click Install helper in the visualiser. The helper only listens while the visualiser is on screen.",
+    "preview": "docs/screenshots/card.gif",
+    "main": "spicy-visualiser.js",
+    "readme": "README.md",
+    "authors": [
+      {
+        "name": "siamct",
+        "url": "https://github.com/siamct"
+      }
+    ],
+    "tags": [
+      "visualiser",
+      "lyrics",
+      "spicy lyrics",
+      "audio",
+      "beat"
+    ]
+  }
+]

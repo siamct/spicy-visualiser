@@ -1,0 +1,9 @@
+{
+  "name": "spicy-visualiser-helper",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Sends Spotify's audio levels to the Spicy Visualiser Spicetify extension.",
+  "main": "helper.js",
+  "scripts": { "start": "node helper.js", "test-tone": "node helper.js --test-tone" },
+  "dependencies": { "loopback-capture": "4.0.0", "ws": "8.18.0" }
+}

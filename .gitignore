@@ -1,0 +1,9 @@
+node_modules/
+helper/node_modules/
+helper/helper.log
+dist/
+test/out/
+*.log
+.DS_Store
+Thumbs.db
+NOTES.md
