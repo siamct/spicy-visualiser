@@ -7,7 +7,7 @@
 19 styles that move with the music, take their colours from the album cover and sit right behind the lyrics.
 
 > [!IMPORTANT]
-> **Needs the Spicy Visualiser helper (Windows).** Spotify doesn't let add-ons hear the music, so a small helper does the listening. Spotify starts it when you open the visualiser and it closes with Spotify. After installing from the Marketplace, click **Install helper** in the visualiser, or [download the helper setup](https://github.com/siamct/spicy-visualiser/raw/main/setup/SpicyVisualiserHelperSetup.exe).
+> **Needs the Spicy Visualiser helper (Windows).** Spotify doesn't let add-ons hear the music, so a small helper does the listening. Spotify starts it when you open the visualiser and it closes with Spotify. After installing from the Marketplace, click **Install helper** in the visualiser, or [download the helper](https://github.com/siamct/spicy-visualiser/raw/main/setup/SpicyVisualiserHelper.zip).
 
 [![Spicetify](https://img.shields.io/badge/Spicetify-extension-1ed760?style=flat-square)](https://spicetify.app)
 [![Spicy Lyrics](https://img.shields.io/badge/Spicy%20Lyrics-add--on-e8356f?style=flat-square)](https://github.com/Spikerko/spicy-lyrics)
@@ -52,8 +52,8 @@ You need Spotify desktop with [Spicetify](https://spicetify.app) and the **Spicy
 ### Marketplace + helper (recommended)
 
 1. In Spotify, open **Marketplace** → **Extensions**, search **Spicy Visualiser** and click **Install**.
-2. Open Spicy Lyrics. The visualiser asks to install its helper: click **Install helper**. (Or [download the setup](https://github.com/siamct/spicy-visualiser/raw/main/setup/SpicyVisualiserHelperSetup.exe) yourself.)
-3. Open **SpicyVisualiserHelperSetup.exe** from your downloads. Windows may say it protected your PC (the file isn't signed): click **More info** → **Run anyway**. The visualiser goes **Live** by itself.
+2. Open Spicy Lyrics. The visualiser asks to install its helper: click **Install helper**. (Or [download the helper](https://github.com/siamct/spicy-visualiser/raw/main/setup/SpicyVisualiserHelper.zip) yourself.)
+3. Open **SpicyVisualiserHelper.zip** from your downloads, click **Extract all**, then double-click **Install helper.bat** in the extracted folder. If Windows says it protected your PC (the file isn't signed), click **More info** → **Run anyway**. The visualiser goes **Live** by itself. You can delete the folder afterwards.
 
 **The helper isn't intrusive.** Nothing starts with Windows: Spotify starts it the first time the visualiser is on screen, it sleeps (no listening, next to no CPU) while the visualiser is hidden, and it closes about 20 seconds after Spotify closes. It installs for your Windows user only (no admin), brings its own copy of Node.js, only listens to Spotify, and nothing leaves your PC. Remove it any time in **Settings → Apps**.
 

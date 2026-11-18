@@ -872,8 +872,8 @@
   }
   // The helper's setup file. An add-on inside Spotify can't install programs,
   // so the button downloads it (in the web browser) for the user to open once.
-  const HELPER_SETUP = "https://github.com/siamct/spicy-visualiser/raw/main/setup/SpicyVisualiserHelperSetup.exe";
-  const HELPER_STEP = "Downloading. Open SpicyVisualiserHelperSetup.exe from your downloads. If Windows says it protected your PC, click More info, then Run anyway. The visualiser goes Live by itself.";
+  const HELPER_SETUP = "https://github.com/siamct/spicy-visualiser/raw/main/setup/SpicyVisualiserHelper.zip";
+  const HELPER_STEP = "Downloading SpicyVisualiserHelper.zip. Open it from your downloads, click Extract all, then double-click Install helper.bat. If Windows asks, click More info, then Run anyway. The visualiser goes Live by itself.";
   function downloadHelper() {
     shared.downloaded = true;
     try {
@@ -3291,7 +3291,7 @@
       </div>
 
       <div class="lp-page" data-page="more">
-        <div class="lp-group"><div class="lp-gtitle">Sound source</div>${toggle("useHelper", "Use the helper", "Hears the real music (Windows). Off: the visualiser is off too")}<div class="lp-status-text"></div><div class="lp-note lp-get-note"></div><div class="lp-btnrow"><button class="lp-reset lp-get-helper">Install helper (1 click)</button><button class="lp-reset lp-start-helper">Start the helper</button></div></div>
+        <div class="lp-group"><div class="lp-gtitle">Sound source</div>${toggle("useHelper", "Use the helper", "Hears the real music (Windows). Off: the visualiser is off too")}<div class="lp-status-text"></div><div class="lp-note lp-get-note"></div><div class="lp-btnrow"><button class="lp-reset lp-get-helper">Install helper</button><button class="lp-reset lp-start-helper">Start the helper</button></div></div>
         ${group("Beat effects", toggle("kickPulse", "Pulse on kicks", "The visual swells a little on each kick") + toggle("kickFlash", "Flash on kicks", "A soft flash of colour"))}
         ${group("Sync", slider("syncDelay", "Audio delay (Bluetooth)", 0, 400, 10, "global") + `<div class="lp-note">Visuals ahead of the sound? With Bluetooth headphones the sound arrives later than it's played. Slide this until the beat lines up.</div>`)}
         ${group("Performance", toggle("ecoUnfocused", "Save power when Spotify isn't focused", "Drops to 30 fps while you're gaming or in another app") + `<div class="lp-label"><span>Frame rate</span></div>${seg("fps", [["30", "30 fps"], ["60", "60 fps"], ["max", "Max"]], "global")}<div class="lp-label"><span>Quality</span></div>${seg("quality", [["low", "Low"], ["medium", "Medium"], ["high", "High"]], "global")}<div class="lp-note">Everything stops (including the helper) when the lyrics view isn't on screen.</div>`)}
