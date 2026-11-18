@@ -7,6 +7,8 @@
 
 $ErrorActionPreference = "Stop"
 $ProgressPreference = "SilentlyContinue"
+# Older Windows PowerShell defaults to TLS versions nodejs.org no longer accepts.
+try { [Net.ServicePointManager]::SecurityProtocol = [Net.ServicePointManager]::SecurityProtocol -bor [Net.SecurityProtocolType]::Tls12 } catch {}
 $Host.UI.RawUI.WindowTitle = "Spicy Visualiser helper setup"
 $Here = Split-Path -Parent $MyInvocation.MyCommand.Path
 $Root = Join-Path $env:LOCALAPPDATA "SpicyVisualiser"
@@ -36,9 +38,11 @@ try {
     Line "Downloading Node.js (about 30 MB, first time only)..."
     $ver = $null
     try {
-      $ver = (Invoke-RestMethod "https://nodejs.org/dist/index.json" | Where-Object { $_.lts } | Select-Object -First 1).version
+      # Stored first: Windows PowerShell passes a JSON list down a pipe as one item.
+      $list = Invoke-RestMethod "https://nodejs.org/dist/index.json"
+      $ver = ($list | Where-Object { $_.lts } | Select-Object -First 1).version
     } catch {}
-    if (-not $ver) { $ver = "v24.11.1" }
+    if (-not ($ver -is [string] -and $ver -match '^v\d+\.\d+\.\d+$')) { $ver = "v24.11.1" }
     $zip = Join-Path $env:TEMP "spicy-visualiser-node.zip"
     Invoke-WebRequest -UseBasicParsing "https://nodejs.org/dist/$ver/node-$ver-win-x64.zip" -OutFile $zip
     $tmp = Join-Path $env:TEMP ("spicy-visualiser-node-" + [guid]::NewGuid().ToString("N"))
