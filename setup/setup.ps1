@@ -59,7 +59,6 @@ try {
   New-Item -ItemType Directory -Force -Path $HelperDir | Out-Null
   Expand-Archive (Join-Path $Here "helper.zip") -DestinationPath $HelperDir -Force
   Copy-Item (Join-Path $Here "uninstall-helper.ps1") (Join-Path $Root "uninstall-helper.ps1") -Force
-  Get-ChildItem $Root -Recurse -File | Unblock-File -ErrorAction SilentlyContinue
 
   # 3. Started by Spotify (spicy-visualiser:// link), closes with Spotify.
   #    Nothing starts with Windows (an older version's start-up entry is removed).
