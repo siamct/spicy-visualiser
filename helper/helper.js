@@ -12,7 +12,7 @@ const { execFile } = require("node:child_process");
 const os = require("node:os");
 const { WebSocketServer } = require("ws");
 
-const PORT = 47823;
+const PORT = Number((process.argv.find((a) => a.startsWith("--port=")) || "").split("=")[1]) || 47823; // --port: tests only
 const SAMPLE_RATE = 48000;
 const BANDS = 64;
 const TEST_SONG = process.argv.includes("--test-song"); // fake song with a quiet build-up and a drop
@@ -22,11 +22,18 @@ const TEST_TONE = TEST_SONG || process.argv.includes("--test-tone");
 const fs = require("node:fs");
 const path = require("node:path");
 const LOG_FILE = process.argv.includes("--log-file") ? path.join(__dirname, "helper.log") : null;
-// On demand: the extension starts the helper when the visualiser is on screen,
-// and the helper closes itself once nothing has needed it for a while, so it
-// never sits in the background. --stay keeps it running (tests, debugging).
+// Started from its Start-menu shortcut (which also opens Spotify with
+// --open-spotify), it runs in a small minimised window and closes itself once
+// Spotify has been closed for IDLE_EXIT_MS. --stay keeps it running (tests).
 const IDLE_EXIT_MS = (Number((process.argv.find((a) => a.startsWith("--idle-exit=")) || "").split("=")[1]) || 20) * 1000;
 const STAY = TEST_TONE || process.argv.includes("--stay");
+const OPEN_SPOTIFY = process.argv.includes("--open-spotify");
+if (!LOG_FILE) {
+  process.title = "Spicy Visualiser helper";
+  console.log("Spicy Visualiser helper - lets the visualiser hear the music.");
+  console.log("Close this window to turn it off. It also closes by itself when Spotify closes.");
+  console.log("");
+}
 if (LOG_FILE) {
   try {
     fs.writeFileSync(LOG_FILE, "");
@@ -418,6 +425,16 @@ setInterval(async () => {
 // ---------------------------------------------------------------------------
 // Only Spotify (or a local tool with no origin) may connect, so websites you
 // visit in a browser can't read what you're listening to.
+// The shortcut opens Spotify too, if it isn't open yet.
+if (OPEN_SPOTIFY && process.platform === "win32") {
+  findSpotifyPid().then((pid) => {
+    if (!pid) {
+      log("Opening Spotify...");
+      execFile("explorer.exe", ["spotify:"], () => {});
+    }
+  });
+}
+
 const wss = new WebSocketServer({
   host: "127.0.0.1",
   port: PORT,
@@ -492,14 +509,14 @@ setInterval(() => {
   }
 }, 50);
 
-// Lives as long as Spotify: Spotify starts it (when the visualiser is first on
-// screen), it sleeps while the visualiser is hidden, and it closes once
-// Spotify has been gone (no connection) for IDLE_EXIT_MS.
-let neededAt = Date.now();
+// Lives as long as Spotify: it sleeps while the visualiser is hidden, and it
+// closes once Spotify has been gone (no connection) for IDLE_EXIT_MS.
+// From the shortcut, Spotify may take a while to open: wait longer at first.
+let neededAt = Date.now() + (OPEN_SPOTIFY ? 90000 : 0);
 setInterval(() => {
   if (wss.clients.size) neededAt = Date.now();
   else if (!STAY && Date.now() - neededAt > IDLE_EXIT_MS) {
-    log("Spotify closed - closing too. Spotify starts it again when the visualiser is on screen.");
+    log("Spotify closed - closing too.");
     stopCapture(true);
     process.exit(0);
   }

@@ -21,6 +21,11 @@ const check = (name, ok, extra = "") => {
   const browser = await chromium.launch({ channel: process.env.LP_BROWSER || undefined, args: ["--use-gl=angle", "--use-angle=swiftshader", "--enable-unsafe-swiftshader"] });
   for (const [file, vp] of [["harness.html", { width: 1280, height: 720 }], ["harness-popout.html", { width: 380, height: 300 }]]) {
     const page = await browser.newPage({ viewport: vp });
+    // LP_PORT: talk to a test helper on another port (when the real one is running).
+    if (process.env.LP_PORT) await page.addInitScript((port) => {
+      const WS = window.WebSocket;
+      window.WebSocket = class extends WS { constructor(u, ...r) { super(String(u).replace(":47823", ":" + port), ...r); } };
+    }, process.env.LP_PORT);
     const errors = [];
     page.on("pageerror", (e) => errors.push(e.message));
     page.on("console", (m) => m.type() === "error" && !m.text().includes("WebSocket") && errors.push(m.text()));

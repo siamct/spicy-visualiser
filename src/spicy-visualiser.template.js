@@ -859,12 +859,10 @@
   // Helper connection (real audio)
   // ===========================================================================
   let retryMs = 2000;
-  // Starting the helper: the installer registers a spicy-visualiser:// link
-  // that starts it hidden. Only tried once this PC has had a working helper
-  // (remembered), so Marketplace-only installs never see a "how do you want
-  // to open this" box. A button in the panel can also try it by hand.
+  // Spotify doesn't let add-ons start programs (or open custom links), so the
+  // helper is started from its "Spicy Visualiser" Start-menu shortcut, which
+  // opens Spotify too. Remembered once it has connected (= installed).
   const HELPER_SEEN_KEY = "spicy-visualiser:helper-seen";
-  let lastLaunch = 0;
   function helperWanted() {
     let visible = false;
     for (const inst of instances) if (inst.isVisible()) visible = true;
@@ -873,7 +871,7 @@
   // The helper's setup file. An add-on inside Spotify can't install programs,
   // so the button downloads it (in the web browser) for the user to open once.
   const HELPER_SETUP = "https://github.com/siamct/spicy-visualiser/raw/main/setup/SpicyVisualiserHelper.zip";
-  const HELPER_STEP = "Downloading SpicyVisualiserHelper.zip. Open it from your downloads, click Extract all, then double-click Install helper.bat. If Windows asks, click More info, then Run anyway. The visualiser goes Live by itself.";
+  const HELPER_STEP = "Downloading SpicyVisualiserHelper.zip. Open it from your downloads, click Extract all, then double-click Install helper.bat. If Windows asks, click More info, then Run anyway. The visualiser goes Live by itself, and from then on you open Spotify with Spicy Visualiser from the Start menu.";
   function downloadHelper() {
     shared.downloaded = true;
     try {
@@ -889,26 +887,8 @@
     }
   }
   const NOTICE_KEY = "spicy-visualiser:helper-notice";
-  function launchHelper(byHand) {
-    if (shared.helper === "live" || S.useHelper === false) return;
-    let seen = false;
-    try { seen = localStorage.getItem(HELPER_SEEN_KEY) === "1"; } catch (_) {}
-    if (!seen && !byHand) return;
-    const now = Date.now();
-    if (!byHand && now - lastLaunch < 30000) return;
-    lastLaunch = now;
-    shared.launchFailed = false;
-    try { window.open("spicy-visualiser://start", "_blank"); } catch (_) {}
-    retryMs = 1200;
-    // No connection a few seconds later: it isn't installed (or was removed).
-    setTimeout(() => {
-      if (shared.helper !== "live" && lastLaunch === now) {
-        shared.launchFailed = true;
-        refreshPanels();
-      }
-    }, 7000);
-    refreshPanels();
-  }
+  const REMIND_KEY = "spicy-visualiser:helper-remind-off";
+  const HELPER_START = "Turn the helper on: open the Start menu, search Spicy Visualiser and press Enter. It opens Spotify too, so pin it to your taskbar and open Spotify with it.";
   function connectHelper() {
     if (S.useHelper === false) return setTimeout(connectHelper, 2000); // turned off: just wait
     let ws;
@@ -3291,7 +3271,7 @@
       </div>
 
       <div class="lp-page" data-page="more">
-        <div class="lp-group"><div class="lp-gtitle">Sound source</div>${toggle("useHelper", "Use the helper", "Hears the real music (Windows). Off: the visualiser is off too")}<div class="lp-status-text"></div><div class="lp-note lp-get-note"></div><div class="lp-btnrow"><button class="lp-reset lp-get-helper">Install helper</button><button class="lp-reset lp-start-helper">Start the helper</button></div></div>
+        <div class="lp-group"><div class="lp-gtitle">Sound source</div>${toggle("useHelper", "Use the helper", "Hears the real music (Windows). Off: the visualiser is off too")}<div class="lp-status-text"></div><div class="lp-note lp-get-note"></div><div class="lp-btnrow"><button class="lp-reset lp-get-helper">Install helper</button></div></div>
         ${group("Beat effects", toggle("kickPulse", "Pulse on kicks", "The visual swells a little on each kick") + toggle("kickFlash", "Flash on kicks", "A soft flash of colour"))}
         ${group("Sync", slider("syncDelay", "Audio delay (Bluetooth)", 0, 400, 10, "global") + `<div class="lp-note">Visuals ahead of the sound? With Bluetooth headphones the sound arrives later than it's played. Slide this until the beat lines up.</div>`)}
         ${group("Performance", toggle("ecoUnfocused", "Save power when Spotify isn't focused", "Drops to 30 fps while you're gaming or in another app") + `<div class="lp-label"><span>Frame rate</span></div>${seg("fps", [["30", "30 fps"], ["60", "60 fps"], ["max", "Max"]], "global")}<div class="lp-label"><span>Quality</span></div>${seg("quality", [["low", "Low"], ["medium", "Medium"], ["high", "High"]], "global")}<div class="lp-note">Everything stops (including the helper) when the lyrics view isn't on screen.</div>`)}
@@ -3338,7 +3318,6 @@
         refreshPanelEl(p, doc);
         return;
       }
-      if (e.target.closest(".lp-start-helper")) return launchHelper(true);
       if (e.target.closest(".lp-get-helper")) {
         downloadHelper();
         const note = p.querySelector(".lp-get-note");
@@ -3444,18 +3423,15 @@
     let seen = false;
     try { seen = localStorage.getItem(HELPER_SEEN_KEY) === "1"; } catch (_) {}
     const need = use && shared.helper !== "live"; // not connected: offer install / start
-    const sh = p.querySelector(".lp-start-helper");
-    if (sh) {
-      sh.classList.toggle("lp-hidden", !need || !seen);
-      sh.textContent = Date.now() - lastLaunch < 7000 && !shared.launchFailed ? "Starting…" : "Start the helper";
-    }
+    const gh = p.querySelector(".lp-get-helper");
+    if (gh) gh.textContent = seen ? "Reinstall helper" : "Install helper";
     p.querySelectorAll(".lp-get-helper, .lp-get-note").forEach((el) => el.classList.toggle("lp-hidden", !need));
     const gn = p.querySelector(".lp-get-note");
     if (gn) gn.textContent = shared.downloaded
       ? HELPER_STEP
-      : seen && shared.launchFailed
-      ? "The helper didn't start. It may not be installed on this PC any more: install it again."
-      : "Spotify doesn't let add-ons hear the music, so the visualiser needs its small helper (Windows) to react properly. It only listens while the visualiser is on screen.";
+      : seen
+      ? HELPER_START
+      : "Spotify doesn't let add-ons hear the music, so the visualiser needs its small helper (Windows) to react properly. It runs only while Spotify is open.";
     const dg = p.querySelector(".lp-diag");
     if (dg) {
       const d = ana.diag || {};
@@ -3714,14 +3690,15 @@
       sync();
     }
 
-    // First time without the helper: say why it isn't fully accurate, once.
+    // No helper: first time ever, explain and offer the install (once).
+    // Installed but not running: say how to turn it on, once per Spotify run.
     let noticeAt = 0;
     function maybeNotice() {
       if (box.querySelector(".lp-notice") || shared.helper === "live" || S.useHelper === false) return;
+      let seen = false;
       try {
-        if (localStorage.getItem(NOTICE_KEY)) return;
-        // A helper that worked before is started automatically: only speak up if that failed.
-        if (localStorage.getItem(HELPER_SEEN_KEY) === "1" && !shared.launchFailed) return;
+        seen = localStorage.getItem(HELPER_SEEN_KEY) === "1";
+        if (seen ? shared.remindShown || localStorage.getItem(REMIND_KEY) : localStorage.getItem(NOTICE_KEY)) return;
       } catch (_) {
         return;
       }
@@ -3729,16 +3706,26 @@
       if (performance.now() < noticeAt || styleKey() === "off") return;
       const n = doc.createElement("div");
       n.className = "lp-notice";
-      // Shown once, ever: the panel's Sound source section has it after that.
-      try { localStorage.setItem(NOTICE_KEY, "1"); } catch (_) {}
-      n.innerHTML = `<div class="lp-notice-title">${ICON}<span>Spicy Visualiser</span></div><p>The visualiser only moves to the real music, and Spotify doesn't let add-ons hear it. Its small helper (Windows) does the listening, so it stays empty until the helper is installed.</p><div class="lp-notice-row"><button class="lp-notice-go">Install helper</button><button class="lp-notice-no">OK</button></div>`;
-      n.querySelector(".lp-notice-go").addEventListener("click", (e) => {
-        e.stopPropagation();
-        downloadHelper();
-        n.querySelector("p").textContent = HELPER_STEP;
-        n.querySelector(".lp-notice-go").remove();
-        n.querySelector(".lp-notice-no").textContent = "Close";
-      });
+      const head = `<div class="lp-notice-title">${ICON}<span>Spicy Visualiser</span></div>`;
+      if (seen) {
+        shared.remindShown = true;
+        n.innerHTML = `${head}<p>${HELPER_START}</p><div class="lp-notice-row"><button class="lp-notice-no">OK</button></div><button class="lp-notice-never">Don't remind me</button>`;
+        n.querySelector(".lp-notice-never").addEventListener("click", (e) => {
+          e.stopPropagation();
+          try { localStorage.setItem(REMIND_KEY, "1"); } catch (_) {}
+          n.remove();
+        });
+      } else {
+        try { localStorage.setItem(NOTICE_KEY, "1"); } catch (_) {}
+        n.innerHTML = `${head}<p>The visualiser only moves to the real music, and Spotify doesn't let add-ons hear it. Its small helper (Windows) does the listening, so it stays empty until the helper is installed.</p><div class="lp-notice-row"><button class="lp-notice-go">Install helper</button><button class="lp-notice-no">OK</button></div>`;
+        n.querySelector(".lp-notice-go").addEventListener("click", (e) => {
+          e.stopPropagation();
+          downloadHelper();
+          n.querySelector("p").textContent = HELPER_STEP;
+          n.querySelector(".lp-notice-go").remove();
+          n.querySelector(".lp-notice-no").textContent = "Close";
+        });
+      }
       n.querySelector(".lp-notice-no").addEventListener("click", (e) => {
         e.stopPropagation();
         n.remove();
@@ -4052,7 +4039,6 @@
 
   setInterval(() => {
     sendHelperState();
-    if (shared.helper !== "live" && helperWanted()) launchHelper(false);
     for (const inst of instances) if (inst.maybeNotice && inst.isVisible()) inst.maybeNotice();
     scan(document);
     try {

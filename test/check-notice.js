@@ -15,8 +15,13 @@ const path = require("path");
   await p.reload();
   await p.waitForTimeout(7000);
   const again = await p.evaluate(() => !!document.querySelector(".lp-notice"));
-  const ok = !!first && /stays empty/.test(first) && !again;
-  console.log(ok ? "PASS" : "FAIL", "one-time helper notice", JSON.stringify({ first, again }));
+  // Installed before (helper seen) but not running: says how to turn it on.
+  await p.evaluate(() => localStorage.setItem("spicy-visualiser:helper-seen", "1"));
+  await p.reload();
+  await p.waitForTimeout(7000);
+  const remind = await p.evaluate(() => { const n = document.querySelector(".lp-notice"); return n ? n.textContent : null; });
+  const ok = !!first && /stays empty/.test(first) && !again && /Start menu/.test(remind || "");
+  console.log(ok ? "PASS" : "FAIL", "one-time helper notice", JSON.stringify({ first, again, remind }));
   await b.close();
   process.exit(ok ? 0 : 1);
 })();

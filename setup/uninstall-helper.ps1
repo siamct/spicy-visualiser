@@ -5,6 +5,7 @@ Get-CimInstance Win32_Process -Filter "Name='node.exe'" -ErrorAction SilentlyCon
   ForEach-Object { Stop-Process -Id $_.ProcessId -Force -ErrorAction SilentlyContinue }
 Start-Sleep -Milliseconds 500
 Remove-Item (Join-Path ([Environment]::GetFolderPath("Startup")) "Spicy Visualiser helper.lnk") -Force -ErrorAction SilentlyContinue
+Remove-Item (Join-Path ([Environment]::GetFolderPath("Programs")) "Spicy Visualiser.lnk") -Force -ErrorAction SilentlyContinue
 Remove-Item "HKCU:\Software\Classes\spicy-visualiser" -Recurse -Force -ErrorAction SilentlyContinue
 Remove-Item "HKCU:\Software\Microsoft\Windows\CurrentVersion\Uninstall\SpicyVisualiserHelper" -Recurse -Force -ErrorAction SilentlyContinue
 Remove-Item (Join-Path $Root "helper") -Recurse -Force -ErrorAction SilentlyContinue
