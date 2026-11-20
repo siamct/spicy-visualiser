@@ -4,7 +4,7 @@
 
 **A Spicetify extension that adds a music visualiser to Spicy Lyrics.**
 
-19 styles that move with the music, take their colours from the album cover and sit right behind the lyrics.
+18 styles that move with the music, take their colours from the album cover and sit right behind the lyrics.
 
 > [!TIP]
 > **Works straight from the Marketplace.** Without anything else it follows Spotify's data for each song (Spotify only gives add-ons a little info, like bass, mids and highs). For the real sound, where every style looks its best, add the small **helper** (Windows): click **Install helper** in the visualiser, or [download the helper](https://github.com/siamct/spicy-visualiser/raw/main/setup/SpicyVisualiserHelper.zip).
@@ -24,7 +24,7 @@
 
 ## Highlights
 
-- **19 styles:** bars, retro and LED spectrums, circles and a subwoofer, beat-locked motion, poster shapes, fluids, particles and 3D landscapes.
+- **18 styles:** bars, retro and LED spectrums, circles and a subwoofer, poster shapes, fluids, silky streaks, particles and 3D landscapes.
 - **Album colours:** every song gets its own palette from its cover, shifting on the beat or holding still, as you like. Or pick your own, rainbow, or each style's classic look.
 - **Fully customisable:** opacity, size, blur, brightness, bar count, position, sensitivity, bass boost, speed, shake and more. Each style remembers its own settings.
 - **Hears the real music:** a small helper listens to Spotify's audio (64 bands, kicks and snares). It only listens while the visualiser is on screen.
@@ -33,7 +33,7 @@
 - **Light on your PC:** stops when the lyrics aren't on screen and drops to 30 fps when Spotify isn't focused.
 
 <details>
-<summary><b>See all 19 styles</b></summary>
+<summary><b>See all 18 styles</b></summary>
 
 <br>
 
@@ -90,7 +90,7 @@ spicetify apply
 
 Click the bars icon in Spicy Lyrics for quick settings, or open **Spicy Visualiser Settings** from Spotify's profile menu for the full settings window. While you drag a slider the rest of the panel fades away so you can see the effect.
 
-- **Style:** pick one of the 19 styles.
+- **Style:** pick one of the 18 styles.
 - **Look:** colours, opacity, blur, brightness, size, bar count, position.
 - **Sound:** sensitivity, bass boost, smoothing, shake, speed, tap to the beat.
 - **Lyrics:** highlight the word or line, with Soft, Fade, Sweep or Underline glows.

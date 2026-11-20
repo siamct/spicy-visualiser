@@ -250,3 +250,14 @@
 .lp-install-go { background: #fff; color: #111; }
 .lp-install-go:disabled { opacity: .7; cursor: default; }
 .lp-install-no { background: rgba(255,255,255,.08); color: rgba(255,255,255,.8); }
+
+/* Sound source switch (top of the Style page) */
+:is(#SpicyLyricsPage, .lp-modal-wrap) .lp-panel .lp-source { padding: 10px 12px 12px; margin-bottom: 10px; border-radius: 14px; background: rgba(255,255,255,.07); }
+:is(#SpicyLyricsPage, .lp-modal-wrap) .lp-panel .lp-source-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 6px; }
+:is(#SpicyLyricsPage, .lp-modal-wrap) .lp-panel .lp-source-head .lp-gtitle { margin: 0; }
+:is(#SpicyLyricsPage, .lp-modal-wrap) .lp-panel .lp-test-helper { border: 0; padding: 4px 10px; border-radius: 999px; cursor: pointer; background: rgba(255,255,255,.1); color: rgba(255,255,255,.85); font-size: 11px; font-weight: 600; }
+:is(#SpicyLyricsPage, .lp-modal-wrap) .lp-panel .lp-test-helper:hover { background: rgba(255,255,255,.18); color: #fff; }
+:is(#SpicyLyricsPage, .lp-modal-wrap) .lp-panel .lp-source .lp-seg button { padding: 10px 4px; font-size: 14px; font-weight: 600; }
+:is(#SpicyLyricsPage, .lp-modal-wrap) .lp-panel .lp-source .lp-status-text { margin: 8px 2px 2px; }
+:is(#SpicyLyricsPage, .lp-modal-wrap) .lp-panel .lp-source .lp-test-result { margin: 6px 2px 0; color: #fff; }
+:is(#SpicyLyricsPage, .lp-modal-wrap) .lp-panel .lp-source .lp-btnrow { margin-top: 6px; }

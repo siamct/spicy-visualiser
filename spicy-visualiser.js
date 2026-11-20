@@ -29,9 +29,8 @@
     ["mirror", "Mirror Bars"],
     ["retro", "Retro Bars"],
     ["plasma", "Plasma"],
-    ["ink", "Ink in Water"],
+    ["ink", "Silk"],
     ["warp", "Warp"],
-    ["motion", "Beat Motion"],
     ["dnb", "Liquid"],
     ["neuro", "Neuro Mesh"],
     ["ascii", "ASCII"],
@@ -54,15 +53,14 @@
     dnb: "Liquid: a flowing three-strand bass wave that pumps on kicks, streaks racing past, and a flash on every snare.",
     ascii: "Terminal-style spectrum made of characters, with falling peak markers.",
     led: "A panel of glowing LED dots (unlit ones faintly visible) showing spectrum bars with falling peak dots.",
-    motion: "Smooth movement locked to the song's beat. Sweep: a band of light glides across on every beat, back and forth, colour changing each bar. Radar: an arm goes round once a bar past four beat marks, kicks leave blips. Rings: a ring ripples out on every beat, a bigger one on each bar.",
     ledplasma: "A fluid on the LED panel: it flows faster, swirls harder and glows brighter with the music, surges on kicks, and its colours sweep round on every beat (Look tab: change every beat, 2, 4 or 8).",
     trap: "The classic trap-channel circle with nothing in the middle: the spectrum round a circle, mirrored, bass at the bottom; a white layer in front with seven colour layers bursting out behind it on every hit, a bass bounce, shake, and white dust flying towards you.",
     retro: "The classic old media-player spectrum: segmented bars coloured by height (blue and green at the bottom, yellow, then orange and red at the top) with peak caps that hang, then drop.",
-    neuro: "Drum & bass: a wireframe landscape rolling towards you, fed by the spectrum. It twists with the bass like a wobbling reese, glitches on every snare and lights up on drops.",
-    ink: "Ink in water: a real fluid. Kicks drop ink in from the top and it sinks and billows, the bass stirs it, snares flick a splash, drops burst ink out of the middle. Colours step on the beat.",
-    sub: "A big subwoofer drawn in light: kicks punch the cone out and it springs back, the surround wobbles with the bass, the light ring changes colour on the beat, and a drop gives one huge push with a shockwave. Sits round the album art when it's on screen.",
-    bauhaus: "A poster grid of flat circles, half circles, quarter circles and triangles: shapes grow with their part of the spectrum, tiles turn a quarter on the beat and the colours step round, drops reshuffle the grid. Look tab: change every beat, 2, 4 or 8.",
-    geometric: "Bold flat shapes like a modern poster: slanted bands slide in from the edges with the spectrum, colours step round on the beat, drops shuffle the layout. Look tab: Poster or Brutalist, and change every beat, 2, 4 or 8.",
+    neuro: "Drum & bass: a wireframe landscape rolling towards you, fed by the spectrum. It twists with the bass like a wobbling reese, glitches on every snare.",
+    ink: "Silk: long streaks of colour pulled through a slow current, like ink drawn through water. The bass speeds the current up, kicks bloom a burst of new streaks, snares flick thin bright ones, and the colours step round on the beat. Smoothing sets how long the streaks last.",
+    sub: "A big subwoofer drawn in light: kicks punch the cone out and it springs back, the surround wobbles with the bass, the light ring changes colour on the beat. Sits round the album art when it's on screen.",
+    bauhaus: "A poster grid of flat circles, half circles, quarter circles and triangles: shapes grow with their part of the spectrum, tiles turn a quarter on the beat and the colours step round. Look tab: change every beat, 2, 4 or 8.",
+    geometric: "Bold flat shapes like a modern poster: slanted bands slide in from the edges with the spectrum, colours step round on the beat. Look tab: Poster or Brutalist, and change every beat, 2, 4 or 8.",
     off: "Visualiser hidden.",
   };
   // Little pictures for the style picker.
@@ -76,28 +74,28 @@
     warp: '<g stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M12 12 4 4M12 12l8-8M12 12l-8 8M12 12l8 8M12 12V2M12 12v10M12 12H2M12 12h10" opacity=".8"/></g>',
     dnb: '<path d="M2 15c2-4 3 4 5 0s3-5 5-1 3 5 5 0 3-3 5-1" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><g stroke="currentColor" stroke-width="1.4" stroke-linecap="round" opacity=".6"><path d="M4 6h7M13 9h8M7 4h4"/></g>',
     ascii: '<text x="2" y="10" font-size="8" font-family="monospace" font-weight="700">&gt;_</text><g opacity=".85"><rect x="3" y="15" width="2.5" height="6"/><rect x="7" y="12" width="2.5" height="9"/><rect x="11" y="16" width="2.5" height="5"/><rect x="15" y="13" width="2.5" height="8"/><rect x="19" y="17" width="2.5" height="4"/></g>',
-    motion: '<g fill="none" stroke="currentColor" stroke-width="1.4"><circle cx="12" cy="12" r="3"/><circle cx="12" cy="12" r="6.5" opacity=".65"/><circle cx="12" cy="12" r="10" opacity=".35"/><path d="M12 12 19 5" stroke-width="1.8"/></g>',
     ledplasma: '<g>'+[4,8,12,16,20].map((x,i)=>[4,8,12,16,20].map((y,j)=>`<circle cx="${x}" cy="${y}" r="1.4" opacity="${(0.25+0.75*Math.abs(Math.sin(i*0.9+j*0.6))).toFixed(2)}"/>`).join('')).join('')+'</g>',
     led: '<g>'+[4,8,12,16,20].map((x,i)=>[20,16,12,8,4].map((y,j)=>`<circle cx="${x}" cy="${y}" r="1.4" opacity="${j<=[2,4,3,1,2][i]?1:.25}"/>`).join('')).join('')+'</g>',
     trap: '<path d="M12 3.5c2 2.5 3.5 1 5.5 3s.5 3.5 2.5 5.5-1 3.5-2.5 5.5-3.5.5-5.5 3c-2-2.5-3.5-1-5.5-3s.5-3.5-2.5-5.5 1-3.5 2.5-5.5 3.5-.5 5.5-3z" opacity=".55"/><circle cx="12" cy="12" r="4.6" fill="none" stroke="currentColor" stroke-width="1.6"/>',
     retro: '<g>'+[[3,3],[7,5],[11,2],[15,4],[19,1]].map(([x,n])=>[0,1,2,3,4,5].slice(0,6-n+1).map((s)=>`<rect x="${x}" y="${19-s*3}" width="3" height="2" opacity="${(0.5+s*0.1).toFixed(2)}"/>`).join('')).join('')+'</g>',
     neuro: '<g fill="none" stroke="currentColor" stroke-width="1.2"><path d="M2 18c4-3 6 1 10-2s6 1 10-2"/><path d="M4 13c3-2 5 1 8-1.5s5 1 8-1.5" opacity=".7"/><path d="M6 9c2-1.5 4 .5 6-1s4 .5 6-1" opacity=".45"/><path d="M7 18 9 9M12 16l.5-7.5M17 16.5 15 8.5" opacity=".5"/></g>',
-    ink: '<path d="M12 2c0 3-1 4-1 6 0 1.5 1 2 1 3.5 0 2-3 2.5-4.5 5S8 21 10 21.5c1.5.4 2-1 3.5-1.2 2-.3 3.5 1.2 4.5-.8 1-2.2-2-3-3-5.5-.8-2 .5-3 0-5S12 5 12 2z" opacity=".85"/>',
+    ink: '<g fill="none" stroke="currentColor" stroke-linecap="round"><path d="M2 9c5-5 9 3 14-1 2-1.6 4-2 6-1.5" stroke-width="1.8"/><path d="M2 13c5-3.5 9 2.5 14-.5 2-1.2 4-1.4 6-1" stroke-width="1.3" opacity=".7"/><path d="M2 17c5-2.5 9 2 14 0 2-.8 4-1 6-.6" stroke-width=".9" opacity=".45"/></g>',
     sub: '<circle cx="12" cy="12" r="10" fill="none" stroke="currentColor" stroke-width="1.5"/><circle cx="12" cy="12" r="7" fill="none" stroke="currentColor" stroke-width="1.2" opacity=".7"/><circle cx="12" cy="12" r="5" fill="none" stroke="currentColor" stroke-width="1" opacity=".45"/><circle cx="12" cy="12" r="2.8"/>',
     bauhaus: '<path d="M3 3h8A8 8 0 0 1 3 11z"/><path d="M13 11a4 4 0 0 1 8 0z" opacity=".6"/><circle cx="7" cy="17" r="3.6" opacity=".8"/><path d="M13 21h8L13 13z"/>',
     geometric: '<path d="M2 4h11l-3 4H2z"/><path d="M22 10H9l3-4h10z" opacity=".55"/><path d="M2 12h15l-3 4H2z"/><path d="M22 18h-9l3-4h6z" opacity=".55"/><path d="M2 20h7l-2 2H2z" opacity=".8"/>',
     off: '<circle cx="12" cy="12" r="8" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M6.5 17.5 17.5 6.5" stroke="currentColor" stroke-width="1.8"/>',
   };
-  // The style picker shows the styles in groups, A-Z inside each group.
+  // The style picker shows the styles in groups, in this order (A-Z, but
+  // Plasma and LED Plasma side by side).
   // Styles that still look right on Spotify's data (it has loudness and
   // beats, not a real spectrum). With that source they're listed first and
   // the rest fold away under "More styles".
-  const SONG_DATA_OK = new Set(["particles", "plasma", "ledplasma", "ink", "warp", "dnb", "motion", "geometric", "bauhaus", "trap", "sub", "off"]);
+  const SONG_DATA_OK = new Set(["particles", "plasma", "ledplasma", "ink", "warp", "dnb", "geometric", "bauhaus", "sub", "off"]);
   const STYLE_GROUPS = [
-    ["Bars", ["monstercat", "mirror", "radial", "retro", "ascii", "led"]],
-    ["Circles", ["ncs", "trap", "sub"]],
-    ["On the beat", ["motion", "geometric", "bauhaus"]],
-    ["Flowing", ["particles", "plasma", "ledplasma", "ink", "warp", "dnb", "neuro"]],
+    ["Bars", ["ascii", "led", "mirror", "monstercat", "radial", "retro"]],
+    ["Circles", ["ncs", "sub", "trap"]],
+    ["On the beat", ["geometric", "bauhaus"]],
+    ["Flowing", ["plasma", "ledplasma", "dnb", "neuro", "particles", "ink", "warp"]],
     ["", ["off"]],
   ];
   // Which bands each style reads: "punch" snaps up and falls with gravity.
@@ -111,12 +109,11 @@
     neuroLook: ["neuro"],
     neuroLine: ["neuro"],
     mcColor: ["monstercat"],
-    motionLook: ["motion"],
     neuroTwist: ["neuro"],
     neuroMirror: ["neuro"],
-    circleAt: ["trap", "radial", "ncs", "sub", "motion"],
+    circleAt: ["trap", "radial", "ncs", "sub"],
     speed: ["trap", "retro", "neuro", "ink", "particles", "monstercat", "ncs", "radial", "plasma", "warp", "dnb", "ascii", "led", "ledplasma"],
-    bassBoost: ["particles", "monstercat", "radial", "mirror", "ncs", "warp", "plasma", "dnb", "ascii", "geometric", "bauhaus", "led", "ledplasma", "sub", "trap", "retro", "neuro", "ink", "motion"],
+    bassBoost: ["particles", "monstercat", "radial", "mirror", "ncs", "warp", "plasma", "dnb", "ascii", "geometric", "bauhaus", "led", "ledplasma", "sub", "trap", "retro", "neuro", "ink"],
     smoothing: ["particles", "monstercat", "radial", "mirror", "ncs", "warp", "plasma", "dnb", "ascii", "geometric", "bauhaus", "led", "ledplasma", "sub", "trap", "retro", "neuro", "ink"],
   };
 
@@ -137,7 +134,6 @@
     neuroLook: "mesh",
     mcColor: "flow", // Monstercat bar colour: flow | frequency | height (area) | bar | solid
     neuroLine: "rough", // Ridges look: rough (a little jagged) or smooth
-    motionLook: "rings",
     neuroTwist: 0, // Neuro Mesh: how much it rolls along its length (0 = still)
     neuroMirror: "off",
     circleAt: "middle", // circle styles: middle of the view, or round the album art
@@ -156,11 +152,10 @@
     bauhaus: { shake: 0, opacity: 0.85, beatEvery: "4" },
     sub: { shake: 0.6 },
     trap: { shake: 0.5, bassBoost: 0.7, colorMode: "classic" },
-    neuro: { shake: 0.3, colorMode: "classic" },
+    neuro: { shake: 0.3, colorMode: "classic", neuroTwist: 0.05 },
     ink: { shake: 0 }, // turns once a bar (most songs count in 4s and 8s)
     led: { colorMode: "classic", shake: 0 },
     ledplasma: { shake: 0 },
-    motion: { shake: 0 },
     monstercat: { barCount: 63, bassBoost: 0.8, smoothing: 0.45, beatEvery: "4" },
     retro: { shake: 0, colorMode: "classic", beatEvery: "4" },
   };
@@ -287,7 +282,6 @@
     treble: 0,
     beatSerial: 0,
     snareSerial: 0,
-    dropSerial: 0,
     tickSerial: 0, // beats from the beat clock (tempo-locked, see beatClock)
     barSerial: 0, // first beats of bars (only from the song's own beat grid)
     beatInBar: 0, // 0-3: which beat of the bar the last beat was
@@ -296,8 +290,6 @@
     noLyr: 0, // 0 = synced lyrics on screen, 1 = no lyrics (0.5 = static lyrics); eased
     bFloor: new Float32Array(64), // per-band quiet level (auto range)
     bCeil: new Float32Array(64).fill(0.3), // per-band recent top (auto range)
-    eS: 0, // short loudness average (drop detector)
-    quietT: 0, // seconds of quiet so far
     raw: new Float32Array(NB), // latest input
     punch: new Float32Array(NB), // snaps up, falls with gravity
     pvel: new Float32Array(NB),
@@ -915,15 +907,9 @@
   // within half a beat is ignored, so one beat never counts twice. Without a
   // tempo yet, every kick is a beat (at most one per 200 ms). After about 8
   // beats with no kicks at all it stops, so quiet parts stay still.
-  const clock = { last: 0, kickSeen: 0, lastKick: 0, dropSeen: 0 };
+  const clock = { last: 0, kickSeen: 0, lastKick: 0 };
   function beatClock(now) {
     if (songClock()) return; // the song's own beat grid, when we have it
-    // No bar lines without the song grid: a drop is almost always beat 1,
-    // so the beat it lands on starts the count of 4.
-    if (clock.dropSeen !== shared.dropSerial) {
-      clock.dropSeen = shared.dropSerial;
-      shared.beatInBar = 3;
-    }
     const period = bpm.shown && bpm.period > 300 && bpm.period < 900 ? bpm.period : 0;
     const kicked = clock.kickSeen !== shared.beatSerial;
     if (kicked) {
@@ -1000,6 +986,7 @@
   const HELPER_SETUP = "https://github.com/siamct/spicy-visualiser/raw/main/setup/SpicyVisualiserHelper.zip";
   function downloadHelper() {
     shared.downloaded = true;
+    if (S.source !== "helper") { S.source = "helper"; save(); refreshPanels(); }
     try {
       const a = document.createElement("a");
       a.href = HELPER_SETUP;
@@ -1045,9 +1032,34 @@
     for (const ev of ["pointerdown", "mousedown", "wheel", "keydown"]) w.addEventListener(ev, (e) => e.stopPropagation());
     document.body.appendChild(w);
   }
+  // "Test helper": tries to reach the helper right now and says what it found.
+  function testHelper() {
+    const say = (msg) => { shared.testMsg = msg; refreshPanels(); };
+    say("Testing…");
+    let done = false, probe;
+    const finish = (msg) => {
+      if (done) return;
+      done = true;
+      try { probe.close(); } catch (_) {}
+      say(msg);
+      clearTimeout(shared.testClear);
+      shared.testClear = setTimeout(() => say(""), 12000);
+    };
+    try { probe = new WebSocket(HELPER_URL); } catch (_) { return finish("Couldn't reach the helper."); }
+    probe.onopen = () => {
+      try { localStorage.setItem(HELPER_SEEN_KEY, "1"); } catch (_) {}
+      retryMs = 2000;
+      if (S.source === "spotify") return finish("The helper is installed and running. Switch to Helper above to use it.");
+      if (shared.helper !== "live") return finish("Found the helper. Connecting…");
+      const heard = performance.now() - (shared.helperLoudAt || 0) < 1500;
+      finish(heard ? "Working: the helper is hearing the music." : "The helper is running but hears nothing. Play a song through your default speakers or headphones.");
+    };
+    probe.onerror = () => finish("No helper found. It isn't installed, or it isn't running (restart your PC, or open Spicy Visualiser helper from the Start menu).");
+    setTimeout(() => finish("No helper found. It isn't installed, or it isn't running."), 3000);
+  }
   const NOTICE_KEY = "spicy-visualiser:helper-notice";
   const REMIND_KEY = "spicy-visualiser:helper-remind-off";
-  const HELPER_START = "The helper isn't running. It starts with Windows, so restarting your PC starts it, or open Spicy Visualiser helper from the Start menu. You can also switch to Spotify data under More, Sound source.";
+  const HELPER_START = "The helper isn't running. It starts with Windows, so restarting your PC starts it, or open Spicy Visualiser helper from the Start menu. You can also switch to Spotify data at the top of the Style tab.";
   function connectHelper() {
     if (S.source === "spotify") return setTimeout(connectHelper, 2000); // turned off: just wait
     let ws;
@@ -1267,13 +1279,6 @@
     shared.energy += (te - shared.energy) * Math.min(1, dt * (te > shared.energy ? 10 : 2.5));
     shared.bass = bass / 10;
     shared.treble = treble / (NB - 40);
-    // Drop: a loud kick after 1.5 s+ of quiet (cheap, a few sums per frame).
-    shared.eS += (shared.energy - shared.eS) * Math.min(1, dt * 4);
-    shared.quietT = shared.energy < 0.28 ? shared.quietT + dt : Math.max(0, shared.quietT - dt * 0.5);
-    if (shared.quietT > 1.5 && shared.eS > 0.45 && shared.kick > 0.4) {
-      shared.dropSerial++;
-      shared.quietT = 0;
-    }
     shared.kick *= Math.exp(-dt * 6);
     shared.snare *= Math.exp(-dt * 8);
     shared.histPos = (shared.histPos + 1) % HIST;
@@ -2123,8 +2128,7 @@ void main() {
   // (smooth). Fills `d` (cols x rows RGBA). The music sets how fast it flows
   // (loudness, bass, a surge on each kick), how hard it swirls (bass), how
   // fine it shimmers (treble) and how bright it is. On each step of the beat
-  // clock the colours sweep a third of the way round the palette; a drop
-  // gives it a big swirl. It is kept fairly dim on purpose so white lyrics
+  // clock the colours sweep a third of the way round the palette. It is kept fairly dim on purpose so white lyrics
   // stay readable over it: deep colour, never near white.
   function fluidFrame(st, d, cols, rows, p, dt, ghost) {
     const lut = st.lut || (st.lut = new Uint8ClampedArray(256 * 3));
@@ -2136,7 +2140,7 @@ void main() {
     }
     const k = Math.min(1, shared.kick);
     const e = shared.energy, bass = shared.bassPunch || 0, tre = shared.treble || 0;
-    const fl = st.fl || (st.fl = { t: Math.random() * 50, spd: 0.3, swirl: 0.5, lum: 0.3, surge: 0, off: 0, offT: 0, dropSeen: shared.dropSerial, tickSeen: shared.tickSerial, beat: 0 });
+    const fl = st.fl || (st.fl = { t: Math.random() * 50, spd: 0.3, swirl: 0.5, lum: 0.3, surge: 0, off: 0, offT: 0, tickSeen: shared.tickSerial, beat: 0 });
     // Moves ON THE BEAT: each beat of the beat clock (the song's own beat
     // grid when Spotify gives it, otherwise the tempo-locked kick clock)
     // gives the flow a push that dies away before the next beat, so it
@@ -2145,7 +2149,6 @@ void main() {
     if (fl.tickSeen !== shared.tickSerial) { fl.tickSeen = shared.tickSerial; fl.beat = 1; }
     const per = bpm.period > 300 && bpm.period < 900 ? bpm.period / 1000 : 0.5;
     fl.beat *= Math.exp(-dt * (4 / per)); // gone by about the next beat
-    if (fl.dropSeen !== shared.dropSerial) { fl.dropSeen = shared.dropSerial; fl.surge = 1.6; }
     fl.surge *= Math.exp(-dt * 1.5);
     const spdT = (0.08 + 0.15 * e + 0.15 * bass + 2.2 * fl.beat + 1.2 * fl.surge) * p.speed;
     fl.spd += (spdT - fl.spd) * Math.min(1, dt * 14);
@@ -2249,143 +2252,7 @@ void main() {
     v.soft(cx, cy, Math.max(w, h) * 0.12 * (1 + shared.bass), colorAt(0.5), 0.18 + 0.3 * shared.kick);
   };
 
-  // ---------------------------------------------------------------------------
-  // Beat Motion: smooth movement locked to the song's beat, nothing random.
-  // It reads where we are between two beats (beatPhase), so it moves the
-  // whole time, not just on hits. Three looks:
-  //  Sweep - a soft band of light glides across the screen once per beat,
-  //          back and forth, leaving a fading trail; colour changes per bar.
-  //  Radar - an arm goes round once per bar (4 beats) past four beat marks;
-  //          kicks leave glowing blips that fade over the bar.
-  //  Rings - a ring ripples out from the middle on every beat, a bigger
-  //          brighter one on the first beat of each bar.
-  // Cheap: a handful of shapes per frame, see-through so lyrics read.
-  const ease = (x) => 0.5 - 0.5 * Math.cos(Math.PI * Math.max(0, Math.min(1, x)));
   const cyc = (q) => 1 - Math.abs((((q % 2) + 2) % 2) - 1); // 0..1..0, no jumps
-  DRAW.motion = (v, p, dt, t) => {
-    const { ctx, w, h, U } = v;
-    const st = v.motion || (v.motion = { tick: shared.tickSerial, kick: shared.beatSerial, beats: 0, bars: 0, blips: [], rings: [], flash: 0 });
-    const bp = beatPhase();
-    const k = Math.min(1, shared.kick), bass = shared.bassPunch || 0;
-    if (st.tick !== shared.tickSerial) {
-      st.tick = shared.tickSerial;
-      st.beats++;
-      if (bp.inBar === 0) st.bars++;
-      st.flash = bp.inBar === 0 ? 1 : 0.6;
-      st.rings.push({ age: 0, big: bp.inBar === 0, c: st.bars });
-      if (st.rings.length > 8) st.rings.shift();
-    }
-    st.flash *= Math.exp(-dt * (3 / bp.per));
-    const look = p.motionLook || "sweep";
-    const col = (q) => colorAt(cyc(q + st.bars * 0.35));
-
-    if (look === "sweep") {
-      // Back and forth: even beats left -> right, odd beats right -> left.
-      const pos = (b, ph) => { const x = ease(ph); return b % 2 ? 1 - x : x; };
-      const bw = w * 0.16 * p.size;
-      const c = col(0.3);
-      for (let g = 6; g >= 0; g--) {
-        // the trail: where the band was a little earlier (same beat only)
-        const ph = bp.ph - g * 0.05;
-        if (ph < 0) continue;
-        const x = pos(st.beats, ph) * (w + bw) - bw / 2;
-        const a = (g === 0 ? 0.3 : 0.16 * (1 - g / 7)) * (0.55 + 0.45 * st.flash + 0.3 * bass);
-        const grad = ctx.createLinearGradient(x - bw / 2, 0, x + bw / 2, 0);
-        grad.addColorStop(0, v.rgba(c, 0));
-        grad.addColorStop(0.5, v.rgba(g === 0 ? mix(c, WHITE, 0.35) : c, a));
-        grad.addColorStop(1, v.rgba(c, 0));
-        ctx.fillStyle = grad;
-        ctx.fillRect(x - bw / 2, 0, bw, h);
-      }
-      // a thin bright line along the bottom shows the beat count in the bar
-      const floor = unitArea(v).floor;
-      for (let i = 0; i < 4; i++) {
-        const on = i === bp.inBar;
-        ctx.fillStyle = v.rgba(on ? mix(c, WHITE, 0.4) : c, on ? 0.75 : 0.18);
-        ctx.fillRect(w * (0.3 + i * 0.1) + 2 * U, floor - 10 * U, w * 0.1 - 4 * U, 3 * U * p.size);
-      }
-      return;
-    }
-
-    const spot = circleSpot(v, p, 0.3);
-    const cx = spot.x, cy = spot.y, R = spot.r;
-    const c = col(0.5);
-
-    if (look === "radar") {
-      // One turn per bar: 4 beats, the arm passes a mark on each beat.
-      const turn = ((bp.inBar + bp.ph) / 4) * Math.PI * 2 - Math.PI / 2;
-      ctx.lineWidth = Math.max(1, 1.2 * U);
-      ctx.strokeStyle = v.rgba(c, 0.18);
-      ctx.beginPath();
-      for (const f of [0.35, 0.7, 1]) { ctx.moveTo(cx + R * f, cy); ctx.arc(cx, cy, R * f, 0, Math.PI * 2); }
-      ctx.stroke();
-      for (let i = 0; i < 4; i++) {
-        const a = (i / 4) * Math.PI * 2 - Math.PI / 2, on = i === bp.inBar;
-        ctx.strokeStyle = v.rgba(on ? WHITE : c, on ? 0.5 + 0.5 * st.flash : 0.3);
-        ctx.lineWidth = (on ? 3 : 2) * U;
-        ctx.beginPath();
-        ctx.moveTo(cx + Math.cos(a) * R * 0.92, cy + Math.sin(a) * R * 0.92);
-        ctx.lineTo(cx + Math.cos(a) * R * 1.08, cy + Math.sin(a) * R * 1.08);
-        ctx.stroke();
-      }
-      // the fading wedge behind the arm
-      const W = 0.9;
-      for (let s = 0; s < 8; s++) {
-        const a1 = turn - (s / 8) * W, a0 = turn - ((s + 1) / 8) * W;
-        ctx.fillStyle = v.rgba(c, 0.16 * (1 - s / 8) * (0.7 + 0.5 * st.flash));
-        ctx.beginPath();
-        ctx.moveTo(cx, cy);
-        ctx.arc(cx, cy, R, a0, a1);
-        ctx.closePath();
-        ctx.fill();
-      }
-      ctx.strokeStyle = v.rgba(mix(c, WHITE, 0.5), 0.8);
-      ctx.lineWidth = 2 * U;
-      ctx.beginPath();
-      ctx.moveTo(cx, cy);
-      ctx.lineTo(cx + Math.cos(turn) * R, cy + Math.sin(turn) * R);
-      ctx.stroke();
-      // kicks leave blips under the arm, further out for harder kicks
-      if (st.kick !== shared.beatSerial) {
-        st.kick = shared.beatSerial;
-        st.blips.push({ a: turn, r: R * (0.25 + 0.7 * Math.min(1, 0.3 + bass * 0.8 + Math.random() * 0.2)), life: 1 });
-        if (st.blips.length > 16) st.blips.shift();
-      }
-      for (let i = st.blips.length - 1; i >= 0; i--) {
-        const b = st.blips[i];
-        b.life -= dt / (bp.per * 4);
-        if (b.life <= 0) { st.blips.splice(i, 1); continue; }
-        v.glow(cx + Math.cos(b.a) * b.r, cy + Math.sin(b.a) * b.r, (3 + 4 * b.life) * U * p.size, mix(c, WHITE, 0.4), 0.8 * b.life);
-      }
-      v.soft(cx, cy, R * 0.5, c, 0.08 + 0.15 * st.flash);
-      return;
-    }
-
-    // Rings: ripple out from the middle on each beat.
-    const life = bp.per * 3;
-    const far = Math.hypot(w, h) * 0.5;
-    for (let i = st.rings.length - 1; i >= 0; i--) {
-      const r = st.rings[i];
-      r.age += dt;
-      const q = r.age / life;
-      if (q >= 1) { st.rings.splice(i, 1); continue; }
-      const rad = R * 0.35 + (far - R * 0.35) * (1 - Math.pow(1 - q, 2.2)); // fast out, slowing
-      const rc = colorAt(cyc(r.c * 0.35 + 0.5));
-      ctx.strokeStyle = v.rgba(r.big ? mix(rc, WHITE, 0.3) : rc, (r.big ? 0.7 : 0.45) * (1 - q) * (1 - q));
-      ctx.lineWidth = (r.big ? 5 : 2.5) * U * p.size * (1 - 0.5 * q);
-      ctx.beginPath();
-      ctx.arc(cx, cy, rad, 0, Math.PI * 2);
-      ctx.stroke();
-    }
-    // the middle breathes with the beat
-    const pulse = 1 - ease(bp.ph);
-    ctx.strokeStyle = v.rgba(mix(c, WHITE, 0.4), 0.35 + 0.45 * pulse);
-    ctx.lineWidth = 2 * U;
-    ctx.beginPath();
-    ctx.arc(cx, cy, R * 0.35 * (1 + 0.08 * pulse + 0.05 * k), 0, Math.PI * 2);
-    ctx.stroke();
-    v.soft(cx, cy, R * 0.6, c, 0.08 + 0.18 * st.flash);
-  };
 
   // ---------------------------------------------------------------------------
   // Drum & Bass: a growling "reese" bass wave (three detuned strands) that
@@ -2565,10 +2432,10 @@ void main() {
 
   // How many "steps" a beat-stepping style has made: one per N clock beats.
   function beatSteps(st, p) {
-    if (st.tickSeen === undefined) { st.tickSeen = shared.tickSerial; st.ticks = 0; st.step = st.step || 0; st.barDrop = shared.dropSerial; }
+    if (st.tickSeen === undefined) { st.tickSeen = shared.tickSerial; st.ticks = 0; st.step = st.step || 0; }
     if (p.colorMove === "still") {
       // Still colours: hold the current step; pick up from here if switched back.
-      st.tickSeen = shared.tickSerial; st.ticks = 0; st.barSeen = shared.barSerial; st.barDrop = shared.dropSerial;
+      st.tickSeen = shared.tickSerial; st.ticks = 0; st.barSeen = shared.barSerial;
       return st.step;
     }
     const every = Math.max(1, Number(p.beatEvery) || 1);
@@ -2581,19 +2448,9 @@ void main() {
         while (st.barCount >= every / 4) { st.barCount -= every / 4; st.step++; st.stepAt = performance.now(); }
       }
       st.tickSeen = shared.tickSerial;
-      st.barDrop = shared.dropSerial;
       return st.step;
     }
     st.barSeen = shared.barSerial;
-    if (st.barDrop !== shared.dropSerial) {
-      // A drop almost always lands on the first beat of a bar: restart the
-      // count there, so "every 4 / 8 beats" changes on the bar, not mid-bar.
-      st.barDrop = shared.dropSerial;
-      st.tickSeen = shared.tickSerial;
-      st.ticks = 0;
-      st.step++;
-      st.stepAt = performance.now();
-    }
     if (st.tickSeen !== shared.tickSerial) {
       st.ticks += shared.tickSerial - st.tickSeen;
       st.tickSeen = shared.tickSerial;
@@ -2606,7 +2463,7 @@ void main() {
   // Geometric Shapes: flat, hard-edged blocks like a modern poster, no glow.
   // Slanted bars slide in from both edges, each one's length driven by a part
   // of the spectrum. On every beat the colours step round one place (a snap,
-  // no easing); a drop shuffles the whole arrangement. Brutalist variant:
+  // no easing). Brutalist variant:
   // plain white slabs on a heavy grid, lengths snapped to the grid, with
   // monospace LOW / MID / HIGH labels cut out of the slabs.
   function geoLayout(n, seed) {
@@ -2629,7 +2486,7 @@ void main() {
     ctx.globalCompositeOperation = "source-over"; // flat colour, overlaps stay flat
     const brut = p.variant === "brutalist";
     const n = brut ? (h < 380 * v.scale ? 5 : 7) : h < 380 * v.scale ? 4 : 6;
-    const st = v.geo || (v.geo = { step: 0, beatSeen: shared.beatSerial, dropSeen: shared.dropSerial, seed: shared.seed, n: 0 });
+    const st = v.geo || (v.geo = { step: 0, beatSeen: shared.beatSerial, seed: shared.seed, n: 0 });
     if (st.n !== n || st.seedFor !== shared.seed) {
       st.n = n;
       st.seedFor = shared.seed;
@@ -2637,11 +2494,6 @@ void main() {
       st.blocks = geoLayout(n, st.seed);
     }
     beatSteps(st, p);
-    if (st.dropSeen !== shared.dropSerial) {
-      st.dropSeen = shared.dropSerial;
-      st.seed = (st.seed * 7 + 13) % 65521 || 1;
-      st.blocks = geoLayout(n, st.seed);
-    }
     const pal = [colorAt(0), colorAt(0.5), colorAt(1)];
     const top = h * 0.08, span = h * 0.84;
     const pitch = span / n;
@@ -2764,8 +2616,7 @@ void main() {
   // circles, circles, corner triangles), see-through so the lyrics read over
   // it. Each tile's shape grows with its part of the spectrum (bass on the
   // left); on each beat-clock step about a third of the tiles turn a quarter
-  // (a quick snap) and every colour steps round one place; a drop reshuffles
-  // the whole grid. A few dozen flat fills per frame.
+  // (a quick snap) and every colour steps round one place. A few dozen flat fills per frame.
   function bauhausLayout(n, seed) {
     let s = seed || 1;
     const rnd = () => ((s = (s * 16807) % 2147483647) / 2147483647);
@@ -2790,16 +2641,11 @@ void main() {
     const rows = Math.ceil(h / tile), cols = Math.ceil(w / tile);
     const x0 = (w - cols * tile) / 2, y0 = (h - rows * tile) / 2;
     const n = rows * cols;
-    const st = v.bh || (v.bh = { step: 0, dropSeen: shared.dropSerial, n: 0, seedFor: -1 });
+    const st = v.bh || (v.bh = { step: 0, n: 0, seedFor: -1 });
     if (st.n !== n || st.seedFor !== shared.seed) {
       st.n = n;
       st.seedFor = shared.seed;
       st.seed = shared.seed || 1;
-      st.tiles = bauhausLayout(n, st.seed);
-    }
-    if (st.dropSeen !== shared.dropSerial) {
-      st.dropSeen = shared.dropSerial;
-      st.seed = (st.seed * 7 + 13) % 65521 || 1;
       st.tiles = bauhausLayout(n, st.seed);
     }
     const before = st.step;
@@ -2857,7 +2703,7 @@ void main() {
   // ---------------------------------------------------------------------------
   // Speaker cone physics shared by Subwoofer and Speaker Grille: a cone on a
   // spring. Kicks knock it outwards, the bass holds it out, it springs back
-  // with a little overshoot; a drop gives one huge push. st.x is how far out
+  // with a little overshoot. st.x is how far out
   // it is (0 = rest, about 1 = a big kick).
   function speakerMove(st, dt, strict) {
     if (st.kickSeen !== shared.beatSerial) {
@@ -2868,11 +2714,6 @@ void main() {
       if (real) st.vel += strict ? 10 * Math.min(1.2, shared.kick) : 9 * Math.min(1.2, shared.kick + 0.3);
       st.realKick = real;
     } else st.realKick = false;
-    if (st.dropSeen !== shared.dropSerial) {
-      st.dropSeen = shared.dropSerial;
-      st.vel += 24;
-      st.shock = 1;
-    }
     const target = 0.35 * (shared.bassPunch || 0);
     const n = Math.max(1, Math.ceil(dt / 0.008));
     const h = dt / n;
@@ -2882,17 +2723,15 @@ void main() {
       st.x += st.vel * h;
     }
     st.x = Math.max(-0.6, Math.min(1.8, st.x));
-    st.shock = (st.shock || 0) * Math.exp(-dt * 1.6);
   }
 
   // Subwoofer: a big speaker drawn in light (outlines and sheen, so it sits
   // over the background like the other styles). Kicks punch the cone out and
   // it springs back, the rubber surround wobbles with the bass, a ring of
-  // light round it changes colour on the beat, a drop gives one huge push
-  // plus a shockwave. On the album art, the art is the middle of the cone.
+  // light round it changes colour on the beat. On the album art, the art is the middle of the cone.
   DRAW.sub = (v, p, dt, t) => {
     const { ctx, w, h, U } = v;
-    const st = v.sub || (v.sub = { x: 0, vel: 0, kickSeen: shared.beatSerial, dropSeen: shared.dropSerial, shock: 0 });
+    const st = v.sub || (v.sub = { x: 0, vel: 0, kickSeen: shared.beatSerial });
     speakerMove(st, dt);
     const step = beatSteps(st, p);
     const e = shared.energy, k = Math.min(1, shared.kick), bass = shared.bassPunch || 0, x = st.x;
@@ -2938,13 +2777,6 @@ void main() {
     ctx.strokeStyle = v.rgba(mix(cB, WHITE, 0.5), 0.5);
     ctx.lineWidth = Math.max(1, 1.5 * U);
     ctx.stroke();
-    // Highlight on the top-left of the surround.
-    ctx.beginPath();
-    ctx.arc(cx, cy, sr - R * 0.02, Math.PI * 1.05, Math.PI * 1.45);
-    ctx.strokeStyle = v.rgba(WHITE, 0.25 + 0.2 * Math.max(0, x));
-    ctx.lineWidth = Math.max(1.5, R * 0.025);
-    ctx.lineCap = "round";
-    ctx.stroke();
     // Dust cap (or a ring round the album art).
     if (spot.art) {
       ctx.beginPath();
@@ -2986,14 +2818,6 @@ void main() {
     ctx.strokeStyle = v.rgba(mix(cA, WHITE, 0.3), 0.35 + 0.5 * e);
     ctx.lineWidth = Math.max(1.5, 2.5 * U);
     ctx.stroke();
-    // Drop: a shockwave ring rolling out.
-    if (st.shock > 0.03) {
-      ctx.beginPath();
-      ctx.arc(cx, cy, R * (1.25 + (1 - st.shock) * 2.5), 0, Math.PI * 2);
-      ctx.strokeStyle = v.rgba(mix(cA, WHITE, 0.4), 0.6 * st.shock);
-      ctx.lineWidth = (3 + 10 * st.shock) * U;
-      ctx.stroke();
-    }
   };
 
   // Seeded random numbers (same layout every time for the same seed).
@@ -3195,8 +3019,7 @@ void main() {
   // The spectrum is fed in at the front (bass in the middle) and scrolls
   // back, faster when it's loud. The whole mesh twists along its length,
   // wobbling at a rate set by the bass, like a reese bass; every snare
-  // glitches it (rows jump sideways, a cyan / magenta split); drops light it
-  // up and give it a big twist. ~750 points, a few batched strokes.
+  // glitches it (rows jump sideways, a cyan / magenta split). ~750 points, a few batched strokes.
   // Ridges look: flat stacked lines, the classic pulsar-plot look. Each line
   // is a spectrum frame (newest at the bottom, drifting up), flat at the
   // edges and rising into peaks in the middle; each line hides the ones
@@ -3207,11 +3030,10 @@ void main() {
     const R = 44, C = 72, smooth = p.neuroLine === "smooth";
     let st = v.ridges;
     if (!st || st.smooth !== smooth) {
-      st = v.ridges = { rows: [], acc: 0, flash: 0, glitch: 0, smooth, dropSeen: shared.dropSerial, snareSeen: shared.snareSerial, shift: new Float32Array(R) };
+      st = v.ridges = { rows: [], acc: 0, flash: 0, glitch: 0, smooth, snareSeen: shared.snareSerial, shift: new Float32Array(R) };
       for (let r = 0; r < R; r++) st.rows.push({ v: new Float32Array(C), n: new Float32Array(C) });
     }
     const e = shared.energy;
-    if (st.dropSeen !== shared.dropSerial) { st.dropSeen = shared.dropSerial; st.flash = 1; }
     if (st.snareSeen !== shared.snareSerial) {
       st.snareSeen = shared.snareSerial;
       st.glitch = 1;
@@ -3288,7 +3110,7 @@ void main() {
     const COLS = lines ? 64 : 34, ROWS = lines ? 26 : 22;
     let st = v.neuro;
     if (!st || st.rows.length !== ROWS || st.rows[0].length !== COLS) {
-      st = v.neuro = { rows: Array.from({ length: ROWS }, () => new Float32Array(COLS)), acc: 0, phase: 0, glitch: 0, flash: 0, snareSeen: shared.snareSerial, dropSeen: shared.dropSerial, shift: new Float32Array(ROWS) };
+      st = v.neuro = { rows: Array.from({ length: ROWS }, () => new Float32Array(COLS)), acc: 0, phase: 0, glitch: 0, flash: 0, snareSeen: shared.snareSerial, shift: new Float32Array(ROWS) };
     }
     const e = shared.energy, k = Math.min(1, shared.kick), bass = shared.bassPunch || 0;
     const step = beatSteps(st, p);
@@ -3296,10 +3118,6 @@ void main() {
       st.snareSeen = shared.snareSerial;
       st.glitch = 1;
       for (let r = 0; r < ROWS; r++) st.shift[r] = Math.random() < 0.3 ? (Math.random() - 0.5) * 0.12 : 0;
-    }
-    if (st.dropSeen !== shared.dropSerial) {
-      st.dropSeen = shared.dropSerial;
-      st.flash = 1;
     }
     st.glitch *= Math.exp(-dt * 10);
     st.flash *= Math.exp(-dt * 1.5);
@@ -3412,80 +3230,99 @@ void main() {
   };
 
   // ---------------------------------------------------------------------------
-  // Ink in Water: a cheap fake of ink clouds, no real fluid maths. A small
-  // canvas (160 wide) keeps last frame's ink, smeared a touch outwards and
-  // faded a little each frame (two quick image copies), and a few dozen ink
-  // blobs drift through a made-up swirling current, leaving soft trails.
-  // Kicks drop a cluster of blobs in from the top (they sink and spread),
-  // the bass makes the current swirl harder, snares flick a small splash,
-  // drops burst ink out of the middle, colours step on the beat.
+  // Silk (was Ink in Water): long streaks of colour pulled through a slow
+  // current. A few hundred strands follow a smooth, slowly turning flow and
+  // draw short line pieces onto a half-size canvas that fades a little at a
+  // time, so each strand leaves a long silky trail. The bass speeds the
+  // current up, kicks bloom a burst of new strands from one spot, snares flick
+  // a few thin bright ones, colours step round on the beat.
   DRAW.ink = (v, p, dt, t) => {
     const { ctx, w, h } = v;
-    const W = 160, H = Math.max(40, Math.min(160, Math.round((160 * h) / Math.max(1, w))));
+    const W = Math.max(80, Math.round(w * 0.5)), H = Math.max(60, Math.round(h * 0.5));
     let st = v.ink;
-    if (!st || st.H !== H) {
+    if (!st || st.W !== W || st.H !== H) {
       const c = document.createElement("canvas");
       c.width = W;
       c.height = H;
-      st = v.ink = { c, g: c.getContext("2d"), H, blobs: [], kickSeen: shared.beatSerial, snareSeen: shared.snareSerial, dropSeen: shared.dropSerial, ft: Math.random() * 50 };
+      st = v.ink = { c, g: c.getContext("2d"), W, H, s: [], kickSeen: shared.beatSerial, snareSeen: shared.snareSerial, ft: Math.random() * 50, fade: 0 };
     }
-    const g = st.g;
+    const g = st.g, D = Math.min(W, H);
     const e = shared.energy, k = Math.min(1, shared.kick), bass = shared.bassPunch || 0;
     const step = beatSteps(st, p);
     const sp = p.speed;
     const ink = (q) => colorAt((q + step / 3) % 1);
-    const add = (x, y, vx, vy, n, col, size) => {
-      for (let i = 0; i < n && st.blobs.length < 70; i++)
-        st.blobs.push({ x: x + (Math.random() - 0.5) * 6, y: y + (Math.random() - 0.5) * 6, vx: vx + (Math.random() - 0.5) * 20, vy: vy + (Math.random() - 0.5) * 20, life: 1, r: size * (0.6 + Math.random() * 0.8), c: col });
+    const MAX = 260;
+    const add = (x, y, vx, vy, col, wd, life) => {
+      if (st.s.length >= MAX) st.s.shift();
+      st.s.push({ x, y, px: x, py: y, vx, vy, life: 1, fall: 1 / life, wd, c: col, off: Math.random() * 6.28 });
     };
+    // Kick: a bloom of strands from one spot, shooting out and then caught by the current.
     if (st.kickSeen !== shared.beatSerial) {
       st.kickSeen = shared.beatSerial;
-      if (bass > 0.2 || !isLive()) add(W * (0.12 + Math.random() * 0.76), -2, 0, (40 + 60 * k) * sp, 5, ink(Math.random() * 0.3), 5 + 4 * k);
-    }
-    if (st.snareSeen !== shared.snareSerial) {
-      st.snareSeen = shared.snareSerial;
-      add(W * Math.random(), H * (0.2 + Math.random() * 0.6), (Math.random() - 0.5) * 80 * sp, 0, 2, mix(ink(0.6), WHITE, 0.3), 3);
-    }
-    if (st.dropSeen !== shared.dropSerial) {
-      st.dropSeen = shared.dropSerial;
-      for (let i = 0; i < 10; i++) {
-        const a = (i / 10) * Math.PI * 2;
-        add(W / 2, H / 2, Math.cos(a) * 90 * sp, Math.sin(a) * 90 * sp, 1, ink(i / 10), 9);
+      if (bass > 0.15 || !isLive()) {
+        const x = W * (0.15 + Math.random() * 0.7), y = H * (0.2 + Math.random() * 0.6), q = Math.random();
+        const n = 14 + Math.round(16 * k);
+        for (let i = 0; i < n; i++) {
+          const a = (i / n) * Math.PI * 2 + Math.random() * 0.3, f = D * (0.4 + 0.8 * k) * (0.5 + Math.random());
+          add(x, y, Math.cos(a) * f, Math.sin(a) * f, ink(q + (i / n) * 0.25), 0.8 + Math.random() * 1.6, 2.5 + Math.random() * 2);
+        }
       }
     }
-    // 1. Old ink: smear outwards a touch, then fade.
-    g.globalCompositeOperation = "copy"; // replace, don't stack (stacking turned it white)
-    g.globalAlpha = 1;
-    g.drawImage(st.c, -0.6, -0.4, W + 1.2, H + 0.8);
-    g.globalCompositeOperation = "destination-out";
-    g.fillStyle = `rgba(0,0,0,${Math.min(0.5, dt * 0.7)})`;
-    g.fillRect(0, 0, W, H);
-    // 2. Blobs drifting through a made-up swirling current.
-    st.ft += dt * (0.2 + 0.6 * bass) * sp;
-    const swirl = (14 + 70 * bass) * sp, T = st.ft;
-    g.globalCompositeOperation = "source-over"; // ink tints, never piles up to white
-    for (let i = st.blobs.length - 1; i >= 0; i--) {
-      const b = st.blobs[i];
-      const nx = b.x / W * 6, ny = b.y / H * 4;
-      const fx = Math.sin(ny * 1.7 + T * 1.3) + 0.6 * Math.sin(nx * 0.9 - ny * 1.1 + T);
-      const fy = Math.cos(nx * 1.4 - T * 1.1) + 0.5 * Math.cos(ny * 2.1 + T * 0.7);
-      b.vx += (fx * swirl - b.vx) * Math.min(1, dt * 0.9);
-      b.vy += (fy * swirl * 0.7 + 12 - b.vy) * Math.min(1, dt * 0.9); // ink sinks a little
-      b.x += b.vx * dt;
-      b.y += b.vy * dt;
-      b.r += dt * 3; // spreads out
-      b.life -= dt * 0.22;
-      if (b.life <= 0 || b.x < -20 || b.x > W + 20 || b.y > H + 20) { st.blobs.splice(i, 1); continue; }
-      g.globalAlpha = 0.1 * b.life;
-      g.drawImage(softSprite(b.c), b.x - b.r, b.y - b.r, b.r * 2, b.r * 2);
+    // Snare: a few thin, bright strands.
+    if (st.snareSeen !== shared.snareSerial) {
+      st.snareSeen = shared.snareSerial;
+      const x = W * Math.random(), y = H * Math.random();
+      for (let i = 0; i < 5; i++) add(x, y, (Math.random() - 0.5) * D, (Math.random() - 0.5) * D, mix(ink(0.6), WHITE, 0.45), 0.6, 1.5 + Math.random());
+    }
+    // Always some strands drifting, more when it's loud.
+    const want = 50 + 110 * e;
+    for (let i = 0; i < 4 && st.s.length < want; i++) add(Math.random() * W, Math.random() * H, 0, 0, ink(Math.random()), 0.7 + Math.random() * 1.8, 3 + Math.random() * 4);
+
+    // 1. Fade old streaks in steps (a big step now and then, so faint
+    //    leftovers really go instead of sticking at a low alpha).
+    st.fade += dt;
+    const keep = 0.5 + 0.9 * p.smoothing; // seconds-ish a streak lasts
+    if (st.fade > 1 / 20) {
+      g.globalCompositeOperation = "destination-out";
+      g.fillStyle = `rgba(0,0,0,${Math.min(0.6, st.fade / keep).toFixed(3)})`;
+      g.fillRect(0, 0, W, H);
+      st.fade = 0;
+    }
+    g.globalCompositeOperation = "source-over";
+    g.lineCap = "round";
+    // 2. Move every strand through the current and draw its newest piece.
+    st.ft += dt * (0.12 + 0.35 * bass + 0.15 * e) * sp;
+    const T = st.ft;
+    const flow = D * (0.05 + 0.32 * bass + 0.2 * e) * sp;
+    const grip = Math.min(1, dt * 1.6);
+    const lw = D / 320;
+    for (let i = st.s.length - 1; i >= 0; i--) {
+      const s = st.s[i];
+      const nx = (s.x / D) * 2.4, ny = (s.y / D) * 2.4;
+      const a = 1.6 * Math.sin(nx * 1.1 + T) + 1.6 * Math.cos(ny * 1.3 - T * 0.8) + Math.sin((nx - ny) * 0.6 + T * 0.45) + s.off * 0.12;
+      s.vx += (Math.cos(a) * flow - s.vx) * grip;
+      s.vy += (Math.sin(a) * flow - s.vy) * grip;
+      s.px = s.x;
+      s.py = s.y;
+      s.x += s.vx * dt;
+      s.y += s.vy * dt;
+      s.life -= dt * s.fall;
+      if (s.life <= 0 || s.x < -10 || s.x > W + 10 || s.y < -10 || s.y > H + 10) { st.s.splice(i, 1); continue; }
+      const fadeIn = Math.min(1, (1 - s.life) * 8); // no hard dot where it starts
+      g.globalAlpha = 0.55 * fadeIn * Math.min(1, s.life * 2);
+      g.strokeStyle = `rgb(${s.c[0]},${s.c[1]},${s.c[2]})`;
+      g.lineWidth = Math.max(0.6, s.wd * lw * (0.6 + 0.6 * s.life));
+      g.beginPath();
+      g.moveTo(s.px, s.py);
+      g.lineTo(s.x, s.y);
+      g.stroke();
     }
     g.globalAlpha = 1;
-    g.globalCompositeOperation = "source-over";
     // 3. Up to full size, smooth, kept below white so lyrics read.
     ctx.globalCompositeOperation = "source-over";
     ctx.imageSmoothingEnabled = true;
     ctx.imageSmoothingQuality = "medium";
-    ctx.globalAlpha = A_(0.85, v);
+    ctx.globalAlpha = A_(0.9, v);
     ctx.drawImage(st.c, 0, 0, w, h);
     ctx.globalAlpha = 1;
   };
@@ -3841,6 +3678,17 @@ void main() {
 .lp-install-go { background: #fff; color: #111; }
 .lp-install-go:disabled { opacity: .7; cursor: default; }
 .lp-install-no { background: rgba(255,255,255,.08); color: rgba(255,255,255,.8); }
+
+/* Sound source switch (top of the Style page) */
+:is(#SpicyLyricsPage, .lp-modal-wrap) .lp-panel .lp-source { padding: 10px 12px 12px; margin-bottom: 10px; border-radius: 14px; background: rgba(255,255,255,.07); }
+:is(#SpicyLyricsPage, .lp-modal-wrap) .lp-panel .lp-source-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 6px; }
+:is(#SpicyLyricsPage, .lp-modal-wrap) .lp-panel .lp-source-head .lp-gtitle { margin: 0; }
+:is(#SpicyLyricsPage, .lp-modal-wrap) .lp-panel .lp-test-helper { border: 0; padding: 4px 10px; border-radius: 999px; cursor: pointer; background: rgba(255,255,255,.1); color: rgba(255,255,255,.85); font-size: 11px; font-weight: 600; }
+:is(#SpicyLyricsPage, .lp-modal-wrap) .lp-panel .lp-test-helper:hover { background: rgba(255,255,255,.18); color: #fff; }
+:is(#SpicyLyricsPage, .lp-modal-wrap) .lp-panel .lp-source .lp-seg button { padding: 10px 4px; font-size: 14px; font-weight: 600; }
+:is(#SpicyLyricsPage, .lp-modal-wrap) .lp-panel .lp-source .lp-status-text { margin: 8px 2px 2px; }
+:is(#SpicyLyricsPage, .lp-modal-wrap) .lp-panel .lp-source .lp-test-result { margin: 6px 2px 0; color: #fff; }
+:is(#SpicyLyricsPage, .lp-modal-wrap) .lp-panel .lp-source .lp-btnrow { margin-top: 6px; }
 `;
   function ensureStyle(doc) {
     if (doc.getElementById(STYLE_ID)) return;
@@ -3887,7 +3735,8 @@ void main() {
       <div class="lp-body">
 
       <div class="lp-page" data-page="style">
-        <div class="lp-cards" data-key="__style" data-scope="global"><div class="lp-cat lp-sd-cat">Works with Spotify data</div>${STYLE_GROUPS.map(([cat, keys]) => (cat ? `<div class="lp-cat">${cat}</div>` : "") + keys.map((k) => STYLES.find((x) => x[0] === k)).sort((x, y) => (x[0] === "off") - (y[0] === "off") || x[1].localeCompare(y[1])).map(([v, l]) => `<button data-v="${v}" data-sd="${SONG_DATA_OK.has(v) ? 1 : 0}"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">${STYLE_ICON[v] || ""}</svg><span>${l}</span></button>`).join("")).join("")}<div class="lp-sd-more" role="button" tabindex="0"><span>More styles</span><small>Best with the helper</small></div></div>
+        <div class="lp-source"><div class="lp-source-head"><span class="lp-gtitle">Sound source</span><button class="lp-test-helper">Test helper</button></div>${seg("source", [["helper", "Helper"], ["spotify", "Spotify data"]], "global")}<div class="lp-status-text"></div><div class="lp-note lp-test-result lp-hidden"></div><div class="lp-note lp-get-note"></div><div class="lp-btnrow"><button class="lp-reset lp-get-helper">Install helper</button></div></div>
+        <div class="lp-cards" data-key="__style" data-scope="global"><div class="lp-cat lp-sd-cat">Works with Spotify data</div>${STYLE_GROUPS.map(([cat, keys]) => (cat ? `<div class="lp-cat">${cat}</div>` : "") + keys.map((k) => STYLES.find((x) => x[0] === k)).map(([v, l]) => `<button data-v="${v}" data-sd="${SONG_DATA_OK.has(v) ? 1 : 0}"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">${STYLE_ICON[v] || ""}</svg><span>${l}</span></button>`).join("")).join("")}<div class="lp-sd-more" role="button" tabindex="0"><span>More styles</span><small>Best with the helper</small></div></div>
         <div class="lp-hint"></div>
       </div>
 
@@ -3897,7 +3746,7 @@ void main() {
             <div class="lp-row"><div class="lp-label"><span>Colour changes</span></div>${seg("colorMove", [["move", "Moving"], ["still", "Still"]], "style")}</div>
             <div class="lp-colors" data-show-color><label><input type="color" data-key="color1" data-scope="style">Colour 1</label><label><input type="color" data-key="color2" data-scope="style">Colour 2</label></div>`)}
           ${group("Appearance", slider("opacity", "Opacity", 0.1, 1, 0.05, "style") + slider("blur", "Blur", 0, 20, 0.5, "style") + slider("brightness", "Brightness", 0.2, 1.6, 0.05, "style") + slider("size", "Size", 0.4, 2, 0.05, "style"))}
-          ${group("Layout", slider("barCount", "Bar count", 16, 128, 1, "style", u("barCount")) + slider("neuroTwist", "Twist", 0, 1, 0.05, "style", u("neuroTwist")) + `<div class="lp-row" data-uses="${u("position")}"><div class="lp-label"><span>Position</span></div>${seg("position", [["bottom", "Bottom"], ["top", "Top"], ["both", "Both"]], "style")}</div><div class="lp-row" data-uses="${u("variant")}"><div class="lp-label"><span>Look</span></div>${seg("variant", [["poster", "Poster"], ["brutalist", "Brutalist"]], "style")}</div><div class="lp-row" data-uses="${u("motionLook")}"><div class="lp-label"><span>Look</span></div>${seg("motionLook", [["sweep", "Sweep"], ["radar", "Radar"], ["rings", "Rings"]], "style")}</div><div class="lp-row" data-uses="${u("neuroLook")}"><div class="lp-label"><span>Look</span></div>${seg("neuroLook", [["mesh", "Mesh"], ["lines", "Lines"], ["ridges", "Ridges"]], "style")}</div><div class="lp-row" data-uses="${u("neuroLine")}"><div class="lp-label"><span>Ridges line</span></div>${seg("neuroLine", [["rough", "Rough"], ["smooth", "Smooth"]], "style")}</div><div class="lp-row" data-uses="${u("neuroMirror")}"><div class="lp-label"><span>Mirror</span></div>${seg("neuroMirror", [["off", "Off"], ["on", "On"]], "style")}</div><div class="lp-row" data-uses="${u("circleAt")}"><div class="lp-label"><span>Circle at</span></div>${seg("circleAt", [["middle", "Middle"], ["art", "Album art"]], "style")}</div><div class="lp-row" data-uses="${u("mcColor")}"><div class="lp-label"><span>Bar colour</span></div>${seg("mcColor", [["flow", "Flow"], ["frequency", "Freq."], ["height", "Area"], ["bar", "Bar"], ["solid", "Solid"]], "style")}</div><div class="lp-row" data-uses="${u("beatEvery")}"><div class="lp-label"><span>Change every</span></div>${seg("beatEvery", [["1", "Beat"], ["2", "2"], ["4", "4"], ["8", "8 beats"]], "style")}</div>`, [...new Set([...USES.barCount, ...USES.position, ...USES.variant, ...USES.motionLook, ...USES.neuroLook, ...USES.neuroLine, ...USES.neuroTwist, ...USES.neuroMirror, ...USES.circleAt, ...USES.mcColor, ...USES.beatEvery])].join(","))}
+          ${group("Layout", slider("barCount", "Bar count", 16, 128, 1, "style", u("barCount")) + slider("neuroTwist", "Twist", 0, 1, 0.05, "style", u("neuroTwist")) + `<div class="lp-row" data-uses="${u("position")}"><div class="lp-label"><span>Position</span></div>${seg("position", [["bottom", "Bottom"], ["top", "Top"], ["both", "Both"]], "style")}</div><div class="lp-row" data-uses="${u("variant")}"><div class="lp-label"><span>Look</span></div>${seg("variant", [["poster", "Poster"], ["brutalist", "Brutalist"]], "style")}</div><div class="lp-row" data-uses="${u("neuroLook")}"><div class="lp-label"><span>Look</span></div>${seg("neuroLook", [["mesh", "Mesh"], ["lines", "Lines"], ["ridges", "Ridges"]], "style")}</div><div class="lp-row" data-uses="${u("neuroLine")}"><div class="lp-label"><span>Ridges line</span></div>${seg("neuroLine", [["rough", "Rough"], ["smooth", "Smooth"]], "style")}</div><div class="lp-row" data-uses="${u("neuroMirror")}"><div class="lp-label"><span>Mirror</span></div>${seg("neuroMirror", [["off", "Off"], ["on", "On"]], "style")}</div><div class="lp-row" data-uses="${u("circleAt")}"><div class="lp-label"><span>Circle at</span></div>${seg("circleAt", [["middle", "Middle"], ["art", "Album art"]], "style")}</div><div class="lp-row" data-uses="${u("mcColor")}"><div class="lp-label"><span>Bar colour</span></div>${seg("mcColor", [["flow", "Flow"], ["frequency", "Freq."], ["height", "Area"], ["bar", "Bar"], ["solid", "Solid"]], "style")}</div><div class="lp-row" data-uses="${u("beatEvery")}"><div class="lp-label"><span>Change every</span></div>${seg("beatEvery", [["1", "Beat"], ["2", "2"], ["4", "4"], ["8", "8 beats"]], "style")}</div>`, [...new Set([...USES.barCount, ...USES.position, ...USES.variant, ...USES.neuroLook, ...USES.neuroLine, ...USES.neuroTwist, ...USES.neuroMirror, ...USES.circleAt, ...USES.mcColor, ...USES.beatEvery])].join(","))}
         </div>
       </div>
 
@@ -3917,7 +3766,6 @@ void main() {
       </div>
 
       <div class="lp-page" data-page="more">
-        <div class="lp-group"><div class="lp-gtitle">Sound source</div>${seg("source", [["helper", "Helper when available"], ["spotify", "Spotify data only"]], "global")}<div class="lp-status-text"></div><div class="lp-note lp-get-note"></div><div class="lp-btnrow"><button class="lp-reset lp-get-helper">Install helper</button></div></div>
         ${group("Beat effects", toggle("kickPulse", "Pulse on kicks", "The visual swells a little on each kick") + toggle("kickFlash", "Flash on kicks", "A soft flash of colour"))}
         ${group("Sync", slider("syncDelay", "Audio delay (Bluetooth)", 0, 400, 10, "global") + `<div class="lp-note">Visuals ahead of the sound? With Bluetooth headphones the sound arrives later than it's played. Slide this until the beat lines up.</div>`)}
         ${group("Performance", toggle("ecoUnfocused", "Save power when Spotify isn't focused", "Drops to 30 fps while you're gaming or in another app") + `<div class="lp-label"><span>Frame rate</span></div>${seg("fps", [["30", "30 fps"], ["60", "60 fps"], ["max", "Max"]], "global")}<div class="lp-label"><span>Quality</span></div>${seg("quality", [["low", "Low"], ["medium", "Medium"], ["high", "High"]], "global")}<div class="lp-note">Everything stops (including the helper) when the lyrics view isn't on screen.</div>`)}
@@ -3966,6 +3814,7 @@ void main() {
         return;
       }
       if (e.target.closest(".lp-get-helper")) return openInstall();
+      if (e.target.closest(".lp-test-helper")) return testHelper();
       if (e.target.closest(".lp-reset")) {
         delete S.per[styleKey()];
         return save();
@@ -4069,6 +3918,8 @@ void main() {
     const gn = p.querySelector(".lp-get-note");
     if (gn) gn.textContent = seen && !quiet ? HELPER_START : "";
     if (gn) gn.classList.toggle("lp-hidden", !need || !gn.textContent);
+    const tr = p.querySelector(".lp-test-result");
+    if (tr) { tr.textContent = shared.testMsg || ""; tr.classList.toggle("lp-hidden", !shared.testMsg); }
     const dg = p.querySelector(".lp-diag");
     if (dg) {
       const d = ana.diag || {};

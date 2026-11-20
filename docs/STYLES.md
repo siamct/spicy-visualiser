@@ -72,8 +72,7 @@ The classic trap-channel circle, empty in the middle. The spectrum is mirrored r
 A speaker drawn in light:
 - kicks punch the cone out and it springs back;
 - the surround wobbles with the bass;
-- the light ring changes colour on the beat;
-- a drop gives one huge push with a shockwave.
+- the light ring changes colour on the beat.
 
 ---
 
@@ -81,18 +80,10 @@ A speaker drawn in light:
 
 These styles follow the song's beat more than the raw spectrum, so they keep a steady rhythm.
 
-### Beat Motion
-![Beat Motion](screenshots/styles/motion.jpg)
-
-Smooth movement locked to the beat, with three looks (Look tab → **Look**):
-- **Rings** (shown): a ring ripples out on every beat, with a bigger one on the first beat of each bar.
-- **Sweep**: a band of light glides across the screen, back and forth, once per beat.
-- **Radar**: an arm goes round once a bar past four beat marks, and kicks leave blips.
-
 ### Geometric
 ![Geometric](screenshots/styles/geometric.jpg)
 
-Bold, flat slanted bands like a modern poster, one per slice of the spectrum, sliding in from the edges. Colours step on the beat, and drops shuffle the layout. The **Brutalist** variant adds a heavy grid and cut-out labels.
+Bold, flat slanted bands like a modern poster, one per slice of the spectrum, sliding in from the edges. Colours step on the beat. The **Brutalist** variant adds a heavy grid and cut-out labels.
 
 ### Bauhaus Tiles
 ![Bauhaus Tiles](screenshots/styles/bauhaus.jpg)
@@ -100,7 +91,6 @@ Bold, flat slanted bands like a modern poster, one per slice of the spectrum, sl
 A poster grid of flat circles, half circles, quarter circles and triangles.
 - Shapes grow with their part of the spectrum.
 - Tiles turn a quarter on the beat and the colours step round.
-- Drops reshuffle the whole grid.
 
 ---
 
@@ -121,14 +111,14 @@ A smooth glowing fluid. It flows faster, swirls harder and glows brighter as the
 
 The same fluid as Plasma, shown on the LED dot panel.
 
-### Ink in Water
-![Ink in Water](screenshots/styles/ink.jpg)
+### Silk
+Long streaks of colour pulled through a slow current, like ink drawn through water:
+- the bass speeds the current up;
+- kicks bloom a burst of new streaks from one spot;
+- snares flick a few thin, bright ones;
+- the colours step round on the beat.
 
-A real fluid simulation:
-- kicks drop ink in from the top, and it sinks and billows;
-- the bass stirs it;
-- snares flick a splash;
-- drops burst ink out of the middle.
+The **Smoothing** slider sets how long the streaks last.
 
 ### Warp
 ![Warp](screenshots/styles/warp.jpg)
@@ -143,7 +133,7 @@ A flowing three-strand bass wave that pumps on kicks, with speed streaks racing 
 ### Neuro Mesh
 ![Neuro Mesh](screenshots/styles/neuro.jpg)
 
-A wireframe landscape rolling towards you, shaped by the spectrum. It glitches on snares and lights up on drops.
+A wireframe landscape rolling towards you, shaped by the spectrum. It glitches on snares.
 
 Settings to try:
 - **Twist** (slider): makes it wobble with the bass like a reese.

@@ -33,7 +33,7 @@ const path = require("path");
   await p.waitForTimeout(5500);
   const st = await p.evaluate(() => window.SpicyVisualiser.state());
   await p.evaluate(() => document.querySelector(".lp-button").click());
-  await p.evaluate(() => document.querySelector('.lp-tabs [data-v="more"]').click());
+  await p.evaluate(() => document.querySelector('.lp-tabs [data-v="style"]').click());
   const quietText = await p.evaluate(() => document.querySelector(".lp-status-text").textContent);
   const drawn = () => p.evaluate(() => { const c = document.querySelector("canvas"); const d = c.getContext("2d").getImageData(0, 0, c.width, c.height).data; let n = 0; for (let i = 3; i < d.length; i += 4) if (d[i]) n++; return n; });
   const px1 = await drawn();
