@@ -30,6 +30,7 @@
     ["retro", "Retro Bars"],
     ["plasma", "Plasma"],
     ["ink", "Silk"],
+    ["ribbon", "Ribbon"],
     ["warp", "Warp"],
     ["dnb", "Liquid"],
     ["neuro", "Neuro Mesh"],
@@ -58,6 +59,7 @@
     trap: '<path d="M12 3.5c2 2.5 3.5 1 5.5 3s.5 3.5 2.5 5.5-1 3.5-2.5 5.5-3.5.5-5.5 3c-2-2.5-3.5-1-5.5-3s.5-3.5-2.5-5.5 1-3.5 2.5-5.5 3.5-.5 5.5-3z" opacity=".55"/><circle cx="12" cy="12" r="4.6" fill="none" stroke="currentColor" stroke-width="1.6"/>',
     retro: '<g>'+[[3,3],[7,5],[11,2],[15,4],[19,1]].map(([x,n])=>[0,1,2,3,4,5].slice(0,6-n+1).map((s)=>`<rect x="${x}" y="${19-s*3}" width="3" height="2" opacity="${(0.5+s*0.1).toFixed(2)}"/>`).join('')).join('')+'</g>',
     neuro: '<g fill="none" stroke="currentColor" stroke-width="1.2"><path d="M2 18c4-3 6 1 10-2s6 1 10-2"/><path d="M4 13c3-2 5 1 8-1.5s5 1 8-1.5" opacity=".7"/><path d="M6 9c2-1.5 4 .5 6-1s4 .5 6-1" opacity=".45"/><path d="M7 18 9 9M12 16l.5-7.5M17 16.5 15 8.5" opacity=".5"/></g>',
+    ribbon: '<g fill="none" stroke="currentColor" stroke-linecap="round"><path d="M2 12c4-6 8 5 12 0s6-3 8-1" stroke-width="2"/><path d="M2 15c4-5 8 4 12 0s6-2 8-.5" stroke-width="1.3" opacity=".6"/><path d="M2 9c4-5 8 4 12 0s6-2 8-.5" stroke-width="1" opacity=".4"/></g><circle cx="17.5" cy="9.8" r="1.1"/>',
     ink: '<g fill="none" stroke="currentColor" stroke-linecap="round"><path d="M3 20C6 13 9 7 21 4" stroke-width="2.2"/><path d="M3 20c4-4 8-6 18-5" stroke-width="1.5" opacity=".75"/><path d="M3 20c2-6 6-12 11-16" stroke-width="1.1" opacity=".5"/><path d="M3 20c5-2 10-2 16 1" stroke-width=".9" opacity=".4"/></g><circle cx="3.2" cy="19.8" r="1.6"/>',
     sub: '<circle cx="12" cy="12" r="10" fill="none" stroke="currentColor" stroke-width="1.5"/><circle cx="12" cy="12" r="7" fill="none" stroke="currentColor" stroke-width="1.2" opacity=".7"/><circle cx="12" cy="12" r="5" fill="none" stroke="currentColor" stroke-width="1" opacity=".45"/><circle cx="12" cy="12" r="2.8"/>',
     bauhaus: '<path d="M3 3h8A8 8 0 0 1 3 11z"/><path d="M13 11a4 4 0 0 1 8 0z" opacity=".6"/><circle cx="7" cy="17" r="3.6" opacity=".8"/><path d="M13 21h8L13 13z"/>',
@@ -69,12 +71,12 @@
   // Styles that still look right on Spotify's data (it has loudness and
   // beats, not a real spectrum). With that source they're listed first and
   // the rest fold away under "More styles".
-  const SONG_DATA_OK = new Set(["particles", "plasma", "ledplasma", "ink", "warp", "dnb", "geometric", "bauhaus", "sub", "off"]);
+  const SONG_DATA_OK = new Set(["particles", "plasma", "ledplasma", "ink", "warp", "dnb", "ribbon", "geometric", "bauhaus", "sub", "off"]);
   const STYLE_GROUPS = [
     ["Bars", ["ascii", "led", "mirror", "monstercat", "radial", "retro"]],
     ["Circles", ["ncs", "sub", "trap"]],
     ["On the beat", ["geometric", "bauhaus"]],
-    ["Flowing", ["plasma", "ledplasma", "dnb", "neuro", "particles", "ink", "warp"]],
+    ["Flowing", ["plasma", "ledplasma", "dnb", "neuro", "particles", "ribbon", "ink", "warp"]],
     ["", ["off"]],
   ];
   // Which bands each style reads: "punch" snaps up and falls with gravity.
@@ -84,15 +86,15 @@
     particles: ["particles", "monstercat", "warp", "dnb", "trap"],
     position: ["monstercat", "mirror", "ascii"],
     variant: ["geometric"],
-    beatEvery: ["geometric", "bauhaus", "plasma", "ledplasma", "sub", "trap", "neuro", "ink"],
+    beatEvery: ["geometric", "bauhaus", "plasma", "ledplasma", "sub", "trap", "neuro", "ink", "ribbon"],
     neuroLook: ["neuro"],
     neuroLine: ["neuro"],
     mcColor: ["monstercat"],
     neuroTwist: ["neuro"],
     neuroMirror: ["neuro"],
     circleAt: ["trap", "radial", "ncs", "sub"],
-    speed: ["trap", "retro", "neuro", "ink", "particles", "monstercat", "ncs", "radial", "plasma", "warp", "dnb", "ascii", "led", "ledplasma"],
-    bassBoost: ["particles", "monstercat", "radial", "mirror", "ncs", "warp", "plasma", "dnb", "ascii", "geometric", "bauhaus", "led", "ledplasma", "sub", "trap", "retro", "neuro", "ink"],
+    speed: ["trap", "retro", "neuro", "ink", "ribbon", "particles", "monstercat", "ncs", "radial", "plasma", "warp", "dnb", "ascii", "led", "ledplasma"],
+    bassBoost: ["particles", "monstercat", "radial", "mirror", "ncs", "warp", "plasma", "dnb", "ascii", "geometric", "bauhaus", "led", "ledplasma", "sub", "trap", "retro", "neuro", "ink", "ribbon"],
     smoothing: ["particles", "monstercat", "radial", "mirror", "ncs", "warp", "plasma", "dnb", "ascii", "geometric", "bauhaus", "led", "ledplasma", "sub", "trap", "retro", "neuro", "ink"],
   };
 
@@ -132,7 +134,8 @@
     sub: { shake: 0.4 },
     trap: { shake: 0.4, bassBoost: 0.7, colorMode: "classic" },
     neuro: { shake: 0.2, colorMode: "classic", neuroTwist: 0.05 },
-    ink: { shake: 0 }, // turns once a bar (most songs count in 4s and 8s)
+    ink: { shake: 0 },
+    ribbon: { shake: 0 }, // turns once a bar (most songs count in 4s and 8s)
     led: { colorMode: "classic", shake: 0 },
     ledplasma: { shake: 0 },
     monstercat: { barCount: 63, bassBoost: 0.8, smoothing: 0.45, beatEvery: "4" },
@@ -2600,7 +2603,7 @@
     const { ctx, w, h, U } = v;
     const N = TRAP_N, HIST = 24, L = 8;
     let st = v.trap;
-    if (!st) st = v.trap = { val: new Float32Array(N), hist: Array.from({ length: HIST }, () => new Float32Array(N)), hi: 0, dust: [], bounce: 0, histT: 0 };
+    if (!st) st = v.trap = { val: new Float32Array(N), pk: new Float32Array(N).fill(0.3), hist: Array.from({ length: HIST }, () => new Float32Array(N)), hi: 0, dust: [], bounce: 0, histT: 0 };
     const k = Math.min(1, shared.kick), bass = shared.bassPunch || 0;
     // 1. Spectrum -> N points, evenly, so the bass is a narrow stretch near
     //    the top (the two sharp "ears"), not a wide blob.
@@ -2624,19 +2627,23 @@
       }
       [a, b] = [b, a];
     }
-    // Only what stands out shows: take away most of the ring's average
-    // level (on loud songs every band is high, which made one fat blob),
-    // then curve it so small differences stay small. Then scale by a slowly
-    // moving peak, so loud and quiet songs both end up a similar size.
+    // Each point is measured against its own recent loudest (a slow peak per
+    // point), so the mids and highs make peaks of their own instead of the
+    // bass drowning everything out. Then only what stands out shows: take
+    // away most of the ring's average and curve it, so the rest stays near
+    // the circle. Then scale by a slowly moving overall peak.
+    for (let i = 0; i < N; i++) {
+      st.pk[i] = Math.max(a[i], st.pk[i] - dt * 0.08);
+      a[i] = a[i] / (0.12 + 0.88 * st.pk[i]);
+    }
     let mean = 0;
     for (let i = 0; i < N; i++) mean += a[i];
     mean /= N;
     let top = 0;
     for (let i = 0; i < N; i++) {
-      const x = Math.max(0, a[i] - 0.6 * mean) / Math.max(0.3, 1 - 0.6 * mean);
-      // Peaks stand out, the rest stays near the circle; the first few points
-      // fade in so the very top dips between the two bass "ears".
-      a[i] = Math.pow(x, 1.8) * Math.min(1, (i + 0.5) / 5);
+      const x = Math.max(0, a[i] - 0.55 * mean) / Math.max(0.3, 1 - 0.55 * mean);
+      // the first few points fade in so the very top dips between the bass peaks
+      a[i] = Math.pow(x, 1.5) * Math.min(1, (i + 0.5) / 4);
       if (a[i] > top) top = a[i];
     }
     st.peak = Math.max(top, (st.peak || 0.5) - dt * 0.15);
@@ -2984,6 +2991,71 @@
     ctx.strokeStyle = v.rgba(mix(pal(0), WHITE, 0.5), 0.6 + 0.4 * k);
     ctx.lineWidth = Math.max(1.5, 2.6 * U);
     ctx.stroke();
+  };
+
+  // ---------------------------------------------------------------------------
+  // Ribbon: slow, see-through wave ribbons drifting across the screen, with
+  // a few sparkles riding on them. The bass swells the waves, loudness speeds
+  // them up, kicks make them glow, colours step round on the beat. Cheap: six
+  // ribbons of ~70 points, filled and stroked once each.
+  DRAW.ribbon = (v, p, dt, t) => {
+    const { ctx, w, h, U } = v;
+    const st = v.ribbon || (v.ribbon = { t: Math.random() * 100, glow: 0, kickSeen: shared.beatSerial, sp: [], swell: 0 });
+    const e = shared.energy, bass = shared.bassPunch || 0;
+    if (st.kickSeen !== shared.beatSerial) { st.kickSeen = shared.beatSerial; st.glow = Math.min(1, st.glow + 0.6 * Math.min(1, shared.kick + 0.3)); }
+    st.glow *= Math.exp(-dt * 3);
+    st.swell += (bass - st.swell) * Math.min(1, dt * (bass > st.swell ? 10 : 2.5));
+    st.t += dt * (0.18 + 0.5 * e) * p.speed;
+    const step = beatSteps(st, p);
+    const T = st.t, R = 6, PTS = 70;
+    const cy = h * 0.58, amp = h * (0.07 + 0.16 * st.swell) * p.size;
+    ctx.globalCompositeOperation = "lighter";
+    ctx.lineJoin = "round";
+    const lines = [];
+    for (let r = 0; r < R; r++) {
+      const ph = r * 1.7, f = 1.2 + r * 0.23, off = (r - (R - 1) / 2) * h * 0.035;
+      const col = colorAt(((r / R) + step / 3) % 1);
+      const top = [], bot = [];
+      for (let i = 0; i <= PTS; i++) {
+        const x = (i / PTS) * w, q = (i / PTS) * Math.PI * 2;
+        const y = cy + off + amp * (Math.sin(q * f + T * (0.9 + r * 0.12) + ph) * 0.7 + Math.sin(q * f * 0.5 - T * 0.6 + ph * 2) * 0.45);
+        const th = h * (0.012 + 0.05 * (0.5 + 0.5 * Math.sin(q * 0.8 + T * 0.7 + ph))) * (0.7 + 0.6 * st.swell);
+        top.push(x, y - th);
+        bot.push(x, y + th);
+      }
+      // the ribbon: a soft see-through band
+      ctx.beginPath();
+      ctx.moveTo(top[0], top[1]);
+      for (let i = 2; i < top.length; i += 2) ctx.lineTo(top[i], top[i + 1]);
+      for (let i = bot.length - 2; i >= 0; i -= 2) ctx.lineTo(bot[i], bot[i + 1]);
+      ctx.closePath();
+      ctx.fillStyle = v.rgba(col, A_(0.05 + 0.05 * e + 0.08 * st.glow, v));
+      ctx.fill();
+      // its bright edge
+      ctx.beginPath();
+      ctx.moveTo(top[0], top[1]);
+      for (let i = 2; i < top.length; i += 2) ctx.lineTo(top[i], top[i + 1]);
+      ctx.strokeStyle = v.rgba(mix(col, WHITE, 0.35), A_(0.22 + 0.25 * e + 0.35 * st.glow, v));
+      ctx.lineWidth = Math.max(1, (1 + 1.2 * st.glow) * U);
+      ctx.stroke();
+      lines.push(top);
+    }
+    // Sparkles riding along the ribbons' edges, twinkling.
+    while (st.sp.length < 36) st.sp.push({ r: (Math.random() * R) | 0, x: Math.random(), v: 0.02 + Math.random() * 0.05, tw: Math.random() * 6.28 });
+    ctx.fillStyle = v.rgba(WHITE, 1);
+    for (const s of st.sp) {
+      s.x += dt * s.v * (0.5 + e) * p.speed;
+      if (s.x > 1) { s.x -= 1; s.r = (Math.random() * R) | 0; }
+      const L = lines[s.r], i = Math.min(PTS, Math.round(s.x * PTS)) * 2;
+      const a = (0.5 + 0.5 * Math.sin(t * 3 + s.tw)) * (0.4 + 0.6 * e + 0.5 * st.glow);
+      ctx.globalAlpha = A_(Math.min(1, a), v);
+      const sz = (1 + 1.5 * a) * U;
+      ctx.beginPath();
+      ctx.arc(L[i], L[i + 1], sz, 0, Math.PI * 2);
+      ctx.fill();
+    }
+    ctx.globalAlpha = 1;
+    v.soft(w / 2, cy, Math.max(w, h) * 0.4, colorAt((step / 3) % 1), 0.05 + 0.1 * st.swell + 0.12 * st.glow);
   };
 
   // ---------------------------------------------------------------------------

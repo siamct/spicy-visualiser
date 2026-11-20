@@ -64,7 +64,7 @@ A sphere of glowing dots. It flows with the loudness, bulges by frequency (bass 
 ### Trap Circle
 ![Trap Circle](screenshots/styles/trap.jpg)
 
-The classic trap-channel circle, empty in the middle. The spectrum is mirrored round a ring, with the bass at the top as two sharp ears and the treble meeting at the bottom. A white layer sits in front, and seven colour layers burst out behind it on every hit. The circle bounces with the bass, and white dust flies towards you. Set **Circle at** to the art and it wraps the album cover instead.
+The classic trap-channel circle, empty in the middle. The spectrum is mirrored round a ring, bass at the top and treble at the bottom. Every part of the spectrum makes its own peaks, so the shape changes with the song. A white layer sits in front, and seven colour layers burst out behind it on every hit. The circle bounces with the bass, and white dust flies towards you. Set **Circle at** to the art and it wraps the album cover instead.
 
 ### Subwoofer
 ![Subwoofer](screenshots/styles/sub.jpg)
@@ -110,6 +110,13 @@ A smooth glowing fluid. It flows faster, swirls harder and glows brighter as the
 ![LED Plasma](screenshots/styles/ledplasma.jpg)
 
 The same fluid as Plasma, shown on the LED dot panel.
+
+### Ribbon
+Slow, see-through wave ribbons drifting across the screen, with sparkles riding along them:
+- the bass swells the waves;
+- louder parts speed them up;
+- kicks make them glow;
+- the colours step round on the beat.
 
 ### Silk
 Long streaks of colour pulled through a slow current, like ink drawn through water:
