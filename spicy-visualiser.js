@@ -146,7 +146,8 @@
     glowStrength: 1,
     kickPulse: true,
     dimPaused: true,
-    beatSens: 1, // Sound tab: how easily a hit counts as a beat (lower = only clear kicks)
+    beatSens: 0.6, // Sound tab: how easily a hit counts as a beat, 0 (off) to 1 (lower = only clear kicks)
+    beatScale: 2, // settings version for the beat sensitivity slider
     noLyricsBoost: true, // brighter, fuller visuals on songs with no (or static) lyrics
     kickFlash: false,
     quality: "medium",
@@ -182,6 +183,9 @@
   // they look the same on the new 0-100% scale.
   try {
     const raw = JSON.parse(localStorage.getItem(STORE_KEY) || "{}");
+    // Beat sensitivity used to go 40-200% with 100% as the default (far too
+    // jumpy): it's 0 (off) to 100% now, the old 100% is the new 60%.
+    if ("beatSens" in raw && raw.beatScale !== 2) S.beatSens = Math.max(0, Math.min(1, (Number(raw.beatSens) || 1) * 0.6));
     if (raw.per && raw.shakeScale !== 2) {
       for (const k of Object.keys(S.per)) if (typeof S.per[k].shake === "number") S.per[k].shake = Math.min(1, S.per[k].shake / 0.4);
     }
@@ -632,7 +636,7 @@
         near = k >= 0 && pos - ana.beats[k] < 0.12;
       }
       if (ready && dLo > 0.16 && near) {
-        kickHit(Math.min(1, 0.35 + dLo * 1.6) * (S.beatSens ?? 1));
+        kickHit(Math.min(1, 0.35 + dLo * 1.6) * (S.beatSens ?? 0.6));
         w.cool = pos + 0.14;
         h.length = 0;
       } else if (ready && dHi > 0.2) {
@@ -688,7 +692,7 @@
         const k = firstAfter(ana.beats, g.s + 0.07) - 1;
         near = k >= 0 && g.s - ana.beats[k] < 0.07;
       }
-      if (jump > 5 && near && bright < 0.65) kickHit(Math.min(1, 0.3 + jump / 20) * (S.beatSens ?? 1));
+      if (jump > 5 && near && bright < 0.65) kickHit(Math.min(1, 0.3 + jump / 20) * (S.beatSens ?? 0.6));
       else if (jump > 6 && bright > 0.45 && (g.tb[3] || 0) > 20) snareHit(0.5);
     }
     ana.segIdx = i;
@@ -1094,7 +1098,7 @@
         }
         shared.live.level = d.l || 0;
         shared.live.at = performance.now();
-        if (d.k) kickHit(d.k * (S.beatSens ?? 1));
+        if (d.k) kickHit(d.k * (S.beatSens ?? 0.6));
         if (d.s) snareHit(d.s * 0.8);
       }
     }
@@ -3740,7 +3744,7 @@ void main() {
       <div class="lp-page" data-page="sound">
         <div class="lp-needs-style">
           ${group("How it reacts", slider("sensitivity", "Sensitivity", 0.3, 3, 0.05, "style") + slider("bassBoost", "Bass / kick boost", 0, 2, 0.05, "style", u("bassBoost")) + slider("smoothing", "Smoothing (fall speed)", 0, 1, 0.05, "style", u("smoothing")) + slider("autoRange", "Auto range (less peaking)", 0, 1, 0.05, "style"))}
-          ${group("Beat", slider("beatSens", "Beat sensitivity", 0.4, 2, 0.05, "global") + `<div class="lp-beatrow"><button class="lp-tap">Tap to the beat</button><span class="lp-beatinfo"></span></div>`)}
+          ${group("Beat", slider("beatSens", "Beat sensitivity", 0, 1, 0.05, "global") + `<div class="lp-beatrow"><button class="lp-tap">Tap to the beat</button><span class="lp-beatinfo"></span></div>`)}
           ${group("Movement", slider("shake", "Shake", 0, 1, 0.05, "style", allBut) + slider("speed", "Speed", 0.1, 2.5, 0.05, "style", u("speed")) + slider("particles", "Particles", 0, 2.5, 0.05, "style", u("particles")))}
         </div>
       </div>
@@ -3872,7 +3876,7 @@ void main() {
     p.querySelectorAll(".lp-val").forEach((el) => {
       const key = el.dataset.for;
       const val = read(el.dataset.scope, key);
-      el.textContent = key === "barCount" ? String(Math.round(val)) : key === "blur" ? val + "px" : key === "syncDelay" ? Math.round(val) + " ms" : Math.round(val * 100) + "%";
+      el.textContent = key === "barCount" ? String(Math.round(val)) : key === "blur" ? val + "px" : key === "syncDelay" ? Math.round(val) + " ms" : key === "beatSens" && val <= 0 ? "Off" : Math.round(val * 100) + "%";
     });
     p.querySelectorAll("[data-uses]").forEach((el) => el.classList.toggle("lp-hidden", !el.dataset.uses.split(",").includes(style)));
     p.querySelectorAll("[data-show-if]").forEach((el) => el.classList.toggle("lp-hidden", S[el.dataset.showIf] === "off"));
