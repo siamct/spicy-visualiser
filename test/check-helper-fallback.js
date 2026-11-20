@@ -1,5 +1,5 @@
-// Helper source: a helper that connects but hears nothing leaves the visual
-// empty (and the panel says why). Switching the source to Spotify data closes
+// A helper that connects but hears nothing: Spotify's data takes over (and
+// the panel says why). Switching the source to Spotify data closes
 // the helper connection and draws from the song's data instead.
 const { chromium } = require("playwright");
 const path = require("path");
@@ -37,8 +37,8 @@ const path = require("path");
   const quietText = await p.evaluate(() => document.querySelector(".lp-status-text").textContent);
   const drawn = () => p.evaluate(() => { const c = document.querySelector("canvas"); const d = c.getContext("2d").getImageData(0, 0, c.width, c.height).data; let n = 0; for (let i = 3; i < d.length; i += 4) if (d[i]) n++; return n; });
   const px1 = await drawn();
-  const r1 = st.helper === "live" && px1 === 0 && /hears no sound/.test(quietText);
-  console.log(r1 ? "PASS" : "FAIL", "silent helper: nothing drawn, panel says why", JSON.stringify({ helper: st.helper, px1, quietText }));
+  const r1 = st.helper === "live" && px1 > 0 && st.songData && /hears no sound/.test(quietText);
+  console.log(r1 ? "PASS" : "FAIL", "silent helper: Spotify's data takes over, panel says why", JSON.stringify({ helper: st.helper, px1, songData: st.songData, quietText }));
   await p.evaluate(() => document.querySelector('[data-key="source"] button[data-v="spotify"]').click());
   await p.waitForTimeout(2500);
   const r = await p.evaluate(() => ({ ws: window.__ws, st: window.SpicyVisualiser.state(), text: document.querySelector(".lp-status-text").textContent, install: !document.querySelector(".lp-get-helper").classList.contains("lp-hidden") }));

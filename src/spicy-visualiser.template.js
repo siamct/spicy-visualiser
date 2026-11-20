@@ -178,7 +178,7 @@
     quality: "medium",
     fps: "60", // 30 | 60 | max
     ecoUnfocused: true,
-    source: "helper", // helper: the real sound | spotify: Spotify's data for the song (an estimate)
+    source: "helper", // helper: the helper's real sound when it's running, else Spotify's data | spotify: Spotify's data only
     tab: "style",
     shakeScale: 2, // settings version for the shake slider
     per: {},
@@ -998,7 +998,6 @@
   // The helper's setup file. An add-on inside Spotify can't install programs,
   // so the button downloads it (in the web browser) for the user to open once.
   const HELPER_SETUP = "https://github.com/siamct/spicy-visualiser/raw/main/setup/SpicyVisualiserHelper.zip";
-  const HELPER_STEP = "Downloading SpicyVisualiserHelper.zip. Open it from your downloads, click Extract all, then double-click Install helper.bat. If Windows asks, click More info, then Run anyway. The visualiser goes Live by itself.";
   function downloadHelper() {
     shared.downloaded = true;
     try {
@@ -1012,6 +1011,39 @@
     } catch (_) {
       try { window.open(HELPER_SETUP, "_blank"); } catch (_) {}
     }
+  }
+  // "Install helper": a small window in Spotify with the steps and a download
+  // button (add-ons can't install programs, so it's a download + one click).
+  function openInstall() {
+    ensureStyle(document);
+    const old = document.querySelector(".lp-install-wrap");
+    if (old) old.remove();
+    const w = document.createElement("div");
+    w.className = "lp-install-wrap";
+    w.innerHTML = `<div class="lp-install" role="dialog" aria-label="Install the helper">
+      <div class="lp-install-head">${ICON}<b>Install the helper</b><button class="lp-install-x" title="Close"><svg viewBox="0 0 24 24" width="14" height="14"><path d="M7 7l10 10M17 7 7 17" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg></button></div>
+      <p>Spotify only gives add-ons a little info about each song, so right now the visualiser runs on that. The helper is a small Windows program that hears the real sound, so every style looks its best. You install it once.</p>
+      <ol>
+        <li><b>Download</b> the helper below.</li>
+        <li>Open <b>SpicyVisualiserHelper.zip</b> from your downloads and click <b>Extract all</b>.</li>
+        <li>Double-click <b>Install helper.bat</b>. If Windows asks, click <b>More info</b>, then <b>Run anyway</b>.</li>
+      </ol>
+      <p class="lp-install-small">No admin needed. It starts with Windows in the background and only listens while the visualiser is on screen. Remove it any time in Settings, Apps. The visualiser switches to Live by itself.</p>
+      <div class="lp-install-row"><button class="lp-install-go">Download helper</button><button class="lp-install-no">Not now</button></div>
+    </div>`;
+    const close = () => w.remove();
+    w.addEventListener("click", (e) => {
+      e.stopPropagation();
+      if (e.target === w || e.target.closest(".lp-install-x, .lp-install-no")) return close();
+      if (e.target.closest(".lp-install-go")) {
+        downloadHelper();
+        const g = w.querySelector(".lp-install-go");
+        g.textContent = "Downloading… now open it from your downloads";
+        g.disabled = true;
+      }
+    });
+    for (const ev of ["pointerdown", "mousedown", "wheel", "keydown"]) w.addEventListener(ev, (e) => e.stopPropagation());
+    document.body.appendChild(w);
   }
   const NOTICE_KEY = "spicy-visualiser:helper-notice";
   const REMIND_KEY = "spicy-visualiser:helper-remind-off";
@@ -1146,7 +1178,9 @@
     // Quiet for 3 s while a song plays: the helper can't hear Spotify.
     if (shared.helper !== "live" || !playing || !shared.helperLoudAt) shared.helperLoudAt = now;
     const quiet = shared.helper === "live" && now - (shared.helperLoudAt || now) > 3000;
-    if (S.source === "spotify") waveFrame() || songDataFrame();
+    // No helper sound (not installed, not running, or "Spotify data only"):
+    // Spotify's data for the song drives everything instead.
+    if (S.source === "spotify" || shared.helper !== "live" || quiet) waveFrame() || songDataFrame();
     if (quiet !== !!shared.helperQuiet) {
       shared.helperQuiet = quiet;
       refreshPanels();
@@ -3399,7 +3433,7 @@
       </div>
 
       <div class="lp-page" data-page="more">
-        <div class="lp-group"><div class="lp-gtitle">Sound source</div>${seg("source", [["helper", "Helper (real sound)"], ["spotify", "Spotify data"]], "global")}<div class="lp-status-text"></div><div class="lp-note lp-get-note"></div><div class="lp-btnrow"><button class="lp-reset lp-get-helper">Install helper</button></div></div>
+        <div class="lp-group"><div class="lp-gtitle">Sound source</div>${seg("source", [["helper", "Helper when available"], ["spotify", "Spotify data only"]], "global")}<div class="lp-status-text"></div><div class="lp-note lp-get-note"></div><div class="lp-btnrow"><button class="lp-reset lp-get-helper">Install helper</button></div></div>
         ${group("Beat effects", toggle("kickPulse", "Pulse on kicks", "The visual swells a little on each kick") + toggle("kickFlash", "Flash on kicks", "A soft flash of colour"))}
         ${group("Sync", slider("syncDelay", "Audio delay (Bluetooth)", 0, 400, 10, "global") + `<div class="lp-note">Visuals ahead of the sound? With Bluetooth headphones the sound arrives later than it's played. Slide this until the beat lines up.</div>`)}
         ${group("Performance", toggle("ecoUnfocused", "Save power when Spotify isn't focused", "Drops to 30 fps while you're gaming or in another app") + `<div class="lp-label"><span>Frame rate</span></div>${seg("fps", [["30", "30 fps"], ["60", "60 fps"], ["max", "Max"]], "global")}<div class="lp-label"><span>Quality</span></div>${seg("quality", [["low", "Low"], ["medium", "Medium"], ["high", "High"]], "global")}<div class="lp-note">Everything stops (including the helper) when the lyrics view isn't on screen.</div>`)}
@@ -3447,12 +3481,7 @@
         refreshPanelEl(p, doc);
         return;
       }
-      if (e.target.closest(".lp-get-helper")) {
-        downloadHelper();
-        const note = p.querySelector(".lp-get-note");
-        if (note) note.textContent = HELPER_STEP;
-        return;
-      }
+      if (e.target.closest(".lp-get-helper")) return openInstall();
       if (e.target.closest(".lp-reset")) {
         delete S.per[styleKey()];
         return save();
@@ -3533,36 +3562,29 @@
     const c = colorAt(0.3);
     p.style.setProperty("--lp-accent", `rgb(${c[0] | 0},${c[1] | 0},${c[2] | 0})`);
     const use = S.source !== "spotify";
-    p.classList.toggle("lp-sdmode", !use);
-    const quiet = shared.helper === "live" && !!shared.helperQuiet;
+    const quiet = use && shared.helper === "live" && !!shared.helperQuiet;
     const live = use && shared.helper === "live" && !quiet;
-    const off = use && shared.helper === "offline";
-    const sd = !use && !!shared.songData;
-    p.querySelector(".lp-dot").className = "lp-dot " + (live ? "lp-live" : sd ? "" : off || quiet || !use ? "lp-offline" : "");
-    p.querySelector(".lp-pill-text").textContent = live ? "Live" : !use ? (sd ? "Spotify data" : "No data") : quiet ? "No sound" : off ? "No helper" : "Connecting";
+    p.classList.toggle("lp-sdmode", !live);
+    const sd = !live && !!shared.songData;
+    p.querySelector(".lp-dot").className = "lp-dot " + (live ? "lp-live" : sd ? "" : "lp-offline");
+    p.querySelector(".lp-pill-text").textContent = live ? "Live" : sd ? "Spotify data" : "No data";
+    const why = !use ? "" : quiet ? " The helper is running but hears no sound: is Spotify playing through your default speakers or headphones?" : " For the real sound (every style looks its best), install the helper.";
     const long = live
-      ? "Connected to the helper: reacting to the real sound."
-      : !use
-        ? (sd ? "Following Spotify's data for this song. It's an estimate, not the real sound: for that, choose Helper." : "No Spotify data for this song yet.")
-        : quiet
-        ? "The helper is running but hears no sound. Is Spotify playing through your default speakers or headphones?"
-        : off
-        ? "The helper isn't running. The visualiser only moves to the real music, so it stays empty until the helper is on."
-        : "Connecting to the helper…";
+      ? "Helper connected: reacting to the real sound."
+      : sd
+        ? "Following Spotify's data for this song. It's only an estimate." + why
+        : "No data from Spotify for this song yet." + why;
     p.querySelector(".lp-pill").title = long;
     p.querySelector(".lp-status-text").textContent = long;
     let seen = false;
     try { seen = localStorage.getItem(HELPER_SEEN_KEY) === "1"; } catch (_) {}
-    const need = use && shared.helper !== "live"; // not connected: offer install / start
+    const need = use && !live; // no helper sound: offer the install
     const gh = p.querySelector(".lp-get-helper");
     if (gh) gh.textContent = seen ? "Reinstall helper" : "Install helper";
     p.querySelectorAll(".lp-get-helper, .lp-get-note").forEach((el) => el.classList.toggle("lp-hidden", !need));
     const gn = p.querySelector(".lp-get-note");
-    if (gn) gn.textContent = shared.downloaded
-      ? HELPER_STEP
-      : seen
-      ? HELPER_START
-      : "Spotify doesn't let add-ons hear the music, so the visualiser needs its small helper (Windows) to react properly. It starts with Windows and only listens while the visualiser is on screen.";
+    if (gn) gn.textContent = seen && !quiet ? HELPER_START : "";
+    if (gn) gn.classList.toggle("lp-hidden", !need || !gn.textContent);
     const dg = p.querySelector(".lp-diag");
     if (dg) {
       const d = ana.diag || {};
@@ -3848,24 +3870,11 @@
         });
       } else {
         try { localStorage.setItem(NOTICE_KEY, "1"); } catch (_) {}
-        n.innerHTML = `${head}<p>The visualiser only moves to the real music, and Spotify doesn't let add-ons hear it. Its small helper (Windows) does the listening. Or use Spotify's data for each song instead: it works straight away, but it's only an estimate.</p><div class="lp-notice-row"><button class="lp-notice-go">Install helper</button><button class="lp-notice-sd">Use Spotify data</button></div>`;
+        n.innerHTML = `${head}<p>Spotify doesn't let add-ons hear the music, so for now the visualiser follows Spotify's data for each song. It works, but it's only an estimate. For the real sound, where every style looks its best, install the small helper.</p><div class="lp-notice-row"><button class="lp-notice-go">Install helper</button><button class="lp-notice-no">OK</button></div>`;
         n.querySelector(".lp-notice-go").addEventListener("click", (e) => {
           e.stopPropagation();
-          downloadHelper();
-          n.querySelector("p").textContent = HELPER_STEP;
-          n.querySelector(".lp-notice-go").remove();
-          n.querySelector(".lp-notice-sd").remove();
-          const c = doc.createElement("button");
-          c.className = "lp-notice-no";
-          c.textContent = "Close";
-          c.addEventListener("click", (ev) => { ev.stopPropagation(); n.remove(); });
-          n.querySelector(".lp-notice-row").appendChild(c);
-        });
-        n.querySelector(".lp-notice-sd").addEventListener("click", (e) => {
-          e.stopPropagation();
-          write("global", "source", "spotify");
-          refreshPanels();
           n.remove();
+          openInstall();
         });
       }
       const no = n.querySelector(".lp-notice-no");
