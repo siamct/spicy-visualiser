@@ -42,27 +42,6 @@
     ["ledplasma", "LED Plasma"],
     ["off", "Off"],
   ];
-  const HINT = {
-    particles: "A living field of light: drifts in a gentle flow, links up into constellations, bursts outwards on kicks and twinkles with the hi-hats.",
-    monstercat: "Monstercat-style bars: snap up on hits, fall with gravity.",
-    ncs: "NCS-style sphere of glowing dots that ripples with the music.",
-    radial: "Spectrum bars in a ring around the album art.",
-    mirror: "Bars mirrored up and down, bass in the middle.",
-    plasma: "The LED Plasma fluid drawn smooth: flows faster, swirls harder and glows brighter with the music, surges on kicks, colours sweep round on every beat (Look tab: change every beat, 2, 4 or 8).",
-    warp: "Hyperspace stars, faster on the bass.",
-    dnb: "Liquid: a flowing three-strand bass wave that pumps on kicks, streaks racing past, and a flash on every snare.",
-    ascii: "Terminal-style spectrum made of characters, with falling peak markers.",
-    led: "A panel of glowing LED dots (unlit ones faintly visible) showing spectrum bars with falling peak dots.",
-    ledplasma: "A fluid on the LED panel: it flows faster, swirls harder and glows brighter with the music, surges on kicks, and its colours sweep round on every beat (Look tab: change every beat, 2, 4 or 8).",
-    trap: "The classic trap-channel circle with nothing in the middle: the spectrum round a circle, mirrored, bass at the bottom; a white layer in front with seven colour layers bursting out behind it on every hit, a bass bounce, shake, and white dust flying towards you.",
-    retro: "The classic old media-player spectrum: segmented bars coloured by height (blue and green at the bottom, yellow, then orange and red at the top) with peak caps that hang, then drop.",
-    neuro: "Drum & bass: a wireframe landscape rolling towards you, fed by the spectrum. It twists with the bass like a wobbling reese, glitches on every snare.",
-    ink: "Silk: long streaks of colour pulled through a slow current, like ink drawn through water. The bass speeds the current up, kicks bloom a burst of new streaks, snares flick thin bright ones, and the colours step round on the beat. Smoothing sets how long the streaks last.",
-    sub: "A big subwoofer drawn in light: kicks punch the cone out and it springs back, the surround wobbles with the bass, the light ring changes colour on the beat. Sits round the album art when it's on screen.",
-    bauhaus: "A poster grid of flat circles, half circles, quarter circles and triangles: shapes grow with their part of the spectrum, tiles turn a quarter on the beat and the colours step round. Look tab: change every beat, 2, 4 or 8.",
-    geometric: "Bold flat shapes like a modern poster: slanted bands slide in from the edges with the spectrum, colours step round on the beat. Look tab: Poster or Brutalist, and change every beat, 2, 4 or 8.",
-    off: "Visualiser hidden.",
-  };
   // Little pictures for the style picker.
   const STYLE_ICON = {
     particles: '<g stroke="currentColor" stroke-width="1" opacity=".55"><path d="M5 7l6 4 7-5M11 11l-4 7M11 11l7 5"/></g><circle cx="5" cy="7" r="2"/><circle cx="11" cy="11" r="2.4"/><circle cx="18" cy="6" r="1.6"/><circle cx="7" cy="18" r="1.7"/><circle cx="18" cy="16" r="2"/>',
@@ -126,7 +105,7 @@
     smoothing: 0.5,
     bassBoost: 0.5,
     speed: 1,
-    shake: 0.5,
+    shake: 0.3,
     barCount: 64,
     particles: 1,
     position: "bottom",
@@ -150,9 +129,9 @@
     ascii: { colorMode: "classic" },
     geometric: { shake: 0, opacity: 0.85 },
     bauhaus: { shake: 0, opacity: 0.85, beatEvery: "4" },
-    sub: { shake: 0.6 },
-    trap: { shake: 0.5, bassBoost: 0.7, colorMode: "classic" },
-    neuro: { shake: 0.3, colorMode: "classic", neuroTwist: 0.05 },
+    sub: { shake: 0.4 },
+    trap: { shake: 0.4, bassBoost: 0.7, colorMode: "classic" },
+    neuro: { shake: 0.2, colorMode: "classic", neuroTwist: 0.05 },
     ink: { shake: 0 }, // turns once a bar (most songs count in 4s and 8s)
     led: { colorMode: "classic", shake: 0 },
     ledplasma: { shake: 0 },
@@ -1034,7 +1013,7 @@
   }
   // "Test helper": tries to reach the helper right now and says what it found.
   function testHelper() {
-    const say = (msg) => { shared.testMsg = msg; refreshPanels(); };
+    const say = (msg) => { shared.testMsg = msg; shared.testSource = S.source; refreshPanels(); };
     say("Testing…");
     let done = false, probe;
     const finish = (msg) => {
@@ -1050,7 +1029,10 @@
       try { localStorage.setItem(HELPER_SEEN_KEY, "1"); } catch (_) {}
       retryMs = 2000;
       if (S.source === "spotify") return finish("The helper is installed and running. Switch to Helper above to use it.");
-      if (shared.helper !== "live") return finish("Found the helper. Connecting…");
+      if (shared.helper !== "live") {
+        say("Found the helper. Connecting…");
+        return setTimeout(() => finish(shared.helper === "live" ? "Connected: the helper is working." : "Found the helper, but it didn't connect. Try again in a few seconds."), 3500);
+      }
       const heard = performance.now() - (shared.helperLoudAt || 0) < 1500;
       finish(heard ? "Working: the helper is hearing the music." : "The helper is running but hears nothing. Play a song through your default speakers or headphones.");
     };
@@ -3228,8 +3210,7 @@
     return `
       <div class="lp-top">
         <div class="lp-head">
-          <div class="lp-title"><span class="lp-logo">${ICON}</span><div><h3>Spicy Visualiser</h3><div class="lp-sub lp-where"></div></div></div>
-          <div class="lp-pill" title=""><span class="lp-dot"></span><span class="lp-pill-text"></span></div>
+          <div class="lp-title"><span class="lp-logo">${ICON}</span><div class="lp-tblock"><h3>Spicy Visualiser</h3><div class="lp-subrow"><div class="lp-pill" title=""><span class="lp-dot"></span><span class="lp-pill-text"></span></div><span class="lp-sub lp-where"></span></div></div></div>
           <button class="lp-icon-btn lp-expand" title="Open all settings"><svg viewBox="0 0 24 24"><path d="M14 5h5v5M10 19H5v-5M19 5l-6 6M5 19l6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button><button class="lp-icon-btn lp-min" title="Make smaller"><svg viewBox="0 0 24 24"><path d="M6 12h12" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg></button>
           <button class="lp-icon-btn lp-close" title="Close"><svg viewBox="0 0 24 24"><path d="M7 7l10 10M17 7 7 17" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg></button>
         </div>
@@ -3242,7 +3223,6 @@
       <div class="lp-page" data-page="style">
         <div class="lp-source"><div class="lp-source-head"><span class="lp-gtitle">Sound source</span><button class="lp-test-helper">Test helper</button></div>${seg("source", [["helper", "Helper"], ["spotify", "Spotify data"]], "global")}<div class="lp-status-text"></div><div class="lp-note lp-test-result lp-hidden"></div><div class="lp-note lp-get-note"></div><div class="lp-btnrow"><button class="lp-reset lp-get-helper">Install helper</button></div></div>
         <div class="lp-cards" data-key="__style" data-scope="global"><div class="lp-cat lp-sd-cat">Works with Spotify data</div>${STYLE_GROUPS.map(([cat, keys]) => (cat ? `<div class="lp-cat">${cat}</div>` : "") + keys.map((k) => STYLES.find((x) => x[0] === k)).map(([v, l]) => `<button data-v="${v}" data-sd="${SONG_DATA_OK.has(v) ? 1 : 0}"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">${STYLE_ICON[v] || ""}</svg><span>${l}</span></button>`).join("")).join("")}<div class="lp-sd-more" role="button" tabindex="0"><span>More styles</span><small>Best with the helper</small></div></div>
-        <div class="lp-hint"></div>
       </div>
 
       <div class="lp-page" data-page="look">
@@ -3360,7 +3340,7 @@
     const style = styleKey();
     const name = (STYLES.find((s) => s[0] === style) || ["", ""])[1];
     const where = p.querySelector(".lp-where");
-    if (where) where.textContent = "Now playing: " + name;
+    if (where) where.textContent = "· " + name;
     const bi = p.querySelector(".lp-beatinfo");
     if (bi) {
       const tapped = bpm.tapUri === shared.uri;
@@ -3392,7 +3372,6 @@
       const val = read(el.dataset.scope, key);
       el.textContent = key === "barCount" ? String(Math.round(val)) : key === "blur" ? val + "px" : key === "syncDelay" ? Math.round(val) + " ms" : Math.round(val * 100) + "%";
     });
-    p.querySelector(".lp-hint").textContent = HINT[style] || "";
     p.querySelectorAll("[data-uses]").forEach((el) => el.classList.toggle("lp-hidden", !el.dataset.uses.split(",").includes(style)));
     p.querySelectorAll("[data-show-if]").forEach((el) => el.classList.toggle("lp-hidden", S[el.dataset.showIf] === "off"));
     p.querySelector("[data-show-color]").classList.toggle("lp-hidden", P(style).colorMode !== "custom");
@@ -3424,6 +3403,7 @@
     if (gn) gn.textContent = seen && !quiet ? HELPER_START : "";
     if (gn) gn.classList.toggle("lp-hidden", !need || !gn.textContent);
     const tr = p.querySelector(".lp-test-result");
+    if (shared.testMsg && shared.testSource !== S.source) shared.testMsg = "";
     if (tr) { tr.textContent = shared.testMsg || ""; tr.classList.toggle("lp-hidden", !shared.testMsg); }
     const dg = p.querySelector(".lp-diag");
     if (dg) {
@@ -3452,11 +3432,11 @@
     const close = p.querySelector(".lp-close");
     p.querySelectorAll(".lp-min, .lp-expand").forEach((b) => b.remove());
     const head = p.querySelector(".lp-head");
+    top.appendChild(p.querySelector(".lp-pill"));
     head.querySelector(".lp-title").innerHTML = `<span class="lp-logo">${ICON}</span><span class="lp-brand">Spicy Visualiser</span>`;
     head.insertAdjacentHTML("afterend", `<h2 class="lp-mtitle">Settings</h2>`);
     const tabs = p.querySelector(".lp-tabs");
     tabs.insertAdjacentHTML("beforeend", `<div class="lp-navsep"></div><button data-v="about"><svg viewBox="0 0 24 24" aria-hidden="true">${TAB_ICON.about}</svg><span>About</span></button>`);
-    top.appendChild(p.querySelector(".lp-pill"));
     // Content: page title + close button, then the page.
     const body = p.querySelector(".lp-body");
     body.insertAdjacentHTML("afterbegin", `<div class="lp-phead"><h1 class="lp-ptitle"></h1></div>`);
