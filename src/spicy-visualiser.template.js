@@ -89,6 +89,10 @@
     off: '<circle cx="12" cy="12" r="8" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M6.5 17.5 17.5 6.5" stroke="currentColor" stroke-width="1.8"/>',
   };
   // The style picker shows the styles in groups, A-Z inside each group.
+  // Styles that still look right on Spotify's data (it has loudness and
+  // beats, not a real spectrum). With that source they're listed first and
+  // the rest fold away under "More styles".
+  const SONG_DATA_OK = new Set(["particles", "plasma", "ledplasma", "ink", "warp", "dnb", "motion", "geometric", "bauhaus", "trap", "sub", "off"]);
   const STYLE_GROUPS = [
     ["Bars", ["monstercat", "mirror", "radial", "retro", "ascii", "led"]],
     ["Circles", ["ncs", "trap", "sub"]],
@@ -161,7 +165,7 @@
     retro: { shake: 0, colorMode: "classic", beatEvery: "4" },
   };
   const GLOBAL_DEFAULTS = {
-    style: "particles",
+    style: "plasma", // first install: a flowing style, not bars
     syncDelay: 0, // ms: hold the visuals back (for Bluetooth headphones)
     lyricGlow: "word", // off | word | line
     glowStyle: "soft", // soft | fade | sweep | underline
@@ -174,7 +178,7 @@
     quality: "medium",
     fps: "60", // 30 | 60 | max
     ecoUnfocused: true,
-    useHelper: true, // off: never connect to / start the helper, use Spotify's song data
+    source: "helper", // helper: the real sound | spotify: Spotify's data for the song (an estimate)
     tab: "style",
     shakeScale: 2, // settings version for the shake slider
     per: {},
@@ -192,9 +196,11 @@
   try {
     const saved = JSON.parse(localStorage.getItem(STORE_KEY) || "{}");
     for (const k of Object.keys(GLOBAL_DEFAULTS)) if (k in saved && typeof saved[k] === typeof GLOBAL_DEFAULTS[k]) S[k] = saved[k];
+    if (saved.useHelper === false && !("source" in saved)) S.source = "spotify"; // older "Use the helper: off"
   } catch (_) {}
   if (!["soft", "fade", "sweep", "underline"].includes(S.glowStyle)) S.glowStyle = "soft";
   if (!validStyle(S.style)) S.style = GLOBAL_DEFAULTS.style;
+  if (S.source !== "spotify") S.source = "helper";
   if (!S.per || typeof S.per !== "object") S.per = {};
   // Neuro Mesh Twist was Off / Low / High; it's a slider now.
   if (S.per.neuro && typeof S.per.neuro.neuroTwist === "string") S.per.neuro.neuroTwist = { low: 0.3, high: 1 }[S.per.neuro.neuroTwist] || 0;
@@ -305,7 +311,7 @@
     queue: [],
     applyFrame: null,
   };
-  const helperFeeding = () => S.useHelper !== false && shared.helper === "live" && !shared.helperQuiet;
+  const helperFeeding = () => S.source !== "spotify" && shared.helper === "live" && !shared.helperQuiet;
   const isLive = () => performance.now() - shared.live.at < 700;
 
   let CP = P("particles"); // settings of the style being drawn right now
@@ -597,6 +603,127 @@
       }
     }
   }
+  // Bars from the three-band waveform: lows fill the left, mids the middle,
+  // highs the right, with jumps in the lows and highs as kicks and snares.
+  function waveFrame() {
+    const w = ana.wave;
+    if (!w || ana.uri !== shared.uri || !Spicetify.Player.isPlaying()) return false;
+    const pos = (Spicetify.Player.getProgress() || 0) / 1000;
+    const fi = pos * w.rate, i = Math.floor(fi), fr = fi - i;
+    if (i < 0 || i >= w.n - 1) return false;
+    const cl = (x) => (x < 0 ? 0 : x > 1 ? 1 : x);
+    const at = (c, k) => cl((c[i] + (c[i + 1] - c[i]) * fr) / w.top[k]);
+    // Smoothed like a meter: rises in ~60 ms, falls in ~280 ms, so it moves
+    // with the music without flicking on every point.
+    const now = performance.now(), dt = Math.min(0.1, Math.max(0, (now - (w.t || now)) / 1000));
+    w.t = now;
+    const sm = (key, v) => {
+      const old = w[key] ?? v;
+      const k = 1 - Math.exp(-dt / (v > old ? 0.06 : 0.28));
+      return (w[key] = old + (v - old) * k);
+    };
+    const rLo = at(w.lo, 0), rMid = at(w.mid, 1), rHi = at(w.hi, 2);
+    const lo = sm("sLo", rLo) * 0.85, mid = sm("sMid", rMid) * 0.85, hi = sm("sHi", rHi) * 0.85;
+    // A fixed spectrum shape (music is loudest in the bass and tails off to
+    // the treble), with the bass, middle and treble parts raised and lowered
+    // by Spotify's three levels. The parts overlap so they always add up to
+    // one: nothing travels from side to side.
+    const bands = shared.live.bands;
+    const ss = (e0, e1, x) => {
+      const u = cl((x - e0) / (e1 - e0));
+      return u * u * (3 - 2 * u);
+    };
+    for (let b = 0; b < NB; b++) {
+      const x = b / (NB - 1);
+      const wl = 1 - ss(0.12, 0.42, x), wh = ss(0.5, 0.85, x), wm = 1 - wl - wh;
+      const shape = 0.25 + 0.75 * Math.exp(-1.7 * x);
+      bands[b] = cl((lo * wl + mid * wm + hi * wh) * shape * 1.15);
+    }
+    shared.three = [lo, mid, hi];
+    const level = cl(0.5 * lo + 0.3 * mid + 0.2 * hi);
+    shared.live.level = level;
+    shared.live.abs = 0.05 + 0.3 * level;
+    shared.live.at = performance.now();
+    if (i !== w.at) {
+      w.at = i;
+      // Rise over the last ~60 ms (the waveform has up to 50 points a second,
+      // so a kick's attack is spread over a few of them).
+      const h = w.hist || (w.hist = []);
+      h.push([rLo, rHi]);
+      if (h.length > Math.max(2, Math.round(w.rate * 0.06)) + 1) h.shift();
+      let mLo = rLo, mHi = rHi;
+      for (const [a, c] of h) { if (a < mLo) mLo = a; if (c < mHi) mHi = c; }
+      const dLo = rLo - mLo, dHi = rHi - mHi;
+      const ready = !w.cool || pos > w.cool;
+      let near = true;
+      if (ana.beats) {
+        const k = firstAfter(ana.beats, pos + 0.06) - 1;
+        near = k >= 0 && pos - ana.beats[k] < 0.12;
+      }
+      if (ready && dLo > 0.16 && near) {
+        kickHit(Math.min(1, 0.35 + dLo * 1.6) * (S.beatSens ?? 1));
+        w.cool = pos + 0.14;
+        h.length = 0;
+      } else if (ready && dHi > 0.2) {
+        snareHit(0.45);
+        w.cool = pos + 0.11;
+        h.length = 0;
+      }
+    }
+    shared.songData = true;
+    return true;
+  }
+  // No helper: builds a frame like the helper's from Spotify's sound data for
+  // this moment of the song, so every style still reacts to the music.
+  // A few small sums per frame. Returns false when there's no data.
+  function songDataFrame() {
+    if (!ana.segs || ana.uri !== shared.uri || !Spicetify.Player.isPlaying()) return false;
+    const pos = (Spicetify.Player.getProgress() || 0) / 1000;
+    const sg = ana.segs;
+    let i = ana.segIdx;
+    if (i >= sg.length || sg[i].s > pos + 0.05) i = Math.max(0, firstAfter(ana.segStarts, pos) - 1);
+    while (i + 1 < sg.length && sg[i + 1].s <= pos) i++;
+    const g = sg[i], into = pos - g.s;
+    if (into < -0.2 || into > g.d + 2) return false;
+    const nx = sg[i + 1];
+    const db = into < g.lt ? g.l0 + (g.lm - g.l0) * (into / Math.max(0.01, g.lt)) : g.lm + ((nx ? nx.l0 : g.lm - 20) - g.lm) * Math.min(1, (into - g.lt) / Math.max(0.02, g.d - g.lt));
+    const cl = (x) => (x < 0 ? 0 : x > 1 ? 1 : x);
+    const lvl = cl(1 + (db - ana.segTop) / 22);
+    const bright = cl(((g.tb[1] || 0) + 40) / 180);
+    const fresh = Math.exp(-Math.max(0, into) / 0.09);
+    // Loudness and brightness of this moment on a fixed spectrum shape:
+    // brighter sound lifts the treble side. Nothing travels sideways.
+    const now = performance.now(), dt = Math.min(0.1, Math.max(0, (now - (ana.sdT || now)) / 1000));
+    ana.sdT = now;
+    const tgt = cl(lvl * (0.85 + 0.25 * fresh));
+    const old = ana.sdL ?? tgt;
+    ana.sdL = old + (tgt - old) * (1 - Math.exp(-dt / (tgt > old ? 0.06 : 0.28)));
+    ana.sdB = (ana.sdB ?? bright) + (bright - (ana.sdB ?? bright)) * (1 - Math.exp(-dt / 0.25));
+    const L = ana.sdL, Br = ana.sdB;
+    const bands = shared.live.bands;
+    for (let b = 0; b < NB; b++) {
+      const x = b / (NB - 1);
+      const shape = 0.25 + 0.75 * Math.exp(-(2.6 - 1.6 * Br) * x);
+      bands[b] = cl(L * shape * 1.1);
+    }
+    shared.live.level = lvl;
+    shared.live.abs = 0.05 + 0.3 * lvl;
+    shared.live.at = performance.now();
+    if (i !== ana.segLast) {
+      ana.segLast = i;
+      const jump = g.lm - g.l0;
+      let near = false;
+      if (ana.beats) {
+        const k = firstAfter(ana.beats, g.s + 0.07) - 1;
+        near = k >= 0 && g.s - ana.beats[k] < 0.07;
+      }
+      if (jump > 5 && near && bright < 0.65) kickHit(Math.min(1, 0.3 + jump / 20) * (S.beatSens ?? 1));
+      else if (jump > 6 && bright > 0.45 && (g.tb[3] || 0) > 20) snareHit(0.5);
+    }
+    ana.segIdx = i;
+    shared.songData = true;
+    return true;
+  }
   function firstAfter(arr, x) {
     let lo = 0, hi = arr.length;
     while (lo < hi) {
@@ -871,7 +998,7 @@
   // The helper's setup file. An add-on inside Spotify can't install programs,
   // so the button downloads it (in the web browser) for the user to open once.
   const HELPER_SETUP = "https://github.com/siamct/spicy-visualiser/raw/main/setup/SpicyVisualiserHelper.zip";
-  const HELPER_STEP = "Downloading SpicyVisualiserHelper.zip. Open it from your downloads, click Extract all, then double-click Install helper.bat. If Windows asks, click More info, then Run anyway. The visualiser goes Live by itself, and from then on you open Spotify with Spicy Visualiser from the Start menu.";
+  const HELPER_STEP = "Downloading SpicyVisualiserHelper.zip. Open it from your downloads, click Extract all, then double-click Install helper.bat. If Windows asks, click More info, then Run anyway. The visualiser goes Live by itself.";
   function downloadHelper() {
     shared.downloaded = true;
     try {
@@ -888,9 +1015,9 @@
   }
   const NOTICE_KEY = "spicy-visualiser:helper-notice";
   const REMIND_KEY = "spicy-visualiser:helper-remind-off";
-  const HELPER_START = "Turn the helper on: open the Start menu, search Spicy Visualiser and press Enter. It opens Spotify too, so pin it to your taskbar and open Spotify with it.";
+  const HELPER_START = "The helper isn't running. It starts with Windows, so restarting your PC starts it, or open Spicy Visualiser helper from the Start menu. You can also switch to Spotify data under More, Sound source.";
   function connectHelper() {
-    if (S.useHelper === false) return setTimeout(connectHelper, 2000); // turned off: just wait
+    if (S.source === "spotify") return setTimeout(connectHelper, 2000); // turned off: just wait
     let ws;
     try {
       ws = new WebSocket(HELPER_URL);
@@ -1013,12 +1140,13 @@
     // No helper: use Spotify's sound data for this song, when there is some.
     shared.songData = false;
     const playing = !!Spicetify.Player.isPlaying();
-    if (shared.helper === "live" && S.useHelper === false) {
+    if (shared.helper === "live" && S.source === "spotify") {
       try { shared.ws.close(); } catch (_) {}
     }
     // Quiet for 3 s while a song plays: the helper can't hear Spotify.
     if (shared.helper !== "live" || !playing || !shared.helperLoudAt) shared.helperLoudAt = now;
     const quiet = shared.helper === "live" && now - (shared.helperLoudAt || now) > 3000;
+    if (S.source === "spotify") waveFrame() || songDataFrame();
     if (quiet !== !!shared.helperQuiet) {
       shared.helperQuiet = quiet;
       refreshPanels();
@@ -1071,7 +1199,7 @@
       // pinning at the top. Blended with the plain level by the slider.
       // Only for the helper's live sound: Spotify's song data is already
       // scaled to the song, and stretching it again made it jumpy.
-      const ar = p.autoRange ?? 0.6;
+      const ar = shared.songData ? 0 : p.autoRange ?? 0.6;
       if (ar > 0 && isLive()) {
         let fl = shared.bFloor[i], ce = shared.bCeil[i];
         if (fl < 0) {
@@ -3241,7 +3369,7 @@
       <div class="lp-body">
 
       <div class="lp-page" data-page="style">
-        <div class="lp-cards" data-key="__style" data-scope="global">${STYLE_GROUPS.map(([cat, keys]) => (cat ? `<div class="lp-cat">${cat}</div>` : "") + keys.map((k) => STYLES.find((x) => x[0] === k)).sort((x, y) => (x[0] === "off") - (y[0] === "off") || x[1].localeCompare(y[1])).map(([v, l]) => `<button data-v="${v}"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">${STYLE_ICON[v] || ""}</svg><span>${l}</span></button>`).join("")).join("")}</div>
+        <div class="lp-cards" data-key="__style" data-scope="global"><div class="lp-cat lp-sd-cat">Works with Spotify data</div>${STYLE_GROUPS.map(([cat, keys]) => (cat ? `<div class="lp-cat">${cat}</div>` : "") + keys.map((k) => STYLES.find((x) => x[0] === k)).sort((x, y) => (x[0] === "off") - (y[0] === "off") || x[1].localeCompare(y[1])).map(([v, l]) => `<button data-v="${v}" data-sd="${SONG_DATA_OK.has(v) ? 1 : 0}"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">${STYLE_ICON[v] || ""}</svg><span>${l}</span></button>`).join("")).join("")}<div class="lp-sd-more" role="button" tabindex="0"><span>More styles</span><small>Best with the helper</small></div></div>
         <div class="lp-hint"></div>
       </div>
 
@@ -3271,7 +3399,7 @@
       </div>
 
       <div class="lp-page" data-page="more">
-        <div class="lp-group"><div class="lp-gtitle">Sound source</div>${toggle("useHelper", "Use the helper", "Hears the real music (Windows). Off: the visualiser is off too")}<div class="lp-status-text"></div><div class="lp-note lp-get-note"></div><div class="lp-btnrow"><button class="lp-reset lp-get-helper">Install helper</button></div></div>
+        <div class="lp-group"><div class="lp-gtitle">Sound source</div>${seg("source", [["helper", "Helper (real sound)"], ["spotify", "Spotify data"]], "global")}<div class="lp-status-text"></div><div class="lp-note lp-get-note"></div><div class="lp-btnrow"><button class="lp-reset lp-get-helper">Install helper</button></div></div>
         ${group("Beat effects", toggle("kickPulse", "Pulse on kicks", "The visual swells a little on each kick") + toggle("kickFlash", "Flash on kicks", "A soft flash of colour"))}
         ${group("Sync", slider("syncDelay", "Audio delay (Bluetooth)", 0, 400, 10, "global") + `<div class="lp-note">Visuals ahead of the sound? With Bluetooth headphones the sound arrives later than it's played. Slide this until the beat lines up.</div>`)}
         ${group("Performance", toggle("ecoUnfocused", "Save power when Spotify isn't focused", "Drops to 30 fps while you're gaming or in another app") + `<div class="lp-label"><span>Frame rate</span></div>${seg("fps", [["30", "30 fps"], ["60", "60 fps"], ["max", "Max"]], "global")}<div class="lp-label"><span>Quality</span></div>${seg("quality", [["low", "Low"], ["medium", "Medium"], ["high", "High"]], "global")}<div class="lp-note">Everything stops (including the helper) when the lyrics view isn't on screen.</div>`)}
@@ -3308,6 +3436,7 @@
     p.addEventListener("click", (e) => {
       e.stopPropagation();
       if (e.target.closest(".lp-close")) return opts.close();
+      if (e.target.closest(".lp-sd-more")) return p.classList.toggle("lp-sd-open");
       if (e.target.closest(".lp-min")) return p.classList.toggle("lp-mini");
       if (e.target.closest(".lp-expand")) return opts.expand && opts.expand();
       if (e.target.closest(".lp-tabs button")) p.classList.remove("lp-mini");
@@ -3403,18 +3532,20 @@
     CP = P(style);
     const c = colorAt(0.3);
     p.style.setProperty("--lp-accent", `rgb(${c[0] | 0},${c[1] | 0},${c[2] | 0})`);
-    const use = S.useHelper !== false;
+    const use = S.source !== "spotify";
+    p.classList.toggle("lp-sdmode", !use);
     const quiet = shared.helper === "live" && !!shared.helperQuiet;
     const live = use && shared.helper === "live" && !quiet;
-    const off = !use || shared.helper === "offline";
-    p.querySelector(".lp-dot").className = "lp-dot " + (live ? "lp-live" : off || quiet ? "lp-offline" : "");
-    p.querySelector(".lp-pill-text").textContent = live ? "Live" : !use ? "Off" : quiet ? "No sound" : off ? "No helper" : "Connecting";
+    const off = use && shared.helper === "offline";
+    const sd = !use && !!shared.songData;
+    p.querySelector(".lp-dot").className = "lp-dot " + (live ? "lp-live" : sd ? "" : off || quiet || !use ? "lp-offline" : "");
+    p.querySelector(".lp-pill-text").textContent = live ? "Live" : !use ? (sd ? "Spotify data" : "No data") : quiet ? "No sound" : off ? "No helper" : "Connecting";
     const long = live
-      ? "Connected: reacting to the music live."
-      : quiet
+      ? "Connected to the helper: reacting to the real sound."
+      : !use
+        ? (sd ? "Following Spotify's data for this song. It's an estimate, not the real sound: for that, choose Helper." : "No Spotify data for this song yet.")
+        : quiet
         ? "The helper is running but hears no sound. Is Spotify playing through your default speakers or headphones?"
-        : !use
-        ? "Helper off, so the visualiser is off too. It only moves to the real music."
         : off
         ? "The helper isn't running. The visualiser only moves to the real music, so it stays empty until the helper is on."
         : "Connecting to the helper…";
@@ -3431,7 +3562,7 @@
       ? HELPER_STEP
       : seen
       ? HELPER_START
-      : "Spotify doesn't let add-ons hear the music, so the visualiser needs its small helper (Windows) to react properly. It runs only while Spotify is open.";
+      : "Spotify doesn't let add-ons hear the music, so the visualiser needs its small helper (Windows) to react properly. It starts with Windows and only listens while the visualiser is on screen.";
     const dg = p.querySelector(".lp-diag");
     if (dg) {
       const d = ana.diag || {};
@@ -3694,7 +3825,7 @@
     // Installed but not running: say how to turn it on, once per Spotify run.
     let noticeAt = 0;
     function maybeNotice() {
-      if (box.querySelector(".lp-notice") || shared.helper === "live" || S.useHelper === false) return;
+      if (box.querySelector(".lp-notice") || shared.helper === "live" || S.source === "spotify") return;
       let seen = false;
       try {
         seen = localStorage.getItem(HELPER_SEEN_KEY) === "1";
@@ -3717,16 +3848,28 @@
         });
       } else {
         try { localStorage.setItem(NOTICE_KEY, "1"); } catch (_) {}
-        n.innerHTML = `${head}<p>The visualiser only moves to the real music, and Spotify doesn't let add-ons hear it. Its small helper (Windows) does the listening, so it stays empty until the helper is installed.</p><div class="lp-notice-row"><button class="lp-notice-go">Install helper</button><button class="lp-notice-no">OK</button></div>`;
+        n.innerHTML = `${head}<p>The visualiser only moves to the real music, and Spotify doesn't let add-ons hear it. Its small helper (Windows) does the listening. Or use Spotify's data for each song instead: it works straight away, but it's only an estimate.</p><div class="lp-notice-row"><button class="lp-notice-go">Install helper</button><button class="lp-notice-sd">Use Spotify data</button></div>`;
         n.querySelector(".lp-notice-go").addEventListener("click", (e) => {
           e.stopPropagation();
           downloadHelper();
           n.querySelector("p").textContent = HELPER_STEP;
           n.querySelector(".lp-notice-go").remove();
-          n.querySelector(".lp-notice-no").textContent = "Close";
+          n.querySelector(".lp-notice-sd").remove();
+          const c = doc.createElement("button");
+          c.className = "lp-notice-no";
+          c.textContent = "Close";
+          c.addEventListener("click", (ev) => { ev.stopPropagation(); n.remove(); });
+          n.querySelector(".lp-notice-row").appendChild(c);
+        });
+        n.querySelector(".lp-notice-sd").addEventListener("click", (e) => {
+          e.stopPropagation();
+          write("global", "source", "spotify");
+          refreshPanels();
+          n.remove();
         });
       }
-      n.querySelector(".lp-notice-no").addEventListener("click", (e) => {
+      const no = n.querySelector(".lp-notice-no");
+      if (no) no.addEventListener("click", (e) => {
         e.stopPropagation();
         n.remove();
       });
@@ -3735,7 +3878,7 @@
     v.maybeNotice = () => {
       maybeNotice();
       const n = box.querySelector(".lp-notice");
-      if (n && (shared.helper === "live" || S.useHelper === false)) n.remove();
+      if (n && (shared.helper === "live" || S.source === "spotify")) n.remove();
     };
 
     function buildPanel() {
@@ -3946,7 +4089,7 @@
         readLyrics();
         // Only the real music drives it: without the helper's sound, nothing
         // is drawn, and the loop idles at a few frames a second.
-        if (!helperFeeding()) {
+        if (!helperFeeding() && !shared.songData) {
           if (!v.idle) {
             ctx.setTransform(1, 0, 0, 1, 0, 0);
             ctx.clearRect(0, 0, v.w, v.h);

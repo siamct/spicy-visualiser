@@ -219,6 +219,17 @@
 #SpicyLyricsPage .lp-notice-row { display: flex; gap: 8px; }
 #SpicyLyricsPage .lp-notice button { flex: 1; border: 0; padding: 9px 10px; border-radius: 10px; cursor: pointer; font-weight: 600; font-size: 13px; }
 #SpicyLyricsPage .lp-notice-go { background: #fff; color: #111; }
-#SpicyLyricsPage .lp-notice-no { background: rgba(255,255,255,.08); color: rgba(255,255,255,.8); }
+#SpicyLyricsPage .lp-notice-no, #SpicyLyricsPage .lp-notice-sd { background: rgba(255,255,255,.08); color: rgba(255,255,255,.8); }
 @keyframes lp-notice-in { from { opacity: 0; transform: translateY(-6px); } to { opacity: 1; transform: none; } }
 #SpicyLyricsPage .lp-notice .lp-notice-never { display: block; width: 100%; margin-top: 8px; padding: 2px; background: none; color: rgba(255,255,255,.45); font-weight: 500; font-size: 12px; }
+/* Sound source "Spotify data": the styles that suit it first, the rest folded under "More styles". */
+:is(#SpicyLyricsPage, .lp-modal-wrap) .lp-panel .lp-cards .lp-sd-cat, :is(#SpicyLyricsPage, .lp-modal-wrap) .lp-panel .lp-cards .lp-sd-more { display: none; }
+:is(#SpicyLyricsPage, .lp-modal-wrap) .lp-panel.lp-sdmode .lp-cards .lp-cat:not(.lp-sd-cat) { display: none; }
+:is(#SpicyLyricsPage, .lp-modal-wrap) .lp-panel.lp-sdmode .lp-cards .lp-sd-cat { display: block; order: -1; margin-top: 0; }
+:is(#SpicyLyricsPage, .lp-modal-wrap) .lp-panel.lp-sdmode .lp-cards button[data-sd="0"] { order: 2; display: none; }
+:is(#SpicyLyricsPage, .lp-modal-wrap) .lp-panel.lp-sdmode.lp-sd-open .lp-cards button[data-sd="0"] { display: flex; }
+:is(#SpicyLyricsPage, .lp-modal-wrap) .lp-panel.lp-sdmode .lp-cards .lp-sd-more { display: flex; order: 1; grid-column: 1 / -1; align-items: baseline; justify-content: space-between; gap: 8px; margin-top: 6px; padding: 9px 12px; border-radius: 12px; cursor: pointer; background: rgba(255,255,255,.05); color: rgba(255,255,255,.8); font-size: 12px; font-weight: 600; }
+:is(#SpicyLyricsPage, .lp-modal-wrap) .lp-panel.lp-sdmode .lp-cards .lp-sd-more small { font-weight: 500; color: rgba(255,255,255,.45); }
+:is(#SpicyLyricsPage, .lp-modal-wrap) .lp-panel.lp-sdmode .lp-cards .lp-sd-more::after { content: "\25BE"; margin-left: auto; transition: transform .2s; }
+:is(#SpicyLyricsPage, .lp-modal-wrap) .lp-panel.lp-sdmode.lp-sd-open .lp-cards .lp-sd-more::after { transform: rotate(180deg); }
+:is(#SpicyLyricsPage, .lp-modal-wrap) .lp-panel.lp-sdmode .lp-cards .lp-sd-more:hover { background: rgba(255,255,255,.09); color: #fff; }

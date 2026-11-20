@@ -7,7 +7,7 @@
 19 styles that move with the music, take their colours from the album cover and sit right behind the lyrics.
 
 > [!IMPORTANT]
-> **Needs the Spicy Visualiser helper (Windows).** Spotify doesn't let add-ons hear the music, so a small helper does the listening. You open Spotify with its **Spicy Visualiser** shortcut and the helper runs alongside, closing when Spotify closes. After installing from the Marketplace, click **Install helper** in the visualiser, or [download the helper](https://github.com/siamct/spicy-visualiser/raw/main/setup/SpicyVisualiserHelper.zip).
+> **Needs the Spicy Visualiser helper (Windows).** Spotify doesn't let add-ons hear the music, so a small helper does the listening. It starts with Windows in the background and only listens while the visualiser is on screen. Don't want it? Choose **Spotify data** under **More → Sound source** instead. After installing from the Marketplace, click **Install helper** in the visualiser, or [download the helper](https://github.com/siamct/spicy-visualiser/raw/main/setup/SpicyVisualiserHelper.zip).
 
 [![Spicetify](https://img.shields.io/badge/Spicetify-extension-1ed760?style=flat-square)](https://spicetify.app)
 [![Spicy Lyrics](https://img.shields.io/badge/Spicy%20Lyrics-add--on-e8356f?style=flat-square)](https://github.com/Spikerko/spicy-lyrics)
@@ -54,11 +54,10 @@ You need Spotify desktop with [Spicetify](https://spicetify.app) and the **Spicy
 1. In Spotify, open **Marketplace** → **Extensions**, search **Spicy Visualiser** and click **Install**.
 2. Open Spicy Lyrics. The visualiser asks to install its helper: click **Install helper**. (Or [download the helper](https://github.com/siamct/spicy-visualiser/raw/main/setup/SpicyVisualiserHelper.zip) yourself.)
 3. Open **SpicyVisualiserHelper.zip** from your downloads, click **Extract all**, then double-click **Install helper.bat** in the extracted folder. If Windows says it protected your PC (the file isn't signed), click **More info** → **Run anyway**. The visualiser goes **Live** by itself. You can delete the folder afterwards.
-4. From then on, open Spotify with **Spicy Visualiser** from the Start menu (pin it to your taskbar in place of Spotify). It opens Spotify and the helper together.
 
-**The helper isn't intrusive.** Nothing starts with Windows and nothing runs hidden: the **Spicy Visualiser** shortcut opens Spotify with the helper in a small minimised window (close it to turn the helper off). It sleeps (no listening, next to no CPU) while the visualiser is hidden, and closes about 20 seconds after Spotify closes. Spotify doesn't let add-ons start programs, which is why it's a shortcut. It installs for your Windows user only (no admin), brings its own copy of Node.js, only listens to Spotify, and nothing leaves your PC. Remove it any time in **Settings → Apps**.
+**The helper isn't intrusive.** It starts with Windows in the background (Spotify doesn't let add-ons start programs, so it can't be started from Spotify). It sleeps (no listening, next to no CPU) while the visualiser isn't on screen. It installs for your Windows user only (no admin), brings its own copy of Node.js, only listens to Spotify, and nothing leaves your PC. Remove it any time in **Settings → Apps**.
 
-Without the helper the visualiser stays empty: Spotify doesn't let add-ons hear the music, and anything made up from Spotify's song data didn't look right, so it only moves to the real sound. You can turn the helper off under **More → Sound source → Use the helper**.
+**Sound source** (under **More**): **Helper** reacts to the real sound. **Spotify data** works without the helper, following Spotify's own data for each song; it's an estimate, so it's less accurate.
 
 ### Full install from this repo (Windows)
 
@@ -114,7 +113,7 @@ Spotify doesn't give extensions its audio. The helper captures **only Spotify's 
 - picks out kicks and snares with spectral flux;
 - sends each update (about every 10 ms) to the extension over `127.0.0.1`.
 
-It only accepts connections from Spotify on your own PC. It runs from the **Spicy Visualiser** shortcut, only listens while the visualiser is on screen, and closes when Spotify closes.
+It only accepts connections from Spotify on your own PC. It starts with Windows and only listens while the visualiser is on screen.
 
 ---
 

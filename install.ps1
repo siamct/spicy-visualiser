@@ -124,18 +124,20 @@ if (-not (Test-Path (Join-Path $HelperDir "node_modules\ws"))) {
   if (-not (Test-Path (Join-Path $HelperDir "node_modules\ws"))) { throw "Couldn't download the helper's parts (npm install failed). Check your internet connection and run this again." }
 }
 
-# Nothing starts with Windows: Spotify starts the helper (through a
-# spicy-visualiser:// link registered here) and it closes when Spotify closes.
+# Like the original installer: the helper starts with Windows in the
+# background and only listens while the visualiser is on screen.
 $conhost = Join-Path $env:WINDIR "System32\conhost.exe"
 $helperJs = Join-Path $HelperDir "helper.js"
-$launchArgs = "--headless `"$nodeExe`" `"$helperJs`" --log-file"
-Remove-Item $StartupLink -Force -ErrorAction SilentlyContinue  # from older versions
-$proto = "HKCU:\Software\Classes\spicy-visualiser"
-New-Item -Path "$proto\shell\open\command" -Force | Out-Null
-Set-ItemProperty -Path $proto -Name "(default)" -Value "URL:Spicy Visualiser helper"
-Set-ItemProperty -Path $proto -Name "URL Protocol" -Value ""
-Set-ItemProperty -Path "$proto\shell\open\command" -Name "(default)" -Value "`"$conhost`" $launchArgs"
-Ok "Spotify starts it with the visualiser; it closes when Spotify closes."
+$launchArgs = "--headless `"$nodeExe`" `"$helperJs`" --log-file --stay"
+$lnk = (New-Object -ComObject WScript.Shell).CreateShortcut($StartupLink)
+$lnk.TargetPath = $conhost
+$lnk.Arguments = $launchArgs
+$lnk.WorkingDirectory = $HelperDir
+$lnk.WindowStyle = 7
+$lnk.Description = "Spicy Visualiser helper (lets the visualiser hear the music)"
+$lnk.Save()
+Remove-Item "HKCU:\Software\Classes\spicy-visualiser" -Recurse -Force -ErrorAction SilentlyContinue
+Ok "Starts with Windows in the background; only listens while the visualiser is on screen."
 
 Start-Process -FilePath $conhost -ArgumentList $launchArgs -WorkingDirectory $HelperDir -WindowStyle Hidden
 Start-Sleep -Seconds 2

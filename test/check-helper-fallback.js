@@ -1,6 +1,6 @@
-// Only the real music drives the visual: a helper that connects but hears
-// nothing leaves it empty (and the panel says why), and turning "Use the
-// helper" off closes the connection and leaves it empty too.
+// Helper source: a helper that connects but hears nothing leaves the visual
+// empty (and the panel says why). Switching the source to Spotify data closes
+// the helper connection and draws from the song's data instead.
 const { chromium } = require("playwright");
 const path = require("path");
 (async () => {
@@ -39,12 +39,12 @@ const path = require("path");
   const px1 = await drawn();
   const r1 = st.helper === "live" && px1 === 0 && /hears no sound/.test(quietText);
   console.log(r1 ? "PASS" : "FAIL", "silent helper: nothing drawn, panel says why", JSON.stringify({ helper: st.helper, px1, quietText }));
-  await p.evaluate(() => document.querySelector('input[data-key="useHelper"]').click());
+  await p.evaluate(() => document.querySelector('[data-key="source"] button[data-v="spotify"]').click());
   await p.waitForTimeout(2500);
   const r = await p.evaluate(() => ({ ws: window.__ws, st: window.SpicyVisualiser.state(), text: document.querySelector(".lp-status-text").textContent, install: !document.querySelector(".lp-get-helper").classList.contains("lp-hidden") }));
   const px2 = await drawn();
-  const r2 = r.ws.closed >= 1 && r.ws.opened === 1 && r.st.helper !== "live" && /Helper off/.test(r.text) && !r.install && px2 === 0;
-  console.log(r2 ? "PASS" : "FAIL", "Use the helper off: closes it, nothing drawn", JSON.stringify({ ws: r.ws, helper: r.st.helper, text: r.text, install: r.install, px2 }));
+  const r2 = r.ws.closed >= 1 && r.ws.opened === 1 && r.st.helper !== "live" && /Spotify's data/.test(r.text) && !r.install && px2 > 0;
+  console.log(r2 ? "PASS" : "FAIL", "Sound source Spotify data: closes the helper, draws from song data", JSON.stringify({ ws: r.ws, helper: r.st.helper, text: r.text, install: r.install, px2 }));
   if (errors.length) console.log("ERRORS", errors);
   await b.close();
   process.exit(r1 && r2 && !errors.length ? 0 : 1);
