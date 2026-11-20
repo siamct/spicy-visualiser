@@ -1,0 +1,31 @@
+<!doctype html><html><head><style>
+body{margin:0;background:#000;font-family:sans-serif;width:1280px;height:720px}
+#SpicyLyricsPage{position:absolute;inset:0}
+#SpicyLyricsPage .ContentBox{position:relative;width:100%;height:100%;display:flex;overflow:hidden}
+.spicy-dynamic-bg{position:absolute;inset:0;background:radial-gradient(circle at 30% 30%,#3a1450,#0b0b20 70%);filter:brightness(.8)}
+.NowBar{position:absolute;z-index:10;left:60px;top:200px;width:300px;color:#fff}
+.NowBar .art{width:260px;height:260px;border-radius:12px;background:linear-gradient(135deg,#ff4fa0,#5b6cff)}
+.LyricsContainer{z-index:4;margin-left:420px;padding-top:120px;color:rgba(255,255,255,.35);font-size:40px;font-weight:800;flex:1}
+.line{margin:22px 0}.line.Active{color:#fff}
+.ViewControls{position:absolute;z-index:10;right:20px;top:20px;display:flex;gap:8px;height:40px}
+.ViewControl{width:40px;height:40px;border-radius:99px;border:0;background:rgba(255,255,255,.12);color:#ccc;display:flex;align-items:center;justify-content:center}
+.ViewControl svg{fill:currentColor}
+</style></head><body>
+<div id="SpicyLyricsPage"><div class="ContentBox"><div class="spicy-dynamic-bg"></div>
+<div class="NowBar"><div class="MediaImageContainer art"></div><h2>Test Song</h2></div>
+<div class="LyricsContainer"><div class="LyricsContent">
+<div class="line"><span class="word">Neon</span> <span class="word">lights</span> <span class="word">on</span> <span class="word">the</span> <span class="word">motorway</span></div>
+<div class="line"><span class="word">We're</span> <span class="word">running</span> <span class="word">out</span> <span class="word">of</span> <span class="word">night</span></div>
+<div class="line"><span class="word">Turn</span> <span class="word">it</span> <span class="word">up</span> <span class="word">and</span> <span class="word">let</span> <span class="word">it</span> <span class="word">play</span></div>
+<div class="line"><span class="word">Till</span> <span class="word">the</span> <span class="word">morning</span> <span class="word">light</span></div>
+</div></div>
+<div class="ViewControls"><button class="ViewControl">A</button><button id="Close" class="ViewControl">X</button></div>
+</div></div>
+<script>
+window.Spicetify={Player:{data:{item:{uri:"spotify:track:x",name:"Neon Motorway",artists:[{name:"Test Artist"}]}},addEventListener(){},isPlaying:()=>true,getProgress:()=>performance.now()},
+ colorExtractor:async()=>({VIBRANT:"#e0408a",LIGHT_VIBRANT:"#7fd3ff",PROMINENT:"#6a4cff"}),
+ getAudioData:async()=>{throw new Error("gone")},showNotification(m){console.log("NOTE",m)}};
+let wi=0;const lines=[...document.querySelectorAll('.line')];
+setInterval(()=>{const words=lines.flatMap(l=>[...l.querySelectorAll('.word')]);document.querySelectorAll('.Active').forEach(e=>e.classList.remove('Active'));
+ const w=words[wi%words.length];w.classList.add('Active');w.closest('.line').classList.add('Active');wi++;},350);
+</script><script src="../spicy-visualiser.js"></script></body></html>

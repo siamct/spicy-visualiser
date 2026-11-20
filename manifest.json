@@ -1,0 +1,22 @@
+[
+  {
+    "name": "Spicy Visualiser",
+    "description": "(WIP) Music visualiser for Spicy Lyrics, 18 styles with album colours. Works straight away on Spotify's song data; for the real sound, add the optional helper (Windows) from the visualiser.",
+    "preview": "docs/screenshots/card.gif",
+    "main": "spicy-visualiser.js",
+    "readme": "README.md",
+    "authors": [
+      {
+        "name": "siamct",
+        "url": "https://github.com/siamct"
+      }
+    ],
+    "tags": [
+      "visualiser",
+      "lyrics",
+      "spicy lyrics",
+      "audio",
+      "beat"
+    ]
+  }
+]
