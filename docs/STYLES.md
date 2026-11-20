@@ -64,7 +64,7 @@ A sphere of glowing dots. It flows with the loudness, bulges by frequency (bass 
 ### Trap Circle
 ![Trap Circle](screenshots/styles/trap.jpg)
 
-The classic trap-channel circle, empty in the middle. The spectrum is mirrored round a ring, with bass at the bottom. A white layer sits in front, and seven colour layers burst out behind it on every hit. The circle bounces with the bass, and white dust flies towards you. Set **Circle at** to the art and it wraps the album cover instead.
+The classic trap-channel circle, empty in the middle. The spectrum is mirrored round a ring, with the bass at the top as two sharp ears and the treble meeting at the bottom. A white layer sits in front, and seven colour layers burst out behind it on every hit. The circle bounces with the bass, and white dust flies towards you. Set **Circle at** to the art and it wraps the album cover instead.
 
 ### Subwoofer
 ![Subwoofer](screenshots/styles/sub.jpg)
