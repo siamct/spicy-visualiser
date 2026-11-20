@@ -112,11 +112,11 @@ A smooth glowing fluid. It flows faster, swirls harder and glows brighter as the
 The same fluid as Plasma, shown on the LED dot panel.
 
 ### Ribbon
-Slow, see-through wave ribbons drifting across the screen, with sparkles riding along them:
-- the bass swells the waves;
+Calm wave sheets made of fine lines, twisting like silk ribbons as they drift across the screen, with tiny sparkles floating up:
+- the bass swells the waves a little;
 - louder parts speed them up;
 - kicks make them glow;
-- the colours step round on the beat.
+- the tint comes from the album.
 
 ### Silk
 Long streaks of colour pulled through a slow current, like ink drawn through water:

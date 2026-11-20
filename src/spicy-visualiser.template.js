@@ -2994,68 +2994,68 @@
   };
 
   // ---------------------------------------------------------------------------
-  // Ribbon: slow, see-through wave ribbons drifting across the screen, with
-  // a few sparkles riding on them. The bass swells the waves, loudness speeds
-  // them up, kicks make them glow, colours step round on the beat. Cheap: six
-  // ribbons of ~70 points, filled and stroked once each.
+  // Ribbon: calm wave sheets drifting across the screen. Each sheet is a
+  // bundle of thin, faint lines; the sheet's width swings through zero along
+  // the screen, so it looks like a silk ribbon twisting over (the lines cross
+  // where it turns). A few tiny sparkles float up slowly. The bass swells the
+  // waves a little, louder parts speed them up, kicks make them glow, and the
+  // tint comes from the album. Cheap: ~40 strokes of 60 points.
   DRAW.ribbon = (v, p, dt, t) => {
     const { ctx, w, h, U } = v;
     const st = v.ribbon || (v.ribbon = { t: Math.random() * 100, glow: 0, kickSeen: shared.beatSerial, sp: [], swell: 0 });
     const e = shared.energy, bass = shared.bassPunch || 0;
-    if (st.kickSeen !== shared.beatSerial) { st.kickSeen = shared.beatSerial; st.glow = Math.min(1, st.glow + 0.6 * Math.min(1, shared.kick + 0.3)); }
-    st.glow *= Math.exp(-dt * 3);
-    st.swell += (bass - st.swell) * Math.min(1, dt * (bass > st.swell ? 10 : 2.5));
-    st.t += dt * (0.18 + 0.5 * e) * p.speed;
+    if (st.kickSeen !== shared.beatSerial) { st.kickSeen = shared.beatSerial; st.glow = Math.min(1, st.glow + 0.5 * Math.min(1, shared.kick + 0.3)); }
+    st.glow *= Math.exp(-dt * 2.5);
+    st.swell += (bass - st.swell) * Math.min(1, dt * (bass > st.swell ? 6 : 1.5));
+    st.t += dt * (0.12 + 0.3 * e) * p.speed;
     const step = beatSteps(st, p);
-    const T = st.t, R = 6, PTS = 70;
-    const cy = h * 0.58, amp = h * (0.07 + 0.16 * st.swell) * p.size;
+    const T = st.t, PTS = 60, LINES = 22;
     ctx.globalCompositeOperation = "lighter";
     ctx.lineJoin = "round";
-    const lines = [];
-    for (let r = 0; r < R; r++) {
-      const ph = r * 1.7, f = 1.2 + r * 0.23, off = (r - (R - 1) / 2) * h * 0.035;
-      const col = colorAt(((r / R) + step / 3) % 1);
-      const top = [], bot = [];
+    const sheets = [
+      { cy: 0.6, amp: 0.1, f: 0.9, sp: 1, wid: 0.075, ph: 0, c: 0 },
+      { cy: 0.66, amp: 0.07, f: 1.3, sp: -0.7, wid: 0.05, ph: 2.1, c: 0.5 },
+    ];
+    for (const sh of sheets) {
+      const tint = mix(colorAt((sh.c + step / 3) % 1), WHITE, 0.55);
+      const amp = h * sh.amp * (0.8 + 0.7 * st.swell) * p.size;
+      const cxs = new Float32Array(PTS + 1), wids = new Float32Array(PTS + 1);
       for (let i = 0; i <= PTS; i++) {
-        const x = (i / PTS) * w, q = (i / PTS) * Math.PI * 2;
-        const y = cy + off + amp * (Math.sin(q * f + T * (0.9 + r * 0.12) + ph) * 0.7 + Math.sin(q * f * 0.5 - T * 0.6 + ph * 2) * 0.45);
-        const th = h * (0.012 + 0.05 * (0.5 + 0.5 * Math.sin(q * 0.8 + T * 0.7 + ph))) * (0.7 + 0.6 * st.swell);
-        top.push(x, y - th);
-        bot.push(x, y + th);
+        const q = (i / PTS) * Math.PI * 2;
+        cxs[i] = h * sh.cy + amp * (Math.sin(q * sh.f + T * sh.sp + sh.ph) + 0.35 * Math.sin(q * sh.f * 2.1 - T * 0.7 * sh.sp + sh.ph));
+        // the width swings through zero: that's the twist
+        wids[i] = h * sh.wid * Math.sin(q * 0.75 + T * 0.45 * sh.sp + sh.ph * 1.7) * (1 + 0.5 * st.swell);
       }
-      // the ribbon: a soft see-through band
-      ctx.beginPath();
-      ctx.moveTo(top[0], top[1]);
-      for (let i = 2; i < top.length; i += 2) ctx.lineTo(top[i], top[i + 1]);
-      for (let i = bot.length - 2; i >= 0; i -= 2) ctx.lineTo(bot[i], bot[i + 1]);
-      ctx.closePath();
-      ctx.fillStyle = v.rgba(col, A_(0.05 + 0.05 * e + 0.08 * st.glow, v));
-      ctx.fill();
-      // its bright edge
-      ctx.beginPath();
-      ctx.moveTo(top[0], top[1]);
-      for (let i = 2; i < top.length; i += 2) ctx.lineTo(top[i], top[i + 1]);
-      ctx.strokeStyle = v.rgba(mix(col, WHITE, 0.35), A_(0.22 + 0.25 * e + 0.35 * st.glow, v));
-      ctx.lineWidth = Math.max(1, (1 + 1.2 * st.glow) * U);
-      ctx.stroke();
-      lines.push(top);
+      for (let j = 0; j < LINES; j++) {
+        const o = j / (LINES - 1) - 0.5;
+        const edge = Math.abs(o) > 0.45; // the two edges are a touch brighter
+        ctx.beginPath();
+        for (let i = 0; i <= PTS; i++) {
+          const x = (i / PTS) * w;
+          // each line ripples slightly differently, so the sheet looks soft
+          const y = cxs[i] + wids[i] * o + Math.sin((i / PTS) * 9 + T * 1.3 + j * 0.4) * h * 0.003;
+          i ? ctx.lineTo(x, y) : ctx.moveTo(x, y);
+        }
+        ctx.strokeStyle = v.rgba(tint, A_((edge ? 0.22 : 0.07) + 0.06 * e + (edge ? 0.25 : 0.08) * st.glow, v));
+        ctx.lineWidth = Math.max(0.8, (edge ? 1.3 : 0.9) * U);
+        ctx.stroke();
+      }
     }
-    // Sparkles riding along the ribbons' edges, twinkling.
-    while (st.sp.length < 36) st.sp.push({ r: (Math.random() * R) | 0, x: Math.random(), v: 0.02 + Math.random() * 0.05, tw: Math.random() * 6.28 });
+    // Tiny sparkles floating up slowly.
+    while (st.sp.length < 28) st.sp.push({ x: Math.random(), y: 0.35 + Math.random() * 0.6, v: 0.004 + Math.random() * 0.01, tw: Math.random() * 6.28 });
     ctx.fillStyle = v.rgba(WHITE, 1);
     for (const s of st.sp) {
-      s.x += dt * s.v * (0.5 + e) * p.speed;
-      if (s.x > 1) { s.x -= 1; s.r = (Math.random() * R) | 0; }
-      const L = lines[s.r], i = Math.min(PTS, Math.round(s.x * PTS)) * 2;
-      const a = (0.5 + 0.5 * Math.sin(t * 3 + s.tw)) * (0.4 + 0.6 * e + 0.5 * st.glow);
-      ctx.globalAlpha = A_(Math.min(1, a), v);
-      const sz = (1 + 1.5 * a) * U;
+      s.y -= dt * s.v * p.speed;
+      s.x += dt * 0.004 * p.speed;
+      if (s.y < 0.3) { s.y = 0.95; s.x = Math.random(); }
+      const a = (0.5 + 0.5 * Math.sin(t * 1.5 + s.tw)) * (0.25 + 0.4 * e + 0.4 * st.glow) * Math.min(1, (s.y - 0.3) * 5);
+      ctx.globalAlpha = A_(a, v);
       ctx.beginPath();
-      ctx.arc(L[i], L[i + 1], sz, 0, Math.PI * 2);
+      ctx.arc((s.x % 1) * w, s.y * h, (0.8 + a) * U, 0, Math.PI * 2);
       ctx.fill();
     }
     ctx.globalAlpha = 1;
-    v.soft(w / 2, cy, Math.max(w, h) * 0.4, colorAt((step / 3) % 1), 0.05 + 0.1 * st.swell + 0.12 * st.glow);
+    v.soft(w / 2, h * 0.62, Math.max(w, h) * 0.45, colorAt((step / 3) % 1), 0.06 + 0.08 * st.swell + 0.1 * st.glow);
   };
 
   // ---------------------------------------------------------------------------
