@@ -27,7 +27,8 @@
 - **18 styles:** bars, retro and LED spectrums, circles and a subwoofer, poster shapes, fluids, silky streaks, particles and 3D landscapes.
 - **Album colours:** every song gets its own palette from its cover, shifting on the beat or holding still, as you like. Or pick your own, rainbow, or each style's classic look.
 - **Fully customisable:** opacity, size, blur, brightness, bar count, position, sensitivity, bass boost, speed, shake and more. Each style remembers its own settings.
-- **Hears the real music:** a small helper listens to Spotify's audio (64 bands, kicks and snares). It only listens while the visualiser is on screen.
+- **Works out of the box:** runs on Spotify's own song data straight from the Marketplace.
+- **Hears the real music (optional):** a small Windows helper listens to Spotify's audio (64 bands, kicks and snares), only while the visualiser is on screen.
 - **Lyric highlight:** an optional glow behind the word or line being sung.
 - **Every Spicy view:** normal page, fullscreen, cinema and the popout window.
 - **Light on your PC:** stops when the lyrics aren't on screen and drops to 30 fps when Spotify isn't focused.
@@ -52,12 +53,14 @@ You need Spotify desktop with [Spicetify](https://spicetify.app) and the **Spicy
 ### Marketplace (+ optional helper)
 
 1. In Spotify, open **Marketplace** → **Extensions**, search **Spicy Visualiser** and click **Install**.
-2. Open Spicy Lyrics. The visualiser works right away on Spotify's data. For the real sound, click **Install helper** (in the first-time message, or under **More → Sound source**) and then **Download helper**. (Or [download the helper](https://github.com/siamct/spicy-visualiser/raw/main/setup/SpicyVisualiserHelper.zip) yourself.)
+2. Open Spicy Lyrics. The visualiser works right away on Spotify's data. For the real sound, click **Install helper** (in the first-time message, or at the top of the **Style** tab) and then **Download helper**. (Or [download the helper](https://github.com/siamct/spicy-visualiser/raw/main/setup/SpicyVisualiserHelper.zip) yourself.)
 3. Open **SpicyVisualiserHelper.zip** from your downloads, click **Extract all**, then double-click **Install helper.bat** in the extracted folder. If Windows says it protected your PC (the file isn't signed), click **More info** → **Run anyway**. The visualiser goes **Live** by itself. You can delete the folder afterwards.
 
 **The helper isn't intrusive.** It starts with Windows in the background (Spotify doesn't let add-ons start programs, so it can't be started from Spotify). It sleeps (no listening, next to no CPU) while the visualiser isn't on screen. It installs for your Windows user only (no admin), brings its own copy of Node.js, only listens to Spotify, and nothing leaves your PC. Remove it any time in **Settings → Apps**.
 
-**Sound source** (under **More**): **Helper when available** uses the helper's real sound when it's running and Spotify's data otherwise. **Spotify data only** never uses the helper. Without the helper, the styles that suit Spotify's data are listed first and the rest fold under **More styles** (they still work, they just look their best with the helper).
+**Sound source** (top of the **Style** tab): **Helper** uses the helper's real sound when it's running, and Spotify's data when it isn't. **Spotify data** never uses the helper. **Test helper** checks that the helper is installed, running and hearing the music.
+
+Without the helper, the styles that suit Spotify's data are listed first and the rest fold under **More styles**. They still work, they just look their best with the helper.
 
 ### Full install from this repo (Windows)
 
@@ -86,19 +89,17 @@ spicetify apply
 
 ## Settings
 
-<img src="docs/screenshots/panel.png" alt="Settings panel" width="420" align="right">
-
 Click the bars icon in Spicy Lyrics for quick settings, or open **Spicy Visualiser Settings** from Spotify's profile menu for the full settings window. While you drag a slider the rest of the panel fades away so you can see the effect.
 
-- **Style:** pick one of the 18 styles.
+- **Style:** the sound source (helper or Spotify data) and the 18 styles.
 - **Look:** colours, opacity, blur, brightness, size, bar count, position.
 - **Sound:** sensitivity, bass boost, smoothing, shake, speed, tap to the beat.
 - **Lyrics:** highlight the word or line, with Soft, Fade, Sweep or Underline glows.
-- **More:** frame rate, quality, power saving, kick pulse and flash, Bluetooth delay, helper status.
+- **More:** kick pulse and flash, Bluetooth delay, frame rate, quality, power saving.
 
 Look and Sound are saved separately for every style.
 
-<br clear="right">
+<img src="docs/screenshots/panel.png" alt="Settings panel: Style, Look, Sound and More tabs" width="100%">
 
 <img src="docs/screenshots/highlights.png" alt="Lyric highlight looks" width="100%">
 
@@ -130,7 +131,8 @@ It only accepts connections from Spotify on your own PC. It starts with Windows 
 python src/build.py                     # build spicy-visualiser.js
 node helper/helper.js --test-tone       # helper with fake music (no Spotify needed)
 node test/run-tests.js                  # automated checks (Playwright)
-./tools/make-release.sh                 # build the installable zip
+python tools/make-setup.py              # build the helper download (setup/SpicyVisualiserHelper.zip)
+./tools/make-release.sh                 # build the full-install zip
 ```
 
 The source is in `src/` (`spicy-visualiser.template.js` and `style.css`), the helper in `helper/`, and the test page and checks in `test/`.
