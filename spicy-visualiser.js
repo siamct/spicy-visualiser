@@ -58,7 +58,7 @@
     trap: '<path d="M12 3.5c2 2.5 3.5 1 5.5 3s.5 3.5 2.5 5.5-1 3.5-2.5 5.5-3.5.5-5.5 3c-2-2.5-3.5-1-5.5-3s.5-3.5-2.5-5.5 1-3.5 2.5-5.5 3.5-.5 5.5-3z" opacity=".55"/><circle cx="12" cy="12" r="4.6" fill="none" stroke="currentColor" stroke-width="1.6"/>',
     retro: '<g>'+[[3,3],[7,5],[11,2],[15,4],[19,1]].map(([x,n])=>[0,1,2,3,4,5].slice(0,6-n+1).map((s)=>`<rect x="${x}" y="${19-s*3}" width="3" height="2" opacity="${(0.5+s*0.1).toFixed(2)}"/>`).join('')).join('')+'</g>',
     neuro: '<g fill="none" stroke="currentColor" stroke-width="1.2"><path d="M2 18c4-3 6 1 10-2s6 1 10-2"/><path d="M4 13c3-2 5 1 8-1.5s5 1 8-1.5" opacity=".7"/><path d="M6 9c2-1.5 4 .5 6-1s4 .5 6-1" opacity=".45"/><path d="M7 18 9 9M12 16l.5-7.5M17 16.5 15 8.5" opacity=".5"/></g>',
-    ink: '<g fill="none" stroke="currentColor" stroke-linecap="round"><path d="M2 9c5-5 9 3 14-1 2-1.6 4-2 6-1.5" stroke-width="1.8"/><path d="M2 13c5-3.5 9 2.5 14-.5 2-1.2 4-1.4 6-1" stroke-width="1.3" opacity=".7"/><path d="M2 17c5-2.5 9 2 14 0 2-.8 4-1 6-.6" stroke-width=".9" opacity=".45"/></g>',
+    ink: '<g fill="none" stroke="currentColor" stroke-linecap="round"><path d="M3 20C6 13 9 7 21 4" stroke-width="2.2"/><path d="M3 20c4-4 8-6 18-5" stroke-width="1.5" opacity=".75"/><path d="M3 20c2-6 6-12 11-16" stroke-width="1.1" opacity=".5"/><path d="M3 20c5-2 10-2 16 1" stroke-width=".9" opacity=".4"/></g><circle cx="3.2" cy="19.8" r="1.6"/>',
     sub: '<circle cx="12" cy="12" r="10" fill="none" stroke="currentColor" stroke-width="1.5"/><circle cx="12" cy="12" r="7" fill="none" stroke="currentColor" stroke-width="1.2" opacity=".7"/><circle cx="12" cy="12" r="5" fill="none" stroke="currentColor" stroke-width="1" opacity=".45"/><circle cx="12" cy="12" r="2.8"/>',
     bauhaus: '<path d="M3 3h8A8 8 0 0 1 3 11z"/><path d="M13 11a4 4 0 0 1 8 0z" opacity=".6"/><circle cx="7" cy="17" r="3.6" opacity=".8"/><path d="M13 21h8L13 13z"/>',
     geometric: '<path d="M2 4h11l-3 4H2z"/><path d="M22 10H9l3-4h10z" opacity=".55"/><path d="M2 12h15l-3 4H2z"/><path d="M22 18h-9l3-4h6z" opacity=".55"/><path d="M2 20h7l-2 2H2z" opacity=".8"/>',
@@ -2815,7 +2815,7 @@ void main() {
   // ---------------------------------------------------------------------------
   // Trap Circle: the classic trap-channel circle, with nothing in the middle.
   // The spectrum is wrapped round a circle, mirrored left / right, the bass
-  // starting at the bottom and the treble meeting at the top. Eight solid
+  // at the top (two sharp "ears") and the treble meeting at the bottom. Eight solid
   // layers: white in front, then yellow, red, pink, dark blue, blue, light
   // blue and green behind it ("Classic" colours; album colours replace the
   // seven behind). Each layer further back is the spectrum from a few frames
@@ -2834,20 +2834,21 @@ void main() {
     let st = v.trap;
     if (!st) st = v.trap = { val: new Float32Array(N), hist: Array.from({ length: HIST }, () => new Float32Array(N)), hi: 0, dust: [], bounce: 0, histT: 0 };
     const k = Math.min(1, shared.kick), bass = shared.bassPunch || 0;
-    // 1. Spectrum -> N points (more points for the bass).
+    // 1. Spectrum -> N points, evenly, so the bass is a narrow stretch near
+    //    the top (the two sharp "ears"), not a wide blob.
     // Rises quickly (not instantly) and falls back smoothly, so it moves
     // with the music without jittering.
     const fall = 1.2 + 3 * (1 - p.smoothing);
     for (let i = 0; i < N; i++) {
-      const x = bandAt(Math.pow(i / (N - 1), 1.6) * 0.72);
+      const x = bandAt(Math.pow(i / (N - 1), 1.15) * 0.72);
       st.val[i] = x > st.val[i] ? st.val[i] + (x - st.val[i]) * Math.min(1, dt * 22) : Math.max(x, st.val[i] - dt * fall * (0.15 + st.val[i]));
     }
     let a = Float32Array.from(st.val), b = new Float32Array(N);
     for (let pass = 0; pass < 2; pass++) {
       for (let i = 0; i < N; i++) {
         let s = 0, wsum = 0;
-        for (let d = -3; d <= 3; d++) {
-          const j = Math.max(0, Math.min(N - 1, i + d)), wt = 4 - Math.abs(d);
+        for (let d = -2; d <= 2; d++) {
+          const j = Math.max(0, Math.min(N - 1, i + d)), wt = 3 - Math.abs(d);
           s += a[j] * wt;
           wsum += wt;
         }
@@ -2864,8 +2865,10 @@ void main() {
     mean /= N;
     let top = 0;
     for (let i = 0; i < N; i++) {
-      const x = Math.max(0, a[i] - 0.5 * mean) / Math.max(0.3, 1 - 0.5 * mean);
-      a[i] = Math.pow(x, 1.35);
+      const x = Math.max(0, a[i] - 0.6 * mean) / Math.max(0.3, 1 - 0.6 * mean);
+      // Peaks stand out, the rest stays near the circle; the first few points
+      // fade in so the very top dips between the two bass "ears".
+      a[i] = Math.pow(x, 1.8) * Math.min(1, (i + 0.5) / 5);
       if (a[i] > top) top = a[i];
     }
     st.peak = Math.max(top, (st.peak || 0.5) - dt * 0.15);
@@ -2913,7 +2916,7 @@ void main() {
 
     // 3. The layers, back to front, as solid shapes round an empty middle.
     ctx.globalCompositeOperation = "source-over";
-    const ang = (i, side) => Math.PI / 2 - side * (i / (N - 1)) * Math.PI; // bottom -> top
+    const ang = (i, side) => -Math.PI / 2 + side * (i / (N - 1)) * Math.PI; // top (bass) -> bottom (treble)
     for (let layer = L - 1; layer >= 0; layer--) {
       const vals = frame(layer * 2);
       const push = 1 + layer * 0.035; // further back = a touch further out
