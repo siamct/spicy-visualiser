@@ -111,13 +111,6 @@ A smooth glowing fluid. It flows faster, swirls harder and glows brighter as the
 
 The same fluid as Plasma, shown on the LED dot panel.
 
-### Ribbon
-Calm wave sheets made of fine lines, twisting like silk ribbons as they drift across the screen, with tiny sparkles floating up:
-- the bass swells the waves a little;
-- louder parts speed them up;
-- kicks make them glow;
-- the tint comes from the album.
-
 ### Silk
 Long streaks of colour pulled through a slow current, like ink drawn through water:
 - the bass speeds the current up;
@@ -150,6 +143,39 @@ Settings to try:
   - Lines: stacked wave lines;
   - Ridges: flat stacked lines like the classic pulsar-plot album cover (below).
 - **Ridges line**: rough or smooth.
+
+---
+
+## Calm
+
+Slow, soft styles for chill songs. They all work well without the helper.
+
+### Ribbon
+Calm wave sheets made of fine lines, twisting like silk ribbons as they drift across the screen, with tiny sparkles floating up:
+- the bass swells the waves a little;
+- louder parts speed them up;
+- kicks make them glow;
+- the tint comes from the album.
+
+### Rain on Glass
+Looking out of a rainy window at night:
+- blurred city lights in the album's colours glow behind the glass, brighter with the bass;
+- small drops land all the time, more when it's loud;
+- big drops run down, picking up the small ones and leaving a trail;
+- kicks shake a few drops loose.
+
+### Fireflies
+Soft points of light drifting in the dark:
+- each one glows on its own;
+- on every beat a wave of light runs across them, so they flash together;
+- snares make a few twinkle;
+- **Particles** sets how many there are.
+
+### Lava Lamp
+Big soft blobs of colour rising and sinking, merging and splitting:
+- louder parts make them move faster;
+- the bass swells them and kicks give them a wobble;
+- the colours step round on the beat.
 
 ---
 

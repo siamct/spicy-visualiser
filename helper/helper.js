@@ -34,20 +34,53 @@ if (!LOG_FILE) {
   console.log("Close this window to turn it off. It also closes by itself when Spotify closes.");
   console.log("");
 }
-if (LOG_FILE) {
-  try {
-    fs.writeFileSync(LOG_FILE, "");
-  } catch (_) {}
-}
-
 function log(...args) {
-  const line = new Date().toLocaleTimeString() + " - " + args.join(" ");
+  const line = new Date().toLocaleString() + " - " + args.join(" ");
   if (LOG_FILE) {
     try {
       fs.appendFileSync(LOG_FILE, line + "\n");
     } catch (_) {}
   } else console.log(line);
 }
+
+// Hidden (started with Windows): a tiny watcher process runs the real helper
+// as a child and starts it again if it ever crashes, so it's always there.
+// The last run's log is kept as helper.old.log.
+const CHILD = process.argv.includes("--child");
+if (LOG_FILE && !CHILD && !TEST_TONE) {
+  try {
+    if (fs.existsSync(LOG_FILE)) fs.renameSync(LOG_FILE, path.join(__dirname, "helper.old.log"));
+  } catch (_) {}
+  const args = [__filename, ...process.argv.slice(2), "--child"];
+  let starts = [];
+  const run = () => {
+    const child = require("node:child_process").spawn(process.execPath, args, { stdio: "ignore", windowsHide: true });
+    child.on("exit", (code) => {
+      if (code === 0) process.exit(0); // closed on purpose (already running, Spotify closed...)
+      starts = starts.filter((t) => Date.now() - t < 3600000);
+      if (starts.length >= 30) {
+        log("The helper keeps crashing - giving up until the next restart.");
+        return process.exit(1);
+      }
+      log(`The helper stopped unexpectedly (code ${code}) - starting it again.`);
+      setTimeout(() => { starts.push(Date.now()); run(); }, starts.length < 3 ? 2000 : 15000);
+    });
+  };
+  starts.push(Date.now());
+  run();
+  process.on("SIGINT", () => process.exit(0));
+  return; // the watcher does nothing else
+}
+// The real helper: any unexpected error is written down, then it exits so the
+// watcher starts a fresh copy.
+process.on("uncaughtException", (e) => {
+  log("Crashed:", (e && e.stack) || e);
+  process.exit(1);
+});
+process.on("unhandledRejection", (e) => {
+  log("Crashed:", (e && e.stack) || e);
+  process.exit(1);
+});
 
 // ---------------------------------------------------------------------------
 // Audio buffer (mono, most recent samples)
