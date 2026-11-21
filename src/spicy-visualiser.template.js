@@ -36,7 +36,6 @@
     ["lava", "Lava Lamp"],
     ["smoke", "Smoke"],
     ["tunnel", "Starfield Tunnel"],
-    ["neon", "Neon Sign"],
     ["warp", "Warp"],
     ["dnb", "Liquid"],
     ["neuro", "Neuro Mesh"],
@@ -70,7 +69,6 @@
     lava: '<path d="M8.5 2.5h7l1.5 4.5v10l-2 4.5H9l-2-4.5V7z" fill="none" stroke="currentColor" stroke-width="1.4" opacity=".6"/><circle cx="12" cy="9" r="2.1"/><path d="M8.6 17.5c1-2.4 5.8-2.4 6.8 0z"/><circle cx="13.2" cy="13.3" r="1.1"/>',
     smoke: '<g fill="none" stroke="currentColor" stroke-linecap="round"><path d="M9 21c-3-3 3-5 0-8s2-6 0-9" stroke-width="1.8"/><path d="M15 21c-3-3 3-5 0-8s2-5 1-7" stroke-width="1.3" opacity=".6"/></g>',
     tunnel: '<g fill="none" stroke="currentColor"><circle cx="12" cy="12" r="10" stroke-width="1.6"/><circle cx="12.5" cy="11.5" r="6" stroke-width="1.3" opacity=".7"/><circle cx="13" cy="11" r="3" stroke-width="1" opacity=".5"/></g><circle cx="13.2" cy="10.8" r="1"/><circle cx="5" cy="6" r=".7"/><circle cx="19" cy="18" r=".7"/>',
-    neon: '<path d="M12 20.5C6 16.5 3 13.3 3 9.6a4.6 4.6 0 0 1 9-1.4 4.6 4.6 0 0 1 9 1.4c0 3.7-3 6.9-9 10.9z" fill="none" stroke="currentColor" stroke-width="3.2" opacity=".25"/><path d="M12 20.5C6 16.5 3 13.3 3 9.6a4.6 4.6 0 0 1 9-1.4 4.6 4.6 0 0 1 9 1.4c0 3.7-3 6.9-9 10.9z" fill="none" stroke="currentColor" stroke-width="1.4"/>',
     ribbon: '<g fill="none" stroke="currentColor" stroke-linecap="round"><path d="M2 12c4-6 8 5 12 0s6-3 8-1" stroke-width="2"/><path d="M2 15c4-5 8 4 12 0s6-2 8-.5" stroke-width="1.3" opacity=".6"/><path d="M2 9c4-5 8 4 12 0s6-2 8-.5" stroke-width="1" opacity=".4"/></g><circle cx="17.5" cy="9.8" r="1.1"/>',
     ink: '<g fill="none" stroke="currentColor" stroke-linecap="round"><path d="M3 20C6 13 9 7 21 4" stroke-width="2.2"/><path d="M3 20c4-4 8-6 18-5" stroke-width="1.5" opacity=".75"/><path d="M3 20c2-6 6-12 11-16" stroke-width="1.1" opacity=".5"/><path d="M3 20c5-2 10-2 16 1" stroke-width=".9" opacity=".4"/></g><circle cx="3.2" cy="19.8" r="1.6"/>',
     sub: '<circle cx="12" cy="12" r="10" fill="none" stroke="currentColor" stroke-width="1.5"/><circle cx="12" cy="12" r="7" fill="none" stroke="currentColor" stroke-width="1.2" opacity=".7"/><circle cx="12" cy="12" r="5" fill="none" stroke="currentColor" stroke-width="1" opacity=".45"/><circle cx="12" cy="12" r="2.8"/>',
@@ -83,10 +81,10 @@
   // Styles that still look right on Spotify's data (it has loudness and
   // beats, not a real spectrum). With that source they're listed first and
   // the rest fold away under "More styles".
-  const SONG_DATA_OK = new Set(["particles", "plasma", "ledplasma", "ink", "warp", "dnb", "ribbon", "rain", "fireflies", "lava", "smoke", "tunnel", "neon", "geometric", "bauhaus", "sub", "off"]);
+  const SONG_DATA_OK = new Set(["particles", "plasma", "ledplasma", "ink", "warp", "dnb", "ribbon", "rain", "fireflies", "lava", "smoke", "tunnel", "geometric", "bauhaus", "sub", "off"]);
   const STYLE_GROUPS = [
     ["Bars", ["ascii", "led", "mirror", "monstercat", "radial", "retro"]],
-    ["Circles", ["ncs", "sub", "trap", "tunnel", "neon"]],
+    ["Circles", ["ncs", "sub", "trap", "tunnel"]],
     ["On the beat", ["geometric", "bauhaus"]],
     ["Flowing", ["plasma", "ledplasma", "dnb", "neuro", "particles", "ink", "warp"]],
     ["Calm", ["ribbon", "rain", "fireflies", "lava", "smoke"]],
@@ -99,15 +97,15 @@
     particles: ["particles", "monstercat", "warp", "dnb", "trap", "fireflies"],
     position: ["monstercat", "mirror", "ascii"],
     variant: ["geometric"],
-    beatEvery: ["geometric", "bauhaus", "plasma", "ledplasma", "sub", "trap", "neuro", "ink", "ribbon", "rain", "fireflies", "lava", "smoke", "tunnel", "neon"],
+    beatEvery: ["geometric", "bauhaus", "plasma", "ledplasma", "sub", "trap", "neuro", "ink", "ribbon", "rain", "fireflies", "lava", "smoke", "tunnel"],
     neuroLook: ["neuro"],
     neuroLine: ["neuro"],
     mcColor: ["monstercat"],
     neuroTwist: ["neuro"],
     neuroMirror: ["neuro"],
-    circleAt: ["trap", "radial", "ncs", "sub", "neon"],
-    speed: ["trap", "retro", "neuro", "ink", "ribbon", "rain", "fireflies", "lava", "smoke", "tunnel", "neon", "particles", "monstercat", "ncs", "radial", "plasma", "warp", "dnb", "ascii", "led", "ledplasma"],
-    bassBoost: ["particles", "monstercat", "radial", "mirror", "ncs", "warp", "plasma", "dnb", "ascii", "geometric", "bauhaus", "led", "ledplasma", "sub", "trap", "retro", "neuro", "ink", "ribbon", "rain", "fireflies", "lava", "smoke", "tunnel", "neon"],
+    circleAt: ["trap", "radial", "ncs", "sub"],
+    speed: ["trap", "retro", "neuro", "ink", "ribbon", "rain", "fireflies", "lava", "smoke", "tunnel", "particles", "monstercat", "ncs", "radial", "plasma", "warp", "dnb", "ascii", "led", "ledplasma"],
+    bassBoost: ["particles", "monstercat", "radial", "mirror", "ncs", "warp", "plasma", "dnb", "ascii", "geometric", "bauhaus", "led", "ledplasma", "sub", "trap", "retro", "neuro", "ink", "ribbon", "rain", "fireflies", "lava", "smoke", "tunnel"],
     smoothing: ["particles", "monstercat", "radial", "mirror", "ncs", "warp", "plasma", "dnb", "ascii", "geometric", "bauhaus", "led", "ledplasma", "sub", "trap", "retro", "neuro", "ink"],
   };
 
@@ -154,7 +152,6 @@
     lava: { shake: 0 },
     smoke: { shake: 0 },
     tunnel: { shake: 0.2 },
-    neon: { shake: 0 }, // turns once a bar (most songs count in 4s and 8s)
     led: { colorMode: "classic", shake: 0 },
     ledplasma: { shake: 0 },
     monstercat: { barCount: 63, bassBoost: 0.8, smoothing: 0.45, beatEvery: "4" },
@@ -2628,7 +2625,7 @@
     const { ctx, w, h, U } = v;
     const N = TRAP_N, HIST = 24, L = 8;
     let st = v.trap;
-    if (!st) st = v.trap = { val: new Float32Array(N), pk: new Float32Array(N).fill(0.3), hist: Array.from({ length: HIST }, () => new Float32Array(N)), hi: 0, dust: [], bounce: 0, histT: 0 };
+    if (!st) st = v.trap = { val: new Float32Array(N), hist: Array.from({ length: HIST }, () => new Float32Array(N)), hi: 0, dust: [], bounce: 0, histT: 0 };
     const k = Math.min(1, shared.kick), bass = shared.bassPunch || 0;
     // 1. Spectrum -> N points, evenly, so the bass is a narrow stretch near
     //    the top (the two sharp "ears"), not a wide blob.
@@ -2652,27 +2649,28 @@
       }
       [a, b] = [b, a];
     }
-    // Each point is measured against its own recent loudest (a slow peak per
-    // point), so the mids and highs make peaks of their own instead of the
-    // bass drowning everything out. Then only what stands out shows: take
-    // away most of the ring's average and curve it, so the rest stays near
-    // the circle. Then scale by a slowly moving overall peak.
+    // Like the trap channels it's driven by the bass: the low end is weighted
+    // up and exaggerated, the rest barely moves. Then only what stands out
+    // shows (most of the ring's average taken away, then curved), scaled by
+    // a slow peak that never blows quiet parts up, so it sits still when
+    // there's no bass.
+    // Bass-heavy: the low end counts double, the highs barely move it.
     for (let i = 0; i < N; i++) {
-      st.pk[i] = Math.max(a[i], st.pk[i] - dt * 0.08);
-      a[i] = a[i] / (0.12 + 0.88 * st.pk[i]);
+      const q = i / (N - 1);
+      a[i] *= q < 0.3 ? 1.8 : q < 0.55 ? 1.8 - (q - 0.3) * 5.2 : 0.5;
     }
     let mean = 0;
     for (let i = 0; i < N; i++) mean += a[i];
     mean /= N;
     let top = 0;
     for (let i = 0; i < N; i++) {
-      const x = Math.max(0, a[i] - 0.55 * mean) / Math.max(0.3, 1 - 0.55 * mean);
+      const x = Math.max(0, a[i] - 0.5 * mean) / Math.max(0.3, 1 - 0.5 * mean);
       // the first few points fade in so the very top dips between the bass peaks
-      a[i] = Math.pow(x, 1.5) * Math.min(1, (i + 0.5) / 4);
+      a[i] = Math.pow(x, 1.7) * Math.min(1, (i + 0.5) / 4);
       if (a[i] > top) top = a[i];
     }
     st.peak = Math.max(top, (st.peak || 0.5) - dt * 0.15);
-    const norm = 0.85 / Math.max(0.25, st.peak);
+    const norm = 1 / Math.max(0.7, st.peak);
     for (let i = 0; i < N; i++) a[i] = Math.min(1, a[i] * norm);
     // keep a history at a steady rate (~60 per second), for the layer delays
     st.histT += dt;
@@ -2687,7 +2685,7 @@
     const cx = spot.x, cy = spot.y;
     st.bounce += ((0.05 * bass + 0.03 * k) - st.bounce) * Math.min(1, dt * 14);
     const R0 = spot.r * (1 + st.bounce);
-    const maxLen = spot.r * 0.42 * p.size;
+    const maxLen = spot.r * 0.6 * p.size;
     const classic = p.colorMode === "classic";
 
     // 2. Dust flying out towards you (3D: starts small near the middle,
@@ -2725,7 +2723,7 @@
         for (let n = 0; n < N; n++) {
           const i = side === 1 ? n : N - 1 - n;
           if (side === -1 && (i === 0 || i === N - 1)) continue;
-          const r = R0 + 2 * U * (1 + layer * 0.5) + vals[i] * maxLen * push;
+          const r = R0 + 2 * U + layer * 2.4 * U + vals[i] * maxLen * push; // each colour keeps a thin band showing
           const an = ang(i, side);
           pts.push(cx + Math.cos(an) * r, cy + Math.sin(an) * r);
         }
@@ -3084,97 +3082,124 @@
   };
 
   // ---------------------------------------------------------------------------
-  // Rain on Glass: looking out of a rainy window at night. Soft blurred city
+  // Rain on Glass: looking out of a rainy window at night. Blurred city
   // lights in the album's colours glow behind the glass (brighter with the
-  // bass), small drops land on it all the time (more when it's loud), and
-  // big drops run down, picking up the small ones and leaving a trail.
-  // Kicks shake a few drops loose. All the drops are drawn in three batched
-  // paths per frame, so a few hundred cost very little.
+  // bass). Drops keep running down the glass, each leaving a wet streak that
+  // slowly dries, with tiny beads left behind in it; small drops speckle the
+  // glass. Louder parts bring more rain, kicks send a few big drops running.
+  // The streaks live on a half-size canvas that fades slowly, so they build
+  // up into the look of a rain-covered window.
   DRAW.rain = (v, p, dt, t) => {
     const { ctx, w, h, U } = v;
+    const W = Math.max(80, Math.round(w * 0.5)), H = Math.max(60, Math.round(h * 0.5));
     let st = v.rain;
-    if (!st || st.w !== w || st.h !== h) {
-      st = v.rain = { w, h, lights: [], drops: [], runners: [], kickSeen: shared.beatSerial, acc: 0, glow: 0 };
-      for (let i = 0; i < 16; i++) st.lights.push({ x: Math.random(), y: 0.25 + Math.random() * 0.7, r: 0.04 + Math.random() * 0.09, q: Math.random(), ph: Math.random() * 6.28 });
-      for (let i = 0; i < 140; i++) st.drops.push({ x: Math.random() * w, y: Math.random() * h, r: U * (1 + Math.pow(Math.random(), 2.5) * 4.5) });
+    if (!st || st.W !== W || st.H !== H) {
+      const c = document.createElement("canvas");
+      c.width = W;
+      c.height = H;
+      st = v.rain = { c, g: c.getContext("2d"), W, H, lights: [], dots: [], runners: [], kickSeen: shared.beatSerial, acc: 0, dotAcc: 0, glow: 0, fade: 0 };
+      for (let i = 0; i < 16; i++) st.lights.push({ x: Math.random(), y: 0.2 + Math.random() * 0.75, r: 0.04 + Math.random() * 0.09, q: Math.random(), ph: Math.random() * 6.28 });
+      for (let i = 0; i < 90; i++) st.dots.push({ x: Math.random() * w, y: Math.random() * h, r: U * (0.5 + Math.pow(Math.random(), 3) * 1.6) });
     }
-    const e = shared.energy, bass = shared.bassPunch || 0, sp = p.speed;
+    const g = st.g, e = shared.energy, bass = shared.bassPunch || 0, sp = p.speed;
     const step = beatSteps(st, p);
-    st.glow = Math.max(st.glow * Math.exp(-dt * 2.5), 0);
-    // A runner: a big drop starting to slide down.
-    const loosen = (n) => {
-      for (let k = 0; k < n && st.runners.length < 12; k++) {
-        let best = -1;
-        for (let i = 0; i < st.drops.length; i++) if (st.drops[i].r > 2.2 * U && st.drops[i].y < h * 0.8 && (best < 0 || Math.random() < 0.3)) best = i;
-        if (best < 0) break;
-        const d = st.drops.splice(best, 1)[0];
-        st.runners.push({ x: d.x, y: d.y, r: Math.max(d.r, 2.6 * U), vy: 0, go: 1, gap: 0, wob: Math.random() * 6.28 });
-      }
+    st.glow *= Math.exp(-dt * 2.5);
+    const run = (big) => {
+      if (st.runners.length >= 26) return;
+      const r = U * (big ? 2.4 + Math.random() * 1.4 : 1.2 + Math.random() * 1.4);
+      st.runners.push({ x: Math.random() * w, y: -r - Math.random() * h * (big ? 0.1 : 0.6), r, vy: 0, go: 1, wob: Math.random() * 6.28, lx: null, ly: null, bead: 0 });
     };
     if (st.kickSeen !== shared.beatSerial) {
       st.kickSeen = shared.beatSerial;
       st.glow = Math.min(1, st.glow + 0.5 * Math.min(1, shared.kick + 0.3));
-      if (shared.kick > 0.45 || !isLive()) loosen(1 + (Math.random() < 0.4 ? 1 : 0));
+      if (shared.kick > 0.4 || !isLive()) { run(true); if (Math.random() < 0.5) run(true); }
     }
-    if (Math.random() < dt * 0.25 * sp) loosen(1);
-    // New small drops landing.
-    st.acc += dt * (6 + 40 * e) * sp;
-    while (st.acc >= 1) {
-      st.acc -= 1;
-      if (st.drops.length > 320) st.drops.shift();
-      st.drops.push({ x: Math.random() * w, y: Math.random() * h, r: U * (0.9 + Math.pow(Math.random(), 2.5) * 4.5) });
+    st.acc += dt * (0.8 + 3 * e) * sp;
+    while (st.acc >= 1) { st.acc -= 1; run(false); }
+    st.dotAcc += dt * (4 + 14 * e) * sp;
+    while (st.dotAcc >= 1) {
+      st.dotAcc -= 1;
+      if (st.dots.length > 160) st.dots.shift();
+      st.dots.push({ x: Math.random() * w, y: Math.random() * h, r: U * (0.5 + Math.pow(Math.random(), 3) * 1.6) });
     }
-    // Behind the glass: blurred lights.
+    // 1. Behind the glass: blurred lights.
     ctx.globalCompositeOperation = "lighter";
     for (const L of st.lights) {
       const c = colorAt((L.q + step / 3) % 1);
       const a = 0.1 + 0.08 * Math.sin(t * 0.7 + L.ph) ** 2 + 0.15 * bass + 0.12 * st.glow;
       v.soft(L.x * w, L.y * h, L.r * Math.max(w, h) * (0.9 + 0.2 * bass), c, a);
     }
-    // Runners slide down in fits and starts, wobbling a little, eating the
-    // small drops in their way and leaving a trail of tiny ones.
+    // 2. Streaks: old ones dry slowly (faded in steps so nothing gets stuck).
+    st.fade += dt;
+    if (st.fade > 1 / 15) {
+      g.globalCompositeOperation = "destination-out";
+      g.fillStyle = `rgba(0,0,0,${Math.min(0.3, st.fade * 0.22).toFixed(3)})`;
+      g.fillRect(0, 0, st.W, st.H);
+      st.fade = 0;
+    }
+    g.globalCompositeOperation = "source-over";
+    g.lineCap = "round";
+    const k2 = st.W / w; // screen -> streak canvas
+    const wet = mix(colorAt((0.5 + step / 3) % 1), WHITE, 0.7);
+    // Runners slide down in fits and starts, wandering a little sideways,
+    // drawing their wet streak and dropping tiny beads into it.
     for (let i = st.runners.length - 1; i >= 0; i--) {
       const R = st.runners[i];
-      if (Math.random() < dt * 0.6) R.go = Math.random() < 0.75 ? 1 : 0; // sticks now and then
-      const target = R.go ? (60 + 25 * (R.r / U)) * U * (0.6 + 0.5 * e) * sp : 0;
-      R.vy += (target - R.vy) * Math.min(1, dt * 4);
+      if (Math.random() < dt * 0.8) R.go = Math.random() < 0.8 ? 1 : 0; // sticks now and then
+      const target = R.go ? (90 + 40 * (R.r / U)) * U * (0.6 + 0.5 * e) * sp : 0;
+      R.vy += (target - R.vy) * Math.min(1, dt * 5);
       const dy = R.vy * dt;
       R.y += dy;
-      R.x += Math.sin(R.y * 0.03 / U + R.wob) * 0.15 * dy;
-      R.gap += dy;
-      if (R.gap > 7 * U) {
-        R.gap = 0;
-        if (st.drops.length < 340) st.drops.push({ x: R.x + (Math.random() - 0.5) * R.r * 0.6, y: R.y - R.r * 1.4, r: R.r * (0.22 + Math.random() * 0.15) });
+      R.x += Math.sin(R.y * 0.02 / U + R.wob) * 0.25 * dy;
+      if (R.ly !== null && R.y > 0) {
+        g.strokeStyle = v.rgba(wet, 0.22);
+        g.lineWidth = Math.max(0.6, R.r * 0.9 * k2);
+        g.beginPath();
+        g.moveTo(R.lx * k2, R.ly * k2);
+        g.lineTo(R.x * k2, R.y * k2);
+        g.stroke();
       }
-      for (let j = st.drops.length - 1; j >= 0; j--) {
-        const d = st.drops[j];
-        if (Math.abs(d.y - R.y) < R.r && Math.abs(d.x - R.x) < R.r + d.r && d.y > R.y - R.r) {
-          R.r = Math.min(7 * U, Math.sqrt(R.r * R.r + d.r * d.r * 0.5));
-          st.drops.splice(j, 1);
+      R.lx = R.x;
+      R.ly = R.y;
+      R.bead += dy;
+      if (R.bead > 14 * U) {
+        R.bead = 0;
+        g.fillStyle = v.rgba(WHITE, 0.45);
+        g.beginPath();
+        g.arc((R.x + (Math.random() - 0.5) * R.r) * k2, (R.y - R.r * 3) * k2, Math.max(0.5, R.r * 0.25 * k2), 0, Math.PI * 2);
+        g.fill();
+      }
+      // it picks up the small drops it runs over
+      for (let j = st.dots.length - 1; j >= 0; j--) {
+        const d = st.dots[j];
+        if (Math.abs(d.x - R.x) < R.r + d.r && d.y < R.y + R.r && d.y > R.y - R.r * 2) {
+          R.r = Math.min(4.5 * U, Math.sqrt(R.r * R.r + d.r * d.r * 0.6));
+          st.dots.splice(j, 1);
         }
       }
-      if (R.y - R.r > h) st.runners.splice(i, 1);
+      if (R.y - R.r * 3 > h) st.runners.splice(i, 1);
     }
-    // Drops: tinted body, light rim, bright highlight (batched).
+    ctx.globalCompositeOperation = "lighter";
+    ctx.imageSmoothingEnabled = true;
+    ctx.globalAlpha = A_(0.8, v);
+    ctx.drawImage(st.c, 0, 0, w, h);
+    ctx.globalAlpha = 1;
+    // 3. The drops themselves: a soft body with a bright glint at the bottom
+    //    (where the light behind is focused), runners stretched into a tear.
     ctx.globalCompositeOperation = "source-over";
-    const tint = mix(colorAt((0.5 + step / 3) % 1), WHITE, 0.55);
-    const all = st.drops.concat(st.runners);
     ctx.beginPath();
-    for (const d of all) { ctx.moveTo(d.x + d.r, d.y); ctx.arc(d.x, d.y, d.r, 0, Math.PI * 2); }
-    for (const R of st.runners) { ctx.moveTo(R.x + R.r * 0.7, R.y - R.r * 0.6); ctx.ellipse(R.x, R.y - R.r * 0.6, R.r * 0.7, R.r * 1.1, 0, 0, Math.PI * 2); }
-    ctx.fillStyle = v.rgba(tint, A_(0.1 + 0.05 * st.glow, v));
-    ctx.fill();
-    ctx.strokeStyle = v.rgba(WHITE, A_(0.2 + 0.1 * st.glow, v));
-    ctx.lineWidth = Math.max(0.6, 0.8 * U);
-    ctx.stroke();
-    ctx.beginPath();
-    for (const d of all) {
-      if (d.r < 1.2 * U) continue;
-      const hr = d.r * 0.28;
-      ctx.moveTo(d.x - d.r * 0.3 + hr, d.y - d.r * 0.35);
-      ctx.arc(d.x - d.r * 0.3, d.y - d.r * 0.35, hr, 0, Math.PI * 2);
+    for (const d of st.dots) { ctx.moveTo(d.x + d.r, d.y); ctx.arc(d.x, d.y, d.r, 0, Math.PI * 2); }
+    for (const R of st.runners) {
+      const s = 1 + Math.min(1.2, R.vy / (200 * U));
+      ctx.moveTo(R.x + R.r, R.y);
+      ctx.ellipse(R.x, R.y - R.r * (s - 1), R.r, R.r * s, 0, 0, Math.PI * 2);
     }
-    ctx.fillStyle = v.rgba(WHITE, A_(0.55 + 0.2 * st.glow, v));
+    ctx.fillStyle = v.rgba(wet, A_(0.16, v));
+    ctx.fill();
+    ctx.beginPath();
+    for (const d of st.dots) { if (d.r < U) continue; ctx.moveTo(d.x + d.r * 0.35, d.y + d.r * 0.4); ctx.arc(d.x, d.y + d.r * 0.4, d.r * 0.35, 0, Math.PI * 2); }
+    for (const R of st.runners) { ctx.moveTo(R.x + R.r * 0.4, R.y + R.r * 0.35); ctx.arc(R.x, R.y + R.r * 0.35, R.r * 0.4, 0, Math.PI * 2); }
+    ctx.fillStyle = v.rgba(WHITE, A_(0.5 + 0.2 * st.glow, v));
     ctx.fill();
   };
 
@@ -3419,58 +3444,6 @@
     ctx.globalAlpha = 1;
     const [fx, fy] = bend(DEPTH);
     v.soft(cx + fx, cy + fy, Math.min(w, h) * 0.25, colorAt((step / 3) % 1), 0.12 + 0.15 * e + 0.15 * st.flash);
-  };
-
-  // ---------------------------------------------------------------------------
-  // Neon Sign: a glowing neon tube shape that hums with the music. Each song
-  // gets one of a few shapes (heart, star, lightning bolt, music note, moon).
-  // Kicks make it flare, loudness sets its glow, snares make it flicker like
-  // a tube that's about to go, and now and then a stretch of tube buzzes off
-  // for a moment. Colours from the album, stepping on the beat. The glow is a
-  // few wide see-through strokes under a thin bright core (no blur filters).
-  const NEON = [
-    "M50 84C24 66 10 52 10 36a20 20 0 0 1 40-6a20 20 0 0 1 40 6c0 16-14 30-40 48z", // heart
-    "M50 8l11 27 29 2-22 19 7 29-25-16-25 16 7-29-22-19 29-2z", // star
-    "M58 6 22 54h24l-8 40 40-52H52z", // lightning bolt
-    "M38 74a12 9 0 1 1-1-1V18l44-10v54a12 9 0 1 1-1-1V22L38 30", // music note
-    "M62 10a40 40 0 1 0 28 54A32 32 0 1 1 62 10z", // moon
-  ].map((d) => { try { return new Path2D(d); } catch (_) { return null; } });
-  DRAW.neon = (v, p, dt, t) => {
-    const { ctx, w, h, U } = v;
-    const st = v.neon || (v.neon = { kickSeen: shared.beatSerial, snareSeen: shared.snareSerial, flare: 0, flick: 0, cut: 0, cutAt: 0 });
-    const e = shared.energy, sp = p.speed;
-    const step = beatSteps(st, p);
-    if (st.kickSeen !== shared.beatSerial) { st.kickSeen = shared.beatSerial; st.flare = Math.min(1, st.flare + 0.7 * Math.min(1, shared.kick + 0.3)); }
-    if (st.snareSeen !== shared.snareSerial) { st.snareSeen = shared.snareSerial; st.flick = 1; }
-    st.flare *= Math.exp(-dt * 5);
-    st.flick *= Math.exp(-dt * 9);
-    // a buzzing tube: now and then it drops out for a split second
-    if (st.cut <= 0 && Math.random() < dt * 0.15 * sp) st.cut = 0.06 + Math.random() * 0.12;
-    st.cut -= dt;
-    const shapeNo = ((shared.seed || 1) % NEON.length + NEON.length) % NEON.length;
-    const path = NEON[shapeNo];
-    if (!path) return;
-    const spot = circleSpot(v, p, 0.3);
-    const S = (Math.min(w, h) * 0.55 * p.size) / 100;
-    const col = colorAt(((step / 3) + 0.1) % 1);
-    let on = 0.55 + 0.35 * e + 0.5 * st.flare;
-    if (st.flick > 0.05) on *= 0.55 + 0.45 * Math.abs(Math.sin(t * 90)); // flicker
-    if (st.cut > 0) on *= 0.15;
-    on = Math.min(1.2, on);
-    ctx.save();
-    ctx.translate(spot.x - 50 * S, spot.y - 50 * S);
-    ctx.scale(S, S);
-    ctx.lineJoin = "round";
-    ctx.lineCap = "round";
-    ctx.globalCompositeOperation = "lighter";
-    for (const [wd, a, cc] of [[14, 0.06, col], [8, 0.1, col], [4, 0.25, col], [1.6, 0.9, mix(col, WHITE, 0.75)]]) {
-      ctx.strokeStyle = v.rgba(cc, A_(a * on, v));
-      ctx.lineWidth = (wd * U) / S * (1 + 0.4 * st.flare * (wd > 3 ? 1 : 0));
-      ctx.stroke(path);
-    }
-    ctx.restore();
-    // light spilling onto the wall behind it
-    v.soft(spot.x, spot.y, Math.min(w, h) * 0.45 * p.size, col, A_(0.1 + 0.12 * e + 0.2 * st.flare, v) * (st.cut > 0 ? 0.3 : 1));
   };
 
   // ---------------------------------------------------------------------------

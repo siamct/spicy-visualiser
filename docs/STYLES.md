@@ -64,7 +64,7 @@ A sphere of glowing dots. It flows with the loudness, bulges by frequency (bass 
 ### Trap Circle
 ![Trap Circle](screenshots/styles/trap.jpg)
 
-The classic trap-channel circle, empty in the middle. The spectrum is mirrored round a ring, bass at the top and treble at the bottom. Every part of the spectrum makes its own peaks, so the shape changes with the song. A white layer sits in front, and seven colour layers burst out behind it on every hit. The circle bounces with the bass, and white dust flies towards you. Set **Circle at** to the art and it wraps the album cover instead.
+The classic trap-channel circle, empty in the middle. The spectrum is mirrored round a ring, bass at the top, exaggerated like the trap channels; the rest barely moves, so it sits still when there's no bass. A white layer sits in front, and seven colour layers burst out behind it on every hit. The circle bounces with the bass, and white dust flies towards you. Set **Circle at** to the art and it wraps the album cover instead.
 
 ### Subwoofer
 ![Subwoofer](screenshots/styles/sub.jpg)
@@ -160,9 +160,8 @@ Calm wave sheets made of fine lines, twisting like silk ribbons as they drift ac
 ### Rain on Glass
 Looking out of a rainy window at night:
 - blurred city lights in the album's colours glow behind the glass, brighter with the bass;
-- small drops land all the time, more when it's loud;
-- big drops run down, picking up the small ones and leaving a trail;
-- kicks shake a few drops loose.
+- drops keep running down the glass, each leaving a wet streak that slowly dries;
+- louder parts bring more rain, and kicks send a few big drops running.
 
 ### Fireflies
 Tiny lights drifting lazily in the dark, mostly unlit:
@@ -192,12 +191,6 @@ Flying down a gently bending tunnel of glowing rings, with stars streaming past:
 - the bass widens the rings and speeds you up;
 - kicks make the nearest rings flash;
 - the colours step round on the beat.
-
-### Neon Sign
-A glowing neon tube shape (heart, star, lightning bolt, music note or moon; each song gets one):
-- kicks make it flare and the loudness sets its glow;
-- snares make it flicker, and now and then the tube buzzes off for a split second;
-- **Circle at** can put it on the album art.
 
 ---
 
