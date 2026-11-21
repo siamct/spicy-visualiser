@@ -160,8 +160,8 @@ Calm wave sheets made of fine lines, twisting like silk ribbons as they drift ac
 ### Rain on Glass
 Looking out of a rainy window at night:
 - blurred city lights in the album's colours glow behind the glass, brighter with the bass;
-- drops keep running down the glass, each leaving a wet streak that slowly dries;
-- louder parts bring more rain, and kicks send a few big drops running.
+- drops keep running down the glass, each leaving a smooth wet streak that slowly dries;
+- the bass sends big drops running, loudness (and **Speed**) sets how fast they flow, and the highs are the patter of new drops landing.
 
 ### Fireflies
 Tiny lights drifting lazily in the dark, mostly unlit:
@@ -171,7 +171,7 @@ Tiny lights drifting lazily in the dark, mostly unlit:
 - **Particles** sets how many there are.
 
 ### Lava Lamp
-Big soft blobs of colour rising and sinking, merging and splitting:
+Lumpy blobs of colour rising and sinking, stretching, merging and splitting:
 - louder parts make them move faster;
 - the bass swells them and kicks give them a wobble;
 - the colours step round on the beat.

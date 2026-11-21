@@ -3084,9 +3084,10 @@
   // ---------------------------------------------------------------------------
   // Rain on Glass: looking out of a rainy window at night. Blurred city
   // lights in the album's colours glow behind the glass (brighter with the
-  // bass). Drops keep running down the glass, each leaving a wet streak that
-  // slowly dries, with tiny beads left behind in it; small drops speckle the
-  // glass. Louder parts bring more rain, kicks send a few big drops running.
+  // bass). Drops keep running down the glass, each leaving a smooth wet
+  // streak that slowly dries. The bass sends big drops running and sets how
+  // much trickles down, loudness (and Speed) how fast they flow, and the
+  // highs are the patter of new drops landing.
   // The streaks live on a half-size canvas that fades slowly, so they build
   // up into the look of a rain-covered window.
   DRAW.rain = (v, p, dt, t) => {
@@ -3099,7 +3100,7 @@
       c.height = H;
       st = v.rain = { c, g: c.getContext("2d"), W, H, lights: [], dots: [], runners: [], kickSeen: shared.beatSerial, acc: 0, dotAcc: 0, glow: 0, fade: 0 };
       for (let i = 0; i < 16; i++) st.lights.push({ x: Math.random(), y: 0.2 + Math.random() * 0.75, r: 0.04 + Math.random() * 0.09, q: Math.random(), ph: Math.random() * 6.28 });
-      for (let i = 0; i < 90; i++) st.dots.push({ x: Math.random() * w, y: Math.random() * h, r: U * (0.5 + Math.pow(Math.random(), 3) * 1.6) });
+      for (let i = 0; i < 40; i++) st.dots.push({ x: Math.random() * w, y: Math.random() * h, r: U * (1.8 + Math.pow(Math.random(), 2) * 3) });
     }
     const g = st.g, e = shared.energy, bass = shared.bassPunch || 0, sp = p.speed;
     const step = beatSteps(st, p);
@@ -3112,15 +3113,18 @@
     if (st.kickSeen !== shared.beatSerial) {
       st.kickSeen = shared.beatSerial;
       st.glow = Math.min(1, st.glow + 0.5 * Math.min(1, shared.kick + 0.3));
-      if (shared.kick > 0.4 || !isLive()) { run(true); if (Math.random() < 0.5) run(true); }
+      // bass hits send big drops running
+      if (bass > 0.25 || !isLive()) { run(true); if (bass > 0.5) run(true); }
     }
-    st.acc += dt * (0.8 + 3 * e) * sp;
+    // a steady trickle, more with the bass
+    st.acc += dt * (0.5 + 2.5 * bass + 1.5 * e) * sp;
     while (st.acc >= 1) { st.acc -= 1; run(false); }
-    st.dotAcc += dt * (4 + 14 * e) * sp;
+    // the highs are the patter of new drops landing on the glass
+    st.dotAcc += dt * (1 + 10 * (shared.treble || 0) + 3 * e) * sp;
     while (st.dotAcc >= 1) {
       st.dotAcc -= 1;
-      if (st.dots.length > 160) st.dots.shift();
-      st.dots.push({ x: Math.random() * w, y: Math.random() * h, r: U * (0.5 + Math.pow(Math.random(), 3) * 1.6) });
+      if (st.dots.length > 70) st.dots.shift();
+      st.dots.push({ x: Math.random() * w, y: Math.random() * h, r: U * (1.8 + Math.pow(Math.random(), 2) * 3) });
     }
     // 1. Behind the glass: blurred lights.
     ctx.globalCompositeOperation = "lighter";
@@ -3138,7 +3142,7 @@
       st.fade = 0;
     }
     g.globalCompositeOperation = "source-over";
-    g.lineCap = "round";
+    g.lineCap = "butt";
     const k2 = st.W / w; // screen -> streak canvas
     const wet = mix(colorAt((0.5 + step / 3) % 1), WHITE, 0.7);
     // Runners slide down in fits and starts, wandering a little sideways,
@@ -3146,14 +3150,15 @@
     for (let i = st.runners.length - 1; i >= 0; i--) {
       const R = st.runners[i];
       if (Math.random() < dt * 0.8) R.go = Math.random() < 0.8 ? 1 : 0; // sticks now and then
-      const target = R.go ? (90 + 40 * (R.r / U)) * U * (0.6 + 0.5 * e) * sp : 0;
+      // flow speed: bigger drops and louder music run faster
+      const target = R.go ? (70 + 35 * (R.r / U)) * U * (0.5 + 0.6 * e + 0.5 * bass) * sp : 0;
       R.vy += (target - R.vy) * Math.min(1, dt * 5);
       const dy = R.vy * dt;
       R.y += dy;
       R.x += Math.sin(R.y * 0.02 / U + R.wob) * 0.25 * dy;
       if (R.ly !== null && R.y > 0) {
-        g.strokeStyle = v.rgba(wet, 0.22);
-        g.lineWidth = Math.max(0.6, R.r * 0.9 * k2);
+        g.strokeStyle = v.rgba(wet, 0.14);
+        g.lineWidth = Math.max(0.8, R.r * 1.1 * k2);
         g.beginPath();
         g.moveTo(R.lx * k2, R.ly * k2);
         g.lineTo(R.x * k2, R.y * k2);
@@ -3161,13 +3166,11 @@
       }
       R.lx = R.x;
       R.ly = R.y;
+      // now and then it leaves a small drop behind in its streak
       R.bead += dy;
-      if (R.bead > 14 * U) {
+      if (R.bead > 60 * U && Math.random() < 0.5) {
         R.bead = 0;
-        g.fillStyle = v.rgba(WHITE, 0.45);
-        g.beginPath();
-        g.arc((R.x + (Math.random() - 0.5) * R.r) * k2, (R.y - R.r * 3) * k2, Math.max(0.5, R.r * 0.25 * k2), 0, Math.PI * 2);
-        g.fill();
+        if (st.dots.length < 90) st.dots.push({ x: R.x, y: R.y - R.r * 4, r: R.r * 0.5 });
       }
       // it picks up the small drops it runs over
       for (let j = st.dots.length - 1; j >= 0; j--) {
@@ -3184,22 +3187,25 @@
     ctx.globalAlpha = A_(0.8, v);
     ctx.drawImage(st.c, 0, 0, w, h);
     ctx.globalAlpha = 1;
-    // 3. The drops themselves: a soft body with a bright glint at the bottom
-    //    (where the light behind is focused), runners stretched into a tear.
+    // 3. The drops: like real water on glass, a dark lens with a bright
+    //    crescent along the bottom (the light behind, focused) and a tiny
+    //    glint at the top. Runners are stretched into a tear shape.
     ctx.globalCompositeOperation = "source-over";
-    ctx.beginPath();
-    for (const d of st.dots) { ctx.moveTo(d.x + d.r, d.y); ctx.arc(d.x, d.y, d.r, 0, Math.PI * 2); }
-    for (const R of st.runners) {
-      const s = 1 + Math.min(1.2, R.vy / (200 * U));
-      ctx.moveTo(R.x + R.r, R.y);
-      ctx.ellipse(R.x, R.y - R.r * (s - 1), R.r, R.r * s, 0, 0, Math.PI * 2);
-    }
-    ctx.fillStyle = v.rgba(wet, A_(0.16, v));
+    const shape = (fn) => {
+      ctx.beginPath();
+      for (const d of st.dots) fn(d.x, d.y, d.r, d.r);
+      for (const R of st.runners) { const s = 1 + Math.min(1, R.vy / (250 * U)); fn(R.x, R.y - R.r * (s - 1) * 0.8, R.r, R.r * s); }
+    };
+    shape((x, y, rx, ry) => { ctx.moveTo(x + rx, y); ctx.ellipse(x, y, rx, ry, 0, 0, Math.PI * 2); });
+    ctx.fillStyle = v.rgba([0, 0, 0], A_(0.22, v));
     ctx.fill();
-    ctx.beginPath();
-    for (const d of st.dots) { if (d.r < U) continue; ctx.moveTo(d.x + d.r * 0.35, d.y + d.r * 0.4); ctx.arc(d.x, d.y + d.r * 0.4, d.r * 0.35, 0, Math.PI * 2); }
-    for (const R of st.runners) { ctx.moveTo(R.x + R.r * 0.4, R.y + R.r * 0.35); ctx.arc(R.x, R.y + R.r * 0.35, R.r * 0.4, 0, Math.PI * 2); }
-    ctx.fillStyle = v.rgba(WHITE, A_(0.5 + 0.2 * st.glow, v));
+    shape((x, y, rx, ry) => { ctx.moveTo(x + rx * 0.78, y + ry * 0.15); ctx.ellipse(x, y, rx * 0.8, ry * 0.8, 0, 0.15 * Math.PI, 0.85 * Math.PI); });
+    ctx.strokeStyle = v.rgba(wet, A_(0.55 + 0.25 * st.glow, v));
+    ctx.lineWidth = Math.max(0.8, 1.1 * U);
+    ctx.lineCap = "round";
+    ctx.stroke();
+    shape((x, y, rx, ry) => { if (rx < 1.5 * U) return; const gx = x - rx * 0.3, gy = y - ry * 0.45, gr = rx * 0.16; ctx.moveTo(gx + gr, gy); ctx.arc(gx, gy, gr, 0, Math.PI * 2); });
+    ctx.fillStyle = v.rgba(WHITE, A_(0.7, v));
     ctx.fill();
   };
 
@@ -3259,7 +3265,7 @@
 
   // ---------------------------------------------------------------------------
   // Lava Lamp: big soft blobs of colour rising and sinking, merging and
-  // splitting. Worked out on a small grid (a "metaball" field, ~13,000 points)
+  // splitting. Worked out on a small grid (a "metaball" field: 13 blobs of three parts each)
   // and scaled up smooth, so the edges are soft. Louder parts make them rise
   // and sink faster, the bass swells them, kicks give them a wobble, colours
   // step round on the beat (top and bottom colours from the album).
@@ -3273,7 +3279,14 @@
       c.height = GH;
       st = v.lava = { c, g: c.getContext("2d"), GH, img: null, blobs: [], kickSeen: shared.beatSerial, wob: 0, swell: 0 };
       st.img = st.g.createImageData(GW, GH);
-      for (let i = 0; i < 8; i++) st.blobs.push({ ph: Math.random() * 6.28, rate: 0.12 + Math.random() * 0.18, x0: 0.12 + Math.random() * 0.76, xr: 0.04 + Math.random() * 0.08, xph: Math.random() * 6.28, r: 0.045 + Math.random() * 0.045 });
+      // Each blob is made of three parts that drift round each other, so it's
+      // lumpy and keeps changing shape instead of being a circle.
+      for (let i = 0; i < 13; i++)
+        st.blobs.push({
+          ph: Math.random() * 6.28, rate: 0.1 + Math.random() * 0.2, x0: 0.08 + Math.random() * 0.84, xr: 0.03 + Math.random() * 0.08, xph: Math.random() * 6.28,
+          r: 0.025 + Math.pow(Math.random(), 1.5) * 0.05, sy: 0.7 + Math.random() * 0.25,
+          parts: [0, 1, 2].map(() => ({ a: Math.random() * 6.28, spin: (Math.random() - 0.5) * 1.2, d: 0.35 + Math.random() * 0.5, s: 0.55 + Math.random() * 0.35 })),
+        });
     }
     const e = shared.energy, bass = shared.bassPunch || 0;
     if (st.kickSeen !== shared.beatSerial) { st.kickSeen = shared.beatSerial; st.wob = Math.min(1, st.wob + 0.6 * Math.min(1, shared.kick + 0.3)); }
@@ -3281,15 +3294,25 @@
     st.swell += (bass - st.swell) * Math.min(1, dt * (bass > st.swell ? 8 : 2));
     const step = beatSteps(st, p);
     const top = colorAt((0.15 + step / 3) % 1), bot = colorAt((0.75 + step / 3) % 1);
-    const B = st.blobs, nB = B.length;
-    const bx = new Float32Array(nB), by = new Float32Array(nB), br2 = new Float32Array(nB);
-    for (let i = 0; i < nB; i++) {
+    const B = st.blobs, nB = B.length * 3;
+    const bx = new Float32Array(nB), by = new Float32Array(nB), br2 = new Float32Array(nB), bsy = new Float32Array(nB);
+    let n = 0;
+    for (let i = 0; i < B.length; i++) {
       const b = B[i];
       b.ph += dt * b.rate * (0.5 + 1.4 * e) * p.speed;
-      bx[i] = (b.x0 + b.xr * Math.sin(b.ph * 0.7 + b.xph)) * GW;
-      by[i] = (0.5 - 0.48 * Math.sin(b.ph)) * GH; // rises, then sinks
-      const r = b.r * GW * (1 + 0.3 * st.swell) * p.size * (1 + 0.08 * st.wob * Math.sin(t * 20 + i));
-      br2[i] = r * r;
+      const cx = (b.x0 + b.xr * Math.sin(b.ph * 0.7 + b.xph)) * GW;
+      const cy = (0.5 - 0.5 * Math.sin(b.ph)) * GH; // rises, then sinks
+      const r = b.r * GW * (1 + 0.35 * st.swell) * p.size * (1 + 0.1 * st.wob * Math.sin(t * 20 + i));
+      // stretched taller while it's moving fast (mid-way up or down)
+      const sy = b.sy * (1 - 0.2 * Math.abs(Math.cos(b.ph)));
+      for (const q of b.parts) {
+        q.a += dt * q.spin * (0.6 + e) * p.speed;
+        bx[n] = cx + Math.cos(q.a) * r * q.d;
+        by[n] = cy + (Math.sin(q.a) * r * q.d) / sy;
+        br2[n] = (r * q.s) * (r * q.s);
+        bsy[n] = sy;
+        n++;
+      }
     }
     const d = st.img.data;
     for (let y = 0; y < GH; y++) {
@@ -3300,13 +3323,13 @@
         // instead of melting into one wash; where two meet they join up.
         let f = 0;
         for (let i = 0; i < nB; i++) {
-          const dx = x - bx[i], dy = y - by[i];
+          const dx = x - bx[i], dy = (y - by[i]) * bsy[i];
           const k = 1 - (dx * dx + dy * dy) / (4 * br2[i]);
           if (k > 0) f += k * k * k;
         }
         const o = (y * GW + x) * 4;
         // soft edge around f = 0.42 (one blob's own radius); the middle glows a touch brighter
-        const a = Math.max(0, Math.min(1, (f - 0.34) / 0.12));
+        const a = Math.max(0, Math.min(1, (f - 0.28) / 0.12));
         const lift = Math.min(0.35, Math.max(0, f - 0.6) * 0.4);
         d[o] = cr + (255 - cr) * lift;
         d[o + 1] = cg + (255 - cg) * lift;
