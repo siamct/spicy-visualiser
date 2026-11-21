@@ -268,3 +268,19 @@
 :is(#SpicyLyricsPage, .lp-modal-wrap) .lp-panel .lp-subrow { display: flex; align-items: center; gap: 5px; margin-top: 2px; min-width: 0; }
 :is(#SpicyLyricsPage, .lp-modal-wrap) .lp-panel .lp-subrow .lp-pill { background: none; padding: 0; gap: 5px; font-weight: 600; color: rgba(255,255,255,.85); }
 :is(#SpicyLyricsPage, .lp-modal-wrap) .lp-panel .lp-subrow .lp-sub { margin-top: 0; min-width: 0; }
+
+/* Songs with no lyrics: the song name and artist in place of Spicy Lyrics' notice. */
+#SpicyLyricsPage.lp-swap-notice .LyricsNotice[data-notice="lyrics-not-found"] { opacity: 0 !important; pointer-events: none !important; transition: opacity .6s ease; }
+#SpicyLyricsPage .ContentBox > .lp-nolyr {
+  position: absolute; z-index: 5; left: 50%; top: 50%; transform: translate(-50%, -50%);
+  width: max-content; max-width: min(80%, 760px); text-align: center; color: #fff; cursor: pointer;
+  opacity: 0; pointer-events: none; transition: opacity .8s ease;
+}
+#SpicyLyricsPage .ContentBox > .lp-nolyr.lp-show { opacity: 1; pointer-events: auto; }
+#SpicyLyricsPage .lp-nolyr-title {
+  font-size: clamp(26px, 4.4vw, 68px); font-weight: 800; letter-spacing: -.02em; line-height: 1.05;
+  text-shadow: 0 2px 30px rgba(0,0,0,.35); overflow-wrap: anywhere;
+}
+#SpicyLyricsPage .lp-nolyr-artist { margin-top: .5em; font-size: clamp(14px, 1.7vw, 26px); font-weight: 600; opacity: .7; }
+#SpicyLyricsPage .lp-nolyr-note { margin-top: 1.6em; font-size: 11px; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; opacity: .3; transition: opacity .2s; }
+#SpicyLyricsPage .lp-nolyr:hover .lp-nolyr-note { opacity: .6; }

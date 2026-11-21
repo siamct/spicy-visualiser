@@ -9,6 +9,8 @@ Every style:
 - takes its colours from the album cover;
 - gets a little fuller on songs with no lyrics, or with static lyrics that don't move.
 
+On songs with no lyrics, the song name and artist take the place of Spicy Lyrics' "No lyrics" box (click it to see the box again; you can turn it off in the panel's settings).
+
 > The screenshots were taken in Spotify with Spicy Lyrics, all on the same song, so the only thing that changes between them is the style. The colours come from the album cover.
 ---
 
@@ -61,6 +63,12 @@ A panel of LED dots. Unlit dots stay faintly visible, so it reads like real hard
 
 A sphere of glowing dots. It flows with the loudness, bulges by frequency (bass at the top) and gets nudged by kicks.
 
+### Speaker Wall
+A stack of speakers, each pumping with its own part of the sound:
+- big woofers along the bottom take the bass and get knocked out by kicks;
+- mid-range cones in the middle, small tweeters on top for the highs;
+- each cone is on its own spring, so it overshoots and settles like a real one, and a ring of light round it glows as it moves.
+
 ### Trap Circle
 ![Trap Circle](screenshots/styles/trap.jpg)
 
@@ -92,6 +100,13 @@ A poster grid of flat circles, half circles, quarter circles and triangles.
 - Shapes grow with their part of the spectrum.
 - Tiles turn a quarter on the beat and the colours step round.
 
+### Jelly
+A big glossy blob of jelly that wobbles to the music:
+- kicks squash it and make it hop, snares poke it;
+- the bass swells it, and each part of its edge bulges with its own part of the sound (bass at the bottom, highs at the top);
+- hits send waves running round its edge; bubbles drift up inside;
+- **Circle at** can put it on the album art.
+
 ---
 
 ## Flowing
@@ -105,6 +120,16 @@ A field of light that drifts in a gentle flow and links up into constellations. 
 ![Plasma](screenshots/styles/plasma.jpg)
 
 A smooth glowing fluid. It flows faster, swirls harder and glows brighter as the music builds, surges on kicks, and its colours sweep round on the beat. The quietest style, good when you mainly want the lyrics.
+
+### Liquid Chrome
+A mirror-like sheet of molten metal reflecting a sky in the album's colours:
+- it rolls slowly, faster when the music is loud;
+- the bass makes the waves deeper, and kicks drop in rings that spread across it.
+
+### Oil Slick
+Rainbow swirls like oil on a wet road at night, tinted by the album:
+- the bass stirs the swirls harder, kicks send a ring through the film;
+- the colours shift round on the beat.
 
 ### LED Plasma
 ![LED Plasma](screenshots/styles/ledplasma.jpg)
@@ -149,6 +174,11 @@ Settings to try:
 ## Calm
 
 Slow, soft styles for chill songs. They all work well without the helper.
+
+### Aurora
+Northern lights over a starry sky:
+- three curtains of light in the album's colours ripple sideways, with fine rays running up them;
+- the bass lifts them higher and taller, loudness makes them brighter and faster, kicks make them flare.
 
 ### Ribbon
 Calm wave sheets made of fine lines, twisting like silk ribbons as they drift across the screen, with tiny sparkles floating up:
