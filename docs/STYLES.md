@@ -72,7 +72,7 @@ The classic trap-channel circle, empty in the middle. The spectrum is mirrored r
 A speaker drawn in light:
 - kicks punch the cone out and it springs back;
 - the surround wobbles with the bass;
-- the light ring changes colour on the beat.
+- the light ring fades to a new colour on the beat.
 
 ---
 
@@ -165,10 +165,10 @@ Looking out of a rainy window at night:
 - kicks shake a few drops loose.
 
 ### Fireflies
-Soft points of light drifting in the dark:
-- each one glows on its own;
-- on every beat a wave of light runs across them, so they flash together;
-- snares make a few twinkle;
+Tiny lights drifting lazily in the dark, mostly unlit:
+- each one blinks now and then, more often when the music is loud;
+- on every beat a handful blink together, in a wave from left to right;
+- snares set off a few more;
 - **Particles** sets how many there are.
 
 ### Lava Lamp
@@ -176,6 +176,28 @@ Big soft blobs of colour rising and sinking, merging and splitting:
 - louder parts make them move faster;
 - the bass swells them and kicks give them a wobble;
 - the colours step round on the beat.
+
+### Smoke
+Soft coloured smoke curling up from the bottom:
+- louder parts feed more smoke and make it rise faster;
+- kicks puff out a burst;
+- the colours step round on the beat.
+
+---
+
+## Into the light
+
+### Starfield Tunnel
+Flying down a gently bending tunnel of glowing rings, with stars streaming past:
+- the bass widens the rings and speeds you up;
+- kicks make the nearest rings flash;
+- the colours step round on the beat.
+
+### Neon Sign
+A glowing neon tube shape (heart, star, lightning bolt, music note or moon; each song gets one):
+- kicks make it flare and the loudness sets its glow;
+- snares make it flicker, and now and then the tube buzzes off for a split second;
+- **Circle at** can put it on the album art.
 
 ---
 
