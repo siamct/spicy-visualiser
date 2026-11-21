@@ -3264,9 +3264,106 @@
   };
 
   // ---------------------------------------------------------------------------
-  // Lava Lamp: big soft blobs of colour rising and sinking, merging and
-  // splitting. Worked out on a small grid (a "metaball" field: 13 blobs of three parts each)
-  // and scaled up smooth, so the edges are soft. Louder parts make them rise
+  // Lava Lamp drawn on the graphics card: the blob field is worked out for
+  // every screen pixel, so the edges are smooth at any size, and it's lit
+  // like glossy wax (lighter towards the top edge, a glow in the middle).
+  let lavaRenderer;
+  function lavaGL() {
+    if (lavaRenderer === undefined) {
+      try {
+        lavaRenderer = createLavaGL();
+      } catch (e) {
+        console.error("[Spicy Visualiser] Lava Lamp GPU path unavailable:", e);
+        lavaRenderer = null;
+      }
+    }
+    return lavaRenderer;
+  }
+
+  function createLavaGL() {
+    const MAXP = 48;
+    const cv = document.createElement("canvas");
+    cv.width = cv.height = 4;
+    const gl = cv.getContext("webgl2", { premultipliedAlpha: true, antialias: false });
+    if (!gl) return null;
+    const sh = (type, src) => {
+      const o = gl.createShader(type);
+      gl.shaderSource(o, src);
+      gl.compileShader(o);
+      if (!gl.getShaderParameter(o, gl.COMPILE_STATUS)) throw new Error(gl.getShaderInfoLog(o));
+      return o;
+    };
+    const prog = gl.createProgram();
+    gl.attachShader(prog, sh(gl.VERTEX_SHADER, "#version 300 es\nin vec2 pos;void main(){gl_Position=vec4(pos,0.,1.);}"));
+    gl.attachShader(prog, sh(gl.FRAGMENT_SHADER, `#version 300 es
+precision highp float;
+uniform vec2 uRes, uGrid;
+uniform vec4 uP[${MAXP}];
+uniform int uN;
+uniform vec3 uTop, uBot;
+out vec4 o;
+void main() {
+  vec2 g = vec2(gl_FragCoord.x, uRes.y - gl_FragCoord.y) / uRes * uGrid;
+  float f = 0.;
+  vec2 gr = vec2(0.);
+  for (int i = 0; i < ${MAXP}; i++) {
+    if (i >= uN) break;
+    vec4 p = uP[i];
+    vec2 d = vec2(g.x - p.x, (g.y - p.y) * p.w);
+    float k = 1. - dot(d, d) / (4. * p.z);
+    if (k > 0.) { f += k * k * k; gr += k * k * vec2(d.x, d.y * p.w) / p.z; }
+  }
+  float fw = max(fwidth(f), 1e-4) * 0.8;
+  float a = smoothstep(0.34 - fw, 0.34 + fw, f);
+  if (a <= 0.) { o = vec4(0.); return; }
+  float fy = g.y / uGrid.y;
+  vec3 c = mix(uTop, uBot, fy);
+  float inner = smoothstep(0.34, 1.2, f);
+  // gr points away from the middle; its y tells top edge (-) from bottom (+)
+  float side = length(gr) > 1e-5 ? normalize(gr).y : 0.;
+  float rim = 1. - inner;
+  c *= 0.72 + 0.5 * inner;
+  c = mix(c, vec3(1.), clamp(rim * max(0., -side) * 0.45 + 0.25 * inner * inner, 0., 0.6));
+  c *= 1. - 0.25 * rim * max(0., side);
+  o = vec4(c * a, a);
+}`));
+    gl.linkProgram(prog);
+    if (!gl.getProgramParameter(prog, gl.LINK_STATUS)) throw new Error(gl.getProgramInfoLog(prog));
+    const U = (n) => gl.getUniformLocation(prog, n);
+    const u = { res: U("uRes"), grid: U("uGrid"), p: U("uP"), n: U("uN"), top: U("uTop"), bot: U("uBot") };
+    const buf = gl.createBuffer();
+    gl.bindBuffer(gl.ARRAY_BUFFER, buf);
+    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1, -1, 1, -1, -1, 1, 1, 1]), gl.STATIC_DRAW);
+    const loc = gl.getAttribLocation(prog, "pos");
+    return {
+      MAXP,
+      canvas: cv,
+      draw(w, h, parts, n, GW, GH, top, bot) {
+        if (gl.isContextLost()) return false;
+        if (cv.width !== w || cv.height !== h) { cv.width = w; cv.height = h; }
+        gl.viewport(0, 0, w, h);
+        gl.clearColor(0, 0, 0, 0);
+        gl.clear(gl.COLOR_BUFFER_BIT);
+        gl.useProgram(prog);
+        gl.bindBuffer(gl.ARRAY_BUFFER, buf);
+        gl.enableVertexAttribArray(loc);
+        gl.vertexAttribPointer(loc, 2, gl.FLOAT, false, 0, 0);
+        gl.uniform2f(u.res, w, h);
+        gl.uniform2f(u.grid, GW, GH);
+        gl.uniform4fv(u.p, parts);
+        gl.uniform1i(u.n, Math.min(n, MAXP));
+        gl.uniform3f(u.top, top[0] / 255, top[1] / 255, top[2] / 255);
+        gl.uniform3f(u.bot, bot[0] / 255, bot[1] / 255, bot[2] / 255);
+        gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
+        return true;
+      },
+    };
+  }
+
+  // ---------------------------------------------------------------------------
+  // Lava Lamp: lumpy blobs of colour rising and sinking, merging and
+  // splitting (a "metaball" field: 13 blobs of three parts each). Drawn on
+  // the graphics card at full size, with a small-grid fallback. Louder parts make them rise
   // and sink faster, the bass swells them, kicks give them a wobble, colours
   // step round on the beat (top and bottom colours from the album).
   DRAW.lava = (v, p, dt, t) => {
@@ -3314,6 +3411,20 @@
         n++;
       }
     }
+    // On the graphics card when we can: smooth edges at full size.
+    const L = lavaGL();
+    if (!st.parts) st.parts = new Float32Array(48 * 4);
+    for (let i = 0; i < nB && i < 48; i++) { st.parts[i * 4] = bx[i]; st.parts[i * 4 + 1] = by[i]; st.parts[i * 4 + 2] = br2[i]; st.parts[i * 4 + 3] = bsy[i]; }
+    const LW = Math.max(2, Math.round(w)), LH = Math.max(2, Math.round(h));
+    if (L && L.draw(LW, LH, st.parts, nB, GW, GH, top, bot)) {
+      ctx.globalCompositeOperation = "source-over";
+      ctx.globalAlpha = A_(0.8 + 0.15 * e, v);
+      ctx.drawImage(L.canvas, 0, 0, w, h);
+      ctx.globalAlpha = 1;
+      v.soft(w / 2, h, Math.max(w, h) * 0.45, bot, 0.08 + 0.12 * st.swell);
+      return;
+    }
+    // Fallback without WebGL: the same field on a small grid, scaled up.
     const d = st.img.data;
     for (let y = 0; y < GH; y++) {
       const fy = y / (GH - 1);
