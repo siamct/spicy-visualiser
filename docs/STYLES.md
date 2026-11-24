@@ -63,12 +63,6 @@ A panel of LED dots. Unlit dots stay faintly visible, so it reads like real hard
 
 A sphere of glowing dots. It flows with the loudness, bulges by frequency (bass at the top) and gets nudged by kicks.
 
-### Speaker Wall
-A stack of speakers, each pumping with its own part of the sound:
-- big woofers along the bottom take the bass and get knocked out by kicks;
-- mid-range cones in the middle, small tweeters on top for the highs;
-- each cone is on its own spring, so it overshoots and settles like a real one, and a ring of light round it glows as it moves.
-
 ### Trap Circle
 ![Trap Circle](screenshots/styles/trap.jpg)
 
@@ -100,13 +94,6 @@ A poster grid of flat circles, half circles, quarter circles and triangles.
 - Shapes grow with their part of the spectrum.
 - Tiles turn a quarter on the beat and the colours step round.
 
-### Jelly
-A big glossy blob of jelly that wobbles to the music:
-- kicks squash it and make it hop, snares poke it;
-- the bass swells it, and each part of its edge bulges with its own part of the sound (bass at the bottom, highs at the top);
-- hits send waves running round its edge; bubbles drift up inside;
-- **Circle at** can put it on the album art.
-
 ---
 
 ## Flowing
@@ -127,23 +114,15 @@ A mirror-like sheet of molten metal reflecting a sky in the album's colours:
 - the bass makes the waves deeper, and kicks drop in rings that spread across it.
 
 ### Oil Slick
-Rainbow swirls like oil on a wet road at night, tinted by the album:
-- the bass stirs the swirls harder, kicks send a ring through the film;
-- the colours shift round on the beat.
+Rainbow swirls like oil on a wet road at night:
+- it just flows; the bass stirs the swirls harder and moves the colours;
+- the colours shift slowly round on the beat;
+- **Colours: Classic** (default) is the oil rainbow; the other colour modes tint it.
 
 ### LED Plasma
 ![LED Plasma](screenshots/styles/ledplasma.jpg)
 
 The same fluid as Plasma, shown on the LED dot panel.
-
-### Silk
-Long streaks of colour pulled through a slow current, like ink drawn through water:
-- the bass speeds the current up;
-- kicks bloom a burst of new streaks from one spot;
-- snares flick a few thin, bright ones;
-- the colours step round on the beat.
-
-The **Smoothing** slider sets how long the streaks last.
 
 ### Warp
 ![Warp](screenshots/styles/warp.jpg)
@@ -192,13 +171,6 @@ Looking out of a rainy window at night:
 - blurred city lights in the album's colours glow behind the glass, brighter with the bass;
 - drops keep running down the glass, each leaving a smooth wet streak that slowly dries;
 - the bass sends big drops running, loudness (and **Speed**) sets how fast they flow, and the highs are the patter of new drops landing.
-
-### Fireflies
-Tiny lights drifting lazily in the dark, mostly unlit:
-- each one blinks now and then, more often when the music is loud;
-- on every beat a handful blink together, in a wave from left to right;
-- snares set off a few more;
-- **Particles** sets how many there are.
 
 ### Lava Lamp
 Lumpy blobs of colour rising and sinking, stretching, merging and splitting:

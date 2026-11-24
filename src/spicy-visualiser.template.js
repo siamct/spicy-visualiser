@@ -29,18 +29,14 @@
     ["mirror", "Mirror Bars"],
     ["retro", "Retro Bars"],
     ["plasma", "Plasma"],
-    ["ink", "Silk"],
     ["ribbon", "Ribbon"],
     ["rain", "Rain on Glass"],
-    ["fireflies", "Fireflies"],
     ["lava", "Lava Lamp"],
     ["smoke", "Smoke"],
     ["tunnel", "Starfield Tunnel"],
     ["aurora", "Aurora"],
     ["chrome", "Liquid Chrome"],
     ["oil", "Oil Slick"],
-    ["speakers", "Speaker Wall"],
-    ["jelly", "Jelly"],
     ["warp", "Warp"],
     ["dnb", "Liquid"],
     ["neuro", "Neuro Mesh"],
@@ -70,17 +66,13 @@
     retro: '<g>'+[[3,3],[7,5],[11,2],[15,4],[19,1]].map(([x,n])=>[0,1,2,3,4,5].slice(0,6-n+1).map((s)=>`<rect x="${x}" y="${19-s*3}" width="3" height="2" opacity="${(0.5+s*0.1).toFixed(2)}"/>`).join('')).join('')+'</g>',
     neuro: '<g fill="none" stroke="currentColor" stroke-width="1.2"><path d="M2 18c4-3 6 1 10-2s6 1 10-2"/><path d="M4 13c3-2 5 1 8-1.5s5 1 8-1.5" opacity=".7"/><path d="M6 9c2-1.5 4 .5 6-1s4 .5 6-1" opacity=".45"/><path d="M7 18 9 9M12 16l.5-7.5M17 16.5 15 8.5" opacity=".5"/></g>',
     rain: '<rect x="3" y="3" width="18" height="18" rx="3" fill="none" stroke="currentColor" stroke-width="1.4" opacity=".55"/><circle cx="8" cy="7.5" r="1.6"/><circle cx="15.5" cy="9" r="1"/><circle cx="11" cy="13" r="1.1"/><circle cx="16" cy="16.5" r="2"/><path d="M16 14.5V8.5" stroke="currentColor" stroke-width="1" opacity=".5"/><circle cx="7" cy="17" r=".8"/>',
-    fireflies: '<circle cx="7" cy="8" r="3" opacity=".25"/><circle cx="7" cy="8" r="1.3"/><circle cx="16.5" cy="6" r="2.2" opacity=".25"/><circle cx="16.5" cy="6" r="1"/><circle cx="12.5" cy="15.5" r="3.4" opacity=".25"/><circle cx="12.5" cy="15.5" r="1.5"/><circle cx="19" cy="17" r=".8"/><circle cx="4.5" cy="16" r=".7"/>',
     lava: '<path d="M8.5 2.5h7l1.5 4.5v10l-2 4.5H9l-2-4.5V7z" fill="none" stroke="currentColor" stroke-width="1.4" opacity=".6"/><circle cx="12" cy="9" r="2.1"/><path d="M8.6 17.5c1-2.4 5.8-2.4 6.8 0z"/><circle cx="13.2" cy="13.3" r="1.1"/>',
     smoke: '<g fill="none" stroke="currentColor" stroke-linecap="round"><path d="M9 21c-3-3 3-5 0-8s2-6 0-9" stroke-width="1.8"/><path d="M15 21c-3-3 3-5 0-8s2-5 1-7" stroke-width="1.3" opacity=".6"/></g>',
     aurora: '<path d="M2 15c3-6 5-9 7-9s2 5 4 5 4-6 6-6 3 3 3 3" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/><path d="M5 13v6M9 10v8M13 13v5M17 9v7" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" opacity=".5"/><circle cx="4" cy="4" r=".8"/><circle cx="20" cy="3" r=".8"/>',
     chrome: '<path d="M2 14c3-4 6 3 10-1s7-3 10 1v6H2z" opacity=".35"/><path d="M2 10c3-4 6 3 10-1s7-3 10 1" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><ellipse cx="8" cy="15.5" rx="2.5" ry=".9" opacity=".9"/>',
     oil: '<path d="M12 3C7 9 5 12 5 15a7 7 0 0 0 14 0c0-3-2-6-7-12z" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M8 15c1.5-2 3-.5 4-2s2.5-1 3.5.5" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" opacity=".7"/><path d="M8.5 18c2 1 5 1 7-1" fill="none" stroke="currentColor" stroke-width="1.1" stroke-linecap="round" opacity=".5"/>',
-    speakers: '<g fill="none" stroke="currentColor"><circle cx="7" cy="16.5" r="4.5" stroke-width="1.5"/><circle cx="17" cy="16.5" r="4.5" stroke-width="1.5"/><circle cx="7" cy="6" r="3" stroke-width="1.3"/><circle cx="17" cy="6" r="3" stroke-width="1.3"/></g><circle cx="7" cy="16.5" r="1.4"/><circle cx="17" cy="16.5" r="1.4"/><circle cx="7" cy="6" r="1"/><circle cx="17" cy="6" r="1"/>',
-    jelly: '<path d="M4 18c-1.5-7 3-13 8-13s9.5 6 8 13c-.4 2-4 2.5-8 2.5S4.4 20 4 18z" fill="none" stroke="currentColor" stroke-width="1.6"/><ellipse cx="9" cy="9.5" rx="2" ry="1" transform="rotate(-35 9 9.5)"/><circle cx="14" cy="14" r="1" opacity=".5"/><circle cx="11" cy="16.5" r=".7" opacity=".5"/>',
     tunnel: '<g fill="none" stroke="currentColor"><circle cx="12" cy="12" r="10" stroke-width="1.6"/><circle cx="12.5" cy="11.5" r="6" stroke-width="1.3" opacity=".7"/><circle cx="13" cy="11" r="3" stroke-width="1" opacity=".5"/></g><circle cx="13.2" cy="10.8" r="1"/><circle cx="5" cy="6" r=".7"/><circle cx="19" cy="18" r=".7"/>',
     ribbon: '<g fill="none" stroke="currentColor" stroke-linecap="round"><path d="M2 12c4-6 8 5 12 0s6-3 8-1" stroke-width="2"/><path d="M2 15c4-5 8 4 12 0s6-2 8-.5" stroke-width="1.3" opacity=".6"/><path d="M2 9c4-5 8 4 12 0s6-2 8-.5" stroke-width="1" opacity=".4"/></g><circle cx="17.5" cy="9.8" r="1.1"/>',
-    ink: '<g fill="none" stroke="currentColor" stroke-linecap="round"><path d="M3 20C6 13 9 7 21 4" stroke-width="2.2"/><path d="M3 20c4-4 8-6 18-5" stroke-width="1.5" opacity=".75"/><path d="M3 20c2-6 6-12 11-16" stroke-width="1.1" opacity=".5"/><path d="M3 20c5-2 10-2 16 1" stroke-width=".9" opacity=".4"/></g><circle cx="3.2" cy="19.8" r="1.6"/>',
     sub: '<circle cx="12" cy="12" r="10" fill="none" stroke="currentColor" stroke-width="1.5"/><circle cx="12" cy="12" r="7" fill="none" stroke="currentColor" stroke-width="1.2" opacity=".7"/><circle cx="12" cy="12" r="5" fill="none" stroke="currentColor" stroke-width="1" opacity=".45"/><circle cx="12" cy="12" r="2.8"/>',
     bauhaus: '<path d="M3 3h8A8 8 0 0 1 3 11z"/><path d="M13 11a4 4 0 0 1 8 0z" opacity=".6"/><circle cx="7" cy="17" r="3.6" opacity=".8"/><path d="M13 21h8L13 13z"/>',
     geometric: '<path d="M2 4h11l-3 4H2z"/><path d="M22 10H9l3-4h10z" opacity=".55"/><path d="M2 12h15l-3 4H2z"/><path d="M22 18h-9l3-4h6z" opacity=".55"/><path d="M2 20h7l-2 2H2z" opacity=".8"/>',
@@ -91,32 +83,32 @@
   // Styles that still look right on Spotify's data (it has loudness and
   // beats, not a real spectrum). With that source they're listed first and
   // the rest fold away under "More styles".
-  const SONG_DATA_OK = new Set(["particles", "plasma", "ledplasma", "ink", "warp", "dnb", "ribbon", "rain", "fireflies", "lava", "smoke", "tunnel", "aurora", "chrome", "oil", "speakers", "jelly", "geometric", "bauhaus", "sub", "off"]);
+  const SONG_DATA_OK = new Set(["particles", "plasma", "ledplasma", "warp", "dnb", "ribbon", "rain", "lava", "smoke", "tunnel", "aurora", "chrome", "oil", "geometric", "bauhaus", "sub", "off"]);
   const STYLE_GROUPS = [
     ["Bars", ["ascii", "led", "mirror", "monstercat", "radial", "retro"]],
-    ["Circles", ["ncs", "sub", "speakers", "trap", "tunnel"]],
-    ["On the beat", ["geometric", "bauhaus", "jelly"]],
-    ["Flowing", ["plasma", "ledplasma", "chrome", "oil", "dnb", "neuro", "particles", "ink", "warp"]],
-    ["Calm", ["aurora", "ribbon", "rain", "fireflies", "lava", "smoke"]],
+    ["Circles", ["ncs", "sub", "trap", "tunnel"]],
+    ["On the beat", ["geometric", "bauhaus"]],
+    ["Flowing", ["plasma", "ledplasma", "chrome", "oil", "dnb", "neuro", "particles", "warp"]],
+    ["Calm", ["aurora", "ribbon", "rain", "lava", "smoke"]],
     ["", ["off"]],
   ];
   // Which bands each style reads: "punch" snaps up and falls with gravity.
   const MODEL = {};
   const USES = {
     barCount: ["monstercat", "mirror", "radial", "retro"],
-    particles: ["particles", "monstercat", "warp", "dnb", "trap", "fireflies"],
+    particles: ["particles", "monstercat", "warp", "dnb", "trap"],
     position: ["monstercat", "mirror", "ascii"],
     variant: ["geometric"],
-    beatEvery: ["geometric", "bauhaus", "plasma", "ledplasma", "sub", "trap", "neuro", "ink", "ribbon", "rain", "fireflies", "lava", "smoke", "tunnel", "aurora", "chrome", "oil", "jelly"],
+    beatEvery: ["geometric", "bauhaus", "plasma", "ledplasma", "sub", "trap", "neuro", "ribbon", "rain", "lava", "smoke", "tunnel", "aurora", "chrome", "oil"],
     neuroLook: ["neuro"],
     neuroLine: ["neuro"],
     mcColor: ["monstercat"],
     neuroTwist: ["neuro"],
     neuroMirror: ["neuro"],
-    circleAt: ["trap", "radial", "ncs", "sub", "jelly"],
-    speed: ["trap", "retro", "neuro", "ink", "ribbon", "rain", "fireflies", "lava", "smoke", "tunnel", "aurora", "chrome", "oil", "jelly", "particles", "monstercat", "ncs", "radial", "plasma", "warp", "dnb", "ascii", "led", "ledplasma"],
-    bassBoost: ["particles", "monstercat", "radial", "mirror", "ncs", "warp", "plasma", "dnb", "ascii", "geometric", "bauhaus", "led", "ledplasma", "sub", "trap", "retro", "neuro", "ink", "ribbon", "rain", "fireflies", "lava", "smoke", "tunnel", "aurora", "chrome", "oil", "jelly", "speakers"],
-    smoothing: ["particles", "monstercat", "radial", "mirror", "ncs", "warp", "plasma", "dnb", "ascii", "geometric", "bauhaus", "led", "ledplasma", "sub", "trap", "retro", "neuro", "ink", "speakers"],
+    circleAt: ["trap", "radial", "ncs", "sub"],
+    speed: ["trap", "retro", "neuro", "ribbon", "rain", "lava", "smoke", "tunnel", "aurora", "chrome", "oil", "particles", "monstercat", "ncs", "radial", "plasma", "warp", "dnb", "ascii", "led", "ledplasma"],
+    bassBoost: ["particles", "monstercat", "radial", "mirror", "ncs", "warp", "plasma", "dnb", "ascii", "geometric", "bauhaus", "led", "ledplasma", "sub", "trap", "retro", "neuro", "ribbon", "rain", "lava", "smoke", "tunnel", "aurora", "chrome", "oil"],
+    smoothing: ["particles", "monstercat", "radial", "mirror", "ncs", "warp", "plasma", "dnb", "ascii", "geometric", "bauhaus", "led", "ledplasma", "sub", "trap", "retro", "neuro"],
   };
 
   const STYLE_BASE = {
@@ -155,18 +147,14 @@
     sub: { shake: 0.4 },
     trap: { shake: 0.4, bassBoost: 0.7, colorMode: "classic" },
     neuro: { shake: 0.2, colorMode: "classic", neuroTwist: 0.05 },
-    ink: { shake: 0 },
     ribbon: { shake: 0 },
     rain: { shake: 0 },
-    fireflies: { shake: 0 },
     lava: { shake: 0 },
     smoke: { shake: 0 },
     tunnel: { shake: 0.2 },
     aurora: { shake: 0 },
     chrome: { shake: 0 },
-    oil: { shake: 0 },
-    speakers: { shake: 0.3 },
-    jelly: { shake: 0 },
+    oil: { shake: 0, colorMode: "classic" },
     led: { colorMode: "classic", shake: 0 },
     ledplasma: { shake: 0 },
     monstercat: { barCount: 63, bassBoost: 0.8, smoothing: 0.45, beatEvery: "4" },
@@ -183,6 +171,7 @@
     beatSens: 0.6, // Sound tab: how easily a hit counts as a beat, 0 (off) to 1 (lower = only clear kicks)
     beatScale: 2, // settings version for the beat sensitivity slider
     noLyricsBoost: true, // brighter, fuller visuals on songs with no (or static) lyrics
+    bgDim: 0, // 0..0.9: a dark layer over Spicy Lyrics' moving background, under the visual
     noLyricsCard: true, // swap Spicy Lyrics' "No lyrics" box for the song name and artist
     kickFlash: false,
     quality: "medium",
@@ -1200,7 +1189,7 @@
     const t = shared.time;
 
     for (let i = 0; i < 3; i++)
-      for (let j = 0; j < 3; j++) shared.album[i][j] += (shared.target[i][j] - shared.album[i][j]) * Math.min(1, dt * 2.5);
+      for (let j = 0; j < 3; j++) shared.album[i][j] += (shared.target[i][j] - shared.album[i][j]) * Math.min(1, dt * 1.2); // ~2 s blend on a new song
 
     // No helper: use Spotify's sound data for this song, when there is some.
     shared.songData = false;
@@ -2733,13 +2722,15 @@
     const ang = (i, side) => -Math.PI / 2 + side * (i / (N - 1)) * Math.PI; // top (bass) -> bottom (treble)
     for (let layer = L - 1; layer >= 0; layer--) {
       const vals = frame(layer * 2);
-      const push = 1 + layer * 0.035; // further back = a touch further out
+      const push = 1 + layer * 0.07; // further back = further out
       const pts = [];
       for (const side of [1, -1]) {
         for (let n = 0; n < N; n++) {
           const i = side === 1 ? n : N - 1 - n;
           if (side === -1 && (i === 0 || i === N - 1)) continue;
-          const r = R0 + 2 * U + layer * 2.4 * U + vals[i] * maxLen * push; // each colour keeps a thin band showing
+          // quiet: every colour sits right behind the thin white ring; they only
+          // fan out (each a little further than the one in front) where it hits
+          const r = R0 + 2 * U + vals[i] * maxLen * push;
           const an = ang(i, side);
           pts.push(cx + Math.cos(an) * r, cy + Math.sin(an) * r);
         }
@@ -3226,60 +3217,6 @@
   };
 
   // ---------------------------------------------------------------------------
-  // Fireflies: tiny lights drifting lazily in the dark, mostly unlit. Each
-  // one blinks now and then (a quick flash that fades), more often when the
-  // music is loud; on every beat a handful blink together, a wave rolling
-  // left to right; snares set off a few more. Warm yellow-green, tinted by
-  // the album. Particles sets how many.
-  DRAW.fireflies = (v, p, dt, t) => {
-    const { ctx, w, h, U } = v;
-    const n = Math.round(45 * Math.min(2, p.particles || 1));
-    let st = v.ff;
-    if (!st) st = v.ff = { f: [], kickSeen: shared.beatSerial, snareSeen: shared.snareSerial };
-    while (st.f.length < n) st.f.push({ x: Math.random() * w, y: h * (0.25 + Math.random() * 0.72), a: Math.random() * 6.28, sp: 0.4 + Math.random() * 0.8, ph: Math.random() * 6.28, age: 9, next: Math.random() * 4, delay: -1, q: Math.random() });
-    if (st.f.length > n) st.f.length = n;
-    const e = shared.energy, sp = p.speed;
-    const step = beatSteps(st, p);
-    const blink = (f) => { f.age = 0; f.next = (1.5 + Math.random() * 4) / (0.6 + e); };
-    if (st.kickSeen !== shared.beatSerial) {
-      st.kickSeen = shared.beatSerial;
-      // a handful blink together, a short wave from left to right
-      for (const f of st.f) if (Math.random() < 0.18 + 0.2 * Math.min(1, shared.kick)) f.delay = (f.x / w) * 0.35;
-    }
-    if (st.snareSeen !== shared.snareSerial) {
-      st.snareSeen = shared.snareSerial;
-      for (let i = 0; i < 3; i++) { const f = st.f[(Math.random() * st.f.length) | 0]; if (f) blink(f); }
-    }
-    ctx.globalCompositeOperation = "lighter";
-    const warm = [215, 255, 120];
-    const spd = (6 + 14 * e) * U * sp;
-    for (const f of st.f) {
-      f.a += Math.sin(t * 0.6 + f.ph) * dt * 0.9;
-      f.x += Math.cos(f.a) * spd * f.sp * dt;
-      f.y += Math.sin(f.a) * spd * f.sp * dt * 0.5;
-      if (f.x < -10) f.x = w + 10; else if (f.x > w + 10) f.x = -10;
-      if (f.y < h * 0.2) f.a = Math.abs(f.a); else if (f.y > h * 0.98) f.a = -Math.abs(f.a);
-      if (f.delay >= 0) { f.delay -= dt; if (f.delay < 0) blink(f); }
-      f.next -= dt;
-      if (f.next <= 0) blink(f);
-      f.age += dt;
-      // flash: up in 0.08 s, hold, then fade over ~0.7 s
-      const g = f.age < 0.08 ? f.age / 0.08 : f.age < 0.2 ? 1 : Math.max(0, 1 - (f.age - 0.2) / 0.7);
-      const b = 0.05 + 0.95 * g * g;
-      const c = mix(warm, colorAt((f.q + step / 3) % 1), 0.35);
-      const r = (5 + 9 * g) * U * p.size;
-      ctx.globalAlpha = A_(b * 0.55, v);
-      ctx.drawImage(softSprite(c), f.x - r, f.y - r, r * 2, r * 2);
-      if (g > 0.05) {
-        ctx.globalAlpha = A_(b, v);
-        const cr = 1.6 * U * p.size;
-        ctx.drawImage(softSprite(mix(c, WHITE, 0.6)), f.x - cr, f.y - cr, cr * 2, cr * 2);
-      }
-    }
-    ctx.globalAlpha = 1;
-  };
-
-  // ---------------------------------------------------------------------------
   // Lava Lamp drawn on the graphics card: the blob field is worked out for
   // every screen pixel, so the edges are smooth at any size, and it's lit
   // like glossy wax (lighter towards the top edge, a glow in the middle).
@@ -3397,7 +3334,7 @@ void main() {
       for (let i = 0; i < 13; i++)
         st.blobs.push({
           ph: Math.random() * 6.28, rate: 0.1 + Math.random() * 0.2, x0: 0.08 + Math.random() * 0.84, xr: 0.03 + Math.random() * 0.08, xph: Math.random() * 6.28,
-          r: 0.025 + Math.pow(Math.random(), 1.5) * 0.05, sy: 0.7 + Math.random() * 0.25,
+          r: 0.025 + Math.pow(Math.random(), 1.5) * 0.05, sy: 0.95 + Math.random() * 0.2,
           parts: [0, 1, 2].map(() => ({ a: Math.random() * 6.28, spin: (Math.random() - 0.5) * 1.2, d: 0.35 + Math.random() * 0.5, s: 0.55 + Math.random() * 0.35 })),
         });
     }
@@ -3416,8 +3353,8 @@ void main() {
       const cx = (b.x0 + b.xr * Math.sin(b.ph * 0.7 + b.xph)) * GW;
       const cy = (0.5 - 0.5 * Math.sin(b.ph)) * GH; // rises, then sinks
       const r = b.r * GW * (1 + 0.35 * st.swell) * p.size * (1 + 0.1 * st.wob * Math.sin(t * 20 + i));
-      // stretched taller while it's moving fast (mid-way up or down)
-      const sy = b.sy * (1 - 0.2 * Math.abs(Math.cos(b.ph)));
+      // a touch taller while it's moving fast (mid-way up or down)
+      const sy = b.sy * (1 - 0.06 * Math.abs(Math.cos(b.ph)));
       for (const q of b.parts) {
         q.a += dt * q.spin * (0.6 + e) * p.speed;
         bx[n] = cx + Math.cos(q.a) * r * q.d;
@@ -3725,7 +3662,7 @@ float fbm(vec2 p) {
   }
   // Common music inputs for the shader styles: a clock that runs faster
   // when it's loud, a kick flash and a slow bass swell.
-  function fxClock(st, p, dt, rate) {
+  function fxClock(st, p, dt, rate, up = 6, down = 1.5, flashFade = 3) {
     const e = shared.energy, bass = shared.bassPunch || 0;
     st.T = (st.T || Math.random() * 100) + dt * p.speed * (0.35 + rate * e);
     if (st.kickSeen === undefined) st.kickSeen = shared.beatSerial;
@@ -3735,8 +3672,8 @@ float fbm(vec2 p) {
       st.flash = Math.min(1, (st.flash || 0) + 0.6 * Math.min(1, shared.kick + 0.2));
       st.newKick = true;
     }
-    st.flash = (st.flash || 0) * Math.exp(-dt * 3);
-    st.lift = (st.lift || 0) + (bass - (st.lift || 0)) * Math.min(1, dt * (bass > (st.lift || 0) ? 6 : 1.5));
+    st.flash = (st.flash || 0) * Math.exp(-dt * flashFade);
+    st.lift = (st.lift || 0) + (bass - (st.lift || 0)) * Math.min(1, dt * (bass > (st.lift || 0) ? up : down));
   }
   // Ripples that kicks start (up to four at once), packed for the shader.
   function fxRipples(st, dt, asp, make) {
@@ -3786,7 +3723,7 @@ void main() {
 }`;
   DRAW.aurora = (v, p, dt) => {
     const st = v.aurora || (v.aurora = {});
-    fxClock(st, p, dt, 0.9);
+    fxClock(st, p, dt, 0.9, 30, 6, 7); // fast: keeps up with quick bass lines
     const pal = easePal(st, beatSteps(st, p), dt, 1.2);
     fxDraw(v, "aurora", AURORA_FS, { uT: st.T, uE: shared.energy, uBass: st.lift, uKick: st.flash, uC0: rgb1(pal[0]), uC1: rgb1(pal[1]), uC2: rgb1(pal[2]) }, 1);
   };
@@ -3847,344 +3784,35 @@ void main() {
 
   // ---------------------------------------------------------------------------
   // Oil Slick: rainbow swirls like oil on a wet road at night (thin-film
-  // colours, tinted by the album). The bass stirs the swirls harder, kicks
-  // send a ring through the film, the colours shift round on the beat.
+  // colours). It only flows: the bass stirs the swirls harder and moves the
+  // colours, which shift slowly round on the beat. Colours: Classic = oil
+  // rainbow (default), other colour modes tint it.
   const OIL_FS = `
-uniform float uT, uE, uBass, uKick, uShift;
+uniform float uT, uE, uBass, uShift, uTint;
 uniform vec3 uC0, uC1, uC2;
-uniform vec4 uR[4];
 void main() {
   vec2 uv = gl_FragCoord.xy / uRes;
   vec2 p = (uv - 0.5) * vec2(uRes.x / uRes.y, 1.) * 2.5;
   vec2 q = vec2(fbm(p + vec2(0., uT * 0.06)), fbm(p + vec2(5.2, 1.3) - uT * 0.05));
   vec2 r = vec2(fbm(p + 3.5 * q + vec2(1.7, 9.2) + uT * 0.09), fbm(p + 3.5 * q + vec2(8.3, 2.8) - uT * 0.07));
-  float th = fbm(p + (2.2 + 2. * uBass) * r);
-  for (int i = 0; i < 4; i++) {
-    vec4 k = uR[i];
-    if (k.w <= 0.) continue;
-    float d = length(p - k.xy);
-    th += k.w * exp(-abs(d - k.z * 1.3) * 4.) * exp(-k.z * 1.1);
-  }
+  float th = fbm(p + (2.2 + 2. * uBass) * r) + 0.25 * uBass;
   vec3 film = 0.5 + 0.5 * cos(6.2832 * (th * 2.6 + uShift + vec3(0., 0.33, 0.67)));
   vec3 tint = mix(mix(uC0, uC1, q.x), uC2, r.y * 0.6);
-  film = mix(film, film * (0.4 + 1.2 * tint), 0.45);
+  film = mix(film, film * (0.4 + 1.2 * tint), 0.45 * uTint);
   float mask = smoothstep(0.3, 0.72, fbm(p * 0.6 + r * 1.2 - uT * 0.02));
-  vec3 col = film * (0.05 + 0.95 * mask) * (0.4 + 0.35 * uE + 0.3 * uKick);
+  vec3 col = film * (0.05 + 0.95 * mask) * (0.42 + 0.3 * uE + 0.15 * uBass);
   col += vec3(pow(max(0., r.x - 0.55), 3.) * 2. * mask);
   col = min(col, vec3(1.));
   o = vec4(col, max(col.r, max(col.g, col.b)));
 }`;
   DRAW.oil = (v, p, dt) => {
-    const st = v.oil || (v.oil = { shift: 0 });
-    fxClock(st, p, dt, 0.9);
+    const st = v.oil || (v.oil = {});
+    fxClock(st, p, dt, 0.7, 4, 1.2);
     const step = beatSteps(st, p);
-    const pal = easePal(st, step, dt, 1.2);
-    st.shift += (step * 0.17 - st.shift) * Math.min(1, dt * 1.5);
-    const big = st.newKick && ((shared.bassPunch || 0) > 0.25 || !isLive());
-    const rip = fxRipples(st, dt * p.speed, v.w / Math.max(1, v.h), big ? 0.25 + 0.25 * Math.min(1, shared.kick) : 0);
-    fxDraw(v, "oil", OIL_FS, { uT: st.T, uE: shared.energy, uBass: st.lift, uKick: st.flash, uShift: st.shift + st.T * 0.015, uC0: rgb1(pal[0]), uC1: rgb1(pal[1]), uC2: rgb1(pal[2]), uR: rip }, 1);
-  };
-
-  // ---------------------------------------------------------------------------
-  // Speaker Wall: a stack of speakers, each pumping with its own part of the
-  // sound. Big woofers along the bottom (the bass, knocked out by kicks),
-  // mid-range cones above them, small tweeters on top (the highs). Each cone
-  // is on its own spring, so it overshoots and settles like a real one; a
-  // ring of light round it glows as it moves. Colours run left to right.
-  DRAW.speakers = (v, p, dt, t) => {
-    const { ctx, w, h, U } = v;
-    const asp = w / Math.max(1, h);
-    const nW = Math.max(2, Math.min(5, Math.round(asp * 1.6)));
-    const rows = [
-      { n: nW, y: 0.73, hh: 0.36, q0: 0, q1: 0.12, k: 160, d: 13, kick: 9 },
-      { n: nW * 2, y: 0.38, hh: 0.24, q0: 0.16, q1: 0.5, k: 280, d: 18, kick: 3 },
-      { n: nW * 3, y: 0.14, hh: 0.15, q0: 0.5, q1: 0.92, k: 420, d: 22, kick: 0 },
-    ];
-    let st = v.spk;
-    const total = rows.reduce((a, r) => a + r.n, 0);
-    if (!st || st.n !== total) st = v.spk = { n: total, x: new Float32Array(total), vel: new Float32Array(total), kickSeen: shared.beatSerial };
-    const kick = st.kickSeen !== shared.beatSerial;
-    if (kick) st.kickSeen = shared.beatSerial;
-    const kk = kick && ((shared.bassPunch || 0) > 0.25 || !isLive()) ? Math.min(1.2, shared.kick + 0.2) : 0;
-    const e = shared.energy;
-    let idx = 0;
-    for (const row of rows) {
-      const cellW = w / row.n;
-      const R = Math.min(cellW * 0.44, h * row.hh * 0.46) * p.size;
-      for (let i = 0; i < row.n; i++, idx++) {
-        const f = row.n > 1 ? i / (row.n - 1) : 0.5;
-        const target = Math.min(1.3, bandAt(row.q0 + (row.q1 - row.q0) * f) * 1.3);
-        st.vel[idx] += kk * row.kick * (0.8 + 0.4 * Math.sin(i * 2.3));
-        const n = Math.max(1, Math.ceil(dt / 0.008)), hstep = dt / n;
-        for (let s = 0; s < n; s++) {
-          st.vel[idx] += ((target - st.x[idx]) * row.k - st.vel[idx] * row.d) * hstep;
-          st.x[idx] += st.vel[idx] * hstep;
-        }
-        const x = Math.max(-0.5, Math.min(1.6, st.x[idx]));
-        const cx = cellW * (i + 0.5), cy = h * row.y;
-        const c = colorAt(f);
-        const pop = 1 + 0.07 * x;
-        v.soft(cx, cy, R * 1.6, c, 0.04 + 0.14 * Math.max(0, x));
-        // frame
-        ctx.beginPath();
-        ctx.arc(cx, cy, R * 1.04, 0, Math.PI * 2);
-        ctx.strokeStyle = v.rgba(mix(c, WHITE, 0.5), 0.22);
-        ctx.lineWidth = Math.max(1, 1.6 * U);
-        ctx.stroke();
-        // surround, wobbling a little as it moves
-        const sr = R * 0.9 * pop;
-        ctx.beginPath();
-        for (let j = 0; j <= 40; j++) {
-          const a = (j / 40) * Math.PI * 2;
-          const rr = sr + Math.sin(a * 4 + t * 15 + i) * Math.min(0.05, Math.abs(st.vel[idx]) * 0.006) * R;
-          const px = cx + Math.cos(a) * rr, py = cy + Math.sin(a) * rr;
-          j ? ctx.lineTo(px, py) : ctx.moveTo(px, py);
-        }
-        ctx.strokeStyle = v.rgba(c, 0.2 + 0.35 * Math.max(0, x));
-        ctx.lineWidth = R * 0.1;
-        ctx.stroke();
-        // cone sheen and ridges
-        const capR = R * (row.kick ? 0.3 : 0.45);
-        const g = ctx.createRadialGradient(cx - R * 0.15, cy - R * 0.2, capR * 0.5, cx, cy, R * 0.85 * pop);
-        g.addColorStop(0, v.rgba(mix(c, WHITE, 0.35), 0.05 + 0.14 * Math.max(0, x)));
-        g.addColorStop(1, v.rgba(c, 0.02));
-        ctx.fillStyle = g;
-        ctx.beginPath();
-        ctx.arc(cx, cy, R * 0.84 * pop, 0, Math.PI * 2);
-        ctx.fill();
-        if (row.kick) {
-          ctx.lineWidth = Math.max(1, U);
-          for (let j = 1; j <= 3; j++) {
-            const r0 = capR + ((R * 0.82 - capR) * j) / 4;
-            ctx.strokeStyle = v.rgba(mix(c, WHITE, 0.2), 0.1 + 0.06 * j * (0.5 + e));
-            ctx.beginPath();
-            ctx.arc(cx, cy, r0 * (1 + x * (1 - r0 / R) * 0.5), 0, Math.PI * 2);
-            ctx.stroke();
-          }
-        }
-        // dust cap / tweeter dome
-        const cr = capR * (1 + 0.25 * x);
-        const cg = ctx.createRadialGradient(cx - cr * 0.35, cy - cr * 0.4, cr * 0.05, cx, cy, cr);
-        cg.addColorStop(0, v.rgba(mix(c, WHITE, 0.65), 0.5 + 0.3 * Math.max(0, x)));
-        cg.addColorStop(1, v.rgba(c, 0.1));
-        ctx.fillStyle = cg;
-        ctx.beginPath();
-        ctx.arc(cx, cy, cr, 0, Math.PI * 2);
-        ctx.fill();
-        // light ring
-        ctx.beginPath();
-        ctx.arc(cx, cy, R * 1.13, 0, Math.PI * 2);
-        ctx.strokeStyle = v.rgba(mix(c, WHITE, 0.3), 0.08 + 0.6 * Math.max(0, Math.min(1, x)));
-        ctx.lineWidth = Math.max(1, 1.8 * U);
-        ctx.stroke();
-      }
-    }
-  };
-
-  // ---------------------------------------------------------------------------
-  // Jelly: a big glossy blob of jelly that wobbles to the music. Its edge is
-  // a ring of springs joined to their neighbours, so a hit sends waves
-  // running round it. Kicks squash it and make it hop, snares poke it, the
-  // bass swells it, and each part of the edge bulges with its own part of
-  // the sound (bass at the bottom, highs at the top). Bubbles drift up
-  // inside.
-  DRAW.jelly = (v, p, dt, t) => {
-    const { ctx, w, h, U } = v;
-    const N = 64;
-    let st = v.jelly;
-    if (!st) {
-      st = v.jelly = { r: new Float32Array(N).fill(1), vr: new Float32Array(N), y: 0, vy: 0, kickSeen: shared.beatSerial, snareSeen: shared.snareSerial, bub: [] };
-      for (let i = 0; i < 7; i++) st.bub.push({ x: Math.random() * 1.2 - 0.6, y: Math.random() * 2 - 1, r: 0.03 + Math.random() * 0.05, s: 0.1 + Math.random() * 0.15 });
-    }
-    const e = shared.energy, bass = shared.bassPunch || 0, sp = p.speed;
-    const spot = circleSpot(v, p, 0.24);
-    const R = spot.r;
-    if (st.kickSeen !== shared.beatSerial) {
-      st.kickSeen = shared.beatSerial;
-      const k = Math.min(1.2, shared.kick + 0.2) * ((shared.bassPunch || 0) > 0.2 || !isLive() ? 1 : 0.35);
-      for (let i = 0; i < N; i++) st.vr[i] += k * (2.2 * Math.cos((2 * Math.PI * 2 * i) / N) + 0.6);
-      st.vy -= k * 2.2;
-    }
-    if (st.snareSeen !== shared.snareSerial) {
-      st.snareSeen = shared.snareSerial;
-      const j = (Math.random() * N) | 0;
-      for (let d = -4; d <= 4; d++) st.vr[(j + d + N) % N] -= 1.6 * Math.exp(-(d * d) / 6);
-    }
-    // targets: swell with the bass, each part bulging with its band
-    const tgt = new Float32Array(N);
-    for (let i = 0; i < N; i++) {
-      const a = (i / N) * Math.PI * 2;
-      tgt[i] = 1 + 0.12 * bass + 0.1 * bandAt(((1 - Math.sin(a)) / 2) * 0.85);
-    }
-    const n = Math.max(1, Math.ceil(dt / 0.006)), hs = dt / n;
-    for (let s = 0; s < n; s++) {
-      for (let i = 0; i < N; i++) {
-        const lap = st.r[(i + N - 1) % N] + st.r[(i + 1) % N] - 2 * st.r[i];
-        st.vr[i] += ((tgt[i] - st.r[i]) * 60 * sp + lap * 700 - st.vr[i] * 3.2) * hs;
-      }
-      for (let i = 0; i < N; i++) st.r[i] = Math.max(0.55, Math.min(1.6, st.r[i] + st.vr[i] * hs));
-      st.vy += (-st.y * 70 - st.vy * 5) * hs;
-      st.y += st.vy * hs;
-    }
-    const step = beatSteps(st, p);
-    const pal = easePal(st, step, dt, 2);
-    const c = pal[0], c2 = pal[1];
-    const cx = spot.x, cy = spot.y + st.y * R * 0.25;
-    const pts = [];
-    for (let i = 0; i < N; i++) {
-      const a = (i / N) * Math.PI * 2;
-      pts.push([cx + Math.cos(a) * R * st.r[i], cy + Math.sin(a) * R * st.r[i]]);
-    }
-    const path = () => {
-      ctx.beginPath();
-      let m = [(pts[N - 1][0] + pts[0][0]) / 2, (pts[N - 1][1] + pts[0][1]) / 2];
-      ctx.moveTo(m[0], m[1]);
-      for (let i = 0; i < N; i++) {
-        const a = pts[i], b = pts[(i + 1) % N];
-        ctx.quadraticCurveTo(a[0], a[1], (a[0] + b[0]) / 2, (a[1] + b[1]) / 2);
-      }
-      ctx.closePath();
-    };
-    v.soft(cx, cy, R * 2, c, 0.08 + 0.18 * e);
-    ctx.globalCompositeOperation = "source-over";
-    path();
-    const g = ctx.createRadialGradient(cx - R * 0.3, cy - R * 0.35, R * 0.1, cx, cy, R * 1.25);
-    g.addColorStop(0, v.rgba(mix(c, WHITE, 0.45), A_(0.75, v)));
-    g.addColorStop(0.55, v.rgba(c, A_(0.55, v)));
-    g.addColorStop(1, v.rgba(mix(c, c2, 0.6), A_(0.4, v)));
-    ctx.fillStyle = g;
-    ctx.fill();
-    // bubbles drifting up inside
-    ctx.save();
-    path();
-    ctx.clip();
-    ctx.fillStyle = v.rgba(WHITE, A_(0.18, v));
-    ctx.beginPath();
-    for (const b of st.bub) {
-      b.y -= dt * b.s * (0.5 + e) * sp;
-      if (b.y < -1.1) { b.y = 1.1; b.x = Math.random() * 1.2 - 0.6; }
-      const bx = cx + (b.x + 0.04 * Math.sin(t * 2 + b.r * 90)) * R, by = cy + b.y * R, br = b.r * R;
-      ctx.moveTo(bx + br, by);
-      ctx.arc(bx, by, br, 0, Math.PI * 2);
-    }
-    ctx.fill();
-    ctx.restore();
-    // glossy edge and highlights
-    path();
-    ctx.strokeStyle = v.rgba(mix(c, WHITE, 0.6), A_(0.45, v));
-    ctx.lineWidth = Math.max(1.5, 2 * U);
-    ctx.stroke();
-    const hx = cx - R * 0.38 * st.r[(N * 5) / 8], hy = cy - R * 0.42 * st.r[(N * 5) / 8];
-    ctx.save();
-    ctx.translate(hx, hy);
-    ctx.rotate(-0.6);
-    ctx.beginPath();
-    ctx.ellipse(0, 0, R * 0.22, R * 0.09, 0, 0, Math.PI * 2);
-    ctx.fillStyle = v.rgba(WHITE, A_(0.55, v));
-    ctx.fill();
-    ctx.restore();
-    ctx.beginPath();
-    ctx.arc(hx + R * 0.24, hy - R * 0.08, R * 0.035, 0, Math.PI * 2);
-    ctx.fillStyle = v.rgba(WHITE, A_(0.6, v));
-    ctx.fill();
-  };
-
-  // ---------------------------------------------------------------------------
-  // Silk (was Ink in Water): long streaks of colour pulled through a slow
-  // current. A few hundred strands follow a smooth, slowly turning flow and
-  // draw short line pieces onto a half-size canvas that fades a little at a
-  // time, so each strand leaves a long silky trail. The bass speeds the
-  // current up, kicks bloom a burst of new strands from one spot, snares flick
-  // a few thin bright ones, colours step round on the beat.
-  DRAW.ink = (v, p, dt, t) => {
-    const { ctx, w, h } = v;
-    const W = Math.max(80, Math.round(w * 0.5)), H = Math.max(60, Math.round(h * 0.5));
-    let st = v.ink;
-    if (!st || st.W !== W || st.H !== H) {
-      const c = document.createElement("canvas");
-      c.width = W;
-      c.height = H;
-      st = v.ink = { c, g: c.getContext("2d"), W, H, s: [], kickSeen: shared.beatSerial, snareSeen: shared.snareSerial, ft: Math.random() * 50, fade: 0 };
-    }
-    const g = st.g, D = Math.min(W, H);
-    const e = shared.energy, k = Math.min(1, shared.kick), bass = shared.bassPunch || 0;
-    const step = beatSteps(st, p);
-    const sp = p.speed;
-    const ink = (q) => colorAt((q + step / 3) % 1);
-    const MAX = 260;
-    const add = (x, y, vx, vy, col, wd, life) => {
-      if (st.s.length >= MAX) st.s.shift();
-      st.s.push({ x, y, px: x, py: y, vx, vy, life: 1, fall: 1 / life, wd, c: col, off: Math.random() * 6.28 });
-    };
-    // Kick: a bloom of strands from one spot, shooting out and then caught by the current.
-    if (st.kickSeen !== shared.beatSerial) {
-      st.kickSeen = shared.beatSerial;
-      if (bass > 0.15 || !isLive()) {
-        const x = W * (0.15 + Math.random() * 0.7), y = H * (0.2 + Math.random() * 0.6), q = Math.random();
-        const n = 14 + Math.round(16 * k);
-        for (let i = 0; i < n; i++) {
-          const a = (i / n) * Math.PI * 2 + Math.random() * 0.3, f = D * (0.4 + 0.8 * k) * (0.5 + Math.random());
-          add(x, y, Math.cos(a) * f, Math.sin(a) * f, ink(q + (i / n) * 0.25), 0.8 + Math.random() * 1.6, 2.5 + Math.random() * 2);
-        }
-      }
-    }
-    // Snare: a few thin, bright strands.
-    if (st.snareSeen !== shared.snareSerial) {
-      st.snareSeen = shared.snareSerial;
-      const x = W * Math.random(), y = H * Math.random();
-      for (let i = 0; i < 5; i++) add(x, y, (Math.random() - 0.5) * D, (Math.random() - 0.5) * D, mix(ink(0.6), WHITE, 0.45), 0.6, 1.5 + Math.random());
-    }
-    // Always some strands drifting, more when it's loud.
-    const want = 50 + 110 * e;
-    for (let i = 0; i < 4 && st.s.length < want; i++) add(Math.random() * W, Math.random() * H, 0, 0, ink(Math.random()), 0.7 + Math.random() * 1.8, 3 + Math.random() * 4);
-
-    // 1. Fade old streaks in steps (a big step now and then, so faint
-    //    leftovers really go instead of sticking at a low alpha).
-    st.fade += dt;
-    const keep = 0.5 + 0.9 * p.smoothing; // seconds-ish a streak lasts
-    if (st.fade > 1 / 20) {
-      g.globalCompositeOperation = "destination-out";
-      g.fillStyle = `rgba(0,0,0,${Math.min(0.6, st.fade / keep).toFixed(3)})`;
-      g.fillRect(0, 0, W, H);
-      st.fade = 0;
-    }
-    g.globalCompositeOperation = "source-over";
-    g.lineCap = "round";
-    // 2. Move every strand through the current and draw its newest piece.
-    st.ft += dt * (0.12 + 0.35 * bass + 0.15 * e) * sp;
-    const T = st.ft;
-    const flow = D * (0.05 + 0.32 * bass + 0.2 * e) * sp;
-    const grip = Math.min(1, dt * 1.6);
-    const lw = D / 320;
-    for (let i = st.s.length - 1; i >= 0; i--) {
-      const s = st.s[i];
-      const nx = (s.x / D) * 2.4, ny = (s.y / D) * 2.4;
-      const a = 1.6 * Math.sin(nx * 1.1 + T) + 1.6 * Math.cos(ny * 1.3 - T * 0.8) + Math.sin((nx - ny) * 0.6 + T * 0.45) + s.off * 0.12;
-      s.vx += (Math.cos(a) * flow - s.vx) * grip;
-      s.vy += (Math.sin(a) * flow - s.vy) * grip;
-      s.px = s.x;
-      s.py = s.y;
-      s.x += s.vx * dt;
-      s.y += s.vy * dt;
-      s.life -= dt * s.fall;
-      if (s.life <= 0 || s.x < -10 || s.x > W + 10 || s.y < -10 || s.y > H + 10) { st.s.splice(i, 1); continue; }
-      const fadeIn = Math.min(1, (1 - s.life) * 8); // no hard dot where it starts
-      g.globalAlpha = 0.55 * fadeIn * Math.min(1, s.life * 2);
-      g.strokeStyle = `rgb(${s.c[0]},${s.c[1]},${s.c[2]})`;
-      g.lineWidth = Math.max(0.6, s.wd * lw * (0.6 + 0.6 * s.life));
-      g.beginPath();
-      g.moveTo(s.px, s.py);
-      g.lineTo(s.x, s.y);
-      g.stroke();
-    }
-    g.globalAlpha = 1;
-    // 3. Up to full size, smooth, kept below white so lyrics read.
-    ctx.globalCompositeOperation = "source-over";
-    ctx.imageSmoothingEnabled = true;
-    ctx.imageSmoothingQuality = "medium";
-    ctx.globalAlpha = A_(0.9, v);
-    ctx.drawImage(st.c, 0, 0, w, h);
-    ctx.globalAlpha = 1;
+    const pal = easePal(st, step, dt, 0.4);
+    if (st.shift === undefined) st.shift = step * 0.17; // no colour rush when you switch to it
+    st.shift += (step * 0.17 - st.shift) * Math.min(1, dt * 0.3);
+    fxDraw(v, "oil", OIL_FS, { uT: st.T, uE: shared.energy, uBass: st.lift, uShift: st.shift + st.T * 0.015, uTint: p.colorMode === "classic" ? 0 : 1, uC0: rgb1(pal[0]), uC1: rgb1(pal[1]), uC2: rgb1(pal[2]) }, 1);
   };
 
   // ---------------------------------------------------------------------------
@@ -4364,6 +3992,7 @@ void main() {
         ${group("Beat effects", toggle("kickPulse", "Pulse on kicks", "The visual swells a little on each kick") + toggle("kickFlash", "Flash on kicks", "A soft flash of colour"))}
         ${group("Sync", slider("syncDelay", "Audio delay (Bluetooth)", 0, 400, 10, "global") + `<div class="lp-note">Visuals ahead of the sound? With Bluetooth headphones the sound arrives later than it's played. Slide this until the beat lines up.</div>`)}
         ${group("Performance", toggle("ecoUnfocused", "Save power when Spotify isn't focused", "Drops to 30 fps while you're gaming or in another app") + `<div class="lp-label"><span>Frame rate</span></div>${seg("fps", [["30", "30 fps"], ["60", "60 fps"], ["max", "Max"]], "global")}<div class="lp-label"><span>Quality</span></div>${seg("quality", [["low", "Low"], ["medium", "Medium"], ["high", "High"]], "global")}<div class="lp-note">Everything stops (including the helper) when the lyrics view isn't on screen.</div>`)}
+        ${group("Background", slider("bgDim", "Darken background", 0, 0.9, 0.05, "global") + `<div class="lp-note">Calms Spicy Lyrics' moving background so the visual stands out. The lyrics and album art aren't touched.</div>`)}
         ${group("General", toggle("dimPaused", "Dim when paused") + toggle("noLyricsBoost", "Fuller with no lyrics", "Songs with no lyrics, or lyrics that don't move: the visual gets brighter and bigger, and keeps the beat") + toggle("noLyricsCard", "Song name when there are no lyrics", "Shows the song and artist in place of Spicy Lyrics' \"No lyrics\" box (click it to see the box again)"))}
         <button class="lp-reset">Reset this style's settings</button>
       </div>
@@ -4604,6 +4233,10 @@ void main() {
     const isPop = doc !== document || page.classList.contains("CardMode");
     ensureStyle(doc);
 
+    // Dark layer over Spicy Lyrics' background (it sits just under the visual).
+    const dim = doc.createElement("div");
+    dim.className = "lp-bgdim";
+    box.appendChild(dim);
     const canvas = doc.createElement("canvas");
     canvas.className = "lp-canvas";
     box.appendChild(canvas);
@@ -4679,18 +4312,25 @@ void main() {
       const lineStyle = gs === "fade" || gs === "sweep";
       const el = mode === "off" ? null : lineStyle || mode === "line" ? v.activeLine : v.activeWord || v.activeLine;
       for (const g of v.glows) g.target = g.el === el ? 1 : 0;
-      if (el && !v.glows.some((g) => g.el === el)) v.glows.push({ el, a: 0, target: 1, box: null, head: null });
+      if (el && !v.glows.some((g) => g.el === el)) {
+        // The new glow takes over from the one that's showing: it starts
+        // where that one is, as bright, and glides over to the new words.
+        let prev = null;
+        for (const g of v.glows) if (g.box && g.a > 0.05 && (!prev || g.a > prev.a)) prev = g;
+        if (prev) v.glows.splice(v.glows.indexOf(prev), 1);
+        v.glows.push({ el, a: prev ? prev.a : 0, target: 1, box: prev ? { ...prev.box } : null, head: null });
+      }
       const k = Math.min(1, shared.kick);
       const strength = S.glowStrength * (0.32 + 0.38 * k + 0.12 * (shared.bassPunch || 0) + 0.12 * shared.snare);
       const col = colorAt(0.5);
       for (let i = v.glows.length - 1; i >= 0; i--) {
         const g = v.glows[i];
         g.a += (g.target - g.a) * Math.min(1, dt * (g.target > g.a ? 10 : 3.5));
-        if (g.el.isConnected && (!g.box || g.target === 0 || (v.frame + i) % 3 === 0)) {
+        if (g.el.isConnected && (!g.box || g.target === 1 || (v.frame + i) % 3 === 0)) {
           const b = g.el.classList.contains("line") ? measureLine(g.el) : rectOf(g.el);
           if (b) {
-            const f = Math.min(1, dt * 14);
-            g.box = g.box ? { x: g.box.x + (b.x - g.box.x) * f, y: g.box.y + (b.y - g.box.y) * f, w: b.w, h: b.h } : b;
+            const f = Math.min(1, dt * 9);
+            g.box = g.box ? { x: g.box.x + (b.x - g.box.x) * f, y: g.box.y + (b.y - g.box.y) * f, w: g.box.w + (b.w - g.box.w) * f, h: g.box.h + (b.h - g.box.h) * f } : b;
           }
           g.right = g.el.classList.contains("OppositeAligned") || !!g.el.closest(".OppositeAligned");
         }
@@ -4854,11 +4494,26 @@ void main() {
       v.shownOpacity = -1; // let the loop put the pause dimming / no-lyrics lift back on
       v.shownOpacity = on ? p.opacity : 0;
       canvas.style.filter = on && p.blur > 0 ? `blur(${p.blur}px)` : "";
+      dim.style.opacity = String(Math.max(0, Math.min(0.9, S.bgDim || 0)));
       // Head Unit draws a solid dark panel, which "screen" blending would hide.
       canvas.style.mixBlendMode = "";
       const btn = box.querySelector(".ViewControls .lp-button");
       if (btn) btn.classList.toggle("lp-active", on);
       if (v.styleNow !== style) {
+        // keep a picture of the old style and fade it out over the new one
+        if (v.styleNow && v.styleNow !== "off" && canvas.width > 2) {
+          try {
+            const snap = v.xfade && v.xfade.c.width === canvas.width && v.xfade.c.height === canvas.height ? v.xfade.c : doc.createElement("canvas");
+            snap.width = canvas.width;
+            snap.height = canvas.height;
+            const sg = snap.getContext("2d");
+            sg.clearRect(0, 0, snap.width, snap.height);
+            sg.drawImage(canvas, 0, 0);
+            v.xfade = { c: snap, a: 1 };
+          } catch (_) {
+            v.xfade = null;
+          }
+        }
         v.particles.length = 0;
         v.styleNow = style;
       }
@@ -5113,6 +4768,16 @@ void main() {
           ctx.drawImage(softSprite(colorAt(0.5)), -v.w * 0.25, -v.h * 0.6, v.w * 1.5, v.h * 2.2);
           ctx.globalAlpha = 1;
         }
+        if (v.xfade && v.xfade.a > 0) {
+          v.xfade.a -= dt / 0.6;
+          if (v.xfade.a > 0) {
+            ctx.globalCompositeOperation = "source-over";
+            ctx.globalAlpha = v.xfade.a * v.xfade.a;
+            ctx.drawImage(v.xfade.c, 0, 0, v.w, v.h);
+            ctx.globalAlpha = 1;
+            ctx.globalCompositeOperation = "lighter";
+          }
+        }
         updateGlows(dt, t);
       } catch (err) {
         if ((v.errCount = (v.errCount || 0) + 1) < 5) console.error("[Spicy Visualiser]", err);
@@ -5128,6 +4793,7 @@ void main() {
       if (v.raf) win.cancelAnimationFrame(v.raf);
       doc.removeEventListener("pointerdown", closeOnOutside, true);
       canvas.remove();
+      dim.remove();
       if (v.panel) v.panel.remove();
       const btn = box.querySelector(".lp-button");
       if (btn) btn.remove();

@@ -284,3 +284,6 @@
 #SpicyLyricsPage .lp-nolyr-artist { margin-top: .5em; font-size: clamp(14px, 1.7vw, 26px); font-weight: 600; opacity: .7; }
 #SpicyLyricsPage .lp-nolyr-note { margin-top: 1.6em; font-size: 11px; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; opacity: .3; transition: opacity .2s; }
 #SpicyLyricsPage .lp-nolyr:hover .lp-nolyr-note { opacity: .6; }
+
+/* Darken background: under the visual (same z-index, earlier in the page), over Spicy Lyrics' background layers. */
+#SpicyLyricsPage .ContentBox > .lp-bgdim { position: absolute; inset: 0; z-index: 1; pointer-events: none; background: #000; opacity: 0; transition: opacity .4s ease; }

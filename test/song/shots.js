@@ -28,7 +28,7 @@ const SHOTS = [
   ["retro", null, null, 12], ["ascii", null, null, 28], ["led", null, null, 21], ["ncs", null, null, 23],
   ["trap", null, null, 25], ["sub", null, null, 13], ["ribbon", null, null, 27], ["geometric", null, null, 11],
   ["bauhaus", null, null, 29], ["particles", null, null, 22], ["plasma", null, null, 18], ["ledplasma", null, null, 24],
-  ["ink", null, null, 10], ["warp", null, null, 30], ["dnb", null, null, 26], ["neuro", null, null, 14],
+  ["warp", null, null, 30], ["dnb", null, null, 26], ["neuro", null, null, 14],
   ["neuro", "neuroLook", "ridges", 23],
 ];
 
