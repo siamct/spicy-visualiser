@@ -1,9 +1,6 @@
 // NAME: Spicy Visualiser
 // VERSION: 0.9.0
 // DESCRIPTION: Add-on for Spicy Lyrics (needs the Spicy Lyrics extension). Music visualiser inside the Spicy Lyrics view (page, fullscreen, cinema and popout). Styles inspired by Monstercat, NCS and more. Reacts to the real music through the Spicy Visualiser helper.
-//
-// The NCS dot sphere is adapted from Konsl's spicetify-visualizer
-// (https://github.com/Konsl/spicetify-visualizer), MIT License, Copyright (c) 2026 Konsl.
 
 (function SpicyVisualiser() {
   "use strict";
@@ -108,7 +105,7 @@
     circleAt: ["trap", "radial", "ncs", "sub"],
     speed: ["trap", "retro", "neuro", "ribbon", "rain", "lava", "smoke", "tunnel", "aurora", "chrome", "oil", "particles", "monstercat", "ncs", "radial", "plasma", "warp", "dnb", "ascii", "led", "ledplasma"],
     bassBoost: ["particles", "monstercat", "radial", "mirror", "ncs", "warp", "plasma", "dnb", "ascii", "geometric", "bauhaus", "led", "ledplasma", "sub", "trap", "retro", "neuro", "ribbon", "rain", "lava", "smoke", "tunnel", "aurora", "chrome", "oil"],
-    smoothing: ["particles", "monstercat", "radial", "mirror", "ncs", "warp", "plasma", "dnb", "ascii", "geometric", "bauhaus", "led", "ledplasma", "sub", "trap", "retro", "neuro"],
+    smoothing: ["particles", "monstercat", "radial", "mirror", "ncs", "warp", "plasma", "dnb", "ascii", "geometric", "bauhaus", "led", "ledplasma", "sub", "trap", "retro", "neuro", "aurora"],
   };
 
   const STYLE_BASE = {
@@ -152,7 +149,7 @@
     lava: { shake: 0 },
     smoke: { shake: 0 },
     tunnel: { shake: 0.2 },
-    aurora: { shake: 0 },
+    aurora: { shake: 0, smoothing: 0.5 },
     chrome: { shake: 0 },
     oil: { shake: 0, colorMode: "classic" },
     led: { colorMode: "classic", shake: 0 },
@@ -165,6 +162,7 @@
     syncDelay: 0, // ms: hold the visuals back (for Bluetooth headphones)
     lyricGlow: "word", // off | word | line
     glowStyle: "soft", // soft | fade | sweep | underline
+    glowMove: "glide", // glide | fade: how the glow gets to the next line / word
     glowStrength: 1,
     kickPulse: true,
     dimPaused: true,
@@ -198,6 +196,7 @@
     if (saved.useHelper === false && !("source" in saved)) S.source = "spotify"; // older "Use the helper: off"
   } catch (_) {}
   if (!["soft", "fade", "sweep", "underline"].includes(S.glowStyle)) S.glowStyle = "soft";
+  if (!["glide", "fade"].includes(S.glowMove)) S.glowMove = "glide";
   if (!validStyle(S.style)) S.style = GLOBAL_DEFAULTS.style;
   if (S.source !== "spotify") S.source = "helper";
   if (!S.per || typeof S.per !== "object") S.per = {};
@@ -453,8 +452,7 @@
     }
   }
   // ---------------------------------------------------------------------------
-  // Spotify's own per-song data from its metadata service (the route Konsl's
-  // visualiser uses): a three-band waveform (lows / mids / highs over time)
+  // Spotify's own per-song data from its metadata service: a three-band waveform (lows / mids / highs over time)
   // and the beat grid. No helper needed. Found once in Spotify's own modules.
   // ---------------------------------------------------------------------------
   let metaSvc;
@@ -1399,173 +1397,6 @@
   }
 
   // ===========================================================================
-  // NCS sphere renderer (WebGL2). Shaders from Konsl/spicetify-visualizer (MIT).
-  // ===========================================================================
-  const QUAD_VS = `__PARTICLE_VS__`;
-  const PARTICLE_FS = `__PARTICLE_FS__`;
-  const DOT_VS = `__DOT_VS__`;
-  const DOT_FS = `__DOT_FS__`;
-  const BLUR_VS = `__BLUR_VS__`;
-  const BLUR_FS = `__BLUR_FS__`;
-  const FIN_VS = `__FIN_VS__`;
-  const FIN_FS = `__FIN_FS__`;
-
-  let ncsRenderer;
-  function getNcs() {
-    if (ncsRenderer === undefined) {
-      try {
-        ncsRenderer = createNcs();
-      } catch (e) {
-        console.error("[Spicy Visualiser] NCS sphere unavailable:", e);
-        ncsRenderer = null;
-      }
-    }
-    return ncsRenderer;
-  }
-
-  function createNcs() {
-    const cv = document.createElement("canvas");
-    cv.width = cv.height = 4;
-    const gl = cv.getContext("webgl2", { premultipliedAlpha: true, antialias: false, preserveDrawingBuffer: true });
-    if (!gl || !gl.getExtension("EXT_color_buffer_float")) return null;
-    const shader = (type, src) => {
-      const s = gl.createShader(type);
-      gl.shaderSource(s, src);
-      gl.compileShader(s);
-      if (!gl.getShaderParameter(s, gl.COMPILE_STATUS)) throw new Error(gl.getShaderInfoLog(s));
-      return s;
-    };
-    const program = (vs, fs) => {
-      const p = gl.createProgram();
-      gl.attachShader(p, shader(gl.VERTEX_SHADER, vs));
-      gl.attachShader(p, shader(gl.FRAGMENT_SHADER, fs));
-      gl.linkProgram(p);
-      if (!gl.getProgramParameter(p, gl.LINK_STATUS)) throw new Error(gl.getProgramInfoLog(p));
-      const u = {};
-      const n = gl.getProgramParameter(p, gl.ACTIVE_UNIFORMS);
-      for (let i = 0; i < n; i++) {
-        const name = gl.getActiveUniform(p, i).name;
-        u[name] = gl.getUniformLocation(p, name);
-      }
-      return { p, u, pos: gl.getAttribLocation(p, "inPosition") };
-    };
-    const part = program(QUAD_VS, PARTICLE_FS);
-    const dot = program(DOT_VS, DOT_FS);
-    const blur = program(BLUR_VS, BLUR_FS);
-    const fin = program(FIN_VS, FIN_FS);
-
-    const target = (filter) => {
-      const fb = gl.createFramebuffer();
-      const tex = gl.createTexture();
-      gl.bindTexture(gl.TEXTURE_2D, tex);
-      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
-      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
-      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, filter);
-      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, filter);
-      gl.bindFramebuffer(gl.FRAMEBUFFER, fb);
-      gl.framebufferTexture2D(gl.FRAMEBUFFER, gl.COLOR_ATTACHMENT0, gl.TEXTURE_2D, tex, 0);
-      return { fb, tex };
-    };
-    const particles = target(gl.NEAREST);
-    const dots = target(gl.NEAREST);
-    const blurX = target(gl.LINEAR);
-    const blurY = target(gl.NEAREST);
-    const quad = gl.createBuffer();
-    gl.bindBuffer(gl.ARRAY_BUFFER, quad);
-    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1, -1, -1, 1, 1, 1, 1, -1]), gl.STATIC_DRAW);
-
-    let size = 0;
-    let dotCount = 0;
-    const useQuad = (prog) => {
-      gl.useProgram(prog.p);
-      gl.bindBuffer(gl.ARRAY_BUFFER, quad);
-      gl.enableVertexAttribArray(prog.pos);
-      gl.vertexAttribPointer(prog.pos, 2, gl.FLOAT, false, 0, 0);
-    };
-
-    function render(px, u) {
-      if (gl.isContextLost()) return null;
-      if (px !== size) {
-        size = px;
-        cv.width = cv.height = size;
-        for (const t of [dots, blurX, blurY]) {
-          gl.bindTexture(gl.TEXTURE_2D, t.tex);
-          gl.texImage2D(gl.TEXTURE_2D, 0, gl.R8, size, size, 0, gl.RED, gl.UNSIGNED_BYTE, null);
-        }
-      }
-      const count = Math.round(Math.max(90, Math.min(u.maxDots, size * 0.85)));
-      if (count !== dotCount) {
-        dotCount = count;
-        gl.bindTexture(gl.TEXTURE_2D, particles.tex);
-        gl.texImage2D(gl.TEXTURE_2D, 0, gl.RG32F, count, count, 0, gl.RG, gl.FLOAT, null);
-      }
-      const amp = u.amplitude;
-      // 1. Dot positions: a grid pushed around by 3D noise, wrapped onto a sphere.
-      gl.disable(gl.BLEND);
-      gl.bindFramebuffer(gl.FRAMEBUFFER, particles.fb);
-      gl.viewport(0, 0, count, count);
-      gl.clearColor(0, 0, 0, 0);
-      gl.clear(gl.COLOR_BUFFER_BIT);
-      useQuad(part);
-      gl.uniform1f(part.u.uNoiseOffset, u.noiseOffset);
-      gl.uniform1f(part.u.uAmplitude, amp);
-      gl.uniform1i(part.u.uSeed, u.seed);
-      gl.uniform1f(part.u.uDotSpacing, 0.9);
-      gl.uniform1f(part.u.uDotOffset, -0.45);
-      gl.uniform1f(part.u.uSphereRadius, 0.675 + 0.225 * amp);
-      gl.uniform1f(part.u.uFeather, Math.pow(amp + 3, 2) * (45 / 1568));
-      gl.uniform1f(part.u.uNoiseFrequency, 4);
-      gl.uniform1f(part.u.uNoiseAmplitude, 0.32 * 0.9);
-      gl.drawArrays(gl.TRIANGLE_FAN, 0, 4);
-      // 2. Draw the dots.
-      gl.enable(gl.BLEND);
-      gl.blendEquation(gl.MAX);
-      gl.bindFramebuffer(gl.FRAMEBUFFER, dots.fb);
-      gl.viewport(0, 0, size, size);
-      gl.clear(gl.COLOR_BUFFER_BIT);
-      useQuad(dot);
-      const dotRadius = 0.9 / count;
-      gl.uniform1i(dot.u.uDotCount, count);
-      gl.uniform1f(dot.u.uDotRadius, dotRadius);
-      gl.uniform1f(dot.u.uDotRadiusPX, dotRadius * 0.5 * size);
-      gl.uniform1i(dot.u.uParticleTexture, 0);
-      gl.activeTexture(gl.TEXTURE0);
-      gl.bindTexture(gl.TEXTURE_2D, particles.tex);
-      gl.drawArraysInstanced(gl.TRIANGLE_FAN, 0, 4, count * count);
-      // 3. Blur (two passes) for the glow.
-      useQuad(blur);
-      gl.uniform1f(blur.u.uBlurRadius, 0.01 * size);
-      gl.uniform1i(blur.u.uInputTexture, 0);
-      gl.bindFramebuffer(gl.FRAMEBUFFER, blurX.fb);
-      gl.clear(gl.COLOR_BUFFER_BIT);
-      gl.uniform2f(blur.u.uBlurDirection, 1 / size, 0);
-      gl.bindTexture(gl.TEXTURE_2D, dots.tex);
-      gl.drawArrays(gl.TRIANGLE_FAN, 0, 4);
-      gl.bindFramebuffer(gl.FRAMEBUFFER, blurY.fb);
-      gl.clear(gl.COLOR_BUFFER_BIT);
-      gl.uniform2f(blur.u.uBlurDirection, 0, 1 / size);
-      gl.bindTexture(gl.TEXTURE_2D, blurX.tex);
-      gl.drawArrays(gl.TRIANGLE_FAN, 0, 4);
-      // 4. Combine sharp dots + glow in the chosen colour.
-      gl.bindFramebuffer(gl.FRAMEBUFFER, null);
-      gl.viewport(0, 0, size, size);
-      gl.clear(gl.COLOR_BUFFER_BIT);
-      useQuad(fin);
-      gl.uniform3f(fin.u.uOutputColor, u.color[0] / 255, u.color[1] / 255, u.color[2] / 255);
-      gl.uniform1i(fin.u.uBlurredTexture, 0);
-      gl.uniform1i(fin.u.uOriginalTexture, 1);
-      gl.activeTexture(gl.TEXTURE0);
-      gl.bindTexture(gl.TEXTURE_2D, blurY.tex);
-      gl.activeTexture(gl.TEXTURE1);
-      gl.bindTexture(gl.TEXTURE_2D, dots.tex);
-      gl.drawArrays(gl.TRIANGLE_FAN, 0, 4);
-      gl.activeTexture(gl.TEXTURE0);
-      return cv;
-    }
-    return { render };
-  }
-
-  // ===========================================================================
   // Styles. v = this visualiser, p = the style's settings, U = size unit
   // (1 in a normal window, smaller in a small popout).
   // ===========================================================================
@@ -1797,41 +1628,85 @@
     }
   };
 
+  // NCS Sphere: a slowly turning ball of glowing dots. A flowing 3D noise
+  // pushes the dots outwards, more the louder it is, so the ball swells and
+  // bulges with the music and stays a calm sphere in quiet parts. The flow
+  // only moves when there's sound, kicks give it a quick pulse, and the dots
+  // facing you are bigger and brighter than the ones round the back.
+  const ncsPts = {};
+  function spherePoints(n) {
+    if (ncsPts[n]) return ncsPts[n];
+    const a = new Float32Array(n * 3);
+    for (let i = 0; i < n; i++) {
+      const y = 1 - (2 * (i + 0.5)) / n, r = Math.sqrt(1 - y * y), th = i * 2.399963;
+      a[i * 3] = Math.cos(th) * r;
+      a[i * 3 + 1] = y;
+      a[i * 3 + 2] = Math.sin(th) * r;
+    }
+    return (ncsPts[n] = a);
+  }
+  // Smooth 3D value noise, 0..1.
+  function hash3(x, y, z) {
+    let h = (Math.imul(x, 374761393) + Math.imul(y, 668265263) + Math.imul(z, 1274126177)) | 0;
+    h = Math.imul(h ^ (h >>> 13), 1274126177);
+    return ((h ^ (h >>> 16)) >>> 0) / 4294967295;
+  }
+  function noise3(x, y, z) {
+    const xi = Math.floor(x), yi = Math.floor(y), zi = Math.floor(z);
+    let fx = x - xi, fy = y - yi, fz = z - zi;
+    fx = fx * fx * (3 - 2 * fx);
+    fy = fy * fy * (3 - 2 * fy);
+    fz = fz * fz * (3 - 2 * fz);
+    const l = (a, b, f) => a + (b - a) * f;
+    const c = (dx, dy, dz) => hash3(xi + dx, yi + dy, zi + dz);
+    return l(l(l(c(0, 0, 0), c(1, 0, 0), fx), l(c(0, 1, 0), c(1, 1, 0), fx), fy), l(l(c(0, 0, 1), c(1, 0, 1), fx), l(c(0, 1, 1), c(1, 1, 1), fx), fy), fz);
+  }
   DRAW.ncs = (v, p, dt) => {
-    const r = getNcs();
-    if (!r) return DRAW.particles(v, p, dt, shared.time);
+    const { ctx, U } = v;
+    const st = v.ncs || (v.ncs = { rot: 0, off: 0, amp: 0, kp: 0 });
     const spot = circleSpot(v, p, 0.3);
-    // Loudness on a fixed scale, like the original (which used the track's
-    // real loudness, not a level that adjusts itself). Moving average ~0.15 s.
+    // Loudness on a fixed scale (the real level, not one that adjusts
+    // itself), so quiet parts stay small. Averaged over ~0.15 s.
     let loud;
     if (isLive()) {
       const a = shared.live.abs * Math.pow(10, volumeDb() / 20); // undo Spotify's volume
-      loud = Math.min(1, a * 1.9 * p.sensitivity); // ~0.5-0.7 for loud music, ~0.1 for quiet
+      loud = Math.min(1, a * 1.9 * p.sensitivity);
     } else loud = Math.min(1, shared.energy * 0.6);
-    v.ncsAmp = (v.ncsAmp || 0) + (loud - (v.ncsAmp || 0)) * Math.min(1, dt / 0.15);
-    const amp = v.ncsAmp;
-    // The dots only move when there's sound: the flow advances with loudness
-    // (silence = still), so it never plays like a loop.
-    v.ncsOffset = (v.ncsOffset || 0) + dt * (0.04 + amp * 1.1) * p.speed;
-    const R = spot.art ? spot.r * 1.6 * p.size : spot.r * 1.25;
-    const px = Math.max(64, Math.min(1400, Math.round((2 * R) / 0.9)));
-    const c = colorAt(0.5);
-    // If this computer struggles, quietly render smaller and with fewer dots.
-    v.ncsScale = v.ncsScale || 1;
-    const t0 = performance.now();
-    const eco = v.lowPower ? 0.65 : 1;
-    const inner = Math.max(96, Math.round(px * ({ low: 0.75, medium: 1, high: 1.25 }[S.quality] || 1) * v.ncsScale * eco));
-    const out = r.render(inner, { amplitude: amp, noiseOffset: v.ncsOffset, seed: shared.seed, color: c, maxDots: Math.round(({ low: 190, medium: 280, high: 360 }[S.quality] || 280) * v.ncsScale * eco) });
-    if (!out) return;
-    v.ctx.globalAlpha = Math.min(1, CP.brightness);
-    v.ctx.drawImage(out, spot.x - px / 2, spot.y - px / 2, px, px);
-    const took = performance.now() - t0;
-    v.ncsTime = v.ncsTime === undefined ? took : v.ncsTime * 0.9 + took * 0.1;
-    if (v.ncsTime > 20 && v.ncsScale > 0.35) {
-      v.ncsScale *= 0.8;
-      v.ncsTime = 12;
+    st.amp += (loud - st.amp) * Math.min(1, dt / 0.15);
+    st.kp = Math.max(st.kp * Math.exp(-dt * 7), Math.min(1, shared.kick) * ((shared.bassPunch || 0) > 0.2 || !isLive() ? 1 : 0.3));
+    const amp = st.amp;
+    st.off += dt * (0.04 + amp * 1.1) * p.speed; // silence = nearly still
+    st.rot += dt * (0.1 + 0.45 * amp) * p.speed;
+    const n = Math.round(({ low: 520, medium: 820, high: 1200 }[S.quality] || 820) * (v.lowPower ? 0.65 : 1));
+    const pts = spherePoints(n);
+    const Rs = spot.art ? spot.r * 1.3 * p.size : spot.r * 0.85;
+    const cx = spot.x, cy = spot.y;
+    const cr = Math.cos(st.rot), sr = Math.sin(st.rot), ct = Math.cos(0.38), stl = Math.sin(0.38);
+    const col = colorAt(0.5);
+    v.soft(cx, cy, Rs * 2.3, col, 0.05 + 0.22 * amp + 0.1 * st.kp);
+    const B = 5;
+    const paths = Array.from({ length: B }, () => new Path2D());
+    const o = st.off;
+    for (let i = 0; i < n; i++) {
+      const x = pts[i * 3], y = pts[i * 3 + 1], z = pts[i * 3 + 2];
+      const nz = noise3(x * 1.6 + o, y * 1.6 + o * 0.6, z * 1.6 - o * 0.45);
+      const d = 1 + amp * 1.25 * nz * nz + 0.06 * st.kp;
+      // turn round the vertical axis, then tip it towards you a little
+      const x1 = x * cr + z * sr, z1 = -x * sr + z * cr;
+      const y2 = y * ct - z1 * stl, z2 = y * stl + z1 * ct;
+      const persp = 1.25 / (1.25 - z2 * 0.25);
+      const px = cx + x1 * Rs * d * persp, py = cy + y2 * Rs * d * persp;
+      const depth = (z2 + 1) / 2; // 1 = facing you
+      const r = (0.6 + 1.3 * depth) * U * (0.85 + 0.9 * nz * amp);
+      const b = Math.min(B - 1, (depth * B) | 0);
+      paths[b].moveTo(px + r, py);
+      paths[b].arc(px, py, r, 0, Math.PI * 2);
     }
-    v.ctx.globalAlpha = 1;
+    for (let b = 0; b < B; b++) {
+      const f = (b + 0.5) / B;
+      ctx.fillStyle = v.rgba(mix(col, WHITE, 0.25 + 0.55 * f), A_(0.12 + 0.88 * f * f, v));
+      ctx.fill(paths[b]);
+    }
   };
 
   DRAW.radial = (v, p, dt) => {
@@ -3024,115 +2899,65 @@
   };
 
   // ---------------------------------------------------------------------------
-  // Ribbon: calm wave sheets drifting across the screen. Each sheet is a
-  // bundle of thin, faint lines; the sheet's width swings through zero along
-  // the screen, so it looks like a silk ribbon twisting over (the lines cross
-  // where it turns). A few tiny sparkles float up slowly. The bass swells the
-  // waves a little, louder parts speed them up, kicks make them glow, and the
-  // tint comes from the album. Cheap: ~40 strokes of 60 points.
-  DRAW.ribbon = (v, p, dt, t) => {
-    const { ctx, w, h, U } = v;
-    const st = v.ribbon || (v.ribbon = { t: Math.random() * 100, glow: 0, kickSeen: shared.beatSerial, sp: [], swell: 0 });
-    const e = shared.energy, bass = shared.bassPunch || 0;
-    if (st.kickSeen !== shared.beatSerial) { st.kickSeen = shared.beatSerial; st.glow = Math.min(1, st.glow + 0.5 * Math.min(1, shared.kick + 0.3)); }
-    st.glow *= Math.exp(-dt * 2.5);
-    st.swell += (bass - st.swell) * Math.min(1, dt * (bass > st.swell ? 6 : 1.5));
-    st.t += dt * (0.12 + 0.3 * e) * p.speed;
-    const step = beatSteps(st, p);
-    const T = st.t, PTS = 60, LINES = 22;
-    ctx.globalCompositeOperation = "lighter";
-    ctx.lineJoin = "round";
-    const sheets = [
-      { cy: 0.6, amp: 0.1, f: 0.9, sp: 1, wid: 0.075, ph: 0, c: 0 },
-      { cy: 0.66, amp: 0.07, f: 1.3, sp: -0.7, wid: 0.05, ph: 2.1, c: 0.5 },
-    ];
-    for (const sh of sheets) {
-      const tint = mix(colorAt((sh.c + step / 3) % 1), WHITE, 0.55);
-      const amp = h * sh.amp * (0.8 + 0.7 * st.swell) * p.size;
-      const cxs = new Float32Array(PTS + 1), wids = new Float32Array(PTS + 1);
-      for (let i = 0; i <= PTS; i++) {
-        const q = (i / PTS) * Math.PI * 2;
-        cxs[i] = h * sh.cy + amp * (Math.sin(q * sh.f + T * sh.sp + sh.ph) + 0.35 * Math.sin(q * sh.f * 2.1 - T * 0.7 * sh.sp + sh.ph));
-        // the width swings through zero: that's the twist
-        wids[i] = h * sh.wid * Math.sin(q * 0.75 + T * 0.45 * sh.sp + sh.ph * 1.7) * (1 + 0.5 * st.swell);
-      }
-      for (let j = 0; j < LINES; j++) {
-        const o = j / (LINES - 1) - 0.5;
-        const edge = Math.abs(o) > 0.45; // the two edges are a touch brighter
-        ctx.beginPath();
-        for (let i = 0; i <= PTS; i++) {
-          const x = (i / PTS) * w;
-          // each line ripples slightly differently, so the sheet looks soft
-          const y = cxs[i] + wids[i] * o + Math.sin((i / PTS) * 9 + T * 1.3 + j * 0.4) * h * 0.003;
-          i ? ctx.lineTo(x, y) : ctx.moveTo(x, y);
-        }
-        ctx.strokeStyle = v.rgba(tint, A_((edge ? 0.22 : 0.07) + 0.06 * e + (edge ? 0.25 : 0.08) * st.glow, v));
-        ctx.lineWidth = Math.max(0.8, (edge ? 1.3 : 0.9) * U);
-        ctx.stroke();
-      }
-    }
-    // Tiny sparkles floating up slowly.
-    while (st.sp.length < 28) st.sp.push({ x: Math.random(), y: 0.35 + Math.random() * 0.6, v: 0.004 + Math.random() * 0.01, tw: Math.random() * 6.28 });
-    ctx.fillStyle = v.rgba(WHITE, 1);
-    for (const s of st.sp) {
-      s.y -= dt * s.v * p.speed;
-      s.x += dt * 0.004 * p.speed;
-      if (s.y < 0.3) { s.y = 0.95; s.x = Math.random(); }
-      const a = (0.5 + 0.5 * Math.sin(t * 1.5 + s.tw)) * (0.25 + 0.4 * e + 0.4 * st.glow) * Math.min(1, (s.y - 0.3) * 5);
-      ctx.globalAlpha = A_(a, v);
-      ctx.beginPath();
-      ctx.arc((s.x % 1) * w, s.y * h, (0.8 + a) * U, 0, Math.PI * 2);
-      ctx.fill();
-    }
-    ctx.globalAlpha = 1;
-    v.soft(w / 2, h * 0.62, Math.max(w, h) * 0.45, colorAt((step / 3) % 1), 0.06 + 0.08 * st.swell + 0.1 * st.glow);
-  };
-
-  // ---------------------------------------------------------------------------
   // Rain on Glass: looking out of a rainy window at night. Blurred city
-  // lights in the album's colours glow behind the glass (brighter with the
-  // bass). Drops keep running down the glass, each leaving a smooth wet
-  // streak that slowly dries. The bass sends big drops running and sets how
-  // much trickles down, loudness (and Speed) how fast they flow, and the
-  // highs are the patter of new drops landing.
-  // The streaks live on a half-size canvas that fades slowly, so they build
-  // up into the look of a rain-covered window.
+  // lights in the album's colours glow behind the glass. Drops keep landing
+  // on the glass (the bass sets how hard it rains, kicks bring a burst);
+  // when drops touch they join up, and once one is heavy enough it runs
+  // down in fits and starts, picking up the drops in its way. Its wet trail
+  // breaks into little beads and dries up within a few seconds, and drops
+  // left sitting slowly evaporate, so the glass never fills up.
   DRAW.rain = (v, p, dt, t) => {
     const { ctx, w, h, U } = v;
-    const W = Math.max(80, Math.round(w * 0.5)), H = Math.max(60, Math.round(h * 0.5));
     let st = v.rain;
-    if (!st || st.W !== W || st.H !== H) {
-      const c = document.createElement("canvas");
-      c.width = W;
-      c.height = H;
-      st = v.rain = { c, g: c.getContext("2d"), W, H, lights: [], dots: [], runners: [], kickSeen: shared.beatSerial, acc: 0, dotAcc: 0, glow: 0, fade: 0 };
+    if (!st || st.w !== w || st.h !== h) {
+      st = v.rain = { w, h, lights: [], drops: [], runners: [], kickSeen: shared.beatSerial, acc: 0, glow: 0 };
       for (let i = 0; i < 16; i++) st.lights.push({ x: Math.random(), y: 0.2 + Math.random() * 0.75, r: 0.04 + Math.random() * 0.09, q: Math.random(), ph: Math.random() * 6.28 });
-      for (let i = 0; i < 40; i++) st.dots.push({ x: Math.random() * w, y: Math.random() * h, r: U * (1.8 + Math.pow(Math.random(), 2) * 3) });
     }
-    const g = st.g, e = shared.energy, bass = shared.bassPunch || 0, sp = p.speed;
+    const e = shared.energy, bass = shared.bassPunch || 0, sp = p.speed;
     const step = beatSteps(st, p);
     st.glow *= Math.exp(-dt * 2.5);
-    const run = (big) => {
-      if (st.runners.length >= 26) return;
-      const r = U * (big ? 2.4 + Math.random() * 1.4 : 1.2 + Math.random() * 1.4);
-      st.runners.push({ x: Math.random() * w, y: -r - Math.random() * h * (big ? 0.1 : 0.6), r, vy: 0, go: 1, wob: Math.random() * 6.28, lx: null, ly: null, bead: 0 });
+    const HEAVY = 2.6 * U; // a drop this big starts to run
+    const runner = (x, y, r) => {
+      if (st.runners.length < 24) st.runners.push({ x, y, r, vy: 0, go: 1, wob: Math.random() * 6.28, trail: [], moved: 0, bead: 0, dead: false });
     };
+    // A drop lands: if it touches another they join; a heavy one runs.
+    const land = (x, y, r, life) => {
+      for (let j = st.drops.length - 1; j >= 0; j--) {
+        const d = st.drops[j];
+        const dx = d.x - x, dy = d.y - y;
+        if (dx * dx + dy * dy < (d.r + r) * (d.r + r)) {
+          const nr = Math.sqrt(d.r * d.r + r * r);
+          st.drops.splice(j, 1);
+          if (nr > HEAVY) return runner(d.x, d.y, nr);
+          st.drops.push({ x: (d.x + x) / 2, y: (d.y + y) / 2, r: nr, age: 0, life: Math.max(d.life, life) });
+          return;
+        }
+      }
+      if (st.drops.length > 180) st.drops.shift();
+      st.drops.push({ x, y, r, age: 0, life });
+    };
+    const newDrop = (big) => land(Math.random() * w, Math.random() * h, U * (big ? 1.4 + Math.random() * 1.4 : 0.6 + Math.pow(Math.random(), 2) * 1.8), 5 + Math.random() * 7);
     if (st.kickSeen !== shared.beatSerial) {
       st.kickSeen = shared.beatSerial;
       st.glow = Math.min(1, st.glow + 0.5 * Math.min(1, shared.kick + 0.3));
-      // bass hits send big drops running
-      if (bass > 0.25 || !isLive()) { run(true); if (bass > 0.5) run(true); }
+      if (bass > 0.25 || !isLive()) {
+        for (let i = 0; i < 4 + 6 * Math.min(1, shared.kick); i++) newDrop(true);
+        // a bass hit shakes a drop or two loose
+        const n = 1 + (Math.random() < 0.5 * Math.min(1, shared.kick) ? 1 : 0);
+        for (let i = 0; i < n; i++) runner(Math.random() * w, Math.random() * h * 0.5, U * (2.6 + Math.random() * 1.4));
+      }
     }
-    // a steady trickle, more with the bass
-    st.acc += dt * (0.5 + 2.5 * bass + 1.5 * e) * sp;
-    while (st.acc >= 1) { st.acc -= 1; run(false); }
-    // the highs are the patter of new drops landing on the glass
-    st.dotAcc += dt * (1 + 10 * (shared.treble || 0) + 3 * e) * sp;
-    while (st.dotAcc >= 1) {
-      st.dotAcc -= 1;
-      if (st.dots.length > 70) st.dots.shift();
-      st.dots.push({ x: Math.random() * w, y: Math.random() * h, r: U * (1.8 + Math.pow(Math.random(), 2) * 3) });
+    // how hard it rains: mostly the bass, a little the loudness and highs
+    st.acc += dt * (2 + 28 * bass + 8 * e + 6 * (shared.treble || 0)) * sp;
+    while (st.acc >= 1) { st.acc -= 1; newDrop(false); }
+    // drops sitting on the glass slowly evaporate
+    for (let j = st.drops.length - 1; j >= 0; j--) {
+      const d = st.drops[j];
+      d.age += dt;
+      if (d.age > d.life) d.r -= dt * 0.5 * U;
+      if (d.r < 0.35 * U) st.drops.splice(j, 1);
     }
+
     // 1. Behind the glass: blurred lights.
     ctx.globalCompositeOperation = "lighter";
     for (const L of st.lights) {
@@ -3140,68 +2965,77 @@
       const a = 0.1 + 0.08 * Math.sin(t * 0.7 + L.ph) ** 2 + 0.15 * bass + 0.12 * st.glow;
       v.soft(L.x * w, L.y * h, L.r * Math.max(w, h) * (0.9 + 0.2 * bass), c, a);
     }
-    // 2. Streaks: old ones dry slowly (faded in steps so nothing gets stuck).
-    st.fade += dt;
-    if (st.fade > 1 / 15) {
-      g.globalCompositeOperation = "destination-out";
-      g.fillStyle = `rgba(0,0,0,${Math.min(0.3, st.fade * 0.22).toFixed(3)})`;
-      g.fillRect(0, 0, st.W, st.H);
-      st.fade = 0;
-    }
-    g.globalCompositeOperation = "source-over";
-    g.lineCap = "butt";
-    const k2 = st.W / w; // screen -> streak canvas
+
+    // 2. Runners slide down in fits and starts, wandering a little sideways.
+    const DRY = 2.5; // seconds for a trail to dry
     const wet = mix(colorAt((0.5 + step / 3) % 1), WHITE, 0.7);
-    // Runners slide down in fits and starts, wandering a little sideways,
-    // drawing their wet streak and dropping tiny beads into it.
+    ctx.lineCap = "round";
+    ctx.lineJoin = "round";
     for (let i = st.runners.length - 1; i >= 0; i--) {
       const R = st.runners[i];
-      if (Math.random() < dt * 0.8) R.go = Math.random() < 0.8 ? 1 : 0; // sticks now and then
-      // flow speed: bigger drops and louder music run faster
-      const target = R.go ? (70 + 35 * (R.r / U)) * U * (0.5 + 0.6 * e + 0.5 * bass) * sp : 0;
-      R.vy += (target - R.vy) * Math.min(1, dt * 5);
-      const dy = R.vy * dt;
-      R.y += dy;
-      R.x += Math.sin(R.y * 0.02 / U + R.wob) * 0.25 * dy;
-      if (R.ly !== null && R.y > 0) {
-        g.strokeStyle = v.rgba(wet, 0.14);
-        g.lineWidth = Math.max(0.8, R.r * 1.1 * k2);
-        g.beginPath();
-        g.moveTo(R.lx * k2, R.ly * k2);
-        g.lineTo(R.x * k2, R.y * k2);
-        g.stroke();
+      for (const q of R.trail) q.age += dt;
+      while (R.trail.length && R.trail[0].age > DRY) R.trail.shift();
+      if (!R.dead) {
+        if (Math.random() < dt * 0.9) R.go = Math.random() < 0.8 ? 1 : 0; // sticks now and then
+        const target = R.go ? (55 + 30 * (R.r / U)) * U * (0.55 + 0.6 * e + 0.6 * bass) * sp : 0;
+        R.vy += (target - R.vy) * Math.min(1, dt * 5);
+        const dy = R.vy * dt;
+        R.y += dy;
+        R.x += Math.sin(R.y * 0.02 / U + R.wob) * 0.25 * dy;
+        R.moved += dy;
+        if (R.moved > 3 * U) { R.moved = 0; R.trail.push({ x: R.x, y: R.y - R.r * 0.6, age: 0 }); }
+        // it leaves a little bead behind now and then, and gets lighter
+        R.bead += dy;
+        if (R.bead > 25 * U && Math.random() < 0.6) {
+          R.bead = 0;
+          const br = R.r * (0.25 + Math.random() * 0.15);
+          st.drops.push({ x: R.x + (Math.random() - 0.5) * R.r * 0.6, y: R.y - R.r * 2, r: br, age: 0, life: 1 + Math.random() * 2.5 });
+          R.r = Math.sqrt(Math.max(0, R.r * R.r - br * br));
+        }
+        // it picks up the drops it runs into
+        for (let j = st.drops.length - 1; j >= 0; j--) {
+          const d = st.drops[j];
+          if (Math.abs(d.x - R.x) < R.r + d.r && d.y < R.y + R.r && d.y > R.y - R.r * 1.5) {
+            R.r = Math.min(4.5 * U, Math.sqrt(R.r * R.r + d.r * d.r));
+            st.drops.splice(j, 1);
+          }
+        }
+        if (R.r < 1.2 * U) { R.dead = true; st.drops.push({ x: R.x, y: R.y, r: R.r, age: 0, life: 1 + Math.random() * 2 }); }
+        if (R.y - R.r * 2 > h) R.dead = true;
       }
-      R.lx = R.x;
-      R.ly = R.y;
-      // now and then it leaves a small drop behind in its streak
-      R.bead += dy;
-      if (R.bead > 60 * U && Math.random() < 0.5) {
-        R.bead = 0;
-        if (st.dots.length < 90) st.dots.push({ x: R.x, y: R.y - R.r * 4, r: R.r * 0.5 });
-      }
-      // it picks up the small drops it runs over
-      for (let j = st.dots.length - 1; j >= 0; j--) {
-        const d = st.dots[j];
-        if (Math.abs(d.x - R.x) < R.r + d.r && d.y < R.y + R.r && d.y > R.y - R.r * 2) {
-          R.r = Math.min(4.5 * U, Math.sqrt(R.r * R.r + d.r * d.r * 0.6));
-          st.dots.splice(j, 1);
+      if (R.dead && !R.trail.length) { st.runners.splice(i, 1); continue; }
+      // the trail: wet just behind the drop, fading as it dries
+      if (R.trail.length > 1) {
+        for (let b = 0; b < 4; b++) {
+          ctx.beginPath();
+          let any = false;
+          for (let k = 1; k < R.trail.length; k++) {
+            const q = R.trail[k];
+            if (Math.min(3, ((q.age / DRY) * 4) | 0) !== b) continue;
+            ctx.moveTo(R.trail[k - 1].x, R.trail[k - 1].y);
+            ctx.lineTo(q.x, q.y);
+            any = true;
+          }
+          if (!any) continue;
+          ctx.strokeStyle = v.rgba(wet, A_(0.16 * (1 - (b + 0.5) / 4), v));
+          ctx.lineWidth = Math.max(1, R.r * (0.9 - 0.12 * b));
+          ctx.stroke();
         }
       }
-      if (R.y - R.r * 3 > h) st.runners.splice(i, 1);
     }
-    ctx.globalCompositeOperation = "lighter";
-    ctx.imageSmoothingEnabled = true;
-    ctx.globalAlpha = A_(0.8, v);
-    ctx.drawImage(st.c, 0, 0, w, h);
-    ctx.globalAlpha = 1;
+
     // 3. The drops: like real water on glass, a dark lens with a bright
     //    crescent along the bottom (the light behind, focused) and a tiny
     //    glint at the top. Runners are stretched into a tear shape.
     ctx.globalCompositeOperation = "source-over";
     const shape = (fn) => {
       ctx.beginPath();
-      for (const d of st.dots) fn(d.x, d.y, d.r, d.r);
-      for (const R of st.runners) { const s = 1 + Math.min(1, R.vy / (250 * U)); fn(R.x, R.y - R.r * (s - 1) * 0.8, R.r, R.r * s); }
+      for (const d of st.drops) fn(d.x, d.y, d.r, d.r);
+      for (const R of st.runners) {
+        if (R.dead) continue;
+        const s = 1 + Math.min(1, R.vy / (250 * U));
+        fn(R.x, R.y - R.r * (s - 1) * 0.8, R.r, R.r * s);
+      }
     };
     shape((x, y, rx, ry) => { ctx.moveTo(x + rx, y); ctx.ellipse(x, y, rx, ry, 0, 0, Math.PI * 2); });
     ctx.fillStyle = v.rgba([0, 0, 0], A_(0.22, v));
@@ -3209,11 +3043,11 @@
     shape((x, y, rx, ry) => { ctx.moveTo(x + rx * 0.78, y + ry * 0.15); ctx.ellipse(x, y, rx * 0.8, ry * 0.8, 0, 0.15 * Math.PI, 0.85 * Math.PI); });
     ctx.strokeStyle = v.rgba(wet, A_(0.55 + 0.25 * st.glow, v));
     ctx.lineWidth = Math.max(0.8, 1.1 * U);
-    ctx.lineCap = "round";
     ctx.stroke();
     shape((x, y, rx, ry) => { if (rx < 1.5 * U) return; const gx = x - rx * 0.3, gy = y - ry * 0.45, gr = rx * 0.16; ctx.moveTo(gx + gr, gy); ctx.arc(gx, gy, gr, 0, Math.PI * 2); });
     ctx.fillStyle = v.rgba(WHITE, A_(0.7, v));
     ctx.fill();
+    ctx.globalCompositeOperation = "lighter";
   };
 
   // ---------------------------------------------------------------------------
@@ -3409,67 +3243,6 @@ void main() {
     ctx.drawImage(st.c, 0, 0, w, h);
     ctx.globalAlpha = 1;
     v.soft(w / 2, h, Math.max(w, h) * 0.45, bot, 0.08 + 0.12 * st.swell);
-  };
-
-  // ---------------------------------------------------------------------------
-  // Smoke: soft coloured smoke curling up from the bottom. A few dozen puffs
-  // rise, drift in a slow swirling breeze, grow and fade. Kicks puff out a
-  // burst, louder parts feed more smoke and make it rise faster, colours step
-  // round on the beat. Drawn into a half-size canvas that fades slowly, so
-  // the puffs smear into wisps.
-  DRAW.smoke = (v, p, dt, t) => {
-    const { ctx, w, h } = v;
-    const W = Math.max(60, Math.round(w * 0.35)), H = Math.max(40, Math.round(h * 0.35));
-    let st = v.smoke;
-    if (!st || st.W !== W || st.H !== H) {
-      const c = document.createElement("canvas");
-      c.width = W;
-      c.height = H;
-      st = v.smoke = { c, g: c.getContext("2d"), W, H, puffs: [], acc: 0, kickSeen: shared.beatSerial, T: Math.random() * 50, fade: 0 };
-    }
-    const g = st.g, e = shared.energy, bass = shared.bassPunch || 0, sp = p.speed;
-    const step = beatSteps(st, p);
-    const add = (x, n, strong) => {
-      for (let i = 0; i < n && st.puffs.length < 90; i++)
-        st.puffs.push({ x: x + (Math.random() - 0.5) * W * 0.08, y: H + 4, vx: (Math.random() - 0.5) * W * 0.05, vy: -H * (0.12 + 0.2 * Math.random() + (strong ? 0.25 : 0)), r: H * (0.05 + 0.04 * Math.random()), life: 1, q: Math.random() });
-    };
-    st.acc += dt * (3 + 10 * e) * sp;
-    while (st.acc >= 1) { st.acc -= 1; add(W * (0.1 + Math.random() * 0.8), 1, false); }
-    if (st.kickSeen !== shared.beatSerial) {
-      st.kickSeen = shared.beatSerial;
-      if (shared.kick > 0.4 || !isLive()) add(W * (0.2 + Math.random() * 0.6), 3 + Math.round(3 * shared.kick), true);
-    }
-    // old smoke fades in steps (no stuck faint leftovers)
-    st.fade += dt;
-    if (st.fade > 1 / 20) {
-      g.globalCompositeOperation = "destination-out";
-      g.fillStyle = `rgba(0,0,0,${Math.min(0.5, st.fade * 0.9).toFixed(3)})`;
-      g.fillRect(0, 0, W, H);
-      st.fade = 0;
-    }
-    g.globalCompositeOperation = "source-over";
-    st.T += dt * (0.2 + 0.4 * e) * sp;
-    for (let i = st.puffs.length - 1; i >= 0; i--) {
-      const s = st.puffs[i];
-      const nx = s.x / W, ny = s.y / H;
-      s.vx += Math.sin(ny * 5 + st.T * 1.3 + nx * 3) * W * 0.12 * dt;
-      s.vx *= Math.exp(-dt * 0.8);
-      s.vy *= Math.exp(-dt * 0.25);
-      s.x += s.vx * dt;
-      s.y += s.vy * dt * (0.8 + 0.6 * e + 0.4 * bass) * sp;
-      s.r += dt * H * 0.04;
-      s.life -= dt * 0.18;
-      if (s.life <= 0 || s.y < -s.r) { st.puffs.splice(i, 1); continue; }
-      g.globalAlpha = 0.06 * s.life * Math.min(1, (1 - s.life) * 6 + 0.2);
-      g.drawImage(softSprite(colorAt((s.q + step / 3) % 1)), s.x - s.r, s.y - s.r, s.r * 2, s.r * 2);
-    }
-    g.globalAlpha = 1;
-    ctx.globalCompositeOperation = "lighter";
-    ctx.imageSmoothingEnabled = true;
-    ctx.imageSmoothingQuality = "medium";
-    ctx.globalAlpha = A_(0.9, v);
-    ctx.drawImage(st.c, 0, 0, w, h);
-    ctx.globalAlpha = 1;
   };
 
   // ---------------------------------------------------------------------------
@@ -3705,10 +3478,10 @@ void main() {
     base -= 0.12 * uBass;
     float d = uv.y - base;
     float edge = smoothstep(-0.015, 0.02, d);
-    float tall = exp(-max(d, 0.) * (4.2 - 2.2 * uBass));
+    float tall = exp(-max(d, 0.) * (6. - 3.8 * uBass));
     float rays = fbm(vec2(x * 7. + sin(uT * 0.2 + fl) * 2., uT * 0.5 + fl * 7.));
     rays = 0.25 + 1.4 * rays * rays;
-    float I = edge * tall * rays * (0.3 + 0.45 * uE + 0.5 * uKick) * (1. - 0.22 * fl);
+    float I = edge * tall * rays * (0.1 + 0.35 * uE + 0.55 * uBass + 0.35 * uKick) * (1. - 0.22 * fl);
     vec3 lo = fl < 0.5 ? uC0 : fl < 1.5 ? uC1 : uC2;
     vec3 hi = fl < 0.5 ? uC1 : fl < 1.5 ? uC2 : uC0;
     vec3 c = mix(lo, hi, smoothstep(0.0, 0.35, d));
@@ -3723,40 +3496,37 @@ void main() {
 }`;
   DRAW.aurora = (v, p, dt) => {
     const st = v.aurora || (v.aurora = {});
-    fxClock(st, p, dt, 0.9, 30, 6, 7); // fast: keeps up with quick bass lines
+    // Smoothing sets how it bounces: low = snaps up and drops fast, high = slow and floaty.
+    const sm = Math.max(0, Math.min(1, p.smoothing));
+    fxClock(st, p, dt, 0.9, 28 - 22 * sm, 6 - 4.8 * sm, 7 - 4 * sm);
     const pal = easePal(st, beatSteps(st, p), dt, 1.2);
     fxDraw(v, "aurora", AURORA_FS, { uT: st.T, uE: shared.energy, uBass: st.lift, uKick: st.flash, uC0: rgb1(pal[0]), uC1: rgb1(pal[1]), uC2: rgb1(pal[2]) }, 1);
   };
 
   // ---------------------------------------------------------------------------
-  // Liquid Chrome: a mirror-like sheet of molten metal reflecting a sky in
-  // the album's colours. It rolls slowly, the bass makes the waves deeper,
-  // kicks drop in rings that spread across it, loudness speeds it up.
+  // Liquid Chrome: a sheet of glossy black liquid metal. Most of it is dark
+  // (so the lyrics stay easy to read); thin bright highlights in the album's
+  // colours slide over its curves. It rolls slowly and the bass swells the
+  // waves. No beat effects, it just flows.
   const CHROME_FS = `
-uniform float uT, uE, uBass, uKick;
+uniform float uT, uE, uBass;
 uniform vec3 uC0, uC1, uC2;
-uniform vec4 uR[4];
 float H(vec2 p) {
-  // big smooth rolling waves (no fine detail, so it reads as liquid metal)
   float h = 0.5 * sin(p.x * 1.3 + uT * 0.5 + sin(p.y * 1.1 + uT * 0.3));
   h += 0.4 * sin(p.y * 1.7 - uT * 0.4 + 1.5 * sin(p.x * 0.9 + uT * 0.2));
   vec2 np = p * 0.6 + vec2(uT * 0.05, -uT * 0.07);
   h += 0.7 * noise(np) + 0.25 * noise(np * 2.1 + 3.7);
-  for (int i = 0; i < 4; i++) {
-    vec4 r = uR[i];
-    if (r.w <= 0.) continue;
-    float d = length(p - r.xy);
-    float front = r.z * 1.6;
-    h += r.w * sin((d - front) * 9.) * exp(-abs(d - front) * 2.5) * exp(-r.z * 1.2);
-  }
-  return h * (0.7 + 0.9 * uBass);
+  return h * (0.7 + 0.8 * uBass);
 }
+// What the metal reflects: a dark room with a few soft light strips.
 vec3 env(vec3 r, float sy) {
-  float t = r.y * 1.2 + r.x * 0.35 + (sy - 0.5) * 0.8;
-  vec3 sky = mix(mix(uC0, vec3(1.), 0.3), vec3(1.), smoothstep(0.2, 1.1, t));
-  vec3 ground = mix(uC1 * 0.5, vec3(0.02), smoothstep(-0.05, -0.8, t));
-  vec3 c = mix(ground, sky, smoothstep(-0.02, 0.02, t));
-  c += uC2 * pow(max(0., -r.x * 0.8 + r.y * 0.2), 3.) * 0.9;
+  float t = r.y * 1.1 + r.x * 0.35 + (sy - 0.5) * 0.6;
+  vec3 c = vec3(0.012);
+  c += uC0 * exp(-pow((t - 0.45) * 16., 2.)) * 0.85;
+  c += mix(uC0, vec3(1.), 0.6) * exp(-pow((t - 0.47) * 45., 2.)) * 0.6;
+  c += vec3(1.) * exp(-pow((t - 0.95) * 30., 2.)) * 0.9;
+  c += uC1 * exp(-pow((t + 0.35) * 12., 2.)) * 0.45;
+  c += uC2 * pow(max(0., -r.x * 0.8 + r.y * 0.2), 8.) * 0.35;
   return c;
 }
 void main() {
@@ -3767,19 +3537,93 @@ void main() {
   float hy = H(p + vec2(0., e)) - H(p - vec2(0., e));
   vec3 n = normalize(vec3(-hx / (2. * e) * 0.3, -hy / (2. * e) * 0.3, 1.));
   vec3 r = reflect(vec3(0., 0., -1.), n);
-  vec3 c = env(r, uv.y);
-  c += pow(max(0., dot(r, normalize(vec3(-0.35, 0.55, 0.75)))), 60.) * (0.8 + 1.2 * uKick);
-  vec2 q = uv - 0.5;
-  c *= (1. - 0.9 * dot(q, q)) * (0.7 + 0.35 * uE);
-  o = vec4(min(c, vec3(1.)), 1.);
+  vec3 c = env(r, uv.y) * (0.75 + 0.35 * uE);
+  c += pow(max(0., dot(r, normalize(vec3(-0.35, 0.55, 0.75)))), 80.) * 0.6;
+  c = min(c, vec3(1.));
+  o = vec4(c, max(c.r, max(c.g, c.b)));
 }`;
   DRAW.chrome = (v, p, dt) => {
     const st = v.chrome || (v.chrome = {});
-    fxClock(st, p, dt, 1);
-    const pal = easePal(st, beatSteps(st, p), dt, 1.2);
-    const big = st.newKick && ((shared.bassPunch || 0) > 0.25 || !isLive());
-    const rip = fxRipples(st, dt * p.speed, v.w / Math.max(1, v.h), big ? 0.12 + 0.18 * Math.min(1, shared.kick) : 0);
-    fxDraw(v, "chrome", CHROME_FS, { uT: st.T, uE: shared.energy, uBass: st.lift, uKick: st.flash, uC0: rgb1(pal[0]), uC1: rgb1(pal[1]), uC2: rgb1(pal[2]), uR: rip }, 0.9);
+    fxClock(st, p, dt, 0.8, 3, 1);
+    const pal = easePal(st, beatSteps(st, p), dt, 0.5);
+    fxDraw(v, "chrome", CHROME_FS, { uT: st.T, uE: shared.energy, uBass: st.lift, uC0: rgb1(pal[0]), uC1: rgb1(pal[1]), uC2: rgb1(pal[2]) }, 1);
+  };
+
+  // ---------------------------------------------------------------------------
+  // Ribbon: glowing ribbons of light flowing across the screen, like the wave
+  // on an old games-console home menu. Each ribbon is a soft translucent band
+  // with bright edges; it twists (pinches thin and opens up again) as it
+  // flows. The music sets how fast they flow, the bass makes the waves
+  // bigger, kicks brighten the edges, and a few sparkles drift along.
+  const RIBBON_FS = `
+uniform float uT, uE, uBass, uKick;
+uniform vec3 uC0, uC1, uC2;
+vec3 ribbon(vec2 uv, float asp, float k, vec3 col) {
+  float x = uv.x * asp;
+  float c = 0.5 + (0.09 + 0.07 * uBass) * sin(x * (1.1 + 0.2 * k) + uT * (0.9 + 0.15 * k) + k * 2.1)
+                + 0.05 * sin(x * (2.3 - 0.3 * k) - uT * 0.7 + k * 4.)
+                + 0.06 * (k - 1.);
+  float th = 0.012 + (0.045 + 0.03 * uBass) * abs(sin(x * 0.7 - uT * 0.45 + k * 1.7));
+  float d = abs(uv.y - c);
+  float px = 1. / uRes.y;
+  float sheet = smoothstep(th, th * 0.2, d) * 0.16;
+  float edge = abs(d - th) / px;
+  float line = exp(-edge * edge / 3.) * (0.55 + 0.45 * uKick) + exp(-edge / 14.) * 0.12;
+  float fadeX = smoothstep(0., 0.15, uv.x) * smoothstep(1., 0.85, uv.x);
+  return col * (sheet + line * (0.5 + 0.5 * uE)) * fadeX;
+}
+void main() {
+  vec2 uv = gl_FragCoord.xy / uRes;
+  float asp = uRes.x / uRes.y;
+  vec3 col = ribbon(uv, asp, 0., mix(uC0, vec3(1.), 0.35));
+  col += ribbon(uv, asp, 1., mix(uC1, vec3(1.), 0.25)) * 0.8;
+  col += ribbon(uv, asp, 2., mix(uC2, vec3(1.), 0.25)) * 0.6;
+  // sparkles drifting along with the ribbons
+  vec2 g = vec2(uv.x * asp * 40. - uT * 3., uv.y * 40.);
+  vec2 cell = floor(g), f = fract(g) - 0.5;
+  float hsh = hash(cell);
+  float spark = step(0.985, hsh) * exp(-dot(f, f) * 40.) * (0.4 + 0.6 * sin(uT * 3. + hsh * 50.) * sin(uT * 3. + hsh * 50.));
+  spark *= smoothstep(0.35, 0., abs(uv.y - 0.5));
+  col += vec3(spark * 0.8);
+  col = min(col, vec3(1.));
+  o = vec4(col, max(col.r, max(col.g, col.b)));
+}`;
+  DRAW.ribbon = (v, p, dt) => {
+    const st = v.ribbon || (v.ribbon = {});
+    fxClock(st, p, dt, 1.4, 12, 3, 5);
+    const pal = easePal(st, beatSteps(st, p), dt, 1);
+    fxDraw(v, "ribbon", RIBBON_FS, { uT: st.T, uE: shared.energy, uBass: st.lift, uKick: st.flash, uC0: rgb1(pal[0]), uC1: rgb1(pal[1]), uC2: rgb1(pal[2]) }, 1);
+  };
+
+  // ---------------------------------------------------------------------------
+  // Smoke: soft coloured smoke curling up from the bottom, worked out on the
+  // graphics card (light on the computer). The music feeds it: louder parts
+  // make it thicker and rise faster, the bass stirs it into curls, kicks
+  // puff out a burst from below. Colours from the album, turning on the beat.
+  const SMOKE_FS = `
+uniform float uT, uE, uBass, uKick, uRise;
+uniform vec3 uC0, uC1, uC2;
+void main() {
+  vec2 uv = gl_FragCoord.xy / uRes;
+  vec2 p = vec2(uv.x * uRes.x / uRes.y, uv.y) * 2.4;
+  vec2 flow = vec2(0., -uRise);
+  vec2 q = vec2(fbm(p * 0.7 + flow * 0.8 + vec2(0., uT * 0.04)), fbm(p * 0.7 + flow * 0.8 + vec2(4.1, 1.7)));
+  float n = fbm(p + flow + (1.4 + 1.8 * uBass) * (q - 0.5) * 2.);
+  float wisp = 1. - abs(fbm(p * 1.6 + flow * 1.4 + q * 2.) * 2. - 1.);
+  float d = smoothstep(0.45, 0.85, n) * 0.8 + pow(wisp, 6.) * 0.35;
+  float base = smoothstep(1.1, 0.05, uv.y);
+  d *= base * (0.45 + 0.55 * uE) + uKick * 0.5 * smoothstep(0.55, 0., uv.y);
+  vec3 c = mix(uC0, uC1, smoothstep(0.3, 0.7, q.x));
+  c = mix(c, uC2, smoothstep(0.35, 0.9, uv.y) * 0.5);
+  vec3 col = min(c * d, vec3(1.));
+  o = vec4(col, max(col.r, max(col.g, col.b)));
+}`;
+  DRAW.smoke = (v, p, dt) => {
+    const st = v.smoke || (v.smoke = { rise: 0 });
+    fxClock(st, p, dt, 0.6, 10, 2, 3);
+    st.rise += dt * (0.12 + 0.35 * shared.energy + 0.3 * st.lift) * p.speed;
+    const pal = easePal(st, beatSteps(st, p), dt, 0.8);
+    fxDraw(v, "smoke", SMOKE_FS, { uT: st.T, uE: shared.energy, uBass: st.lift, uKick: st.flash, uRise: st.rise, uC0: rgb1(pal[0]), uC1: rgb1(pal[1]), uC2: rgb1(pal[2]) }, 1);
   };
 
   // ---------------------------------------------------------------------------
@@ -3983,7 +3827,7 @@ void main() {
 
       <div class="lp-page" data-page="lyrics">
         ${group("Highlight", `${seg("lyricGlow", [["off", "Off"], ["word", "Word"], ["line", "Line"]], "global")}
-          <div data-show-if="lyricGlow"><div class="lp-label"><span>Look</span></div>${seg("glowStyle", [["soft", "Soft"], ["fade", "Fade"], ["sweep", "Sweep"], ["underline", "Underline"]], "global")}
+          <div data-show-if="lyricGlow"><div class="lp-label"><span>Look</span></div>${seg("glowStyle", [["soft", "Soft"], ["fade", "Fade"], ["sweep", "Sweep"], ["underline", "Underline"]], "global")}<div class="lp-label"><span>Next line</span></div>${seg("glowMove", [["glide", "Glide"], ["fade", "Fade"]], "global")}
           ${slider("glowStrength", "Strength", 0.2, 2, 0.05, "global")}</div>`)}
         <div class="lp-note">Drawn behind the lyrics, never on them, so Spicy Lyrics' own animation stays exactly as it is.</div>
       </div>
@@ -4315,8 +4159,9 @@ void main() {
       if (el && !v.glows.some((g) => g.el === el)) {
         // The new glow takes over from the one that's showing: it starts
         // where that one is, as bright, and glides over to the new words.
+        // (Fade: the old one fades out where it is and the new one fades in.)
         let prev = null;
-        for (const g of v.glows) if (g.box && g.a > 0.05 && (!prev || g.a > prev.a)) prev = g;
+        if (S.glowMove !== "fade") for (const g of v.glows) if (g.box && g.a > 0.05 && (!prev || g.a > prev.a)) prev = g;
         if (prev) v.glows.splice(v.glows.indexOf(prev), 1);
         v.glows.push({ el, a: prev ? prev.a : 0, target: 1, box: prev ? { ...prev.box } : null, head: null });
       }

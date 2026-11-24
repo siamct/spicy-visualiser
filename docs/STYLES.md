@@ -59,9 +59,10 @@ A panel of LED dots. Unlit dots stay faintly visible, so it reads like real hard
 ## Circles
 
 ### NCS Sphere
-![NCS Sphere](screenshots/styles/ncs.jpg)
-
-A sphere of glowing dots. It flows with the loudness, bulges by frequency (bass at the top) and gets nudged by kicks.
+A slowly turning ball of glowing dots:
+- a flowing pattern pushes the dots outwards, more the louder it is, so it swells and bulges with the music and stays a calm sphere in quiet parts;
+- it only moves when there's sound, and kicks give it a quick pulse;
+- **Circle at** can put it round the album art.
 
 ### Trap Circle
 ![Trap Circle](screenshots/styles/trap.jpg)
@@ -109,9 +110,9 @@ A field of light that drifts in a gentle flow and links up into constellations. 
 A smooth glowing fluid. It flows faster, swirls harder and glows brighter as the music builds, surges on kicks, and its colours sweep round on the beat. The quietest style, good when you mainly want the lyrics.
 
 ### Liquid Chrome
-A mirror-like sheet of molten metal reflecting a sky in the album's colours:
-- it rolls slowly, faster when the music is loud;
-- the bass makes the waves deeper, and kicks drop in rings that spread across it.
+A sheet of glossy black liquid metal:
+- mostly dark, so the lyrics stay easy to read, with thin highlights in the album's colours sliding over its curves;
+- it rolls slowly and the bass swells the waves; no beat effects, it just flows.
 
 ### Oil Slick
 Rainbow swirls like oil on a wet road at night:
@@ -160,17 +161,16 @@ Northern lights over a starry sky:
 - the bass lifts them higher and taller, loudness makes them brighter and faster, kicks make them flare.
 
 ### Ribbon
-Calm wave sheets made of fine lines, twisting like silk ribbons as they drift across the screen, with tiny sparkles floating up:
-- the bass swells the waves a little;
-- louder parts speed them up;
-- kicks make them glow;
-- the tint comes from the album.
+Glowing ribbons of light flowing across the screen, like the wave on an old games-console home menu:
+- each ribbon is a soft see-through band with bright edges that twists as it flows;
+- the music sets how fast they flow, the bass makes the waves bigger, kicks brighten the edges;
+- a few sparkles drift along with them.
 
 ### Rain on Glass
 Looking out of a rainy window at night:
-- blurred city lights in the album's colours glow behind the glass, brighter with the bass;
-- drops keep running down the glass, each leaving a smooth wet streak that slowly dries;
-- the bass sends big drops running, loudness (and **Speed**) sets how fast they flow, and the highs are the patter of new drops landing.
+- blurred city lights in the album's colours glow behind the glass;
+- drops keep landing (the bass sets how hard it rains, kicks bring a burst); drops that touch join up, and heavy ones run down, picking up the drops in their way;
+- the wet trails break into little beads and dry up within a few seconds, and drops left sitting slowly evaporate.
 
 ### Lava Lamp
 Lumpy blobs of colour rising and sinking, stretching, merging and splitting:
@@ -180,9 +180,9 @@ Lumpy blobs of colour rising and sinking, stretching, merging and splitting:
 
 ### Smoke
 Soft coloured smoke curling up from the bottom:
-- louder parts feed more smoke and make it rise faster;
-- kicks puff out a burst;
-- the colours step round on the beat.
+- louder parts make it thicker and rise faster;
+- the bass stirs it into curls, and kicks puff out a burst from below;
+- the colours turn on the beat.
 
 ---
 

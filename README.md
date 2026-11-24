@@ -141,7 +141,6 @@ The source is in `src/` (`spicy-visualiser.template.js` and `style.css`), the he
 
 ## Credits
 
-- NCS Sphere shaders adapted from [Konsl/spicetify-visualizer](https://github.com/Konsl/spicetify-visualizer) (MIT, see `src/vendor/konsl-ncs/LICENSE`)
 - Audio capture: [loopback-capture](https://github.com/WerdoxDev/loopback-capture)
 - Built for [Spicy Lyrics](https://github.com/Spikerko/spicy-lyrics) and [Spicetify](https://spicetify.app)
 
