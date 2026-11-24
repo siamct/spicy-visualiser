@@ -160,10 +160,21 @@ Northern lights over a starry sky:
 - three curtains of light in the album's colours ripple sideways, with fine rays running up them;
 - the bass lifts them higher and taller, loudness makes them brighter and faster, kicks make them flare.
 
+### Ombre
+Big soft gradients in the album's colours, gently waving:
+- the bass pushes the colour bands up from the bottom;
+- loudness makes it glow a little brighter.
+
+### Bubbles
+Soap bubbles floating up, each a clear film with a thin rainbow rim and a bright window reflection:
+- the bass sends more up, and faster; kicks pop a few;
+- **Colours: Classic** (default) is the soap-film rainbow; the other colour modes tint the rims;
+- **Particles** sets how many.
+
 ### Ribbon
-Glowing ribbons of light flowing across the screen, like the wave on an old games-console home menu:
-- each ribbon is a soft see-through band with bright edges that twists as it flows;
-- the music sets how fast they flow, the bass makes the waves bigger, kicks brighten the edges;
+Soft sheets of light rolling across the screen, like the wave on an old games-console home menu:
+- no drawn lines: each sheet fades out at its edges and is brighter where it folds over;
+- the music sets how fast they flow, the bass makes the waves bigger, kicks brighten them;
 - a few sparkles drift along with them.
 
 ### Rain on Glass
@@ -186,6 +197,21 @@ Soft coloured smoke curling up from the bottom:
 
 ---
 
+## Space
+
+### Galaxy
+Drifting slowly through a coloured nebula, stars streaming past:
+- the bass makes the gas glow brighter and swirl;
+- loudness speeds up the flight, kicks make the stars flash.
+
+### Prism Galaxy
+A spiral of tiny glowing points in rainbow colours, turning slowly:
+- the bass spreads the arms out and spins it faster, kicks brighten the core;
+- **Colours: Classic** (default) is the rainbow; the other colour modes use those colours;
+- **Particles** sets how many points.
+
+---
+
 ## Into the light
 
 ### Starfield Tunnel
@@ -197,6 +223,8 @@ Flying down a gently bending tunnel of glowing rings, with stars streaming past:
 ---
 
 ## If the beat feels off
+
+**Auto-tune beats** (Sound tab, on by default) learns each song's kick level in its first few seconds, so busy bass doesn't fire on every note and quiet songs still catch their kicks. Beat sensitivity still works on top of it.
 
 Open the **Sound** tab:
 - **Tap to the beat**: tap the button along with the song 4 or more times, and everything locks to your tempo for that song.

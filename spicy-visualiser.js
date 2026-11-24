@@ -34,6 +34,10 @@
     ["aurora", "Aurora"],
     ["chrome", "Liquid Chrome"],
     ["oil", "Oil Slick"],
+    ["galaxy", "Galaxy"],
+    ["prism", "Prism Galaxy"],
+    ["ombre", "Ombre"],
+    ["bubbles", "Bubbles"],
     ["warp", "Warp"],
     ["dnb", "Liquid"],
     ["neuro", "Neuro Mesh"],
@@ -67,6 +71,10 @@
     smoke: '<g fill="none" stroke="currentColor" stroke-linecap="round"><path d="M9 21c-3-3 3-5 0-8s2-6 0-9" stroke-width="1.8"/><path d="M15 21c-3-3 3-5 0-8s2-5 1-7" stroke-width="1.3" opacity=".6"/></g>',
     aurora: '<path d="M2 15c3-6 5-9 7-9s2 5 4 5 4-6 6-6 3 3 3 3" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/><path d="M5 13v6M9 10v8M13 13v5M17 9v7" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" opacity=".5"/><circle cx="4" cy="4" r=".8"/><circle cx="20" cy="3" r=".8"/>',
     chrome: '<path d="M2 14c3-4 6 3 10-1s7-3 10 1v6H2z" opacity=".35"/><path d="M2 10c3-4 6 3 10-1s7-3 10 1" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><ellipse cx="8" cy="15.5" rx="2.5" ry=".9" opacity=".9"/>',
+    galaxy: '<circle cx="12" cy="12" r="9" opacity=".18"/><path d="M5 15c3-6 10-8 14-5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" opacity=".8"/><circle cx="6" cy="6" r="1"/><circle cx="18" cy="17" r="1.2"/><circle cx="16" cy="5" r=".7"/><circle cx="9" cy="18" r=".7"/>',
+    prism: '<g fill="none" stroke="currentColor" stroke-linecap="round"><path d="M12 12c0-3 3-4 5-2s1 7-5 7-8-6-4-10 10-2 11 1" stroke-width="1.6"/></g><circle cx="12" cy="12" r="1.6"/>',
+    ombre: '<rect x="3" y="3" width="18" height="18" rx="4" opacity=".25"/><rect x="3" y="11" width="18" height="10" rx="4" opacity=".5"/><rect x="3" y="16" width="18" height="5" rx="2.5"/>',
+    bubbles: '<g fill="none" stroke="currentColor"><circle cx="9" cy="14" r="6" stroke-width="1.5"/><circle cx="17.5" cy="7" r="3.5" stroke-width="1.3"/><path d="M5.8 11.5a4.5 4.5 0 0 1 2.5-2.4" stroke-width="1.3" stroke-linecap="round"/></g><circle cx="18" cy="17.5" r="1.3" opacity=".6"/>',
     oil: '<path d="M12 3C7 9 5 12 5 15a7 7 0 0 0 14 0c0-3-2-6-7-12z" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M8 15c1.5-2 3-.5 4-2s2.5-1 3.5.5" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" opacity=".7"/><path d="M8.5 18c2 1 5 1 7-1" fill="none" stroke="currentColor" stroke-width="1.1" stroke-linecap="round" opacity=".5"/>',
     tunnel: '<g fill="none" stroke="currentColor"><circle cx="12" cy="12" r="10" stroke-width="1.6"/><circle cx="12.5" cy="11.5" r="6" stroke-width="1.3" opacity=".7"/><circle cx="13" cy="11" r="3" stroke-width="1" opacity=".5"/></g><circle cx="13.2" cy="10.8" r="1"/><circle cx="5" cy="6" r=".7"/><circle cx="19" cy="18" r=".7"/>',
     ribbon: '<g fill="none" stroke="currentColor" stroke-linecap="round"><path d="M2 12c4-6 8 5 12 0s6-3 8-1" stroke-width="2"/><path d="M2 15c4-5 8 4 12 0s6-2 8-.5" stroke-width="1.3" opacity=".6"/><path d="M2 9c4-5 8 4 12 0s6-2 8-.5" stroke-width="1" opacity=".4"/></g><circle cx="17.5" cy="9.8" r="1.1"/>',
@@ -80,31 +88,32 @@
   // Styles that still look right on Spotify's data (it has loudness and
   // beats, not a real spectrum). With that source they're listed first and
   // the rest fold away under "More styles".
-  const SONG_DATA_OK = new Set(["particles", "plasma", "ledplasma", "warp", "dnb", "ribbon", "rain", "lava", "smoke", "tunnel", "aurora", "chrome", "oil", "geometric", "bauhaus", "sub", "off"]);
+  const SONG_DATA_OK = new Set(["particles", "plasma", "ledplasma", "warp", "dnb", "ribbon", "rain", "lava", "smoke", "tunnel", "aurora", "chrome", "oil", "galaxy", "prism", "ombre", "bubbles", "geometric", "bauhaus", "sub", "off"]);
   const STYLE_GROUPS = [
     ["Bars", ["ascii", "led", "mirror", "monstercat", "radial", "retro"]],
     ["Circles", ["ncs", "sub", "trap", "tunnel"]],
     ["On the beat", ["geometric", "bauhaus"]],
     ["Flowing", ["plasma", "ledplasma", "chrome", "oil", "dnb", "neuro", "particles", "warp"]],
-    ["Calm", ["aurora", "ribbon", "rain", "lava", "smoke"]],
+    ["Calm", ["aurora", "ombre", "bubbles", "ribbon", "rain", "lava", "smoke"]],
+    ["Space", ["galaxy", "prism"]],
     ["", ["off"]],
   ];
   // Which bands each style reads: "punch" snaps up and falls with gravity.
   const MODEL = {};
   const USES = {
     barCount: ["monstercat", "mirror", "radial", "retro"],
-    particles: ["particles", "monstercat", "warp", "dnb", "trap"],
+    particles: ["particles", "monstercat", "warp", "dnb", "trap", "prism", "bubbles"],
     position: ["monstercat", "mirror", "ascii"],
     variant: ["geometric"],
-    beatEvery: ["geometric", "bauhaus", "plasma", "ledplasma", "sub", "trap", "neuro", "ribbon", "rain", "lava", "smoke", "tunnel", "aurora", "chrome", "oil"],
+    beatEvery: ["geometric", "bauhaus", "plasma", "ledplasma", "sub", "trap", "neuro", "ribbon", "rain", "lava", "smoke", "tunnel", "aurora", "chrome", "oil", "galaxy", "prism", "ombre", "bubbles"],
     neuroLook: ["neuro"],
     neuroLine: ["neuro"],
     mcColor: ["monstercat"],
     neuroTwist: ["neuro"],
     neuroMirror: ["neuro"],
     circleAt: ["trap", "radial", "ncs", "sub"],
-    speed: ["trap", "retro", "neuro", "ribbon", "rain", "lava", "smoke", "tunnel", "aurora", "chrome", "oil", "particles", "monstercat", "ncs", "radial", "plasma", "warp", "dnb", "ascii", "led", "ledplasma"],
-    bassBoost: ["particles", "monstercat", "radial", "mirror", "ncs", "warp", "plasma", "dnb", "ascii", "geometric", "bauhaus", "led", "ledplasma", "sub", "trap", "retro", "neuro", "ribbon", "rain", "lava", "smoke", "tunnel", "aurora", "chrome", "oil"],
+    speed: ["trap", "retro", "neuro", "ribbon", "rain", "lava", "smoke", "tunnel", "aurora", "chrome", "oil", "particles", "monstercat", "ncs", "radial", "plasma", "warp", "dnb", "ascii", "led", "ledplasma", "galaxy", "prism", "ombre", "bubbles"],
+    bassBoost: ["particles", "monstercat", "radial", "mirror", "ncs", "warp", "plasma", "dnb", "ascii", "geometric", "bauhaus", "led", "ledplasma", "sub", "trap", "retro", "neuro", "ribbon", "rain", "lava", "smoke", "tunnel", "aurora", "chrome", "oil", "galaxy", "prism", "ombre", "bubbles"],
     smoothing: ["particles", "monstercat", "radial", "mirror", "ncs", "warp", "plasma", "dnb", "ascii", "geometric", "bauhaus", "led", "ledplasma", "sub", "trap", "retro", "neuro", "aurora"],
   };
 
@@ -152,6 +161,10 @@
     aurora: { shake: 0, smoothing: 0.5 },
     chrome: { shake: 0 },
     oil: { shake: 0, colorMode: "classic" },
+    galaxy: { shake: 0 },
+    prism: { shake: 0, colorMode: "classic" },
+    ombre: { shake: 0 },
+    bubbles: { shake: 0, colorMode: "classic" },
     led: { colorMode: "classic", shake: 0 },
     ledplasma: { shake: 0 },
     monstercat: { barCount: 63, bassBoost: 0.8, smoothing: 0.45, beatEvery: "4" },
@@ -168,6 +181,8 @@
     dimPaused: true,
     beatSens: 0.6, // Sound tab: how easily a hit counts as a beat, 0 (off) to 1 (lower = only clear kicks)
     beatScale: 2, // settings version for the beat sensitivity slider
+    autoBeats: true, // learn each song's kick level so busy bass doesn't over-trigger
+    favs: [], // favourite styles, pinned to the top of the Style tab
     noLyricsBoost: true, // brighter, fuller visuals on songs with no (or static) lyrics
     bgDim: 0, // 0..0.9: a dark layer over Spicy Lyrics' moving background, under the visual
     noLyricsCard: true, // swap Spicy Lyrics' "No lyrics" box for the song name and artist
@@ -197,6 +212,7 @@
   } catch (_) {}
   if (!["soft", "fade", "sweep", "underline"].includes(S.glowStyle)) S.glowStyle = "soft";
   if (!["glide", "fade"].includes(S.glowMove)) S.glowMove = "glide";
+  if (!Array.isArray(S.favs)) S.favs = [];
   if (!validStyle(S.style)) S.style = GLOBAL_DEFAULTS.style;
   if (S.source !== "spotify") S.source = "helper";
   if (!S.per || typeof S.per !== "object") S.per = {};
@@ -817,6 +833,29 @@
     if (typeof vol !== "number" || !isFinite(vol)) vol = 1;
     return -20 * Math.log10(Math.max(0.05, Math.min(1, vol)));
   }
+  // Auto-tune beats: over the last ~12 s of a song, count the helper's kick
+  // candidates and set the level so roughly one counts per beat of the
+  // song's tempo (about 2 a second if the tempo isn't known yet). Busy bass
+  // lines then don't fire on every note, and quiet songs still catch their
+  // kicks. Beat sensitivity still works on top (60% = as learned).
+  const autoK = { uri: null, hist: [], t0: 0, g: 0 };
+  function autoKick(raw) {
+    const sens = S.beatSens ?? 0.6;
+    if (!S.autoBeats) return raw * sens;
+    const now = performance.now();
+    if (autoK.uri !== shared.uri) { autoK.uri = shared.uri; autoK.hist.length = 0; autoK.t0 = now; autoK.g = 0; }
+    autoK.hist.push([now, raw]);
+    while (autoK.hist.length && now - autoK.hist[0][0] > 12000) autoK.hist.shift();
+    const span = Math.min(12, (now - autoK.t0) / 1000);
+    if (span < 4 || autoK.hist.length < 4) return raw * sens;
+    const rate = bpm.conf > 0.15 && bpm.value ? bpm.value / 60 : 2;
+    const want = Math.max(2, Math.round(rate * span));
+    const vals = autoK.hist.map((x) => x[1]).sort((a, b) => b - a);
+    const thr = vals[Math.min(vals.length - 1, want - 1)];
+    const g = Math.max(0.4, Math.min(3, 0.3 / Math.max(0.05, thr)));
+    autoK.g = autoK.g ? autoK.g + (g - autoK.g) * 0.15 : g;
+    return raw * autoK.g * (sens / 0.6);
+  }
   function kickHit(amount) {
     shared.kick = Math.min(1.4, shared.kick + amount);
     if (amount >= 0.3) {
@@ -1120,7 +1159,7 @@
         }
         shared.live.level = d.l || 0;
         shared.live.at = performance.now();
-        if (d.k) kickHit(d.k * (S.beatSens ?? 0.6));
+        if (d.k) kickHit(autoKick(d.k));
         if (d.s) snareHit(d.s * 0.8);
       }
     }
@@ -2355,6 +2394,204 @@
   };
 
   // ---------------------------------------------------------------------------
+  // Galaxy: drifting slowly through a coloured nebula, stars streaming past.
+  // The bass makes the gas glow brighter and swirl, loudness speeds up the
+  // flight, kicks make the stars flash. Colours from the album.
+  const GALAXY_FS = `
+uniform float uT, uE, uBass, uKick, uZ;
+uniform vec3 uC0, uC1, uC2;
+float stars(vec2 uv, float scale, float seed) {
+  vec2 g = uv * scale + seed * 17.;
+  vec2 c = floor(g), f = fract(g) - 0.5;
+  float h = hash(c + seed);
+  vec2 off = vec2(hash(c + 3.1), hash(c + 7.7)) - 0.5;
+  float d = length(f - off * 0.7);
+  return step(0.9, h) * exp(-d * d * 300.) * (0.6 + 0.4 * sin(uT * 3. + h * 40.));
+}
+void main() {
+  vec2 uv = (gl_FragCoord.xy - 0.5 * uRes) / uRes.y;
+  float zz = uZ * 0.15, ca = cos(uT * 0.02), sa = sin(uT * 0.02);
+  vec2 p = mat2(ca, -sa, sa, ca) * uv * 1.6;
+  vec2 q = vec2(fbm(p * 1.2 + vec2(zz, 0.)), fbm(p * 1.2 + vec2(3.3, -zz)));
+  float n = fbm(p * 1.5 + (2. + 1.2 * uBass) * q + vec2(-zz * 0.6, zz * 0.4));
+  vec3 col = mix(uC0, uC1, smoothstep(0.3, 0.8, q.x));
+  col = mix(col, uC2, smoothstep(0.5, 0.9, q.y) * 0.7);
+  col *= smoothstep(0.35, 0.95, n) * (0.3 + 0.3 * uE + 0.55 * uBass);
+  col *= 0.55 + 0.45 * smoothstep(0.2, 0.6, fbm(p * 3. - q * 2.)); // darker dust lanes
+  for (int i = 0; i < 4; i++) {
+    float fi = float(i);
+    float d = fract(uZ * 0.25 + fi * 0.25);
+    float fade = smoothstep(0., 0.3, d) * smoothstep(1., 0.85, d);
+    col += vec3(stars(uv, mix(28., 3., d), fi) * fade * (0.8 + 0.6 * uKick));
+  }
+  col = min(col, vec3(1.));
+  o = vec4(col, max(col.r, max(col.g, col.b)));
+}`;
+  DRAW.galaxy = (v, p, dt) => {
+    const st = v.galaxy || (v.galaxy = { z: 0 });
+    fxClock(st, p, dt, 0.5, 10, 2.5, 5);
+    st.z += dt * (0.25 + 0.7 * shared.energy + 0.7 * st.lift) * p.speed;
+    const pal = easePal(st, beatSteps(st, p), dt, 0.6);
+    fxDraw(v, "galaxy", GALAXY_FS, { uT: st.T, uE: shared.energy, uBass: st.lift, uKick: st.flash, uZ: st.z, uC0: rgb1(pal[0]), uC1: rgb1(pal[1]), uC2: rgb1(pal[2]) }, 1);
+  };
+
+  // ---------------------------------------------------------------------------
+  // Ombre: big soft gradients in the album's colours, gently waving. The bass
+  // pushes the colour bands up from the bottom, loudness makes it glow a
+  // little brighter. Clean and calm.
+  const OMBRE_FS = `
+uniform float uT, uE, uBass;
+uniform vec3 uC0, uC1, uC2;
+void main() {
+  vec2 uv = gl_FragCoord.xy / uRes;
+  float y = uv.y + 0.06 * sin(uv.x * 2.2 + uT * 0.4) + 0.04 * sin(uv.x * 4.1 - uT * 0.3) - 0.14 * uBass * (1. - uv.y);
+  y = clamp(y, 0., 1.);
+  vec3 c = y < 0.5 ? mix(uC0, uC1, smoothstep(0., 0.5, y)) : mix(uC1, uC2, smoothstep(0.5, 1., y));
+  c *= (0.16 + 0.14 * uE + 0.22 * uBass) * (0.45 + 0.85 * (1. - uv.y)); // glows from the bottom, darker behind the lyrics
+  c += (hash(gl_FragCoord.xy + fract(uT)) - 0.5) / 255.; // no banding
+  c = clamp(c, 0., 1.);
+  o = vec4(c, max(c.r, max(c.g, c.b)));
+}`;
+  DRAW.ombre = (v, p, dt) => {
+    const st = v.ombre || (v.ombre = {});
+    fxClock(st, p, dt, 0.6, 6, 1.5);
+    const pal = easePal(st, beatSteps(st, p), dt, 0.5);
+    fxDraw(v, "ombre", OMBRE_FS, { uT: st.T, uE: shared.energy, uBass: st.lift, uC0: rgb1(pal[0]), uC1: rgb1(pal[1]), uC2: rgb1(pal[2]) }, 1);
+  };
+
+  // ---------------------------------------------------------------------------
+  // Prism Galaxy: a spiral of tiny glowing points in rainbow colours, turning
+  // slowly (the middle faster than the edge). The bass spreads the arms out
+  // and spins it faster, kicks brighten the core. Colours: Classic = rainbow
+  // (default); the other colour modes use those colours instead.
+  DRAW.prism = (v, p, dt, t) => {
+    const { ctx, w, h, U } = v;
+    const n = Math.round(1400 * Math.min(2, p.particles || 1));
+    let st = v.prism;
+    if (!st || st.n !== n) {
+      st = v.prism = { n, pts: new Float32Array(n * 2), rot: 0, spread: 0, flash: 0, kickSeen: shared.beatSerial };
+      for (let i = 0; i < n; i++) {
+        const r = Math.pow(Math.random(), 0.6);
+        st.pts[i * 2] = r;
+        st.pts[i * 2 + 1] = ((i % 3) * Math.PI * 2) / 3 + (Math.random() - 0.5) * (0.5 - 0.25 * r) + (Math.random() < 0.15 ? Math.random() * 6.28 : 0);
+      }
+    }
+    const e = shared.energy, bass = shared.bassPunch || 0, sp = p.speed;
+    if (st.kickSeen !== shared.beatSerial) { st.kickSeen = shared.beatSerial; st.flash = Math.min(1, st.flash + 0.6 * Math.min(1, shared.kick + 0.2)); }
+    st.flash *= Math.exp(-dt * 4);
+    st.spread += (bass - st.spread) * Math.min(1, dt * (bass > st.spread ? 8 : 2));
+    st.rot += dt * (0.08 + 0.3 * e + 0.35 * st.spread) * sp;
+    const cx = w / 2, cy = h / 2, R = Math.min(w, h) * 0.5 * p.size * (1 + 0.12 * st.spread);
+    const classic = p.colorMode === "classic";
+    const HB = 12;
+    const paths = Array.from({ length: HB }, () => new Path2D());
+    const shift = (t * 0.03 * sp) % 1;
+    for (let i = 0; i < n; i++) {
+      const r = st.pts[i * 2];
+      const a = st.pts[i * 2 + 1] + r * 4.2 + st.rot * (1.3 - 0.7 * r);
+      const rr = r * R * (1 + 0.18 * st.spread * r);
+      const x = cx + Math.cos(a) * rr * (w > h ? 1.25 : 1), y = cy + Math.sin(a) * rr * 0.62;
+      const s = (0.7 + 1.3 * (1 - r)) * U;
+      const b = Math.floor((((r * 0.9 + shift) % 1) + 1) % 1 * HB) % HB;
+      paths[b].rect(x - s / 2, y - s / 2, s, s);
+    }
+    ctx.globalCompositeOperation = "lighter";
+    v.soft(cx, cy, R * 0.45, mix(classic ? WHITE : colorAt(0.5), WHITE, 0.5), 0.12 + 0.2 * st.spread + 0.25 * st.flash);
+    for (let b = 0; b < HB; b++) {
+      const c = classic ? hsl((b / HB) * 330, 0.9, 0.65) : colorAt(b / (HB - 1));
+      ctx.fillStyle = v.rgba(c, A_(0.6 + 0.3 * e, v));
+      ctx.fill(paths[b]);
+    }
+  };
+
+  // ---------------------------------------------------------------------------
+  // Bubbles: soap bubbles floating up, each a clear film with a thin
+  // rainbow rim and a bright window reflection. The bass sends more up and
+  // faster, kicks pop a few. Colours: Classic = soap-film rainbow (default);
+  // the other colour modes tint the rims.
+  DRAW.bubbles = (v, p, dt, t) => {
+    const { ctx, w, h, U } = v;
+    const st = v.bub || (v.bub = { b: [], pops: [], acc: 0, kickSeen: shared.beatSerial });
+    const e = shared.energy, bass = shared.bassPunch || 0, sp = p.speed;
+    const max = Math.round(26 * Math.min(2, p.particles || 1));
+    const spawn = (y) => st.b.push({ x: Math.random() * w, y: y === undefined ? h + 60 * U : y, r: U * (8 + Math.pow(Math.random(), 1.6) * 40) * p.size, vy: U * (14 + Math.random() * 18), ph: Math.random() * 6.28, wob: 0.5 + Math.random(), hue: Math.random() });
+    if (!st.init) { st.init = 1; for (let i = 0; i < 12; i++) spawn(Math.random() * h); }
+    st.acc += dt * (0.5 + 3 * bass + 1.2 * e) * sp;
+    while (st.acc >= 1) { st.acc -= 1; if (st.b.length < max) spawn(); }
+    if (st.kickSeen !== shared.beatSerial) {
+      st.kickSeen = shared.beatSerial;
+      if (bass > 0.3 || !isLive()) {
+        const vis = st.b.filter((b) => b.y > b.r && b.y < h - b.r);
+        for (let k = 0; k < 1 + (shared.kick > 0.7 ? 1 : 0) && vis.length; k++) {
+          const b = vis.splice((Math.random() * vis.length) | 0, 1)[0];
+          st.pops.push({ x: b.x, y: b.y, r: b.r, age: 0, hue: b.hue });
+          st.b.splice(st.b.indexOf(b), 1);
+        }
+      }
+    }
+    const classic = p.colorMode === "classic";
+    const rimCol = (q) => (classic ? hsl(q * 360, 0.85, 0.7) : colorAt(q));
+    ctx.globalCompositeOperation = "lighter";
+    ctx.lineCap = "round";
+    for (let i = st.b.length - 1; i >= 0; i--) {
+      const b = st.b[i];
+      b.y -= b.vy * (0.6 + 0.8 * e + 0.6 * bass) * sp * dt * (0.7 + (20 * U) / b.r * 0.3);
+      b.x += Math.sin(t * b.wob + b.ph) * 10 * U * dt;
+      if (b.y < -b.r - 10) { st.b.splice(i, 1); continue; }
+      // the film: almost clear, a touch thicker towards the edge
+      const g = ctx.createRadialGradient(b.x, b.y, b.r * 0.6, b.x, b.y, b.r);
+      g.addColorStop(0, "rgba(255,255,255,0)");
+      g.addColorStop(1, v.rgba(rimCol(b.hue), A_(0.07, v)));
+      ctx.fillStyle = g;
+      ctx.beginPath();
+      ctx.arc(b.x, b.y, b.r, 0, Math.PI * 2);
+      ctx.fill();
+      // rainbow rim, slowly swirling
+      if (ctx.createConicGradient) {
+        const cg = ctx.createConicGradient(b.ph + t * 0.4, b.x, b.y);
+        for (let k = 0; k <= 6; k++) cg.addColorStop(k / 6, v.rgba(rimCol((b.hue + k / 6) % 1), A_(0.25 + 0.25 * Math.sin(k * 2.1 + b.ph) ** 2, v)));
+        ctx.strokeStyle = cg;
+      } else ctx.strokeStyle = v.rgba(rimCol(b.hue), A_(0.35, v));
+      ctx.lineWidth = Math.max(1, b.r * 0.035);
+      ctx.beginPath();
+      ctx.arc(b.x, b.y, b.r, 0, Math.PI * 2);
+      ctx.stroke();
+      // window reflection top-left, a fainter one bottom-right
+      ctx.strokeStyle = v.rgba(WHITE, A_(0.5, v));
+      ctx.lineWidth = Math.max(1, b.r * 0.06);
+      ctx.beginPath();
+      ctx.arc(b.x, b.y, b.r * 0.78, 1.1 * Math.PI, 1.42 * Math.PI);
+      ctx.stroke();
+      ctx.strokeStyle = v.rgba(WHITE, A_(0.18, v));
+      ctx.lineWidth = Math.max(1, b.r * 0.04);
+      ctx.beginPath();
+      ctx.arc(b.x, b.y, b.r * 0.8, 0.12 * Math.PI, 0.3 * Math.PI);
+      ctx.stroke();
+    }
+    // pops: a quick ring and a few droplets
+    for (let i = st.pops.length - 1; i >= 0; i--) {
+      const q = st.pops[i];
+      q.age += dt;
+      const f = q.age / 0.35;
+      if (f >= 1) { st.pops.splice(i, 1); continue; }
+      ctx.strokeStyle = v.rgba(rimCol(q.hue), A_(0.5 * (1 - f), v));
+      ctx.lineWidth = Math.max(1, q.r * 0.03);
+      ctx.beginPath();
+      ctx.arc(q.x, q.y, q.r * (1 + f * 0.5), 0, Math.PI * 2);
+      ctx.stroke();
+      ctx.fillStyle = v.rgba(WHITE, A_(0.6 * (1 - f), v));
+      ctx.beginPath();
+      for (let k = 0; k < 8; k++) {
+        const a = (k / 8) * Math.PI * 2 + q.hue * 6;
+        const d = q.r * (1 + f * 1.2);
+        ctx.moveTo(q.x + Math.cos(a) * d + 1.2 * U, q.y + Math.sin(a) * d);
+        ctx.arc(q.x + Math.cos(a) * d, q.y + Math.sin(a) * d, 1.2 * U, 0, Math.PI * 2);
+      }
+      ctx.fill();
+    }
+  };
+
+  // ---------------------------------------------------------------------------
   // Speaker cone physics shared by Subwoofer and Speaker Grille: a cone on a
   // spring. Kicks knock it outwards, the bass holds it out, it springs back
   // with a little overshoot. st.x is how far out
@@ -3558,19 +3795,24 @@ void main() {
   const RIBBON_FS = `
 uniform float uT, uE, uBass, uKick;
 uniform vec3 uC0, uC1, uC2;
+float ctr(float x, float k) {
+  return 0.5 + (0.09 + 0.07 * uBass) * sin(x * (1.1 + 0.2 * k) + uT * (0.9 + 0.15 * k) + k * 2.1)
+             + 0.05 * sin(x * (2.3 - 0.3 * k) - uT * 0.7 + k * 4.)
+             + 0.06 * (k - 1.);
+}
+// A sheet of light: soft at its edges, brighter where it folds (where the
+// wave is steep) and along its upper part, like light on a curved surface.
 vec3 ribbon(vec2 uv, float asp, float k, vec3 col) {
   float x = uv.x * asp;
-  float c = 0.5 + (0.09 + 0.07 * uBass) * sin(x * (1.1 + 0.2 * k) + uT * (0.9 + 0.15 * k) + k * 2.1)
-                + 0.05 * sin(x * (2.3 - 0.3 * k) - uT * 0.7 + k * 4.)
-                + 0.06 * (k - 1.);
-  float th = 0.012 + (0.045 + 0.03 * uBass) * abs(sin(x * 0.7 - uT * 0.45 + k * 1.7));
-  float d = abs(uv.y - c);
-  float px = 1. / uRes.y;
-  float sheet = smoothstep(th, th * 0.2, d) * 0.16;
-  float edge = abs(d - th) / px;
-  float line = exp(-edge * edge / 3.) * (0.55 + 0.45 * uKick) + exp(-edge / 14.) * 0.12;
+  float c = ctr(x, k);
+  float th = 0.03 + (0.06 + 0.04 * uBass) * abs(sin(x * 0.7 - uT * 0.45 + k * 1.7));
+  float across = (uv.y - c) / th; // -1 bottom edge .. 1 top edge
+  float inside = smoothstep(1.15, 0.55, abs(across));
+  float slope = abs(ctr(x + 0.02, k) - ctr(x - 0.02, k)) / 0.04;
+  float fold = 0.35 + 0.65 * smoothstep(0.05, 0.5, slope) + 0.5 * smoothstep(0.06, 0.03, th);
+  float sheen = exp(-pow((across - 0.45) * 2.2, 2.));
   float fadeX = smoothstep(0., 0.15, uv.x) * smoothstep(1., 0.85, uv.x);
-  return col * (sheet + line * (0.5 + 0.5 * uE)) * fadeX;
+  return col * inside * (0.1 + 0.38 * sheen * fold) * (0.7 + 0.5 * uE + 0.35 * uKick) * fadeX;
 }
 void main() {
   vec2 uv = gl_FragCoord.xy / uRes;
@@ -4047,6 +4289,24 @@ void main() {
 
 /* Darken background: under the visual (same z-index, earlier in the page), over Spicy Lyrics' background layers. */
 #SpicyLyricsPage .ContentBox > .lp-bgdim { position: absolute; inset: 0; z-index: 1; pointer-events: none; background: #000; opacity: 0; transition: opacity .4s ease; }
+
+/* Favourites: a star on each style card; starred styles move to the top. */
+:is(#SpicyLyricsPage, .lp-modal-wrap) .lp-panel .lp-cards button { position: relative; }
+:is(#SpicyLyricsPage, .lp-modal-wrap) .lp-panel .lp-cards .lp-fav {
+  position: absolute; top: 3px; right: 3px; width: 20px; height: 20px; border-radius: 6px; cursor: pointer;
+  opacity: 0; transition: opacity .15s, background .15s;
+  background: no-repeat center / 13px url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M12 3l2.7 5.6 6.1.8-4.5 4.2 1.1 6L12 16.7 6.6 19.6l1.1-6L3.2 9.4l6.1-.8z' fill='none' stroke='white' stroke-width='2' stroke-linejoin='round'/%3E%3C/svg%3E");
+}
+:is(#SpicyLyricsPage, .lp-modal-wrap) .lp-panel .lp-cards button:hover .lp-fav { opacity: .55; }
+:is(#SpicyLyricsPage, .lp-modal-wrap) .lp-panel .lp-cards .lp-fav:hover { opacity: 1; background-color: rgba(255,255,255,.12); }
+:is(#SpicyLyricsPage, .lp-modal-wrap) .lp-panel .lp-cards button.lp-isfav .lp-fav {
+  opacity: .9;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M12 3l2.7 5.6 6.1.8-4.5 4.2 1.1 6L12 16.7 6.6 19.6l1.1-6L3.2 9.4l6.1-.8z' fill='%23ffd34d'/%3E%3C/svg%3E");
+}
+:is(#SpicyLyricsPage, .lp-modal-wrap) .lp-panel .lp-cards button.lp-isfav { order: -2 !important; display: flex !important; }
+:is(#SpicyLyricsPage, .lp-modal-wrap) .lp-panel .lp-cards .lp-fav-cat { display: none; order: -3; margin-top: 0; }
+:is(#SpicyLyricsPage, .lp-modal-wrap) .lp-panel .lp-cards .lp-fav-cat.lp-has { display: block !important; }
+:is(#SpicyLyricsPage, .lp-modal-wrap) .lp-panel .lp-cards .lp-fav-cat.lp-has ~ .lp-cat:not(.lp-fav-cat) { margin-top: 12px; }
 `;
   function ensureStyle(doc) {
     if (doc.getElementById(STYLE_ID)) return;
@@ -4093,7 +4353,7 @@ void main() {
 
       <div class="lp-page" data-page="style">
         <div class="lp-source"><div class="lp-source-head"><span class="lp-gtitle">Sound source</span><button class="lp-test-helper">Test helper</button></div>${seg("source", [["helper", "Helper"], ["spotify", "Spotify data"]], "global")}<div class="lp-status-text"></div><div class="lp-note lp-test-result lp-hidden"></div><div class="lp-note lp-get-note"></div><div class="lp-btnrow"><button class="lp-reset lp-get-helper">Install helper</button></div></div>
-        <div class="lp-cards" data-key="__style" data-scope="global"><div class="lp-cat lp-sd-cat">Works with Spotify data</div>${STYLE_GROUPS.map(([cat, keys]) => (cat ? `<div class="lp-cat">${cat}</div>` : "") + keys.map((k) => STYLES.find((x) => x[0] === k)).map(([v, l]) => `<button data-v="${v}" data-sd="${SONG_DATA_OK.has(v) ? 1 : 0}"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">${STYLE_ICON[v] || ""}</svg><span>${l}</span></button>`).join("")).join("")}<div class="lp-sd-more" role="button" tabindex="0"><span>More styles</span><small>Best with the helper</small></div></div>
+        <div class="lp-cards" data-key="__style" data-scope="global"><div class="lp-cat lp-fav-cat">Favourites</div><div class="lp-cat lp-sd-cat">Works with Spotify data</div>${STYLE_GROUPS.map(([cat, keys]) => (cat ? `<div class="lp-cat">${cat}</div>` : "") + keys.map((k) => STYLES.find((x) => x[0] === k)).map(([v, l]) => `<button data-v="${v}" data-sd="${SONG_DATA_OK.has(v) ? 1 : 0}"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">${STYLE_ICON[v] || ""}</svg><span>${l}</span>${v === "off" ? "" : `<i class="lp-fav" title="Favourite" aria-label="Favourite"></i>`}</button>`).join("")).join("")}<div class="lp-sd-more" role="button" tabindex="0"><span>More styles</span><small>Best with the helper</small></div></div>
       </div>
 
       <div class="lp-page" data-page="look">
@@ -4109,7 +4369,7 @@ void main() {
       <div class="lp-page" data-page="sound">
         <div class="lp-needs-style">
           ${group("How it reacts", slider("sensitivity", "Sensitivity", 0.3, 3, 0.05, "style") + slider("bassBoost", "Bass / kick boost", 0, 2, 0.05, "style", u("bassBoost")) + slider("smoothing", "Smoothing (fall speed)", 0, 1, 0.05, "style", u("smoothing")) + slider("autoRange", "Auto range (less peaking)", 0, 1, 0.05, "style"))}
-          ${group("Beat", slider("beatSens", "Beat sensitivity", 0, 1, 0.05, "global") + `<div class="lp-beatrow"><button class="lp-tap">Tap to the beat</button><span class="lp-beatinfo"></span></div>`)}
+          ${group("Beat", toggle("autoBeats", "Auto-tune beats", "Learns each song's kick level in its first few seconds, so busy bass doesn't over-trigger and quiet songs still catch the beat (with the helper)") + slider("beatSens", "Beat sensitivity", 0, 1, 0.05, "global") + `<div class="lp-beatrow"><button class="lp-tap">Tap to the beat</button><span class="lp-beatinfo"></span></div>`)}
           ${group("Movement", slider("shake", "Shake", 0, 1, 0.05, "style", allBut) + slider("speed", "Speed", 0.1, 2.5, 0.05, "style", u("speed")) + slider("particles", "Particles", 0, 2.5, 0.05, "style", u("particles")))}
         </div>
       </div>
@@ -4176,6 +4436,13 @@ void main() {
         delete S.per[styleKey()];
         return save();
       }
+      const fav = e.target.closest(".lp-fav");
+      if (fav) {
+        const k = fav.parentElement.dataset.v;
+        S.favs = S.favs.includes(k) ? S.favs.filter((x) => x !== k) : S.favs.concat(k);
+        save();
+        return refreshPanels();
+      }
       const b = e.target.closest("[data-key] > button");
       if (!b) return;
       write(b.parentElement.dataset.scope, b.parentElement.dataset.key, b.dataset.v);
@@ -4209,6 +4476,9 @@ void main() {
 
   function refreshPanelEl(p, doc) {
     if (!p) return;
+    p.querySelectorAll(".lp-cards > button[data-v]").forEach((b) => b.classList.toggle("lp-isfav", S.favs.includes(b.dataset.v)));
+    const favCat = p.querySelector(".lp-fav-cat");
+    if (favCat) favCat.classList.toggle("lp-has", S.favs.length > 0);
     const style = styleKey();
     const name = (STYLES.find((s) => s[0] === style) || ["", ""])[1];
     const where = p.querySelector(".lp-where");

@@ -287,3 +287,21 @@
 
 /* Darken background: under the visual (same z-index, earlier in the page), over Spicy Lyrics' background layers. */
 #SpicyLyricsPage .ContentBox > .lp-bgdim { position: absolute; inset: 0; z-index: 1; pointer-events: none; background: #000; opacity: 0; transition: opacity .4s ease; }
+
+/* Favourites: a star on each style card; starred styles move to the top. */
+:is(#SpicyLyricsPage, .lp-modal-wrap) .lp-panel .lp-cards button { position: relative; }
+:is(#SpicyLyricsPage, .lp-modal-wrap) .lp-panel .lp-cards .lp-fav {
+  position: absolute; top: 3px; right: 3px; width: 20px; height: 20px; border-radius: 6px; cursor: pointer;
+  opacity: 0; transition: opacity .15s, background .15s;
+  background: no-repeat center / 13px url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M12 3l2.7 5.6 6.1.8-4.5 4.2 1.1 6L12 16.7 6.6 19.6l1.1-6L3.2 9.4l6.1-.8z' fill='none' stroke='white' stroke-width='2' stroke-linejoin='round'/%3E%3C/svg%3E");
+}
+:is(#SpicyLyricsPage, .lp-modal-wrap) .lp-panel .lp-cards button:hover .lp-fav { opacity: .55; }
+:is(#SpicyLyricsPage, .lp-modal-wrap) .lp-panel .lp-cards .lp-fav:hover { opacity: 1; background-color: rgba(255,255,255,.12); }
+:is(#SpicyLyricsPage, .lp-modal-wrap) .lp-panel .lp-cards button.lp-isfav .lp-fav {
+  opacity: .9;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M12 3l2.7 5.6 6.1.8-4.5 4.2 1.1 6L12 16.7 6.6 19.6l1.1-6L3.2 9.4l6.1-.8z' fill='%23ffd34d'/%3E%3C/svg%3E");
+}
+:is(#SpicyLyricsPage, .lp-modal-wrap) .lp-panel .lp-cards button.lp-isfav { order: -2 !important; display: flex !important; }
+:is(#SpicyLyricsPage, .lp-modal-wrap) .lp-panel .lp-cards .lp-fav-cat { display: none; order: -3; margin-top: 0; }
+:is(#SpicyLyricsPage, .lp-modal-wrap) .lp-panel .lp-cards .lp-fav-cat.lp-has { display: block !important; }
+:is(#SpicyLyricsPage, .lp-modal-wrap) .lp-panel .lp-cards .lp-fav-cat.lp-has ~ .lp-cat:not(.lp-fav-cat) { margin-top: 12px; }
