@@ -44,6 +44,13 @@ The spectrum as bars round a ring, which turns a notch on every beat. It sits ar
 
 The old media-player look: segmented bars coloured by height, from blue and green at the bottom to orange and red at the top. Peak caps hang for a moment, then drop. Its colours step on the beat (**Change every**).
 
+### VU Meters
+A pair of old hi-fi VU meters filling the screen, drawn faint so the lyrics stay readable:
+- the left one shows the bass, the right one the mids and highs;
+- the needles are a little sluggish and overshoot before settling, like real ones (**Smoothing** sets how sluggish);
+- a red **Peak** lamp lights when a needle goes into the red, and a faint glass glare sits over each face;
+- **Faces: Cream** (warm backlit, default) or **Dark** (black, with the scale and needle glowing in the album's colours).
+
 ### ASCII
 ![ASCII](screenshots/styles/ascii.jpg)
 

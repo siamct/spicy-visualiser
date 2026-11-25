@@ -16,7 +16,7 @@ const path = require("path");
   const cat = await p.evaluate(() => [...document.querySelectorAll(".lp-panel .lp-cards .lp-cat")].filter((x) => x.offsetParent).map((x) => x.textContent));
   await p.evaluate(() => document.querySelector(".lp-panel .lp-sd-more").click());
   const opened = await visible();
-  const ok = sd === 21 && opened === 30 && cat.join() === "Works with Spotify data" && def === "plasma";
+  const ok = sd === 21 && opened === 31 && cat.join() === "Works with Spotify data" && def === "plasma";
   console.log(ok ? "PASS" : "FAIL", "style groups by sound source", JSON.stringify({ sd, opened, cat, def }));
   await b.close();
   process.exit(ok ? 0 : 1);

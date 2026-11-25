@@ -25,6 +25,7 @@
     ["radial", "Radial Bars"],
     ["mirror", "Mirror Bars"],
     ["retro", "Retro Bars"],
+    ["vu", "VU Meters"],
     ["plasma", "Plasma"],
     ["ribbon", "Ribbon"],
     ["rain", "Rain on Glass"],
@@ -52,6 +53,7 @@
   ];
   // Little pictures for the style picker.
   const STYLE_ICON = {
+    vu: '<g fill="none" stroke="currentColor" stroke-linecap="round"><rect x="2.5" y="5" width="19" height="14" rx="1.5" stroke-width="1.5"/><path d="M6 13.5a7 7 0 0 1 12 0" stroke-width="1.4"/><path d="M12 17l3.5-6.5" stroke-width="1.6"/></g>',
     particles: '<g stroke="currentColor" stroke-width="1" opacity=".55"><path d="M5 7l6 4 7-5M11 11l-4 7M11 11l7 5"/></g><circle cx="5" cy="7" r="2"/><circle cx="11" cy="11" r="2.4"/><circle cx="18" cy="6" r="1.6"/><circle cx="7" cy="18" r="1.7"/><circle cx="18" cy="16" r="2"/>',
     monstercat: '<rect x="3" y="11" width="2.5" height="9" rx=".6"/><rect x="7" y="6" width="2.5" height="14" rx=".6"/><rect x="11" y="9" width="2.5" height="11" rx=".6"/><rect x="15" y="4" width="2.5" height="16" rx=".6"/><rect x="19" y="13" width="2.5" height="7" rx=".6"/>',
     ncs: '<g opacity=".9"><circle cx="12" cy="12" r="1"/><circle cx="8" cy="9" r=".9"/><circle cx="16" cy="9" r=".9"/><circle cx="8" cy="15" r=".9"/><circle cx="16" cy="15" r=".9"/><circle cx="12" cy="6" r=".8"/><circle cx="12" cy="18" r=".8"/><circle cx="5.5" cy="12" r=".7"/><circle cx="18.5" cy="12" r=".7"/><circle cx="7" cy="5.5" r=".5"/><circle cx="17" cy="5.5" r=".5"/><circle cx="7" cy="18.5" r=".5"/><circle cx="17" cy="18.5" r=".5"/></g>',
@@ -90,7 +92,7 @@
   // the rest fold away under "More styles".
   const SONG_DATA_OK = new Set(["particles", "plasma", "ledplasma", "warp", "dnb", "ribbon", "rain", "lava", "smoke", "tunnel", "aurora", "chrome", "oil", "galaxy", "prism", "ombre", "bubbles", "geometric", "bauhaus", "sub", "off"]);
   const STYLE_GROUPS = [
-    ["Bars", ["ascii", "led", "mirror", "monstercat", "radial", "retro"]],
+    ["Bars", ["ascii", "led", "mirror", "monstercat", "radial", "retro", "vu"]],
     ["Circles", ["ncs", "sub", "trap", "tunnel"]],
     ["On the beat", ["geometric", "bauhaus"]],
     ["Flowing", ["plasma", "ledplasma", "chrome", "oil", "dnb", "neuro", "particles", "warp"]],
@@ -110,10 +112,11 @@
     mcColor: ["monstercat"],
     neuroTwist: ["neuro"],
     neuroMirror: ["neuro"],
+    vuFace: ["vu"],
     circleAt: ["trap", "radial", "ncs", "sub"],
     speed: ["trap", "retro", "neuro", "ribbon", "rain", "lava", "smoke", "tunnel", "aurora", "chrome", "oil", "particles", "monstercat", "ncs", "radial", "plasma", "warp", "dnb", "ascii", "led", "ledplasma", "galaxy", "prism", "ombre", "bubbles"],
     bassBoost: ["particles", "monstercat", "radial", "mirror", "ncs", "warp", "plasma", "dnb", "ascii", "geometric", "bauhaus", "led", "ledplasma", "sub", "trap", "retro", "neuro", "ribbon", "rain", "lava", "smoke", "tunnel", "aurora", "chrome", "oil", "galaxy", "prism", "ombre", "bubbles"],
-    smoothing: ["particles", "monstercat", "radial", "mirror", "ncs", "warp", "plasma", "dnb", "ascii", "geometric", "bauhaus", "led", "ledplasma", "sub", "trap", "retro", "neuro", "aurora"],
+    smoothing: ["particles", "monstercat", "radial", "mirror", "ncs", "warp", "plasma", "dnb", "ascii", "geometric", "bauhaus", "led", "ledplasma", "sub", "trap", "retro", "neuro", "aurora", "vu"],
   };
 
   const STYLE_BASE = {
@@ -135,6 +138,7 @@
     neuroLine: "rough", // Ridges look: rough (a little jagged) or smooth
     neuroTwist: 0, // Neuro Mesh: how much it rolls along its length (0 = still)
     neuroMirror: "off",
+    vuFace: "cream", // VU Meters: cream (backlit) or dark faces
     circleAt: "middle", // circle styles: middle of the view, or round the album art
     autoRange: 0.6, // 0 = raw levels, 1 = each band fully auto-ranged
     beatEvery: "1", // beat-stepping styles change every 1, 2, 4 or 8 beats
@@ -164,6 +168,7 @@
     prism: { shake: 0, colorMode: "classic" },
     ombre: { shake: 0 },
     bubbles: { shake: 0, colorMode: "classic" },
+    vu: { shake: 0 },
     led: { colorMode: "classic", shake: 0 },
     ledplasma: { shake: 0 },
     monstercat: { barCount: 63, bassBoost: 0.8, smoothing: 0.45, beatEvery: "4" },
@@ -2521,6 +2526,168 @@ void main() {
   };
 
   // ---------------------------------------------------------------------------
+  // VU Meters: a pair of old hi-fi VU meters filling the screen, drawn faint
+  // so the lyrics stay readable. The left one shows the low end (bass), the
+  // right one the mids and highs. The needles are a little sluggish and
+  // overshoot before settling, like real ones (Smoothing sets how sluggish);
+  // a red lamp lights when a needle goes into the red. Look: Cream (warm
+  // backlit faces, default) or Dark (black faces, scale and needle glowing
+  // in the album's colours). A faint glass glare sits over each face.
+  const VU_DB = [-20, -10, -7, -5, -3, -2, -1, 0, 1, 2, 3];
+  const vuPos = (db) => (Math.pow(10, db / 20) - 0.1) / (Math.pow(10, 3 / 20) - 0.1); // 0..1 along the scale
+  DRAW.vu = (v, p, dt) => {
+    const { ctx, w, h } = v;
+    const st = v.vu || (v.vu = { m: [{ a: 0, v: 0, lamp: 0 }, { a: 0, v: 0, lamp: 0 }] });
+    const dark = p.vuFace === "dark";
+    const sens = p.sensitivity;
+    let lo = 0, hi = 0;
+    for (let i = 0; i < 8; i++) { lo += bandAt((i / 7) * 0.25); hi += bandAt(0.3 + (i / 7) * 0.6); }
+    const want = [Math.min(1.1, (lo / 8) * 1.25 * sens), Math.min(1.1, (hi / 8) * 1.9 * sens)];
+    // needle: a spring that overshoots a little, then settles
+    const sm = Math.max(0, Math.min(1, p.smoothing));
+    const k = 140 - 90 * sm, damp = 2 * Math.sqrt(k) * 0.42;
+    const red = vuPos(0);
+    for (let i = 0; i < 2; i++) {
+      const m = st.m[i];
+      m.v += (k * (want[i] - m.a) - damp * m.v) * Math.min(dt, 0.05);
+      m.a += m.v * Math.min(dt, 0.05);
+      if (m.a > 1.12) { m.a = 1.12; m.v = -Math.abs(m.v) * 0.3; } // hits the end stop
+      if (m.a < -0.04) { m.a = -0.04; m.v = Math.abs(m.v) * 0.2; }
+      m.lamp = m.a > red ? 1 : m.lamp * Math.exp(-dt * 3);
+    }
+
+    // layout: two faces side by side, as big as fits
+    const gap = w * 0.03;
+    const fw = Math.min((w * 0.94 - gap) / 2, h * 0.8 * 1.55), fh = fw / 1.55;
+    const y0 = (h - fh) / 2, x0 = (w - fw * 2 - gap) / 2;
+    const ink = dark ? colorAt(0.3) : [30, 26, 22];
+    const inkRed = dark ? mix(colorAt(0.9), [255, 60, 50], 0.5) : [196, 40, 30];
+    const path = (x, y, ww, hh, r) => {
+      ctx.beginPath();
+      ctx.moveTo(x + r, y);
+      ctx.arcTo(x + ww, y, x + ww, y + hh, r);
+      ctx.arcTo(x + ww, y + hh, x, y + hh, r);
+      ctx.arcTo(x, y + hh, x, y, r);
+      ctx.arcTo(x, y, x + ww, y, r);
+      ctx.closePath();
+    };
+    ctx.save();
+    ctx.globalCompositeOperation = "source-over";
+    ctx.globalAlpha = A_(dark ? 0.75 : 0.3, v);
+    for (let i = 0; i < 2; i++) {
+      const m = st.m[i];
+      const fx = x0 + i * (fw + gap), cx = fx + fw / 2;
+      const px = cx, py = y0 + fh * 1.25; // needle pivot, hidden under the bottom bezel
+      const R = fh * 0.95, A = 0.72; // scale radius and half-angle
+      const ang = (t) => -Math.PI / 2 - A + 2 * A * t;
+      // frame and face
+      ctx.fillStyle = dark ? "rgb(6,6,8)" : "rgb(40,34,28)";
+      path(fx - fw * 0.025, y0 - fw * 0.025, fw * 1.05, fh + fw * 0.05, fw * 0.04);
+      ctx.fill();
+      path(fx, y0, fw, fh, fw * 0.02);
+      ctx.save();
+      ctx.clip();
+      if (dark) {
+        ctx.fillStyle = "rgb(12,12,15)";
+        ctx.fillRect(fx, y0, fw, fh);
+      } else {
+        const g = ctx.createRadialGradient(cx, y0 + fh * 0.75, fh * 0.1, cx, y0 + fh * 0.6, fw * 0.75);
+        g.addColorStop(0, "rgb(255,236,190)");
+        g.addColorStop(0.6, "rgb(236,214,160)");
+        g.addColorStop(1, "rgb(170,140,90)");
+        ctx.fillStyle = g;
+        ctx.fillRect(fx, y0, fw, fh);
+      }
+      // the scale: a thin arc, a thick red stretch from 0 to +3, ticks and numbers
+      ctx.lineCap = "butt";
+      ctx.strokeStyle = v.rgba(ink, 1);
+      ctx.lineWidth = Math.max(1, fh * 0.008);
+      ctx.beginPath();
+      ctx.arc(px, py, R, ang(0), ang(red));
+      ctx.stroke();
+      ctx.strokeStyle = v.rgba(inkRed, 1);
+      ctx.lineWidth = Math.max(2, fh * 0.03);
+      ctx.beginPath();
+      ctx.arc(px, py, R + fh * 0.012, ang(red), ang(1));
+      ctx.stroke();
+      ctx.font = `600 ${Math.round(fh * 0.07)}px "Helvetica Neue", Arial, sans-serif`;
+      ctx.textAlign = "center";
+      ctx.textBaseline = "middle";
+      for (const db of VU_DB) {
+        const a = ang(vuPos(db)), c = Math.cos(a), s = Math.sin(a);
+        const col = db > 0 ? inkRed : ink;
+        ctx.strokeStyle = v.rgba(col, 1);
+        ctx.lineWidth = Math.max(1, fh * 0.01);
+        ctx.beginPath();
+        ctx.moveTo(px + c * R, py + s * R);
+        ctx.lineTo(px + c * (R + fh * 0.06), py + s * (R + fh * 0.06));
+        ctx.stroke();
+        ctx.fillStyle = v.rgba(col, 1);
+        ctx.fillText(String(Math.abs(db)), px + c * (R + fh * 0.13), py + s * (R + fh * 0.13));
+      }
+      // small in-between ticks
+      ctx.strokeStyle = v.rgba(ink, 0.8);
+      ctx.lineWidth = Math.max(1, fh * 0.006);
+      ctx.beginPath();
+      for (let j = 0; j <= 20; j++) {
+        const a = ang(j / 20), c = Math.cos(a), s = Math.sin(a);
+        ctx.moveTo(px + c * R, py + s * R);
+        ctx.lineTo(px + c * (R + fh * 0.03), py + s * (R + fh * 0.03));
+      }
+      ctx.stroke();
+      ctx.font = `700 ${Math.round(fh * 0.14)}px "Times New Roman", Georgia, serif`;
+      ctx.fillStyle = v.rgba(ink, 1);
+      ctx.fillText("VU", cx, y0 + fh * 0.66);
+      ctx.font = `600 ${Math.round(fh * 0.05)}px "Helvetica Neue", Arial, sans-serif`;
+      ctx.fillText(i ? "HIGH" : "LOW", cx, y0 + fh * 0.77);
+      ctx.fillStyle = v.rgba(ink, 0.8);
+      ctx.fillText("-", fx + fw * 0.1, y0 + fh * 0.62);
+      ctx.fillStyle = v.rgba(inkRed, 1);
+      ctx.fillText("+", fx + fw * 0.9, y0 + fh * 0.62);
+      // the needle
+      const na = ang(Math.max(-0.04, Math.min(1.12, m.a)));
+      const nc = dark ? mix(colorAt(0.6), [255, 255, 255], 0.5) : [20, 18, 16];
+      ctx.strokeStyle = v.rgba(nc, 1);
+      ctx.lineCap = "round";
+      ctx.lineWidth = Math.max(1.2, fh * 0.012);
+      if (dark) { ctx.shadowColor = v.rgba(colorAt(0.6), 0.9); ctx.shadowBlur = fh * 0.04; }
+      ctx.beginPath();
+      ctx.moveTo(px + Math.cos(na) * fh * 0.3, py + Math.sin(na) * fh * 0.3);
+      ctx.lineTo(px + Math.cos(na) * (R + fh * 0.05), py + Math.sin(na) * (R + fh * 0.05));
+      ctx.stroke();
+      ctx.shadowBlur = 0;
+      // bottom bezel over the pivot
+      ctx.fillStyle = dark ? "rgb(4,4,6)" : "rgb(52,44,36)";
+      ctx.fillRect(fx, y0 + fh * 0.86, fw, fh * 0.14);
+      // peak lamp
+      const lx = fx + fw * 0.88, ly = y0 + fh * 0.12, lr = fh * 0.035;
+      if (m.lamp > 0.02) {
+        const g = ctx.createRadialGradient(lx, ly, 0, lx, ly, lr * 5);
+        g.addColorStop(0, `rgba(255,70,40,${0.6 * m.lamp})`);
+        g.addColorStop(1, "rgba(255,70,40,0)");
+        ctx.fillStyle = g;
+        ctx.fillRect(lx - lr * 5, ly - lr * 5, lr * 10, lr * 10);
+      }
+      ctx.fillStyle = `rgb(${Math.round(90 + 165 * m.lamp)},${Math.round(20 + 70 * m.lamp)},${Math.round(16 + 40 * m.lamp)})`;
+      ctx.beginPath();
+      ctx.arc(lx, ly, lr, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.font = `600 ${Math.round(fh * 0.04)}px "Helvetica Neue", Arial, sans-serif`;
+      ctx.fillStyle = v.rgba(ink, 0.8);
+      ctx.fillText("PEAK", lx, ly + lr * 2.4);
+      // glass glare: a soft diagonal sheen across the top
+      const gg = ctx.createLinearGradient(fx, y0, fx + fw * 0.45, y0 + fh * 0.7);
+      gg.addColorStop(0, "rgba(255,255,255,0.18)");
+      gg.addColorStop(0.5, "rgba(255,255,255,0.05)");
+      gg.addColorStop(0.51, "rgba(255,255,255,0)");
+      ctx.fillStyle = gg;
+      ctx.fillRect(fx, y0, fw, fh);
+      ctx.restore();
+    }
+    ctx.restore();
+  };
+
+  // ---------------------------------------------------------------------------
   // Bubbles: soap bubbles floating up, each a clear film with a thin
   // rainbow rim and a bright window reflection. The bass sends more up and
   // faster, kicks pop a few. Colours: Classic = soap-film rainbow (default);
@@ -3926,7 +4093,7 @@ void main() {
   vec3 film = 0.5 + 0.5 * cos(6.2832 * (th * 2.6 + uShift + vec3(0., 0.33, 0.67)));
   vec3 tint = mix(mix(uC0, uC1, q.x), uC2, r.y * 0.6);
   film = mix(film, film * (0.4 + 1.2 * tint), 0.45 * uTint);
-  float mask = smoothstep(0.54, 0.74, fbm(p * 1.6 + r * 1.2 - uT * 0.02));
+  float mask = smoothstep(0.4, 0.6, fbm(p * 0.5 + r * 0.8 - uT * 0.02));
   vec3 col = film * mask * (0.42 + 0.3 * uE + 0.15 * uBass);
   col += vec3(pow(max(0., r.x - 0.55), 3.) * 2. * mask);
   col *= 1.15;
@@ -4100,7 +4267,7 @@ void main() {
             <div class="lp-row"><div class="lp-label"><span>Colour changes</span></div>${seg("colorMove", [["move", "Moving"], ["still", "Still"]], "style")}</div>
             <div class="lp-colors" data-show-color><label><input type="color" data-key="color1" data-scope="style">Colour 1</label><label><input type="color" data-key="color2" data-scope="style">Colour 2</label></div>`)}
           ${group("Appearance", slider("opacity", "Opacity", 0.1, 1, 0.05, "style") + slider("blur", "Blur", 0, 20, 0.5, "style") + slider("brightness", "Brightness", 0.2, 1.6, 0.05, "style") + slider("size", "Size", 0.4, 2, 0.05, "style"))}
-          ${group("Layout", slider("barCount", "Bar count", 16, 128, 1, "style", u("barCount")) + slider("neuroTwist", "Twist", 0, 1, 0.05, "style", u("neuroTwist")) + `<div class="lp-row" data-uses="${u("position")}"><div class="lp-label"><span>Position</span></div>${seg("position", [["bottom", "Bottom"], ["top", "Top"], ["both", "Both"]], "style")}</div><div class="lp-row" data-uses="${u("variant")}"><div class="lp-label"><span>Look</span></div>${seg("variant", [["poster", "Poster"], ["brutalist", "Brutalist"]], "style")}</div><div class="lp-row" data-uses="${u("neuroLook")}"><div class="lp-label"><span>Look</span></div>${seg("neuroLook", [["mesh", "Mesh"], ["lines", "Lines"], ["ridges", "Ridges"]], "style")}</div><div class="lp-row" data-uses="${u("neuroLine")}"><div class="lp-label"><span>Ridges line</span></div>${seg("neuroLine", [["rough", "Rough"], ["smooth", "Smooth"]], "style")}</div><div class="lp-row" data-uses="${u("neuroMirror")}"><div class="lp-label"><span>Mirror</span></div>${seg("neuroMirror", [["off", "Off"], ["on", "On"]], "style")}</div><div class="lp-row" data-uses="${u("circleAt")}"><div class="lp-label"><span>Circle at</span></div>${seg("circleAt", [["middle", "Middle"], ["art", "Album art"]], "style")}</div><div class="lp-row" data-uses="${u("mcColor")}"><div class="lp-label"><span>Bar colour</span></div>${seg("mcColor", [["flow", "Flow"], ["frequency", "Freq."], ["height", "Area"], ["bar", "Bar"], ["solid", "Solid"]], "style")}</div><div class="lp-row" data-uses="${u("beatEvery")}"><div class="lp-label"><span>Change every</span></div>${seg("beatEvery", [["1", "Beat"], ["2", "2"], ["4", "4"], ["8", "8 beats"]], "style")}</div>`, [...new Set([...USES.barCount, ...USES.position, ...USES.variant, ...USES.neuroLook, ...USES.neuroLine, ...USES.neuroTwist, ...USES.neuroMirror, ...USES.circleAt, ...USES.mcColor, ...USES.beatEvery])].join(","))}
+          ${group("Layout", slider("barCount", "Bar count", 16, 128, 1, "style", u("barCount")) + slider("neuroTwist", "Twist", 0, 1, 0.05, "style", u("neuroTwist")) + `<div class="lp-row" data-uses="${u("position")}"><div class="lp-label"><span>Position</span></div>${seg("position", [["bottom", "Bottom"], ["top", "Top"], ["both", "Both"]], "style")}</div><div class="lp-row" data-uses="${u("variant")}"><div class="lp-label"><span>Look</span></div>${seg("variant", [["poster", "Poster"], ["brutalist", "Brutalist"]], "style")}</div><div class="lp-row" data-uses="${u("neuroLook")}"><div class="lp-label"><span>Look</span></div>${seg("neuroLook", [["mesh", "Mesh"], ["lines", "Lines"], ["ridges", "Ridges"]], "style")}</div><div class="lp-row" data-uses="${u("neuroLine")}"><div class="lp-label"><span>Ridges line</span></div>${seg("neuroLine", [["rough", "Rough"], ["smooth", "Smooth"]], "style")}</div><div class="lp-row" data-uses="${u("neuroMirror")}"><div class="lp-label"><span>Mirror</span></div>${seg("neuroMirror", [["off", "Off"], ["on", "On"]], "style")}</div><div class="lp-row" data-uses="${u("vuFace")}"><div class="lp-label"><span>Faces</span></div>${seg("vuFace", [["cream", "Cream"], ["dark", "Dark"]], "style")}</div><div class="lp-row" data-uses="${u("circleAt")}"><div class="lp-label"><span>Circle at</span></div>${seg("circleAt", [["middle", "Middle"], ["art", "Album art"]], "style")}</div><div class="lp-row" data-uses="${u("mcColor")}"><div class="lp-label"><span>Bar colour</span></div>${seg("mcColor", [["flow", "Flow"], ["frequency", "Freq."], ["height", "Area"], ["bar", "Bar"], ["solid", "Solid"]], "style")}</div><div class="lp-row" data-uses="${u("beatEvery")}"><div class="lp-label"><span>Change every</span></div>${seg("beatEvery", [["1", "Beat"], ["2", "2"], ["4", "4"], ["8", "8 beats"]], "style")}</div>`, [...new Set([...USES.barCount, ...USES.position, ...USES.variant, ...USES.neuroLook, ...USES.neuroLine, ...USES.neuroTwist, ...USES.neuroMirror, ...USES.vuFace, ...USES.circleAt, ...USES.mcColor, ...USES.beatEvery])].join(","))}
         </div>
       </div>
 

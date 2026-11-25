@@ -7,7 +7,7 @@ const fs = require("fs");
 const OUT = path.join(__dirname, "out");
 fs.mkdirSync(OUT, { recursive: true });
 
-const STYLES = ["particles", "monstercat", "ncs", "radial", "mirror", "plasma", "warp", "dnb", "ascii", "geometric", "bauhaus", "sub", "trap", "retro", "neuro", "ribbon", "rain", "lava", "smoke", "tunnel", "aurora", "chrome", "oil", "galaxy", "prism", "ombre", "bubbles", "led", "ledplasma"];
+const STYLES = ["particles", "monstercat", "ncs", "radial", "mirror", "plasma", "warp", "dnb", "ascii", "geometric", "bauhaus", "sub", "trap", "retro", "neuro", "ribbon", "rain", "lava", "smoke", "tunnel", "aurora", "chrome", "oil", "galaxy", "prism", "ombre", "bubbles", "led", "ledplasma", "vu"];
 // Extra looks of a style: [style, setting key, value]
 const VARIANTS = [["geometric", "variant", "brutalist"], ["neuro", "neuroLook", "lines"], ["neuro", "neuroLook", "ridges"], ["monstercat", "mcColor", "height"], ["monstercat", "mcColor", "solid"], ["monstercat", "mcColor", "bar"], ["trap", "circleAt", "art"]];
 const HIGHLIGHTS = ["soft", "fade", "sweep", "underline"];
