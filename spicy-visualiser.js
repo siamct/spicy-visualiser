@@ -3881,13 +3881,15 @@ uniform vec3 uC0, uC1, uC2;
 void main() {
   vec2 uv = gl_FragCoord.xy / uRes;
   vec2 p = vec2(uv.x * uRes.x / uRes.y, uv.y) * 2.4;
-  vec2 flow = vec2(0., -uRise);
-  vec2 q = vec2(fbm(p * 0.7 + flow * 0.8 + vec2(0., uT * 0.04)), fbm(p * 0.7 + flow * 0.8 + vec2(4.1, 1.7)));
-  float n = fbm(p + flow + (1.4 + 1.8 * uBass) * (q - 0.5) * 2.);
+  // it rises and drifts slowly from side to side; the swirls themselves
+  // keep changing shape as they go, so it flows rather than just pulsing
+  vec2 flow = vec2(0.45 * sin(uRise * 0.17) + 0.2 * sin(uRise * 0.41 + 1.3), -uRise);
+  vec2 q = vec2(fbm(p * 0.7 + flow * 0.8 + vec2(uT * 0.09, uT * 0.05)), fbm(p * 0.7 + flow * 0.8 + vec2(4.1, 1.7) - vec2(uT * 0.06, uT * 0.1)));
+  float n = fbm(p + flow + (1.8 + 1.6 * uBass) * (q - 0.5) * 2.);
   float wisp = 1. - abs(fbm(p * 1.6 + flow * 1.4 + q * 2.) * 2. - 1.);
   float d = smoothstep(0.45, 0.85, n) * 0.8 + pow(wisp, 6.) * 0.35;
   float base = smoothstep(1.1, 0.05, uv.y);
-  d *= base * (0.45 + 0.55 * uE) + uKick * 0.5 * smoothstep(0.55, 0., uv.y);
+  d *= base * (0.65 + 0.35 * uE) + uKick * 0.22 * smoothstep(0.55, 0., uv.y);
   vec3 c = mix(uC0, uC1, smoothstep(0.3, 0.7, q.x));
   c = mix(c, uC2, smoothstep(0.35, 0.9, uv.y) * 0.5);
   vec3 col = min(c * d, vec3(1.));
@@ -3895,8 +3897,8 @@ void main() {
 }`;
   DRAW.smoke = (v, p, dt) => {
     const st = v.smoke || (v.smoke = { rise: 0 });
-    fxClock(st, p, dt, 0.6, 10, 2, 3);
-    st.rise += dt * (0.12 + 0.35 * shared.energy + 0.3 * st.lift) * p.speed;
+    fxClock(st, p, dt, 1, 10, 2, 3);
+    st.rise += dt * (0.3 + 0.3 * shared.energy + 0.3 * st.lift) * p.speed;
     const pal = easePal(st, beatSteps(st, p), dt, 0.8);
     fxDraw(v, "smoke", SMOKE_FS, { uT: st.T, uE: shared.energy, uBass: st.lift, uKick: st.flash, uRise: st.rise, uC0: rgb1(pal[0]), uC1: rgb1(pal[1]), uC2: rgb1(pal[2]) }, 1);
   };
