@@ -35,7 +35,7 @@
     ["chrome", "Liquid Chrome"],
     ["oil", "Oil Slick"],
     ["galaxy", "Galaxy"],
-    ["prism", "Labradorite"],
+    ["prism", "Graphite"],
     ["ombre", "Ombre"],
     ["bubbles", "Bubbles"],
     ["warp", "Warp"],
@@ -2440,9 +2440,9 @@ void main() {
   };
 
   // ---------------------------------------------------------------------------
-  // Ombre: rich colour glowing in from the screen edges and fading to dark
-  // in the middle (behind the lyrics). The colours run round the edges as a
-  // soft gradient and slowly turn; the bass pushes the glow further in,
+  // Ombre: rich colour glowing in from the left and right sides, with the
+  // middle left dark (behind the lyrics). The colours run down each side as
+  // a soft gradient and slowly turn; the bass pushes the glow further in,
   // loudness makes it brighter, kicks give it a soft pulse.
   const OMBRE_FS = `
 uniform float uT, uE, uBass, uKick;
@@ -2457,15 +2457,16 @@ void main() {
   vec2 c = (uv - 0.5) * vec2(asp, 1.);
   float ang = atan(c.y, c.x);
   // distance in from the nearest edge, with a slow soft wave along it
-  float wav = 0.05 * sin(ang * 3. + uT * 0.35) + 0.03 * sin(ang * 5. - uT * 0.27);
-  float reach = 0.11 + 0.05 * uE + 0.08 * uBass + 0.04 * uKick;
-  // glow from all four edges added together, so the corners blend smoothly
-  float g = exp(-(uv.x * asp + wav) / reach) + exp(-((1. - uv.x) * asp + wav) / reach)
-          + exp(-(uv.y + wav) / reach) + exp(-(1. - uv.y + wav) / reach);
-  g = 1. - exp(-g * 0.9);
-  vec3 col = loop3(ang / 6.2832 + uT * 0.012 + 0.15 * sin(uT * 0.1));
+  // only the left and right sides glow, fading in a short way; the middle
+  // stays dark so the lyrics are easy to read
+  float wav = 0.025 * sin(uv.y * 5. + uT * 0.35) + 0.015 * sin(uv.y * 9. - uT * 0.27);
+  float reach = 0.07 + 0.03 * uE + 0.05 * uBass + 0.03 * uKick;
+  float sx = min(uv.x, 1. - uv.x) * asp + wav;
+  float g = exp(-max(sx, 0.) / reach);
+  g *= smoothstep(0.3 * asp, 0.12 * asp, min(uv.x, 1. - uv.x) * asp); // hard stop well before the middle
+  vec3 col = loop3(uv.y * 0.6 + (uv.x > 0.5 ? 0.5 : 0.) + uT * 0.012);
   col = mix(col, col * col * 1.6, 0.35); // a bit richer
-  col *= 0.04 + g * (0.6 + 0.2 * uE + 0.25 * uBass + 0.2 * uKick);
+  col *= g * (0.7 + 0.2 * uE + 0.25 * uBass + 0.2 * uKick);
   col += (hash(gl_FragCoord.xy + fract(uT)) - 0.5) / 255.; // no banding
   col = clamp(col, 0., 1.);
   o = vec4(col, max(col.r, max(col.g, col.b)));
@@ -2478,7 +2479,7 @@ void main() {
   };
 
   // ---------------------------------------------------------------------------
-  // Labradorite: a dark, slightly mossy stone surface with little flecks of
+  // Graphite: a dark, slightly mossy stone surface with little flecks of
   // rainbow shimmer (like the mineral catching the light) scattered over it,
   // thicker towards the middle. The flecks drift and shimmer slowly; louder
   // parts and the bass bring out more of them, kicks make them flare.
@@ -2489,20 +2490,22 @@ uniform vec3 uC0, uC1, uC2;
 void main() {
   vec2 uv = gl_FragCoord.xy / uRes;
   vec2 p = (uv - 0.5) * vec2(uRes.x / uRes.y, 1.) * 3.;
-  vec2 drift = vec2(uT * 0.012, -uT * 0.008);
+  // the whole surface drifts slowly round in a big loop and gently warps
+  vec2 drift = vec2(sin(uT * 0.05) * 1.4 + uT * 0.03, cos(uT * 0.04) * 1.1 - uT * 0.02);
   // the stone: soft blotches with faint cracks
   vec2 q = vec2(fbm(p * 0.9 + drift), fbm(p * 0.9 + vec2(4.3, 2.1) - drift));
   float s = fbm(p * 1.6 + q * 1.5 + drift);
   float crack = 1. - abs(fbm(p * 3.2 + q * 2.) * 2. - 1.);
   vec3 stone = vec3(0.075, 0.09, 0.085) * (0.4 + 1.2 * s) + vec3(0.03, 0.035, 0.032) * pow(crack, 5.);
   // the shimmer flecks
-  float n = fbm(p * 6. + q * 2.5 + vec2(uT * 0.03, uT * 0.02));
-  float m = fbm(p * 14. - q * 3. + uT * 0.05);
+  float n = fbm(p * 6. + drift * 1.5 + q * 2.5 + vec2(uT * 0.07, -uT * 0.05));
+  float m = fbm(p * 14. + drift * 2. - q * 3. + vec2(-uT * 0.1, uT * 0.08));
   float centre = length((uv - 0.5) * vec2(1.3, 1.6));
   float thr = 0.69 + 0.2 * centre - 0.05 * uE - 0.07 * uBass - 0.03 * uKick;
   float fleck = smoothstep(thr, thr + 0.02, n) * smoothstep(0.5, 0.6, m);
   float halo = smoothstep(thr - 0.08, thr, n) * smoothstep(0.45, 0.6, m) * 0.08;
-  vec3 film = 0.5 + 0.5 * cos(6.2832 * (n * 7. + m * 2. + uT * 0.04 + vec3(0., 0.33, 0.67)));
+  // the rainbow runs across each fleck and keeps sliding round its colours
+  vec3 film = 0.5 + 0.5 * cos(6.2832 * (n * 9. + m * 2.5 + uv.x * 0.8 - uT * 0.22 + vec3(0., 0.33, 0.67)));
   vec3 tint = mix(mix(uC0, uC1, q.x), uC2, smoothstep(0.4, 0.7, m));
   film = mix(film, tint * (0.6 + 0.8 * film), uTint);
   film = mix(vec3(dot(film, vec3(0.33))), film, 0.8);
@@ -3438,7 +3441,10 @@ void main() {
     st.wob *= Math.exp(-dt * 4);
     st.swell += (bass - st.swell) * Math.min(1, dt * (bass > st.swell ? 8 : 2));
     const step = beatSteps(st, p);
-    const top = colorAt((0.15 + step / 3) % 1), bot = colorAt((0.75 + step / 3) % 1);
+    const wantTop = colorAt((0.15 + step / 3) % 1), wantBot = colorAt((0.75 + step / 3) % 1);
+    if (!st.top) { st.top = wantTop.slice(); st.bot = wantBot.slice(); }
+    for (let j = 0; j < 3; j++) { st.top[j] += (wantTop[j] - st.top[j]) * Math.min(1, dt * 0.9); st.bot[j] += (wantBot[j] - st.bot[j]) * Math.min(1, dt * 0.9); }
+    const top = st.top, bot = st.bot;
     const B = st.blobs, nB = B.length * 3;
     const bx = new Float32Array(nB), by = new Float32Array(nB), br2 = new Float32Array(nB), bsy = new Float32Array(nB);
     let n = 0;
@@ -3920,9 +3926,10 @@ void main() {
   vec3 film = 0.5 + 0.5 * cos(6.2832 * (th * 2.6 + uShift + vec3(0., 0.33, 0.67)));
   vec3 tint = mix(mix(uC0, uC1, q.x), uC2, r.y * 0.6);
   film = mix(film, film * (0.4 + 1.2 * tint), 0.45 * uTint);
-  float mask = smoothstep(0.3, 0.72, fbm(p * 0.6 + r * 1.2 - uT * 0.02));
-  vec3 col = film * (0.05 + 0.95 * mask) * (0.42 + 0.3 * uE + 0.15 * uBass);
+  float mask = smoothstep(0.54, 0.74, fbm(p * 1.6 + r * 1.2 - uT * 0.02));
+  vec3 col = film * mask * (0.42 + 0.3 * uE + 0.15 * uBass);
   col += vec3(pow(max(0., r.x - 0.55), 3.) * 2. * mask);
+  col *= 1.15;
   col = min(col, vec3(1.));
   o = vec4(col, max(col.r, max(col.g, col.b)));
 }`;

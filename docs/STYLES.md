@@ -161,8 +161,8 @@ Northern lights over a starry sky:
 - the bass lifts them higher and taller, loudness makes them brighter and faster, kicks make them flare.
 
 ### Ombre
-Rich colour glowing in from the screen edges, fading to dark in the middle behind the lyrics:
-- the colours run round the edges as a soft gradient and slowly turn;
+Rich colour glowing in from the left and right sides, with the middle left dark behind the lyrics:
+- the colours run down each side as a soft gradient and slowly turn;
 - the bass pushes the glow further in, loudness makes it brighter, kicks give it a soft pulse.
 
 ### Galaxy
@@ -170,9 +170,9 @@ Drifting slowly through a coloured nebula, stars streaming past:
 - the bass makes the gas glow brighter and swirl;
 - loudness speeds up the flight, kicks make the stars flash.
 
-### Labradorite
+### Graphite
 A dark, slightly mossy stone surface with little flecks of rainbow shimmer scattered over it, thicker towards the middle:
-- the flecks drift and shimmer slowly; louder parts and the bass bring out more of them, kicks make them flare;
+- the stone slowly drifts and warps, the flecks change shape as it moves, and the rainbow keeps sliding through them; louder parts and the bass bring out more of them, kicks make them flare;
 - **Colours: Classic** (default) is the rainbow shimmer; the other colour modes tint it.
 
 ### Bubbles
