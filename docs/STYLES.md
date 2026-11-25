@@ -161,9 +161,19 @@ Northern lights over a starry sky:
 - the bass lifts them higher and taller, loudness makes them brighter and faster, kicks make them flare.
 
 ### Ombre
-Big soft gradients in the album's colours, gently waving:
-- the bass pushes the colour bands up from the bottom;
-- loudness makes it glow a little brighter.
+Rich colour glowing in from the screen edges, fading to dark in the middle behind the lyrics:
+- the colours run round the edges as a soft gradient and slowly turn;
+- the bass pushes the glow further in, loudness makes it brighter, kicks give it a soft pulse.
+
+### Galaxy
+Drifting slowly through a coloured nebula, stars streaming past:
+- the bass makes the gas glow brighter and swirl;
+- loudness speeds up the flight, kicks make the stars flash.
+
+### Labradorite
+A dark, slightly mossy stone surface with little flecks of rainbow shimmer scattered over it, thicker towards the middle:
+- the flecks drift and shimmer slowly; louder parts and the bass bring out more of them, kicks make them flare;
+- **Colours: Classic** (default) is the rainbow shimmer; the other colour modes tint it.
 
 ### Bubbles
 Soap bubbles floating up, each a clear film with a thin rainbow rim and a bright window reflection:
@@ -173,15 +183,15 @@ Soap bubbles floating up, each a clear film with a thin rainbow rim and a bright
 
 ### Ribbon
 Soft sheets of light rolling across the screen, like the wave on an old games-console home menu:
-- no drawn lines: each sheet fades out at its edges and is brighter where it folds over;
-- the music sets how fast they flow, the bass makes the waves bigger, kicks brighten them;
+- no drawn lines: each sheet is soft at its edges and brighter where it folds over, and runs right across the screen;
+- the music sets how fast they flow and the bass makes the waves bigger; each kick makes them flash brighter and turns their colours a little further round;
 - a few sparkles drift along with them.
 
 ### Rain on Glass
 Looking out of a rainy window at night:
-- blurred city lights in the album's colours glow behind the glass;
+- big, soft out-of-focus lights in the album's colours glow behind the glass;
 - drops keep landing (the bass sets how hard it rains, kicks bring a burst); drops that touch join up, and heavy ones run down, picking up the drops in their way;
-- the wet trails break into little beads and dry up within a few seconds, and drops left sitting slowly evaporate.
+- they leave a faint wet smear that breaks into little beads and dries up within a few seconds, and drops left sitting slowly evaporate.
 
 ### Lava Lamp
 Lumpy blobs of colour rising and sinking, stretching, merging and splitting:
@@ -194,21 +204,6 @@ Soft coloured smoke curling up from the bottom:
 - louder parts make it thicker and rise faster;
 - the bass stirs it into curls, and kicks puff out a burst from below;
 - the colours turn on the beat.
-
----
-
-## Space
-
-### Galaxy
-Drifting slowly through a coloured nebula, stars streaming past:
-- the bass makes the gas glow brighter and swirl;
-- loudness speeds up the flight, kicks make the stars flash.
-
-### Prism Galaxy
-A spiral of tiny glowing points in rainbow colours, turning slowly:
-- the bass spreads the arms out and spins it faster, kicks brighten the core;
-- **Colours: Classic** (default) is the rainbow; the other colour modes use those colours;
-- **Particles** sets how many points.
 
 ---
 

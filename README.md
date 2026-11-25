@@ -24,7 +24,7 @@
 
 ## Highlights
 
-- **29 styles:** bars, retro and LED spectrums, circles and a subwoofer, poster shapes, fluids, wave ribbons, rain on glass, a lava lamp, smoke, a starfield tunnel, an aurora, liquid chrome, an oil slick, a galaxy, a rainbow spiral, ombre gradients, soap bubbles, particles and 3D landscapes.
+- **29 styles:** bars, retro and LED spectrums, circles and a subwoofer, poster shapes, fluids, wave ribbons, rain on glass, a lava lamp, smoke, a starfield tunnel, an aurora, liquid chrome, an oil slick, a galaxy, iridescent stone, ombre gradients, soap bubbles, particles and 3D landscapes.
 - **Album colours:** every song gets its own palette from its cover, shifting on the beat or holding still, as you like. Or pick your own, rainbow, or each style's classic look.
 - **Fully customisable:** opacity, size, blur, brightness, bar count, position, sensitivity, bass boost, speed, shake and more. Each style remembers its own settings.
 - **Works out of the box:** runs on Spotify's own song data straight from the Marketplace.

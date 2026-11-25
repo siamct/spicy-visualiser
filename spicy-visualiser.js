@@ -35,7 +35,7 @@
     ["chrome", "Liquid Chrome"],
     ["oil", "Oil Slick"],
     ["galaxy", "Galaxy"],
-    ["prism", "Prism Galaxy"],
+    ["prism", "Labradorite"],
     ["ombre", "Ombre"],
     ["bubbles", "Bubbles"],
     ["warp", "Warp"],
@@ -72,7 +72,7 @@
     aurora: '<path d="M2 15c3-6 5-9 7-9s2 5 4 5 4-6 6-6 3 3 3 3" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/><path d="M5 13v6M9 10v8M13 13v5M17 9v7" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" opacity=".5"/><circle cx="4" cy="4" r=".8"/><circle cx="20" cy="3" r=".8"/>',
     chrome: '<path d="M2 14c3-4 6 3 10-1s7-3 10 1v6H2z" opacity=".35"/><path d="M2 10c3-4 6 3 10-1s7-3 10 1" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><ellipse cx="8" cy="15.5" rx="2.5" ry=".9" opacity=".9"/>',
     galaxy: '<circle cx="12" cy="12" r="9" opacity=".18"/><path d="M5 15c3-6 10-8 14-5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" opacity=".8"/><circle cx="6" cy="6" r="1"/><circle cx="18" cy="17" r="1.2"/><circle cx="16" cy="5" r=".7"/><circle cx="9" cy="18" r=".7"/>',
-    prism: '<g fill="none" stroke="currentColor" stroke-linecap="round"><path d="M12 12c0-3 3-4 5-2s1 7-5 7-8-6-4-10 10-2 11 1" stroke-width="1.6"/></g><circle cx="12" cy="12" r="1.6"/>',
+    prism: '<path d="M5 9l4-4 7 1 3 6-3 6-8 1-4-5z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><path d="M10 10l2 1M13 14l2-1M9 15h1" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>',
     ombre: '<rect x="3" y="3" width="18" height="18" rx="4" opacity=".25"/><rect x="3" y="11" width="18" height="10" rx="4" opacity=".5"/><rect x="3" y="16" width="18" height="5" rx="2.5"/>',
     bubbles: '<g fill="none" stroke="currentColor"><circle cx="9" cy="14" r="6" stroke-width="1.5"/><circle cx="17.5" cy="7" r="3.5" stroke-width="1.3"/><path d="M5.8 11.5a4.5 4.5 0 0 1 2.5-2.4" stroke-width="1.3" stroke-linecap="round"/></g><circle cx="18" cy="17.5" r="1.3" opacity=".6"/>',
     oil: '<path d="M12 3C7 9 5 12 5 15a7 7 0 0 0 14 0c0-3-2-6-7-12z" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M8 15c1.5-2 3-.5 4-2s2.5-1 3.5.5" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" opacity=".7"/><path d="M8.5 18c2 1 5 1 7-1" fill="none" stroke="currentColor" stroke-width="1.1" stroke-linecap="round" opacity=".5"/>',
@@ -94,15 +94,14 @@
     ["Circles", ["ncs", "sub", "trap", "tunnel"]],
     ["On the beat", ["geometric", "bauhaus"]],
     ["Flowing", ["plasma", "ledplasma", "chrome", "oil", "dnb", "neuro", "particles", "warp"]],
-    ["Calm", ["aurora", "ombre", "bubbles", "ribbon", "rain", "lava", "smoke"]],
-    ["Space", ["galaxy", "prism"]],
+    ["Calm", ["aurora", "ombre", "galaxy", "prism", "bubbles", "ribbon", "rain", "lava", "smoke"]],
     ["", ["off"]],
   ];
   // Which bands each style reads: "punch" snaps up and falls with gravity.
   const MODEL = {};
   const USES = {
     barCount: ["monstercat", "mirror", "radial", "retro"],
-    particles: ["particles", "monstercat", "warp", "dnb", "trap", "prism", "bubbles"],
+    particles: ["particles", "monstercat", "warp", "dnb", "trap", "bubbles"],
     position: ["monstercat", "mirror", "ascii"],
     variant: ["geometric"],
     beatEvery: ["geometric", "bauhaus", "plasma", "ledplasma", "sub", "trap", "neuro", "ribbon", "rain", "lava", "smoke", "tunnel", "aurora", "chrome", "oil", "galaxy", "prism", "ombre", "bubbles"],
@@ -2126,6 +2125,11 @@
   // How many "steps" a beat-stepping style has made: one per N clock beats.
   function beatSteps(st, p) {
     if (st.tickSeen === undefined) { st.tickSeen = shared.tickSerial; st.ticks = 0; st.step = st.step || 0; }
+    // Not drawn for a while (another style was showing): don't catch up on
+    // the beats it missed, or it races through its colours when you come back.
+    const nowMs = performance.now();
+    if (st.stepsSeenAt && nowMs - st.stepsSeenAt > 400) { st.tickSeen = shared.tickSerial; st.ticks = 0; st.barSeen = shared.barSerial; st.barCount = 0; }
+    st.stepsSeenAt = nowMs;
     if (p.colorMove === "still") {
       // Still colours: hold the current step; pick up from here if switched back.
       st.tickSeen = shared.tickSerial; st.ticks = 0; st.barSeen = shared.barSerial;
@@ -2436,72 +2440,81 @@ void main() {
   };
 
   // ---------------------------------------------------------------------------
-  // Ombre: big soft gradients in the album's colours, gently waving. The bass
-  // pushes the colour bands up from the bottom, loudness makes it glow a
-  // little brighter. Clean and calm.
+  // Ombre: rich colour glowing in from the screen edges and fading to dark
+  // in the middle (behind the lyrics). The colours run round the edges as a
+  // soft gradient and slowly turn; the bass pushes the glow further in,
+  // loudness makes it brighter, kicks give it a soft pulse.
   const OMBRE_FS = `
-uniform float uT, uE, uBass;
+uniform float uT, uE, uBass, uKick;
 uniform vec3 uC0, uC1, uC2;
+vec3 loop3(float f) {
+  f = fract(f) * 3.;
+  return f < 1. ? mix(uC0, uC1, smoothstep(0., 1., f)) : f < 2. ? mix(uC1, uC2, smoothstep(1., 2., f)) : mix(uC2, uC0, smoothstep(2., 3., f));
+}
 void main() {
   vec2 uv = gl_FragCoord.xy / uRes;
-  float y = uv.y + 0.06 * sin(uv.x * 2.2 + uT * 0.4) + 0.04 * sin(uv.x * 4.1 - uT * 0.3) - 0.14 * uBass * (1. - uv.y);
-  y = clamp(y, 0., 1.);
-  vec3 c = y < 0.5 ? mix(uC0, uC1, smoothstep(0., 0.5, y)) : mix(uC1, uC2, smoothstep(0.5, 1., y));
-  c *= (0.16 + 0.14 * uE + 0.22 * uBass) * (0.45 + 0.85 * (1. - uv.y)); // glows from the bottom, darker behind the lyrics
-  c += (hash(gl_FragCoord.xy + fract(uT)) - 0.5) / 255.; // no banding
-  c = clamp(c, 0., 1.);
-  o = vec4(c, max(c.r, max(c.g, c.b)));
+  float asp = uRes.x / uRes.y;
+  vec2 c = (uv - 0.5) * vec2(asp, 1.);
+  float ang = atan(c.y, c.x);
+  // distance in from the nearest edge, with a slow soft wave along it
+  float wav = 0.05 * sin(ang * 3. + uT * 0.35) + 0.03 * sin(ang * 5. - uT * 0.27);
+  float reach = 0.11 + 0.05 * uE + 0.08 * uBass + 0.04 * uKick;
+  // glow from all four edges added together, so the corners blend smoothly
+  float g = exp(-(uv.x * asp + wav) / reach) + exp(-((1. - uv.x) * asp + wav) / reach)
+          + exp(-(uv.y + wav) / reach) + exp(-(1. - uv.y + wav) / reach);
+  g = 1. - exp(-g * 0.9);
+  vec3 col = loop3(ang / 6.2832 + uT * 0.012 + 0.15 * sin(uT * 0.1));
+  col = mix(col, col * col * 1.6, 0.35); // a bit richer
+  col *= 0.04 + g * (0.6 + 0.2 * uE + 0.25 * uBass + 0.2 * uKick);
+  col += (hash(gl_FragCoord.xy + fract(uT)) - 0.5) / 255.; // no banding
+  col = clamp(col, 0., 1.);
+  o = vec4(col, max(col.r, max(col.g, col.b)));
 }`;
   DRAW.ombre = (v, p, dt) => {
     const st = v.ombre || (v.ombre = {});
-    fxClock(st, p, dt, 0.6, 6, 1.5);
+    fxClock(st, p, dt, 0.6, 6, 1.5, 3);
     const pal = easePal(st, beatSteps(st, p), dt, 0.5);
-    fxDraw(v, "ombre", OMBRE_FS, { uT: st.T, uE: shared.energy, uBass: st.lift, uC0: rgb1(pal[0]), uC1: rgb1(pal[1]), uC2: rgb1(pal[2]) }, 1);
+    fxDraw(v, "ombre", OMBRE_FS, { uT: st.T, uE: shared.energy, uBass: st.lift, uKick: st.flash, uC0: rgb1(pal[0]), uC1: rgb1(pal[1]), uC2: rgb1(pal[2]) }, 1);
   };
 
   // ---------------------------------------------------------------------------
-  // Prism Galaxy: a spiral of tiny glowing points in rainbow colours, turning
-  // slowly (the middle faster than the edge). The bass spreads the arms out
-  // and spins it faster, kicks brighten the core. Colours: Classic = rainbow
-  // (default); the other colour modes use those colours instead.
-  DRAW.prism = (v, p, dt, t) => {
-    const { ctx, w, h, U } = v;
-    const n = Math.round(1400 * Math.min(2, p.particles || 1));
-    let st = v.prism;
-    if (!st || st.n !== n) {
-      st = v.prism = { n, pts: new Float32Array(n * 2), rot: 0, spread: 0, flash: 0, kickSeen: shared.beatSerial };
-      for (let i = 0; i < n; i++) {
-        const r = Math.pow(Math.random(), 0.6);
-        st.pts[i * 2] = r;
-        st.pts[i * 2 + 1] = ((i % 3) * Math.PI * 2) / 3 + (Math.random() - 0.5) * (0.5 - 0.25 * r) + (Math.random() < 0.15 ? Math.random() * 6.28 : 0);
-      }
-    }
-    const e = shared.energy, bass = shared.bassPunch || 0, sp = p.speed;
-    if (st.kickSeen !== shared.beatSerial) { st.kickSeen = shared.beatSerial; st.flash = Math.min(1, st.flash + 0.6 * Math.min(1, shared.kick + 0.2)); }
-    st.flash *= Math.exp(-dt * 4);
-    st.spread += (bass - st.spread) * Math.min(1, dt * (bass > st.spread ? 8 : 2));
-    st.rot += dt * (0.08 + 0.3 * e + 0.35 * st.spread) * sp;
-    const cx = w / 2, cy = h / 2, R = Math.min(w, h) * 0.5 * p.size * (1 + 0.12 * st.spread);
-    const classic = p.colorMode === "classic";
-    const HB = 12;
-    const paths = Array.from({ length: HB }, () => new Path2D());
-    const shift = (t * 0.03 * sp) % 1;
-    for (let i = 0; i < n; i++) {
-      const r = st.pts[i * 2];
-      const a = st.pts[i * 2 + 1] + r * 4.2 + st.rot * (1.3 - 0.7 * r);
-      const rr = r * R * (1 + 0.18 * st.spread * r);
-      const x = cx + Math.cos(a) * rr * (w > h ? 1.25 : 1), y = cy + Math.sin(a) * rr * 0.62;
-      const s = (0.7 + 1.3 * (1 - r)) * U;
-      const b = Math.floor((((r * 0.9 + shift) % 1) + 1) % 1 * HB) % HB;
-      paths[b].rect(x - s / 2, y - s / 2, s, s);
-    }
-    ctx.globalCompositeOperation = "lighter";
-    v.soft(cx, cy, R * 0.45, mix(classic ? WHITE : colorAt(0.5), WHITE, 0.5), 0.12 + 0.2 * st.spread + 0.25 * st.flash);
-    for (let b = 0; b < HB; b++) {
-      const c = classic ? hsl((b / HB) * 330, 0.9, 0.65) : colorAt(b / (HB - 1));
-      ctx.fillStyle = v.rgba(c, A_(0.6 + 0.3 * e, v));
-      ctx.fill(paths[b]);
-    }
+  // Labradorite: a dark, slightly mossy stone surface with little flecks of
+  // rainbow shimmer (like the mineral catching the light) scattered over it,
+  // thicker towards the middle. The flecks drift and shimmer slowly; louder
+  // parts and the bass bring out more of them, kicks make them flare.
+  // Colours: Classic = rainbow shimmer (default); other colour modes tint it.
+  const PRISM_FS = `
+uniform float uT, uE, uBass, uKick, uTint;
+uniform vec3 uC0, uC1, uC2;
+void main() {
+  vec2 uv = gl_FragCoord.xy / uRes;
+  vec2 p = (uv - 0.5) * vec2(uRes.x / uRes.y, 1.) * 3.;
+  vec2 drift = vec2(uT * 0.012, -uT * 0.008);
+  // the stone: soft blotches with faint cracks
+  vec2 q = vec2(fbm(p * 0.9 + drift), fbm(p * 0.9 + vec2(4.3, 2.1) - drift));
+  float s = fbm(p * 1.6 + q * 1.5 + drift);
+  float crack = 1. - abs(fbm(p * 3.2 + q * 2.) * 2. - 1.);
+  vec3 stone = vec3(0.075, 0.09, 0.085) * (0.4 + 1.2 * s) + vec3(0.03, 0.035, 0.032) * pow(crack, 5.);
+  // the shimmer flecks
+  float n = fbm(p * 6. + q * 2.5 + vec2(uT * 0.03, uT * 0.02));
+  float m = fbm(p * 14. - q * 3. + uT * 0.05);
+  float centre = length((uv - 0.5) * vec2(1.3, 1.6));
+  float thr = 0.69 + 0.2 * centre - 0.05 * uE - 0.07 * uBass - 0.03 * uKick;
+  float fleck = smoothstep(thr, thr + 0.02, n) * smoothstep(0.5, 0.6, m);
+  float halo = smoothstep(thr - 0.08, thr, n) * smoothstep(0.45, 0.6, m) * 0.08;
+  vec3 film = 0.5 + 0.5 * cos(6.2832 * (n * 7. + m * 2. + uT * 0.04 + vec3(0., 0.33, 0.67)));
+  vec3 tint = mix(mix(uC0, uC1, q.x), uC2, smoothstep(0.4, 0.7, m));
+  film = mix(film, tint * (0.6 + 0.8 * film), uTint);
+  film = mix(vec3(dot(film, vec3(0.33))), film, 0.8);
+  vec3 col = stone + film * (fleck * (0.5 + 0.25 * uE + 0.5 * uKick) + halo);
+  col = min(col, vec3(1.));
+  o = vec4(col, max(col.r, max(col.g, col.b)));
+}`;
+  DRAW.prism = (v, p, dt) => {
+    const st = v.prism || (v.prism = {});
+    fxClock(st, p, dt, 0.6, 8, 2, 4);
+    const pal = easePal(st, beatSteps(st, p), dt, 0.5);
+    fxDraw(v, "prism", PRISM_FS, { uT: st.T, uE: shared.energy, uBass: st.lift, uKick: st.flash, uTint: p.colorMode === "classic" ? 0 : 1, uC0: rgb1(pal[0]), uC1: rgb1(pal[1]), uC2: rgb1(pal[2]) }, 1);
   };
 
   // ---------------------------------------------------------------------------
@@ -3148,7 +3161,7 @@ void main() {
     let st = v.rain;
     if (!st || st.w !== w || st.h !== h) {
       st = v.rain = { w, h, lights: [], drops: [], runners: [], kickSeen: shared.beatSerial, acc: 0, glow: 0 };
-      for (let i = 0; i < 16; i++) st.lights.push({ x: Math.random(), y: 0.2 + Math.random() * 0.75, r: 0.04 + Math.random() * 0.09, q: Math.random(), ph: Math.random() * 6.28 });
+      for (let i = 0; i < 9; i++) st.lights.push({ x: Math.random(), y: 0.15 + Math.random() * 0.8, r: 0.12 + Math.random() * 0.14, q: Math.random(), ph: Math.random() * 6.28 });
     }
     const e = shared.energy, bass = shared.bassPunch || 0, sp = p.speed;
     const step = beatSteps(st, p);
@@ -3173,7 +3186,7 @@ void main() {
       if (st.drops.length > 180) st.drops.shift();
       st.drops.push({ x, y, r, age: 0, life });
     };
-    const newDrop = (big) => land(Math.random() * w, Math.random() * h, U * (big ? 1.4 + Math.random() * 1.4 : 0.6 + Math.pow(Math.random(), 2) * 1.8), 5 + Math.random() * 7);
+    const newDrop = (big) => land(Math.random() * w, Math.random() * h, U * (big ? 1.5 + Math.random() * 1.4 : 1 + Math.pow(Math.random(), 2) * 1.8), 5 + Math.random() * 7);
     if (st.kickSeen !== shared.beatSerial) {
       st.kickSeen = shared.beatSerial;
       st.glow = Math.min(1, st.glow + 0.5 * Math.min(1, shared.kick + 0.3));
@@ -3185,7 +3198,7 @@ void main() {
       }
     }
     // how hard it rains: mostly the bass, a little the loudness and highs
-    st.acc += dt * (2 + 28 * bass + 8 * e + 6 * (shared.treble || 0)) * sp;
+    st.acc += dt * (1.4 + 19 * bass + 5.5 * e + 4 * (shared.treble || 0)) * sp;
     while (st.acc >= 1) { st.acc -= 1; newDrop(false); }
     // drops sitting on the glass slowly evaporate
     for (let j = st.drops.length - 1; j >= 0; j--) {
@@ -3199,8 +3212,11 @@ void main() {
     ctx.globalCompositeOperation = "lighter";
     for (const L of st.lights) {
       const c = colorAt((L.q + step / 3) % 1);
-      const a = 0.1 + 0.08 * Math.sin(t * 0.7 + L.ph) ** 2 + 0.15 * bass + 0.12 * st.glow;
-      v.soft(L.x * w, L.y * h, L.r * Math.max(w, h) * (0.9 + 0.2 * bass), c, a);
+      // big and very soft, like out-of-focus lights; they breathe slowly
+      const a = 0.07 + 0.06 * Math.sin(t * 0.4 + L.ph) ** 2 + 0.1 * bass + 0.08 * st.glow;
+      const rr = L.r * Math.max(w, h) * (0.9 + 0.15 * bass);
+      v.soft(L.x * w, L.y * h, rr, c, a * 0.6);
+      v.soft(L.x * w, L.y * h, rr * 0.55, c, a * 0.5);
     }
 
     // 2. Runners slide down in fits and starts, wandering a little sideways.
@@ -3220,7 +3236,7 @@ void main() {
         R.y += dy;
         R.x += Math.sin(R.y * 0.02 / U + R.wob) * 0.25 * dy;
         R.moved += dy;
-        if (R.moved > 3 * U) { R.moved = 0; R.trail.push({ x: R.x, y: R.y - R.r * 0.6, age: 0 }); }
+        if (R.moved > 3 * U) { R.moved = 0; R.trail.push({ x: R.x + (Math.random() - 0.5) * R.r * 0.15, y: R.y - R.r * 0.6, age: 0, w: R.r * (0.55 + Math.random() * 0.3) }); }
         // it leaves a little bead behind now and then, and gets lighter
         R.bead += dy;
         if (R.bead > 25 * U && Math.random() < 0.6) {
@@ -3241,22 +3257,30 @@ void main() {
         if (R.y - R.r * 2 > h) R.dead = true;
       }
       if (R.dead && !R.trail.length) { st.runners.splice(i, 1); continue; }
-      // the trail: wet just behind the drop, fading as it dries
+      // the trail: a faint wet smear (slightly darker glass with a thin
+      // sheen down one side), uneven in width, fading as it dries
       if (R.trail.length > 1) {
         for (let b = 0; b < 4; b++) {
-          ctx.beginPath();
+          const film = new Path2D(), edge = new Path2D();
           let any = false;
-          for (let k = 1; k < R.trail.length; k++) {
-            const q = R.trail[k];
+          for (const q of R.trail) {
             if (Math.min(3, ((q.age / DRY) * 4) | 0) !== b) continue;
-            ctx.moveTo(R.trail[k - 1].x, R.trail[k - 1].y);
-            ctx.lineTo(q.x, q.y);
+            const ww = q.w * (1 - 0.35 * (q.age / DRY));
+            film.moveTo(q.x + ww, q.y);
+            film.ellipse(q.x, q.y, ww, 2.2 * U, 0, 0, Math.PI * 2);
+            edge.moveTo(q.x - ww * 0.7, q.y - 1.6 * U);
+            edge.lineTo(q.x - ww * 0.7, q.y + 1.6 * U);
             any = true;
           }
           if (!any) continue;
-          ctx.strokeStyle = v.rgba(wet, A_(0.16 * (1 - (b + 0.5) / 4), v));
-          ctx.lineWidth = Math.max(1, R.r * (0.9 - 0.12 * b));
-          ctx.stroke();
+          const fade = 1 - (b + 0.5) / 4;
+          ctx.globalCompositeOperation = "source-over";
+          ctx.fillStyle = v.rgba([0, 0, 0], A_(0.1 * fade, v));
+          ctx.fill(film);
+          ctx.globalCompositeOperation = "lighter";
+          ctx.strokeStyle = v.rgba(wet, A_(0.07 * fade, v));
+          ctx.lineWidth = Math.max(0.8, 0.8 * U);
+          ctx.stroke(edge);
         }
       }
     }
@@ -3711,8 +3735,8 @@ void main() {
   for (int L = 0; L < 3; L++) {
     float fl = float(L);
     float x = uv.x * asp * (0.9 + 0.35 * fl) + fl * 4.7;
-    float base = 0.4 + 0.1 * fl + 0.1 * sin(x * 1.1 + uT * 0.3 + fl * 2.) + 0.18 * (fbm(vec2(x * 0.7, uT * 0.12 + fl * 3.)) - 0.5);
-    base -= 0.12 * uBass;
+    float base = 0.4 + 0.1 * fl + 0.14 * sin(x * 1.1 + uT * 0.3 + fl * 2.) + 0.26 * (fbm(vec2(x * 0.7, uT * 0.12 + fl * 3.)) - 0.5);
+    base -= 0.15 * uBass;
     float d = uv.y - base;
     float edge = smoothstep(-0.015, 0.02, d);
     float tall = exp(-max(d, 0.) * (6. - 3.8 * uBass));
@@ -3735,7 +3759,7 @@ void main() {
     const st = v.aurora || (v.aurora = {});
     // Smoothing sets how it bounces: low = snaps up and drops fast, high = slow and floaty.
     const sm = Math.max(0, Math.min(1, p.smoothing));
-    fxClock(st, p, dt, 0.9, 28 - 22 * sm, 6 - 4.8 * sm, 7 - 4 * sm);
+    fxClock(st, p, dt, 0.65, 11 - 8 * sm, 2.6 - 1.6 * sm, 5 - 2.5 * sm);
     const pal = easePal(st, beatSteps(st, p), dt, 1.2);
     fxDraw(v, "aurora", AURORA_FS, { uT: st.T, uE: shared.energy, uBass: st.lift, uKick: st.flash, uC0: rgb1(pal[0]), uC1: rgb1(pal[1]), uC2: rgb1(pal[2]) }, 1);
   };
@@ -3793,8 +3817,13 @@ void main() {
   // flows. The music sets how fast they flow, the bass makes the waves
   // bigger, kicks brighten the edges, and a few sparkles drift along.
   const RIBBON_FS = `
-uniform float uT, uE, uBass, uKick;
+uniform float uT, uE, uBass, uKick, uHue;
 uniform vec3 uC0, uC1, uC2;
+vec3 hueTurn(vec3 c, float a) {
+  const vec3 k = vec3(0.57735);
+  float ca = cos(a);
+  return c * ca + cross(k, c) * sin(a) + k * dot(k, c) * (1. - ca);
+}
 float ctr(float x, float k) {
   return 0.5 + (0.09 + 0.07 * uBass) * sin(x * (1.1 + 0.2 * k) + uT * (0.9 + 0.15 * k) + k * 2.1)
              + 0.05 * sin(x * (2.3 - 0.3 * k) - uT * 0.7 + k * 4.)
@@ -3811,15 +3840,15 @@ vec3 ribbon(vec2 uv, float asp, float k, vec3 col) {
   float slope = abs(ctr(x + 0.02, k) - ctr(x - 0.02, k)) / 0.04;
   float fold = 0.35 + 0.65 * smoothstep(0.05, 0.5, slope) + 0.5 * smoothstep(0.06, 0.03, th);
   float sheen = exp(-pow((across - 0.45) * 2.2, 2.));
-  float fadeX = smoothstep(0., 0.15, uv.x) * smoothstep(1., 0.85, uv.x);
-  return col * inside * (0.1 + 0.38 * sheen * fold) * (0.7 + 0.5 * uE + 0.35 * uKick) * fadeX;
+  return col * inside * (0.1 + 0.38 * sheen * fold) * (0.65 + 0.45 * uE + 0.9 * uKick);
 }
 void main() {
   vec2 uv = gl_FragCoord.xy / uRes;
   float asp = uRes.x / uRes.y;
-  vec3 col = ribbon(uv, asp, 0., mix(uC0, vec3(1.), 0.35));
-  col += ribbon(uv, asp, 1., mix(uC1, vec3(1.), 0.25)) * 0.8;
-  col += ribbon(uv, asp, 2., mix(uC2, vec3(1.), 0.25)) * 0.6;
+  float a = uHue * 6.2832;
+  vec3 col = ribbon(uv, asp, 0., mix(max(hueTurn(uC0, a), 0.), vec3(1.), 0.2));
+  col += ribbon(uv, asp, 1., mix(max(hueTurn(uC1, a), 0.), vec3(1.), 0.15)) * 0.8;
+  col += ribbon(uv, asp, 2., mix(max(hueTurn(uC2, a), 0.), vec3(1.), 0.15)) * 0.6;
   // sparkles drifting along with the ribbons
   vec2 g = vec2(uv.x * asp * 40. - uT * 3., uv.y * 40.);
   vec2 cell = floor(g), f = fract(g) - 0.5;
@@ -3832,9 +3861,13 @@ void main() {
 }`;
   DRAW.ribbon = (v, p, dt) => {
     const st = v.ribbon || (v.ribbon = {});
-    fxClock(st, p, dt, 1.4, 12, 3, 5);
-    const pal = easePal(st, beatSteps(st, p), dt, 1);
-    fxDraw(v, "ribbon", RIBBON_FS, { uT: st.T, uE: shared.energy, uBass: st.lift, uKick: st.flash, uC0: rgb1(pal[0]), uC1: rgb1(pal[1]), uC2: rgb1(pal[2]) }, 1);
+    fxClock(st, p, dt, 1.4, 12, 3, 4);
+    const pal = easePal(st, beatSteps(st, p), dt, 2.5);
+    // each kick turns the colours a little further round (a smooth glide)
+    if (st.hueTo === undefined) st.hueTo = st.hue = 0;
+    if (st.newKick && p.colorMove !== "still") st.hueTo += 0.06 * Math.min(1, shared.kick + 0.4);
+    st.hue += (st.hueTo - st.hue) * Math.min(1, dt * 4);
+    fxDraw(v, "ribbon", RIBBON_FS, { uT: st.T, uE: shared.energy, uBass: st.lift, uKick: st.flash, uHue: st.hue % 1, uC0: rgb1(pal[0]), uC1: rgb1(pal[1]), uC2: rgb1(pal[2]) }, 1);
   };
 
   // ---------------------------------------------------------------------------
@@ -3897,7 +3930,10 @@ void main() {
     const step = beatSteps(st, p);
     const pal = easePal(st, step, dt, 0.4);
     if (st.shift === undefined) st.shift = step * 0.17; // no colour rush when you switch to it
-    st.shift += (step * 0.17 - st.shift) * Math.min(1, dt * 0.3);
+    // ease the short way round (the colours repeat every 1.0), so it never spins
+    let dS = step * 0.17 - st.shift;
+    dS -= Math.round(dS);
+    st.shift = step * 0.17 - dS + dS * Math.min(1, dt * 0.3);
     fxDraw(v, "oil", OIL_FS, { uT: st.T, uE: shared.energy, uBass: st.lift, uShift: st.shift + st.T * 0.015, uTint: p.colorMode === "classic" ? 0 : 1, uC0: rgb1(pal[0]), uC1: rgb1(pal[1]), uC2: rgb1(pal[2]) }, 1);
   };
 
