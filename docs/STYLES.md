@@ -65,7 +65,7 @@ A pair of old hi-fi VU meters filling the screen, drawn faint so the lyrics stay
 
 The spectrum as bars round a ring, which turns a notch on every beat. It sits around the album art when the art is on screen.
 
-### NCS Sphere
+### Sphere
 A slowly turning ball of glowing dots:
 - a flowing pattern pushes the dots outwards, more the louder it is, so it swells and bulges with the music and stays a calm sphere in quiet parts;
 - it only moves when there's sound, and kicks give it a quick pulse;
@@ -79,8 +79,8 @@ A speaker drawn in light:
 - the surround wobbles with the bass;
 - the light ring fades to a new colour on the beat.
 
-### Trap Circle
-![Trap Circle](screenshots/styles/trap.jpg)
+### Trap
+![Trap](screenshots/styles/trap.jpg)
 
 The classic trap-channel circle, empty in the middle. The spectrum is mirrored round a ring, bass at the top, exaggerated like the trap channels; the rest barely moves, so it sits still when there's no bass. A white layer sits in front, and seven colour layers burst out behind it on every hit. The circle bounces with the bass, and white dust flies towards you. Set **Circle at** to the art and it wraps the album cover instead.
 
@@ -101,8 +101,8 @@ These styles follow the song's beat more than the raw spectrum, so they keep a s
 
 Bold, flat slanted bands like a modern poster, one per slice of the spectrum, sliding in from the edges. Colours step on the beat. The **Brutalist** variant adds a heavy grid and cut-out labels.
 
-### Bauhaus Tiles
-![Bauhaus Tiles](screenshots/styles/bauhaus.jpg)
+### Bauhaus
+![Bauhaus](screenshots/styles/bauhaus.jpg)
 
 A poster grid of flat circles, half circles, quarter circles and triangles.
 - Shapes grow with their part of the spectrum.

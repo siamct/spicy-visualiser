@@ -16,7 +16,7 @@
 
 [Styles](docs/STYLES.md) · [Install](#install) · [Settings](#settings) · [How it hears the music](#how-it-hears-the-music)
 
-<img src="docs/screenshots/styles.jpg" alt="Monstercat, LED Plasma, Bauhaus Tiles and Neuro Mesh" width="100%">
+<img src="docs/screenshots/styles.jpg" alt="Monstercat, LED Plasma, Bauhaus and Neuro Mesh" width="100%">
 
 </div>
 

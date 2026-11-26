@@ -21,7 +21,7 @@
   const STYLES = [
     ["particles", "Particles"],
     ["monstercat", "Monstercat"],
-    ["ncs", "NCS Sphere"],
+    ["ncs", "Sphere"],
     ["radial", "Radial Bars"],
     ["mirror", "Mirror Bars"],
     ["retro", "Retro Bars"],
@@ -44,8 +44,8 @@
     ["neuro", "Neuro Mesh"],
     ["ascii", "ASCII"],
     ["geometric", "Geometric"],
-    ["bauhaus", "Bauhaus Tiles"],
-    ["trap", "Trap Circle"],
+    ["bauhaus", "Bauhaus"],
+    ["trap", "Trap"],
     ["sub", "Subwoofer"],
     ["led", "LED Wall"],
     ["ledplasma", "LED Plasma"],
@@ -4077,8 +4077,8 @@ void main() {
 }`;
   DRAW.smoke = (v, p, dt) => {
     const st = v.smoke || (v.smoke = { rise: 0 });
-    fxClock(st, p, dt, 1, 10, 2, 3);
-    st.rise += dt * (0.3 + 0.3 * shared.energy + 0.3 * st.lift) * p.speed;
+    fxClock(st, p, dt, 0.7, 10, 2, 3);
+    st.rise += dt * (0.2 + 0.2 * shared.energy + 0.2 * st.lift) * p.speed;
     const pal = easePal(st, beatSteps(st, p), dt, 0.8);
     fxDraw(v, "smoke", SMOKE_FS, { uT: st.T, uE: shared.energy, uBass: st.lift, uKick: st.flash, uRise: st.rise, uC0: rgb1(pal[0]), uC1: rgb1(pal[1]), uC2: rgb1(pal[2]) }, 1);
   };
