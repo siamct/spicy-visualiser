@@ -11,7 +11,7 @@ Every style:
 
 On songs with no lyrics, the song name and artist take the place of Spicy Lyrics' "No lyrics" box, except in fullscreen, where Spicy's box is left alone (click it to see the box again; you can turn it off in the panel's settings).
 
-> The screenshots were taken in Spotify with Spicy Lyrics, all on the same song, so the only thing that changes between them is the style. The colours come from the album cover.
+> The pictures show just the visualiser (no lyrics), all playing the same test song. The colours come from the album cover, so they change between a few made-up albums.
 ---
 
 ## Bars & meters
@@ -50,6 +50,8 @@ A panel of LED dots. Unlit dots stay faintly visible, so it reads like real hard
 A terminal-style spectrum made of characters, with falling peak markers.
 
 ### VU Meters
+![VU Meters](screenshots/styles/vu.jpg)
+
 A pair of old hi-fi VU meters filling the screen, drawn faint so the lyrics stay readable:
 - the left one shows the bass, the right one the mids and highs;
 - the needles are a little sluggish and overshoot before settling, like real ones (**Smoothing** sets how sluggish);
@@ -66,6 +68,8 @@ A pair of old hi-fi VU meters filling the screen, drawn faint so the lyrics stay
 The spectrum as bars round a ring, which turns a notch on every beat. It sits around the album art when the art is on screen.
 
 ### Sphere
+![Sphere](screenshots/styles/ncs.jpg)
+
 A slowly turning ball of glowing dots:
 - a flowing pattern pushes the dots outwards, more the louder it is, so it swells and bulges with the music and stays a calm sphere in quiet parts;
 - it only moves when there's sound, and kicks give it a quick pulse;
@@ -85,6 +89,8 @@ A speaker drawn in light:
 The classic trap-channel circle, empty in the middle. The spectrum is mirrored round a ring, bass at the top, exaggerated like the trap channels; the rest barely moves, so it sits still when there's no bass. A white layer sits in front, and seven colour layers burst out behind it on every hit. The circle bounces with the bass, and white dust flies towards you. Set **Circle at** to the art and it wraps the album cover instead.
 
 ### Starfield Tunnel
+![Starfield Tunnel](screenshots/styles/tunnel.jpg)
+
 Flying down a gently bending tunnel of glowing rings, with stars streaming past:
 - the bass widens the rings and speeds you up;
 - kicks make the nearest rings flash;
@@ -123,12 +129,16 @@ A smooth glowing fluid. It flows faster, swirls harder and glows brighter as the
 The same fluid as Plasma, shown on the LED dot panel.
 
 ### Oil Slick
+![Oil Slick](screenshots/styles/oil.jpg)
+
 Rainbow swirls like oil on a wet road at night:
 - it just flows; the bass stirs the swirls harder and moves the colours;
 - the colours shift slowly round on the beat;
 - **Colours: Classic** (default) is the oil rainbow; the other colour modes tint it.
 
 ### Liquid Chrome
+![Liquid Chrome](screenshots/styles/chrome.jpg)
+
 A sheet of glossy black liquid metal:
 - mostly dark, so the lyrics stay easy to read, with thin highlights in the album's colours sliding over its curves;
 - it rolls slowly and the bass swells the waves; no beat effects, it just flows.
@@ -143,22 +153,30 @@ A flowing three-strand bass wave that pumps on kicks, with speed streaks racing 
 ## Sky & light
 
 ### Aurora
+![Aurora](screenshots/styles/aurora.jpg)
+
 Northern lights over a starry sky:
 - three curtains of light in the album's colours ripple sideways, with fine rays running up them;
 - the bass lifts them higher and taller, loudness makes them brighter and faster, kicks make them flare.
 
 ### Galaxy
+![Galaxy](screenshots/styles/galaxy.jpg)
+
 Drifting slowly through a coloured nebula, stars streaming past:
 - the bass makes the gas glow brighter and swirl;
 - loudness speeds up the flight, kicks make the stars flash.
 
 ### Ribbon
+![Ribbon](screenshots/styles/ribbon.jpg)
+
 Soft sheets of light rolling across the screen, like the wave on an old games-console home menu:
 - no drawn lines: each sheet is soft at its edges and brighter where it folds over, and runs right across the screen;
 - the music sets how fast they flow and the bass makes the waves bigger; each kick makes them flash brighter and turns their colours a little further round;
 - a few sparkles drift along with them.
 
 ### Ombre
+![Ombre](screenshots/styles/ombre.jpg)
+
 Rich colour glowing in from the left and right sides, with the middle left dark behind the lyrics:
 - the colours run down each side as a soft gradient and slowly turn;
 - the bass drives it: it pushes the glow further in and makes it brighter, and kicks give it a soft pulse.
@@ -173,29 +191,39 @@ Hyperspace stars flying past, faster on the bass, with a surge on every beat.
 ## Textures
 
 ### Graphite
+![Graphite](screenshots/styles/prism.jpg)
+
 A dark, slightly mossy stone surface with little flecks of rainbow shimmer scattered over it, thicker towards the middle:
 - the stone slowly drifts and warps, and a slow wave of light travels over it, bringing flecks out in new places while others fade back; the rainbow keeps sliding through them; louder parts and the bass bring out more of them, kicks make them flare;
 - **Colours: Classic** (default) is the rainbow shimmer; the other colour modes tint it.
 
 ### Rain on Glass
+![Rain on Glass](screenshots/styles/rain.jpg)
+
 Looking out of a rainy window at night:
 - big, soft out-of-focus lights in the album's colours glow behind the glass;
 - drops keep landing (the bass sets how hard it rains, kicks bring a burst); drops that touch join up, and heavy ones run down, picking up the drops in their way;
 - they leave a faint wet smear that breaks into little beads and dries up within a few seconds, and drops left sitting slowly evaporate.
 
 ### Smoke
+![Smoke](screenshots/styles/smoke.jpg)
+
 Soft coloured smoke curling up from the bottom:
 - louder parts make it thicker and rise faster;
 - the bass stirs it into curls, and kicks puff out a burst from below;
 - the colours turn on the beat.
 
 ### Lava Lamp
+![Lava Lamp](screenshots/styles/lava.jpg)
+
 Lumpy blobs of colour rising and sinking, stretching, merging and splitting:
 - louder parts make them move faster;
 - the bass swells them and kicks give them a wobble;
 - the colours step round on the beat.
 
 ### Bubbles
+![Bubbles](screenshots/styles/bubbles.jpg)
+
 Soap bubbles floating up, each a clear film with a thin rainbow rim and a bright window reflection:
 - the bass sends more up, and faster; kicks pop a few;
 - **Colours: Classic** (default) is the soap-film rainbow; the other colour modes tint the rims;
