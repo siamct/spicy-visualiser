@@ -4,7 +4,7 @@
 
 **A Spicetify extension that adds a music visualiser to Spicy Lyrics.**
 
-18 styles that move with the music, take their colours from the album cover and sit right behind the lyrics.
+30 styles that move with the music, take their colours from the album cover and sit right behind the lyrics.
 
 > [!TIP]
 > **Works straight from the Marketplace.** Without anything else it follows Spotify's data for each song (Spotify only gives add-ons a little info, like bass, mids and highs). For the real sound, where every style looks its best, add the small **helper** (Windows): click **Install helper** in the visualiser, or [download the helper](https://github.com/siamct/spicy-visualiser/raw/main/setup/SpicyVisualiserHelper.zip).
@@ -24,7 +24,7 @@
 
 ## Highlights
 
-- **18 styles:** bars, retro and LED spectrums, circles and a subwoofer, poster shapes, fluids, silky streaks, particles and 3D landscapes.
+- **30 styles:** bars, retro and LED spectrums, old VU meters, circles and a subwoofer, poster shapes, fluids, wave ribbons, rain on glass, a lava lamp, smoke, a starfield tunnel, an aurora, liquid chrome, an oil slick, a galaxy, iridescent stone, ombre gradients, soap bubbles, particles and 3D landscapes.
 - **Album colours:** every song gets its own palette from its cover, shifting on the beat or holding still, as you like. Or pick your own, rainbow, or each style's classic look.
 - **Fully customisable:** opacity, size, blur, brightness, bar count, position, sensitivity, bass boost, speed, shake and more. Each style remembers its own settings.
 - **Works out of the box:** runs on Spotify's own song data straight from the Marketplace.
@@ -34,7 +34,7 @@
 - **Light on your PC:** stops when the lyrics aren't on screen and drops to 30 fps when Spotify isn't focused.
 
 <details>
-<summary><b>See all 18 styles</b></summary>
+<summary><b>See all 30 styles</b></summary>
 
 <br>
 
@@ -91,7 +91,7 @@ spicetify apply
 
 Click the bars icon in Spicy Lyrics for quick settings, or open **Spicy Visualiser Settings** from Spotify's profile menu for the full settings window. While you drag a slider the rest of the panel fades away so you can see the effect.
 
-- **Style:** the sound source (helper or Spotify data) and the 18 styles.
+- **Style:** the sound source (helper or Spotify data) and the 30 styles.
 - **Look:** colours, opacity, blur, brightness, size, bar count, position.
 - **Sound:** sensitivity, bass boost, smoothing, shake, speed, tap to the beat.
 - **Lyrics:** highlight the word or line, with Soft, Fade, Sweep or Underline glows.
@@ -141,7 +141,6 @@ The source is in `src/` (`spicy-visualiser.template.js` and `style.css`), the he
 
 ## Credits
 
-- NCS Sphere shaders adapted from [Konsl/spicetify-visualizer](https://github.com/Konsl/spicetify-visualizer) (MIT, see `src/vendor/konsl-ncs/LICENSE`)
 - Audio capture: [loopback-capture](https://github.com/WerdoxDev/loopback-capture)
 - Built for [Spicy Lyrics](https://github.com/Spikerko/spicy-lyrics) and [Spicetify](https://spicetify.app)
 

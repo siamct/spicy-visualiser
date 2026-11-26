@@ -27,6 +27,27 @@ const path = require("path");
   s = await st();
   check("no lyrics: fuller look", s.noLyr > 0.6, "noLyr " + s.noLyr);
   check("no lyrics, no helper: still moves on a beat", maxKick > 0.2, "max kick " + maxKick.toFixed(2));
+  // Spicy Lyrics' "No lyrics" box: swapped for the song name, click brings it back.
+  await p.evaluate(() => {
+    const n = document.createElement("div");
+    n.className = "LyricsNotice";
+    n.dataset.notice = "lyrics-not-found";
+    n.style.cssText = "margin:120px auto;width:480px;text-align:center";
+    n.innerHTML = '<p class="notice-title">No lyrics for this song yet</p><p class="notice-body">We could not find lyrics.</p>';
+    document.querySelector(".LyricsContent").appendChild(n);
+  });
+  await p.waitForTimeout(5000);
+  const card = () => p.evaluate(() => {
+    const c = document.querySelector(".lp-nolyr"), n = document.querySelector(".LyricsNotice");
+    return { shown: !!c && c.classList.contains("lp-show") && getComputedStyle(c).opacity > 0.9, title: c ? c.firstChild.textContent : "", notice: +getComputedStyle(n).opacity };
+  });
+  let c = await card();
+  check("no lyrics: song name shown instead of the notice", c.shown && c.title.length > 0 && c.notice < 0.05, JSON.stringify(c));
+  await p.screenshot({ path: path.join(__dirname, "out", "no-lyrics-card.png") });
+  await p.click(".lp-nolyr");
+  await p.waitForTimeout(1200);
+  c = await card();
+  check("no lyrics: clicking the card brings the notice back", !c.shown && c.notice > 0.95, JSON.stringify(c));
   await b.close();
   console.log(fails ? `\n${fails} check(s) failed` : "\nAll no-lyrics checks passed");
   process.exit(fails ? 1 : 0);

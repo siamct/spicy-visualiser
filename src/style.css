@@ -268,3 +268,40 @@
 :is(#SpicyLyricsPage, .lp-modal-wrap) .lp-panel .lp-subrow { display: flex; align-items: center; gap: 5px; margin-top: 2px; min-width: 0; }
 :is(#SpicyLyricsPage, .lp-modal-wrap) .lp-panel .lp-subrow .lp-pill { background: none; padding: 0; gap: 5px; font-weight: 600; color: rgba(255,255,255,.85); }
 :is(#SpicyLyricsPage, .lp-modal-wrap) .lp-panel .lp-subrow .lp-sub { margin-top: 0; min-width: 0; }
+
+/* Songs with no lyrics: the song name and artist in place of Spicy Lyrics' notice. */
+#SpicyLyricsPage.lp-swap-notice .LyricsNotice[data-notice="lyrics-not-found"] { opacity: 0 !important; pointer-events: none !important; transition: opacity .6s ease; }
+#SpicyLyricsPage .ContentBox > .lp-nolyr {
+  position: absolute; z-index: 5; left: 50%; top: 50%; transform: translate(-50%, -50%);
+  width: max-content; max-width: min(80%, 760px); text-align: center; color: #fff; cursor: pointer;
+  opacity: 0; pointer-events: none; transition: opacity .8s ease;
+}
+#SpicyLyricsPage .ContentBox > .lp-nolyr.lp-show { opacity: 1; pointer-events: auto; }
+#SpicyLyricsPage .lp-nolyr-title {
+  font-size: clamp(26px, 4.4vw, 68px); font-weight: 800; letter-spacing: -.02em; line-height: 1.05;
+  text-shadow: 0 2px 30px rgba(0,0,0,.35); overflow-wrap: anywhere;
+}
+#SpicyLyricsPage .lp-nolyr-artist { margin-top: .5em; font-size: clamp(14px, 1.7vw, 26px); font-weight: 600; opacity: .7; }
+#SpicyLyricsPage .lp-nolyr-note { margin-top: 1.6em; font-size: 11px; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; opacity: .3; transition: opacity .2s; }
+#SpicyLyricsPage .lp-nolyr:hover .lp-nolyr-note { opacity: .6; }
+
+/* Darken background: under the visual (same z-index, earlier in the page), over Spicy Lyrics' background layers. */
+#SpicyLyricsPage .ContentBox > .lp-bgdim { position: absolute; inset: 0; z-index: 1; pointer-events: none; background: #000; opacity: 0; transition: opacity .4s ease; }
+
+/* Favourites: a star on each style card; starred styles move to the top. */
+:is(#SpicyLyricsPage, .lp-modal-wrap) .lp-panel .lp-cards button { position: relative; }
+:is(#SpicyLyricsPage, .lp-modal-wrap) .lp-panel .lp-cards .lp-fav {
+  position: absolute; top: 3px; right: 3px; width: 20px; height: 20px; border-radius: 6px; cursor: pointer;
+  opacity: 0; transition: opacity .15s, background .15s;
+  background: no-repeat center / 13px url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M12 3l2.7 5.6 6.1.8-4.5 4.2 1.1 6L12 16.7 6.6 19.6l1.1-6L3.2 9.4l6.1-.8z' fill='none' stroke='white' stroke-width='2' stroke-linejoin='round'/%3E%3C/svg%3E");
+}
+:is(#SpicyLyricsPage, .lp-modal-wrap) .lp-panel .lp-cards button:hover .lp-fav { opacity: .55; }
+:is(#SpicyLyricsPage, .lp-modal-wrap) .lp-panel .lp-cards .lp-fav:hover { opacity: 1; background-color: rgba(255,255,255,.12); }
+:is(#SpicyLyricsPage, .lp-modal-wrap) .lp-panel .lp-cards button.lp-isfav .lp-fav {
+  opacity: .9;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M12 3l2.7 5.6 6.1.8-4.5 4.2 1.1 6L12 16.7 6.6 19.6l1.1-6L3.2 9.4l6.1-.8z' fill='%23ffd34d'/%3E%3C/svg%3E");
+}
+:is(#SpicyLyricsPage, .lp-modal-wrap) .lp-panel .lp-cards button.lp-isfav { order: -2 !important; display: flex !important; }
+:is(#SpicyLyricsPage, .lp-modal-wrap) .lp-panel .lp-cards .lp-fav-cat { display: none; order: -3; margin-top: 0; }
+:is(#SpicyLyricsPage, .lp-modal-wrap) .lp-panel .lp-cards .lp-fav-cat.lp-has { display: block !important; }
+:is(#SpicyLyricsPage, .lp-modal-wrap) .lp-panel .lp-cards .lp-fav-cat.lp-has ~ .lp-cat:not(.lp-fav-cat) { margin-top: 12px; }

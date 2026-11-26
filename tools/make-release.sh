@@ -8,7 +8,6 @@ node --check spicy-visualiser.js
 (cd helper && npm install --omit=dev --no-audit --no-fund >/dev/null)
 rm -rf dist && mkdir -p dist/Spicy-Visualiser
 cp -r spicy-visualiser.js install.ps1 uninstall.ps1 "Install Spicy Visualiser.bat" "Uninstall Spicy Visualiser.bat" README.md dist/Spicy-Visualiser/
-cp src/vendor/konsl-ncs/LICENSE dist/Spicy-Visualiser/THIRD-PARTY-LICENSE-Konsl.txt
 mkdir -p dist/Spicy-Visualiser/helper
 cp -r helper/helper.js helper/package.json helper/package-lock.json helper/node_modules dist/Spicy-Visualiser/helper/
 # Windows only needs the Windows build of the audio module.
