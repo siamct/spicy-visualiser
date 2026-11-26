@@ -92,11 +92,13 @@
   // the rest fold away under "More styles".
   const SONG_DATA_OK = new Set(["particles", "plasma", "ledplasma", "warp", "dnb", "ribbon", "rain", "lava", "smoke", "tunnel", "aurora", "chrome", "oil", "galaxy", "prism", "ombre", "bubbles", "geometric", "bauhaus", "sub", "off"]);
   const STYLE_GROUPS = [
-    ["Bars", ["ascii", "led", "mirror", "monstercat", "radial", "retro", "vu"]],
-    ["Circles", ["ncs", "sub", "trap", "tunnel"]],
+    ["Bars & meters", ["monstercat", "mirror", "retro", "led", "ascii", "vu"]],
+    ["Circles", ["radial", "ncs", "sub", "trap", "tunnel"]],
     ["On the beat", ["geometric", "bauhaus"]],
-    ["Flowing", ["plasma", "ledplasma", "chrome", "oil", "dnb", "neuro", "particles", "warp"]],
-    ["Calm", ["aurora", "ombre", "galaxy", "prism", "bubbles", "ribbon", "rain", "lava", "smoke"]],
+    ["Liquid colour", ["plasma", "ledplasma", "oil", "chrome", "dnb"]],
+    ["Sky & light", ["aurora", "galaxy", "ribbon", "ombre", "warp"]],
+    ["Textures", ["prism", "rain", "smoke", "lava", "bubbles"]],
+    ["3D", ["neuro", "particles"]],
     ["", ["off"]],
   ];
   // Which bands each style reads: "punch" snaps up and falls with gravity.
@@ -2438,10 +2440,12 @@ void main() {
 }`;
   DRAW.galaxy = (v, p, dt) => {
     const st = v.galaxy || (v.galaxy = { z: 0 });
-    fxClock(st, p, dt, 0.5, 10, 2.5, 5);
-    st.z += dt * (0.25 + 0.7 * shared.energy + 0.7 * st.lift) * p.speed;
+    fxClock(st, p, dt, 0.3, 2.5, 0.8, 4);
+    // a gentle speed curve: eased loudness, squared, so only big moments push it on
+    st.e = (st.e || 0) + (shared.energy - (st.e || 0)) * Math.min(1, dt * 0.8);
+    st.z += dt * (0.14 + 0.3 * st.e * st.e + 0.2 * st.lift) * p.speed;
     const pal = easePal(st, beatSteps(st, p), dt, 0.6);
-    fxDraw(v, "galaxy", GALAXY_FS, { uT: st.T, uE: shared.energy, uBass: st.lift, uKick: st.flash, uZ: st.z, uC0: rgb1(pal[0]), uC1: rgb1(pal[1]), uC2: rgb1(pal[2]) }, 1);
+    fxDraw(v, "galaxy", GALAXY_FS, { uT: st.T, uE: st.e, uBass: st.lift, uKick: st.flash, uZ: st.z, uC0: rgb1(pal[0]), uC1: rgb1(pal[1]), uC2: rgb1(pal[2]) }, 1);
   };
 
   // ---------------------------------------------------------------------------
@@ -2465,20 +2469,20 @@ void main() {
   // only the left and right sides glow, fading in a short way; the middle
   // stays dark so the lyrics are easy to read
   float wav = 0.025 * sin(uv.y * 5. + uT * 0.35) + 0.015 * sin(uv.y * 9. - uT * 0.27);
-  float reach = 0.07 + 0.03 * uE + 0.05 * uBass + 0.03 * uKick;
+  float reach = 0.05 + 0.01 * uE + 0.12 * uBass + 0.02 * uKick;
   float sx = min(uv.x, 1. - uv.x) * asp + wav;
   float g = exp(-max(sx, 0.) / reach);
   g *= smoothstep(0.3 * asp, 0.12 * asp, min(uv.x, 1. - uv.x) * asp); // hard stop well before the middle
   vec3 col = loop3(uv.y * 0.6 + (uv.x > 0.5 ? 0.5 : 0.) + uT * 0.012);
   col = mix(col, col * col * 1.6, 0.35); // a bit richer
-  col *= g * (0.7 + 0.2 * uE + 0.25 * uBass + 0.2 * uKick);
+  col *= g * (0.35 + 0.08 * uE + 0.75 * uBass + 0.15 * uKick);
   col += (hash(gl_FragCoord.xy + fract(uT)) - 0.5) / 255.; // no banding
   col = clamp(col, 0., 1.);
   o = vec4(col, max(col.r, max(col.g, col.b)));
 }`;
   DRAW.ombre = (v, p, dt) => {
     const st = v.ombre || (v.ombre = {});
-    fxClock(st, p, dt, 0.6, 6, 1.5, 3);
+    fxClock(st, p, dt, 0.6, 9, 2, 3);
     const pal = easePal(st, beatSteps(st, p), dt, 0.5);
     fxDraw(v, "ombre", OMBRE_FS, { uT: st.T, uE: shared.energy, uBass: st.lift, uKick: st.flash, uC0: rgb1(pal[0]), uC1: rgb1(pal[1]), uC2: rgb1(pal[2]) }, 1);
   };
@@ -2503,10 +2507,13 @@ void main() {
   float crack = 1. - abs(fbm(p * 3.2 + q * 2.) * 2. - 1.);
   vec3 stone = vec3(0.075, 0.09, 0.085) * (0.4 + 1.2 * s) + vec3(0.03, 0.035, 0.032) * pow(crack, 5.);
   // the shimmer flecks
-  float n = fbm(p * 6. + drift * 1.5 + q * 2.5 + vec2(uT * 0.07, -uT * 0.05));
-  float m = fbm(p * 14. + drift * 2. - q * 3. + vec2(-uT * 0.1, uT * 0.08));
+  float n = fbm(p * 6. + drift * 1.5 + q * 2.5 + vec2(uT * 0.16, -uT * 0.11));
+  float m = fbm(p * 14. + drift * 2. - q * 3. + vec2(-uT * 0.2, uT * 0.15));
+  // a slow wave of light travels over the stone: where it passes, flecks
+  // appear; behind it they fade back into the stone
+  float reveal = fbm(p * 0.45 + vec2(uT * 0.13, -uT * 0.09)) * 2. - 1.;
   float centre = length((uv - 0.5) * vec2(1.3, 1.6));
-  float thr = 0.69 + 0.2 * centre - 0.05 * uE - 0.07 * uBass - 0.03 * uKick;
+  float thr = 0.7 + 0.12 * centre - 0.16 * reveal - 0.05 * uE - 0.1 * uBass - 0.04 * uKick;
   float fleck = smoothstep(thr, thr + 0.02, n) * smoothstep(0.5, 0.6, m);
   float halo = smoothstep(thr - 0.08, thr, n) * smoothstep(0.45, 0.6, m) * 0.08;
   // the rainbow runs across each fleck and keeps sliding round its colours
@@ -2520,7 +2527,7 @@ void main() {
 }`;
   DRAW.prism = (v, p, dt) => {
     const st = v.prism || (v.prism = {});
-    fxClock(st, p, dt, 0.6, 8, 2, 4);
+    fxClock(st, p, dt, 0.9, 8, 2, 4);
     const pal = easePal(st, beatSteps(st, p), dt, 0.5);
     fxDraw(v, "prism", PRISM_FS, { uT: st.T, uE: shared.energy, uBass: st.lift, uKick: st.flash, uTint: p.colorMode === "classic" ? 0 : 1, uC0: rgb1(pal[0]), uC1: rgb1(pal[1]), uC2: rgb1(pal[2]) }, 1);
   };
@@ -5195,7 +5202,9 @@ void main() {
     // card brings the box back for this song.
     function noLyricsCard(content) {
       const notice = S.noLyricsCard && content ? content.querySelector('.LyricsNotice[data-notice="lyrics-not-found"]') : null;
-      const on = !!notice && v.nlShowFor !== shared.uri && styleKey() !== "off";
+      // Fullscreen: leave Spicy's own notice alone.
+      const full = !!doc.fullscreenElement || /fullscreen/i.test(page.className + " " + doc.body.className);
+      const on = !!notice && !full && v.nlShowFor !== shared.uri && styleKey() !== "off";
       page.classList.toggle("lp-swap-notice", on);
       if (!on) {
         if (v.nl) v.nl.classList.remove("lp-show");
