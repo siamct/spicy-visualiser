@@ -34,6 +34,12 @@ The spectrum as a row of bars, with bass on the left and treble on the right. Ba
 
 Bars reflected up and down from a centre line, with the bass in the middle. Thin and calm, so it suits busy lyric pages.
 
+
+### Holo Spectrum
+![Holo Spectrum](screenshots/styles/holospec.jpg)
+
+Monstercat-style bars (bass on the left, neighbours smoothed into hills), each a stack of short glowing ticks, with a peak tick that hangs over each bar. It has the look of the VU Meters' Holo face: ticks that glow when lit and stay faintly visible when not, a slow shimmer and drifting scanlines. **Bar count** sets how many.
+
 ### LED Meters
 ![LED Meters](screenshots/styles/ledm.jpg)
 
@@ -52,11 +58,10 @@ A terminal-style spectrum made of characters, with falling peak markers.
 ### VU Meters
 ![VU Meters](screenshots/styles/vu.jpg)
 
-One meter with two needles, like a stereo meter: one for the bass (low), one for the mids and highs (high). It sits in the middle, or beside the album art when the art is showing. The needles are a little sluggish and swing past before settling (**Smoothing** sets how sluggish), and a peak light comes on when a needle goes into the red. Five looks (**Look**):
-- **Classic** (above): night hi-fi, a face glowing warm amber from behind in a dark room, the print and needles as dark silhouettes (black is low, red is high);
+One meter with two needles, like a stereo meter: one for the bass (low), one for the mids and highs (high). It sits in the middle, or beside the album art when the art is showing. The needles are a little sluggish and swing past before settling (**Smoothing** sets how sluggish), and a peak light comes on when a needle goes into the red. Four looks (**Look**, Holo to start with):
+- **Classic**: night hi-fi, a face glowing warm amber from behind in a dark room, the print and needles as dark silhouettes (black is low, red is high);
 - **Minimal**: no box, just a thin scale in the album's colours, a red zone that glows (brighter when a needle's in it) and two thin needles in the album's colours;
-- **Broadcast**: an old radio-studio meter, matte black face, white print marked 1 to 7, with a red needle and a green one;
-- **Holo**: two floating arcs of ticks (outer low, inner high) that light up to their needles, with a glowing needle line and a faint scanline shimmer. Its needle is heavier and only really moves on bigger changes;
+- **Holo** (above): two floating arcs of ticks (outer low, inner high) that light up to their needles, with a glowing needle line and a faint scanline shimmer. This is the look it starts with;
 - **HUD**: a sci-fi gauge, two segmented level arcs inside a slowly turning ring.
 
 ### Oscilloscope
@@ -67,41 +72,21 @@ A glowing line tracing the sound like an old scope, over a faint grid:
 - the line glows on for a moment after it passes, like a real scope screen;
 - **Colours: Classic** (default) is green phosphor; the other colour modes use those colours.
 
-### Chip Scope
-![Chip Scope](screenshots/styles/chipscope.jpg)
+### Scope x4
+![Scope x4](screenshots/styles/chipscope.jpg)
 
-Four channels of wave readings, like the scope view in a chiptune tracker: the bass as a square wave, low mids as a thin pulse, high mids as a triangle and the highs as noise. Each moves with its part of the sound: louder makes it taller, and higher notes in that part pack the waves closer together.
+Four rows of wave readings: the bass, low mids, high mids and highs. Each row's wave is made from the real levels in its part of the sound, every band in it adding a wave of its own pitch (higher bands, tighter waves), so its shape changes with what's actually playing. Louder makes it taller.
 
----
-
-## Holo & EKG
-
-Glowing lines and ticks in the album's colours. Holo Spectrum has the look of the VU Meters' Holo face: ticks that glow when lit and stay faintly visible when not, a slow shimmer and drifting scanlines. The EKG styles are glowing lines like a heart monitor. **Speed** sets how fast the EKG lines sweep.
-
-### Holo Spectrum
-![Holo Spectrum](screenshots/styles/holospec.jpg)
-
-Monstercat-style bars (bass on the left, neighbours smoothed into hills), each a stack of short glowing ticks, with a peak tick that hangs over each bar. **Bar count** sets how many.
 
 ### EKG
 ![EKG](screenshots/styles/ekg.jpg)
 
-Like a heart monitor: the line writes across from left to right and wipes just ahead of itself. It stays flat between hits; each kick makes a heartbeat shape and each snare a short sharp blip.
-
-### EKG Pitch
-![EKG Pitch](screenshots/styles/ekgpitch.jpg)
-
-The same sweep, but the line also rises and falls with where the sound sits in pitch. It's the rough pitch (about two piano keys a step), not exact notes.
-
-### EKG Scroll
-![EKG Scroll](screenshots/styles/ekgscroll.jpg)
-
-The heartbeat line scrolling left from the right edge, instead of sweeping across.
+A thin glowing line written across the screen like a heart monitor, wiping just ahead of itself. It has no made-up heartbeat shapes: its height follows where the sound sits in pitch (roughly), and it jumps up or down as the music gets louder or quieter than it just was. One sweep lasts 8 beats of the song, so faster songs sweep faster; **Speed** changes that, **Smoothing** calms the line.
 
 ### EKG x3
 ![EKG x3](screenshots/styles/ekg3.jpg)
 
-Three sweeping lines, each spiking on its own hits: the bass and drums, the middle of the sound (where voices mostly sit), and the high sounds.
+Three of those lines, one each for the bass and drums, the middle of the sound (where voices mostly sit) and the highs. Each moves only with its own part, scaled to how much that part usually moves, so a quiet part still shows.
 
 ---
 
@@ -185,6 +170,12 @@ A smooth glowing fluid. It flows faster, swirls harder and glows brighter as the
 
 The same fluid as Plasma, shown on the LED dot panel.
 
+
+### TV Pixels
+![TV Pixels](screenshots/styles/tvpixels.jpg)
+
+A close-up of a TV screen, close enough to see each pixel's red, green and blue strips. The picture on it is the album's colours flowing like Plasma; loudness and kicks brighten it.
+
 ### Oil Slick
 ![Oil Slick](screenshots/styles/oil.jpg)
 
@@ -193,10 +184,10 @@ Patches of rainbow swirls like oil on a wet road at night, with plenty of dark r
 - the colours shift slowly round on the beat;
 - **Colours: Classic** (default) is the oil rainbow; the other colour modes tint it.
 
-### Mercury
-![Mercury](screenshots/styles/mercury.jpg)
+### Silk
+![Silk](screenshots/styles/silk.jpg)
 
-Blobs of liquid metal that drift, merge and split apart. The bass swells them and pushes them apart; they mirror a bright sky over a sharp horizon in the album's colours, and kicks flash the highlights.
+Slow flowing folds of shiny fabric in the album's colours, with a soft satin sheen. The bass deepens the folds and kicks brighten the sheen.
 
 ### Liquid
 ![Liquid](screenshots/styles/dnb.jpg)
@@ -210,17 +201,12 @@ A flowing three-strand bass wave that pumps on kicks, with speed streaks racing 
 ### Ocean
 ![Ocean](screenshots/styles/ocean.jpg)
 
-Seen from the side: layers of waves rolling across the bottom, the far ones small and dim, the near ones big. The bass raises the swell and kicks brighten the foam along the crests.
+The open sea stretching to the horizon at dusk, lit only by the sky it mirrors (in the album's colours), with a low sun glinting off the waves. The bass raises the swell and kicks brighten the glint.
 
 ### Underwater
 ![Underwater](screenshots/styles/underwater.jpg)
 
 Looking up from under the sea: rippling nets of light wobble across, with soft shafts of light from the surface. The bass makes the light wobble harder; loudness and kicks brighten it.
-
-### Pond
-![Pond](screenshots/styles/pond.jpg)
-
-Looking down at still dark water that reflects a soft sky. Each kick drops a ring of ripples that spreads out and crosses the others.
 
 ---
 
@@ -242,11 +228,6 @@ Drifting slowly through a coloured nebula, stars streaming past. One slow, smoot
 ![Sunset](screenshots/styles/sunset.jpg)
 
 A sky in the album's colours, warm at the horizon with the sun low in the middle. Soft clouds drift across, lit from below; they glow a little on the beat and drift faster when it's busy.
-
-### Storm
-![Storm](screenshots/styles/storm.jpg)
-
-Dark clouds rolling and churning, harder on the bass. Lightning lights them from inside on kicks and snares, and now and then a forked bolt cracks down on the biggest hits.
 
 ### Night Sky
 ![Night Sky](screenshots/styles/nightsky.jpg)

@@ -37,7 +37,8 @@
     ["smoke", "Smoke"],
     ["tunnel", "Starfield Tunnel"],
     ["aurora", "Aurora"],
-    ["mercury", "Mercury"],
+    ["silk", "Silk"],
+    ["tvpixels", "TV Pixels"],
     ["oil", "Oil Slick"],
     ["galaxy", "Galaxy"],
     ["prism", "Graphite"],
@@ -53,30 +54,22 @@
     ["led", "LED Wall"],
     ["ledplasma", "LED Plasma"],
     ["ekg", "EKG"],
-    ["ekgpitch", "EKG Pitch"],
-    ["ekgscroll", "EKG Scroll"],
     ["ekg3", "EKG x3"],
-    ["chipscope", "Chip Scope"],
+    ["chipscope", "Scope x4"],
     ["ocean", "Ocean"],
     ["underwater", "Underwater"],
-    ["pond", "Pond"],
     ["sunset", "Sunset"],
-    ["storm", "Storm"],
     ["nightsky", "Night Sky"],
     ["off", "Off"],
   ];
   // Little pictures for the style picker.
   const STYLE_ICON = {
     ekg: '<path d="M1 13h5l2-3 2.5 9L14 4l2.5 9H23" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round"/>',
-    ekgpitch: '<path d="M1 16c3 0 4-6 7-6l1.5-2 2 8 2-12 2 7c2 0 3-3 7-3" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round" stroke-linecap="round"/>',
-    ekgscroll: '<path d="M1 13h7l2-3 2.5 9L15 4l2.5 9H20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round"/><circle cx="21" cy="13" r="2"/>',
     ekg3: '<g fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round"><path d="M1 5h8l1.5-3 2 6 1.5-3H23"/><path d="M1 12h11l1.5-3 2 6 1.5-3H23" opacity=".8"/><path d="M1 19h5l1.5-3 2 6 1.5-3H23" opacity=".6"/></g>',
-    chipscope: '<g fill="none" stroke="currentColor" stroke-width="1.6"><path d="M1 7V3h4v4h4V3h4v4h4V3h4v4"/><path d="M1 13l3-3 3 3 3-3 3 3 3-3 3 3 3-3" opacity=".75"/><path d="M1 20h3v-3h1v3h5v-3h1v3h5v-3h1v3h4" opacity=".55"/></g>',
+    chipscope: '<g fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M1 5c2-3 3 3 5 0s3-3 5 0 3 3 5 0 3-3 5 0"/><path d="M1 12c1-2 2 2 3 0s2-2 3 0 2 2 3 0 2-2 3 0 2 2 3 0 2-2 3 0" opacity=".75"/><path d="M1 19c1 1 1-2 2 0s1 1 2-1 1 2 2 0 1-1 2 1 1-2 2 0 1 1 2-1 1 2 2 0 1-1 2 1" opacity=".55"/></g>',
     ocean: '<g fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><path d="M1 10c3-3 5 3 8 0s5 3 8 0 4 2 6 0"/><path d="M1 15c3-3 5 3 8 0s5 3 8 0 4 2 6 0" opacity=".7"/><path d="M1 20c3-3 5 3 8 0s5 3 8 0 4 2 6 0" opacity=".45"/></g>',
     underwater: '<g fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M1 5c3-2 5 2 8 0s5 2 8 0 4 1 6 0"/><path d="M6 21l2.5-12M12 21V9M18 21l-2.5-12" opacity=".45"/></g><circle cx="9" cy="15" r="1.2"/><circle cx="15" cy="12" r="1"/>',
-    pond: '<g fill="none" stroke="currentColor" stroke-width="1.5"><ellipse cx="12" cy="12" rx="10" ry="5" opacity=".45"/><ellipse cx="12" cy="12" rx="6.5" ry="3.2" opacity=".75"/><ellipse cx="12" cy="12" rx="3" ry="1.5"/></g>',
     sunset: '<path d="M5 16a7 7 0 0 1 14 0z"/><g stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M1 19h22"/><path d="M4 22h16" opacity=".5"/></g><path d="M3 8c2-1.5 4-1.5 6 0s4 1.5 6 0" fill="none" stroke="currentColor" stroke-width="1.4" opacity=".6"/>',
-    storm: '<path d="M6 13a4 4 0 0 1 .6-8A5.5 5.5 0 0 1 17 6a3.5 3.5 0 0 1 .5 7z" opacity=".75"/><path d="M12 13l-3 5h3l-2 5 5-7h-3l2-3z"/>',
     nightsky: '<path d="M15 3a8 8 0 1 0 6 12 6.5 6.5 0 0 1-6-12z"/><circle cx="5" cy="5" r="1"/><circle cx="9" cy="2.5" r=".8"/><circle cx="3" cy="11" r=".8"/>',
     holospec: '<g>'+[[3,4],[7,6],[11,3],[15,5],[19,2]].map(([x,n])=>[...Array(n)].map((_,s)=>`<rect x="${x}" y="${19-s*3}" width="3" height="1.3" rx=".5" opacity="${(0.45+s*0.1).toFixed(2)}"/>`).join('')).join('')+'</g>',
     drumpads: '<rect x="3" y="3" width="8" height="8" rx="1.6"/><rect x="13" y="3" width="8" height="8" rx="1.6" opacity=".4"/><rect x="3" y="13" width="8" height="8" rx="1.6" opacity=".4"/><rect x="13" y="13" width="8" height="8" rx="1.6"/>',
@@ -101,7 +94,8 @@
     lava: '<path d="M8.5 2.5h7l1.5 4.5v10l-2 4.5H9l-2-4.5V7z" fill="none" stroke="currentColor" stroke-width="1.4" opacity=".6"/><circle cx="12" cy="9" r="2.1"/><path d="M8.6 17.5c1-2.4 5.8-2.4 6.8 0z"/><circle cx="13.2" cy="13.3" r="1.1"/>',
     smoke: '<g fill="none" stroke="currentColor" stroke-linecap="round"><path d="M9 21c-3-3 3-5 0-8s2-6 0-9" stroke-width="1.8"/><path d="M15 21c-3-3 3-5 0-8s2-5 1-7" stroke-width="1.3" opacity=".6"/></g>',
     aurora: '<path d="M2 15c3-6 5-9 7-9s2 5 4 5 4-6 6-6 3 3 3 3" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/><path d="M5 13v6M9 10v8M13 13v5M17 9v7" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" opacity=".5"/><circle cx="4" cy="4" r=".8"/><circle cx="20" cy="3" r=".8"/>',
-    mercury: '<path d="M2 14c3-4 6 3 10-1s7-3 10 1v6H2z" opacity=".35"/><path d="M2 10c3-4 6 3 10-1s7-3 10 1" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><ellipse cx="8" cy="15.5" rx="2.5" ry=".9" opacity=".9"/>',
+    silk: '<path d="M2 7c4-4 7 4 11 0s6-3 9-1v5c-3-2-5-1-9 1s-7-4-11 0z" opacity=".45"/><path d="M2 15c4-4 7 4 11 0s6-3 9-1" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>',
+    tvpixels: '<g><rect x="2" y="3" width="2.5" height="8" rx=".6"/><rect x="5.5" y="3" width="2.5" height="8" rx=".6" opacity=".7"/><rect x="9" y="3" width="2.5" height="8" rx=".6" opacity=".45"/><rect x="13" y="3" width="2.5" height="8" rx=".6"/><rect x="16.5" y="3" width="2.5" height="8" rx=".6" opacity=".7"/><rect x="20" y="3" width="2.5" height="8" rx=".6" opacity=".45"/><rect x="2" y="13" width="2.5" height="8" rx=".6" opacity=".7"/><rect x="5.5" y="13" width="2.5" height="8" rx=".6" opacity=".45"/><rect x="9" y="13" width="2.5" height="8" rx=".6"/><rect x="13" y="13" width="2.5" height="8" rx=".6" opacity=".7"/><rect x="16.5" y="13" width="2.5" height="8" rx=".6" opacity=".45"/><rect x="20" y="13" width="2.5" height="8" rx=".6"/></g>',
     galaxy: '<circle cx="12" cy="12" r="9" opacity=".18"/><path d="M5 15c3-6 10-8 14-5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" opacity=".8"/><circle cx="6" cy="6" r="1"/><circle cx="18" cy="17" r="1.2"/><circle cx="16" cy="5" r=".7"/><circle cx="9" cy="18" r=".7"/>',
     prism: '<path d="M5 9l4-4 7 1 3 6-3 6-8 1-4-5z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><path d="M10 10l2 1M13 14l2-1M9 15h1" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>',
     ombre: '<rect x="3" y="3" width="18" height="18" rx="4" opacity=".25"/><rect x="3" y="11" width="18" height="10" rx="4" opacity=".5"/><rect x="3" y="16" width="18" height="5" rx="2.5"/>',
@@ -118,15 +112,14 @@
   // Styles that still look right on Spotify's data (it has loudness and
   // beats, not a real spectrum). With that source they're listed first and
   // the rest fold away under "More styles".
-  const SONG_DATA_OK = new Set(["ekg", "ekgscroll", "ocean", "underwater", "pond", "sunset", "storm", "nightsky", "drumpads", "drumwaves", "particles", "plasma", "ledplasma", "warp", "dnb", "ribbon", "rain", "lava", "smoke", "tunnel", "aurora", "mercury", "oil", "galaxy", "prism", "ombre", "geometric", "bauhaus", "sub", "off"]);
+  const SONG_DATA_OK = new Set(["ocean", "underwater", "sunset", "nightsky", "silk", "tvpixels", "drumpads", "drumwaves", "particles", "plasma", "ledplasma", "warp", "dnb", "ribbon", "rain", "lava", "smoke", "tunnel", "aurora", "oil", "galaxy", "prism", "ombre", "geometric", "bauhaus", "sub", "off"]);
   const STYLE_GROUPS = [
-    ["Bars & meters", ["monstercat", "mirror", "ledm", "led", "ascii", "vu", "scope", "chipscope"]],
-    ["Holo & EKG", ["holospec", "ekg", "ekgpitch", "ekgscroll", "ekg3"]],
+    ["Bars & meters", ["monstercat", "mirror", "holospec", "ledm", "led", "ascii", "vu", "scope", "chipscope", "ekg", "ekg3"]],
     ["Circles", ["radial", "ncs", "sub", "trap", "tunnel"]],
     ["On the beat", ["drumpads", "drumwaves", "geometric", "bauhaus"]],
-    ["Liquid colour", ["plasma", "ledplasma", "oil", "mercury", "dnb"]],
-    ["Water", ["ocean", "underwater", "pond"]],
-    ["Sky & light", ["aurora", "galaxy", "sunset", "storm", "nightsky", "ribbon", "ombre", "warp", "particles"]],
+    ["Liquid colour", ["plasma", "ledplasma", "tvpixels", "oil", "silk", "dnb"]],
+    ["Water", ["ocean", "underwater"]],
+    ["Sky & light", ["aurora", "galaxy", "sunset", "nightsky", "ribbon", "ombre", "warp", "particles"]],
     ["Textures", ["prism", "rain", "smoke", "lava", "neuro"]],
     ["", ["off"]],
   ];
@@ -137,14 +130,14 @@
     particles: ["particles", "monstercat", "warp", "dnb", "trap"],
     position: ["monstercat", "mirror", "ascii"],
     variant: ["geometric"],
-    beatEvery: ["ocean", "underwater", "pond", "sunset", "storm", "nightsky", "geometric", "bauhaus", "plasma", "ledplasma", "sub", "trap", "neuro", "ribbon", "rain", "lava", "smoke", "tunnel", "aurora", "mercury", "oil", "galaxy", "prism", "ombre"],
+    beatEvery: ["ocean", "underwater", "sunset", "nightsky", "silk", "tvpixels", "geometric", "bauhaus", "plasma", "ledplasma", "sub", "trap", "neuro", "ribbon", "rain", "lava", "smoke", "tunnel", "aurora", "oil", "galaxy", "prism", "ombre"],
     neuroLook: ["neuro"],
     mcColor: ["monstercat"],
     vuFace: ["vu"],
     circleAt: ["trap", "radial", "ncs", "sub"],
-    speed: ["ekg", "ekgpitch", "ekgscroll", "ekg3", "chipscope", "ocean", "underwater", "pond", "sunset", "storm", "nightsky", "drumwaves", "scope", "trap", "neuro", "ribbon", "rain", "lava", "smoke", "tunnel", "aurora", "mercury", "oil", "particles", "monstercat", "ncs", "radial", "plasma", "warp", "dnb", "ascii", "led", "ledplasma", "galaxy", "prism", "ombre"],
-    bassBoost: ["ocean", "underwater", "pond", "sunset", "storm", "nightsky", "chipscope", "scope", "particles", "monstercat", "radial", "mirror", "ncs", "warp", "plasma", "dnb", "ascii", "geometric", "bauhaus", "led", "ledplasma", "sub", "trap", "ledm", "neuro", "ribbon", "rain", "lava", "smoke", "tunnel", "aurora", "mercury", "oil", "galaxy", "prism", "ombre"],
-    smoothing: ["ekgpitch", "chipscope", "particles", "monstercat", "radial", "mirror", "ncs", "warp", "plasma", "dnb", "ascii", "geometric", "bauhaus", "led", "ledplasma", "sub", "trap", "ledm", "neuro", "aurora", "vu", "drumpads", "drumwaves", "holospec"],
+    speed: ["ekg", "ekg3", "chipscope", "ocean", "underwater", "sunset", "nightsky", "silk", "tvpixels", "drumwaves", "scope", "trap", "neuro", "ribbon", "rain", "lava", "smoke", "tunnel", "aurora", "oil", "particles", "monstercat", "ncs", "radial", "plasma", "warp", "dnb", "ascii", "led", "ledplasma", "galaxy", "prism", "ombre"],
+    bassBoost: ["ocean", "underwater", "sunset", "nightsky", "silk", "tvpixels", "chipscope", "scope", "particles", "monstercat", "radial", "mirror", "ncs", "warp", "plasma", "dnb", "ascii", "geometric", "bauhaus", "led", "ledplasma", "sub", "trap", "ledm", "neuro", "ribbon", "rain", "lava", "smoke", "tunnel", "aurora", "oil", "galaxy", "prism", "ombre"],
+    smoothing: ["ekg", "ekg3", "chipscope", "particles", "monstercat", "radial", "mirror", "ncs", "warp", "plasma", "dnb", "ascii", "geometric", "bauhaus", "led", "ledplasma", "sub", "trap", "ledm", "neuro", "aurora", "vu", "drumpads", "drumwaves", "holospec"],
   };
 
   const STYLE_BASE = {
@@ -166,7 +159,7 @@
     neuroLine: "rough", // Ridges look: rough (a little jagged) or smooth
     neuroTwist: 0, // Neuro Mesh: how much it rolls along its length (0 = still)
     neuroMirror: "off",
-    vuFace: "night", // VU Meters look: night (classic) | minimal | broadcast | holo | hud
+    vuFace: "night", // VU Meters look: night (classic) | minimal | holo | hud
     circleAt: "middle", // circle styles: middle of the view, or round the album art
     beatEvery: "1", // beat-stepping styles change every 1, 2, 4 or 8 beats
     colorMove: "move", // move = colours shift on the beat and drift; still = they stay put
@@ -189,12 +182,13 @@
     smoke: { shake: 0 },
     tunnel: { shake: 0.2 },
     aurora: { shake: 0, smoothing: 0.5 },
-    mercury: { shake: 0 },
+    silk: { shake: 0 },
+    tvpixels: { shake: 0 },
     oil: { shake: 0, colorMode: "classic" },
     galaxy: { shake: 0 },
     prism: { shake: 0, colorMode: "classic" },
     ombre: { shake: 0 },
-    vu: { shake: 0 },
+    vu: { shake: 0, vuFace: "holo" },
     scope: { shake: 0, colorMode: "classic" },
     drumpads: { shake: 0 },
     drumwaves: { shake: 0 },
@@ -203,15 +197,11 @@
     monstercat: { barCount: 63, bassBoost: 0.8, smoothing: 0.45, beatEvery: "4" },
     ledm: { shake: 0 },
     ekg: { shake: 0 },
-    ekgpitch: { shake: 0 },
-    ekgscroll: { shake: 0 },
     ekg3: { shake: 0 },
     chipscope: { shake: 0 },
     ocean: { shake: 0 },
     underwater: { shake: 0 },
-    pond: { shake: 0 },
     sunset: { shake: 0 },
-    storm: { shake: 0 },
     nightsky: { shake: 0 },
     holospec: { shake: 0 },
   };
@@ -260,7 +250,7 @@
   if (!Array.isArray(S.favs)) S.favs = [];
   // Retro Bars became LED Meters.
   // (and Drum Bars was taken out)
-  const MOVED = { retro: "ledm", drumbars: "drumpads", drums: "drumpads", holoradar: "holospec", holorings: "holospec", pitchtrail: "ekgpitch", kaleido: "plasma", bubbles: "lava", chrome: "mercury" };
+  const MOVED = { retro: "ledm", drumbars: "drumpads", drums: "drumpads", holoradar: "holospec", holorings: "holospec", pitchtrail: "ekg", kaleido: "plasma", bubbles: "lava", chrome: "silk", ekgpitch: "ekg", ekgscroll: "ekg", pond: "ocean", storm: "sunset", mercury: "silk" };
   if (MOVED[S.style]) S.style = MOVED[S.style];
   S.favs = [...new Set(S.favs.map((f) => MOVED[f] || f))];
   if (!validStyle(S.style)) S.style = GLOBAL_DEFAULTS.style;
@@ -271,7 +261,7 @@
   // Settings that were taken out of the panel go back to their defaults.
   if (S.per.neuro) for (const k of ["neuroLine", "neuroTwist", "neuroMirror"]) delete S.per.neuro[k];
   if (S.per.vu && S.per.vu.vuFace === "led") delete S.per.vu.vuFace;
-  if (S.per.vu && S.per.vu.vuFace === "studio") S.per.vu.vuFace = "broadcast";
+  if (S.per.vu && (S.per.vu.vuFace === "studio" || S.per.vu.vuFace === "broadcast")) S.per.vu.vuFace = "holo";
   for (const k of Object.keys(S.per)) if (S.per[k]) delete S.per[k].autoRange;
   // Shake used to go to 300% (and 40% was already a lot): convert old values so
   // they look the same on the new 0-100% scale.
@@ -2585,13 +2575,11 @@ void main() {
   // the bass (low), one for the mids and highs (high). It sits in the
   // middle, or beside the album art when the art is showing. The needles are
   // a little sluggish and swing past before settling (Smoothing sets how
-  // much); a peak light comes on in the red. Five looks (the Look setting):
+  // much); a peak light comes on in the red. Four looks (the Look setting; Holo is the default):
   //  - Classic: night hi-fi, a face backlit warm amber in a dark room, the
   //    print and needles dark silhouettes (black = low, red = high).
   //  - Minimal: no box, a thin scale, a glowing red zone and two thin
   //    needles in the album colours.
-  //  - Broadcast: an old radio-studio meter, black face, white print, 1 to
-  //    7, red and green needles.
   //  - Holo: two floating arcs of lit ticks (outer = low, inner = high) with
   //    glowing needle lines and a faint scanline shimmer.
   //  - HUD: a sci-fi gauge, two segmented level arcs in a slowly turning ring.
@@ -2829,77 +2817,6 @@ void main() {
     ctx.restore();
   }
 
-  // Broadcast: an old radio-studio meter, matte black face, white print
-  // marked 1 to 7 like a twin peak programme meter, with a red needle (low)
-  // and a green one (high).
-  function vuBroadcast(v, p, st) {
-    const { ctx, h } = v;
-    const sp = freeSpot(v);
-    const fw = Math.min(sp.wmax * 0.5, h * 0.62 * 1.25) * p.size, fh = fw / 1.25;
-    const fx = sp.x - fw / 2, y0 = sp.y - fh / 2, cx = sp.x;
-    const INK = "rgba(238,238,232,0.92)", NEEDLE = [[240, 70, 55], [80, 215, 110]];
-    ctx.save();
-    ctx.globalCompositeOperation = "source-over";
-    ctx.globalAlpha = A_(0.9, v);
-    ctx.textAlign = "center";
-    ctx.textBaseline = "middle";
-    // case, then the face
-    ctx.fillStyle = "rgb(30,30,30)";
-    vuPath(ctx, fx - fw * 0.035, y0 - fw * 0.035, fw * 1.07, fh + fw * 0.07, fw * 0.03);
-    ctx.fill();
-    ctx.fillStyle = "rgb(11,11,11)";
-    vuPath(ctx, fx, y0, fw, fh, fw * 0.012);
-    ctx.fill();
-    ctx.save();
-    ctx.clip();
-    const px = cx, py = y0 + fh * 0.8, R = fh * 0.56, A = 0.95;
-    const ang = (t) => -Math.PI / 2 - A + 2 * A * t;
-    ctx.strokeStyle = INK;
-    ctx.fillStyle = INK;
-    ctx.lineCap = "butt";
-    ctx.lineWidth = Math.max(1, fh * 0.008);
-    ctx.beginPath();
-    ctx.arc(px, py, R, ang(0), ang(1));
-    ctx.stroke();
-    ctx.font = `700 ${Math.round(fh * 0.085)}px ${UI_FONT}`;
-    for (let n = 1; n <= 7; n++) {
-      const a = ang((n - 1) / 6);
-      ctx.lineWidth = Math.max(1.5, fh * 0.016);
-      ctx.beginPath();
-      vuLine(ctx, px, py, a, R, R + fh * 0.07);
-      ctx.stroke();
-      ctx.fillText(String(n), px + Math.cos(a) * (R + fh * 0.15), py + Math.sin(a) * (R + fh * 0.15));
-      if (n < 7) {
-        ctx.lineWidth = Math.max(1, fh * 0.008);
-        ctx.beginPath();
-        vuLine(ctx, px, py, ang((n - 0.5) / 6), R, R + fh * 0.035);
-        ctx.stroke();
-      }
-    }
-    // the two needles and their black cap
-    ctx.lineCap = "round";
-    ctx.lineWidth = Math.max(1.5, fh * 0.012);
-    for (const i of [1, 0]) {
-      ctx.strokeStyle = v.rgba(NEEDLE[i], 1);
-      ctx.beginPath();
-      vuLine(ctx, px, py, ang(Math.max(-0.02, Math.min(1.12, st.m[i].a)) / 1.06), 0, R + fh * 0.05);
-      ctx.stroke();
-    }
-    ctx.fillStyle = "rgb(34,34,34)";
-    ctx.beginPath();
-    ctx.arc(px, py, fh * 0.075, 0, Math.PI * 2);
-    ctx.fill();
-    ctx.restore();
-    // two screws in the case
-    ctx.fillStyle = "rgb(62,62,62)";
-    for (const sx of [0.04, 0.96]) {
-      ctx.beginPath();
-      ctx.arc(fx + fw * sx, y0 + fh * 0.93, fw * 0.011, 0, Math.PI * 2);
-      ctx.fill();
-    }
-    ctx.restore();
-  }
-
   // Holo: two arcs of glowing ticks floating in space, one inside the
   // other (outer = low, inner = high), each with its own glowing needle
   // line.
@@ -3022,7 +2939,7 @@ void main() {
     ctx.fill();
     ctx.restore();
   }
-  const VU_LOOKS = { night: vuNight, minimal: vuMinimal, broadcast: vuBroadcast, holo: vuHolo, hud: vuHud };
+  const VU_LOOKS = { night: vuNight, minimal: vuMinimal, holo: vuHolo, hud: vuHud };
 
   // ---------------------------------------------------------------------------
   // LED Meters: studio LED ladders (green, yellow, red) along the bottom, one
@@ -3157,142 +3074,92 @@ void main() {
   };
 
   // ---------------------------------------------------------------------------
-  // EKG styles: a glowing line like a heart monitor. Each kick makes a
-  // heartbeat shape (a small bump, a sharp spike up, a dip, then a slower
-  // bump), each snare a short sharp blip.
-  //  - EKG: the line writes across from left to right and wipes just ahead
-  //    of itself, like a real monitor; flat between hits.
-  //  - EKG Pitch: the same sweep, but the line also rises and falls with
-  //    where the sound sits in pitch (rough, about two piano keys a step).
-  //  - EKG Scroll: the line scrolls left from the right edge instead.
-  //  - EKG x3: three sweeping lines: the bass and drums, the middle (where
-  //    voices mostly sit), and the high sounds, each spiking on its own hits.
-  // Speed sets how fast it sweeps.
+  // EKG styles: a thin glowing line, written across the screen like a
+  // heart monitor. One sweep lasts 8 beats of the song.
   const EKG_N = 600;
-  const ekgG = (tt, c, w, a) => a * Math.exp(-((tt - c) * (tt - c)) / (2 * w * w));
-  const ekgBeat = (tt) => (tt < 0 || tt > 0.45 ? 0 : ekgG(tt, 0.035, 0.014, 0.12) + ekgG(tt, 0.1, 0.009, -0.18) + ekgG(tt, 0.125, 0.009, 1) + ekgG(tt, 0.152, 0.01, -0.36) + ekgG(tt, 0.32, 0.04, 0.2));
-  const ekgTick = (tt) => (tt < 0 || tt > 0.12 ? 0 : ekgG(tt, 0.02, 0.007, 1) + ekgG(tt, 0.04, 0.009, -0.45));
-  const ekgNew = () => ({ buf: new Float32Array(EKG_N), head: 0, hits: [] });
-  function ekgHits(tr, ts) {
-    let s = 0;
-    for (const x of tr.hits) s += x.a * (x.sharp ? ekgTick(ts - x.t) : ekgBeat(ts - x.t));
-    return s;
-  }
-  // write the samples that come due this frame; value(t) is the height at t
-  function ekgWrite(tr, t, dt, secs, value) {
-    const rate = EKG_N / secs, to = tr.head + dt * rate;
-    for (let k = Math.floor(tr.head) + 1; k <= Math.floor(to); k++) tr.buf[k % EKG_N] = value(t - (to - k) / rate);
+  const ekgNew = () => ({ buf: new Float32Array(EKG_N), head: 0 });
+  // one sweep across the screen lasts 8 beats of the song (at 120 BPM, 4
+  // seconds); Speed makes it faster or slower
+  const ekgSecs = (p) => {
+    const tempo = (bpm.conf > 0.15 && bpm.value) || ana.tempo || 120;
+    return Math.max(1.5, Math.min(10, (8 * 60) / tempo / p.speed));
+  };
+  // write the samples that come due this frame, joining last frame's value
+  // (y0) to this frame's (y1) in a straight line
+  function ekgWrite(tr, dt, secs, y0, y1) {
+    const rate = EKG_N / secs, from = tr.head, to = from + dt * rate;
+    for (let k = Math.floor(from) + 1; k <= Math.floor(to); k++) tr.buf[k % EKG_N] = y0 + (y1 - y0) * ((k - from) / (to - from));
     tr.head = to % EKG_N;
-    tr.hits = tr.hits.filter((x) => t - x.t < 0.6);
   }
-  // sweep: index = place across the screen; the newest sample is the head,
-  // with a small wiped gap just ahead of it; older parts fade a little
+  // a monitor sweep: the line is written left to right over the old one,
+  // with a small wiped gap just ahead of where it's writing
   function ekgSweep(ctx, v, tr, x0, x1, cy, amp, col) {
-    const dx = (x1 - x0) / (EKG_N - 1), head = Math.floor(tr.head) % EKG_N, gap = Math.round(EKG_N * 0.04);
-    const B = 8, paths = Array.from({ length: B }, () => new Path2D());
-    for (let i = 1; i < EKG_N; i++) {
-      const age = (head - i + EKG_N) % EKG_N;
-      if (age + 1 >= EKG_N - gap) continue;
-      const pth = paths[Math.min(B - 1, Math.floor((age / EKG_N) * B))];
-      pth.moveTo(x0 + (i - 1) * dx, cy - tr.buf[i - 1] * amp);
-      pth.lineTo(x0 + i * dx, cy - tr.buf[i] * amp);
+    const dx = (x1 - x0) / (EKG_N - 1), head = Math.floor(tr.head) % EKG_N, gap = Math.round(EKG_N * 0.035);
+    const path = new Path2D();
+    let pen = false;
+    for (let i = 0; i < EKG_N; i++) {
+      const ahead = (i - head + EKG_N) % EKG_N;
+      if (ahead > 0 && ahead <= gap) { pen = false; continue; }
+      const x = x0 + i * dx, y = cy - tr.buf[i] * amp;
+      if (pen) path.lineTo(x, y); else path.moveTo(x, y);
+      pen = true;
     }
-    ekgStroke(ctx, v, paths, col);
-    ekgHead(ctx, v, x0 + head * dx, cy - tr.buf[head] * amp, col);
-  }
-  // scroll: the newest sample sits at the right, older ones further left
-  function ekgScroll(ctx, v, tr, x0, x1, cy, amp, col) {
-    const dx = (x1 - x0) / (EKG_N - 1), head = Math.floor(tr.head) % EKG_N;
-    const B = 8, paths = Array.from({ length: B }, () => new Path2D());
-    const at = (age) => tr.buf[(head - age + EKG_N) % EKG_N];
-    for (let age = 1; age < EKG_N - 1; age++) {
-      const pth = paths[Math.min(B - 1, Math.floor((age / EKG_N) * B))];
-      pth.moveTo(x1 - (age - 1) * dx, cy - at(age - 1) * amp);
-      pth.lineTo(x1 - age * dx, cy - at(age) * amp);
-    }
-    ekgStroke(ctx, v, paths, col);
-    ekgHead(ctx, v, x1, cy - at(0) * amp, col);
-  }
-  function ekgStroke(ctx, v, paths, col) {
-    const B = paths.length, U = v.U;
     ctx.lineCap = "round";
     ctx.lineJoin = "round";
-    for (let b = 0; b < B; b++) {
-      const fade = 1 - (b / B) * 0.8;
-      ctx.strokeStyle = v.rgba(col, 0.14 * fade);
-      ctx.lineWidth = 9 * U;
-      ctx.stroke(paths[b]);
-      ctx.strokeStyle = v.rgba(mix(col, WHITE, 0.3), 0.95 * fade);
-      ctx.lineWidth = Math.max(1.5, 2 * U);
-      ctx.stroke(paths[b]);
-    }
+    ctx.strokeStyle = v.rgba(col, 0.12);
+    ctx.lineWidth = 7 * v.U;
+    ctx.stroke(path);
+    ctx.strokeStyle = v.rgba(mix(col, WHITE, 0.25), 0.9);
+    ctx.lineWidth = Math.max(1.2, 1.6 * v.U);
+    ctx.stroke(path);
   }
-  function ekgHead(ctx, v, x, y, col) {
-    v.soft(x, y, 16 * v.U, col, 0.7);
-    ctx.fillStyle = v.rgba(mix(col, WHITE, 0.6), 0.95);
-    ctx.beginPath();
-    ctx.arc(x, y, Math.max(2, 2.5 * v.U), 0, Math.PI * 2);
-    ctx.fill();
-  }
-  function ekgOne(v, p, dt, follow, mode) {
+  // EKG: the line's height is where the sound sits in pitch (rough), and it
+  // jumps up or down as the sound gets louder or quieter than it just was.
+  // Nothing is drawn that isn't in the music.
+  DRAW.ekg = (v, p, dt) => {
     const { ctx, w, h } = v;
-    const key = "ekg_" + follow + "_" + mode;
-    const st = v[key] || (v[key] = { t: 0, tr: ekgNew(), kSeen: shared.beatSerial, sSeen: shared.snareSerial, pos: 0.5, prev: 0.5 });
-    st.t += dt;
-    const sens = 0.6 + 0.4 * p.sensitivity;
-    if (st.kSeen !== shared.beatSerial) { st.kSeen = shared.beatSerial; st.tr.hits.push({ t: st.t, a: (0.55 + 0.5 * Math.min(1, shared.kick)) * sens }); }
-    if (st.sSeen !== shared.snareSerial) { st.sSeen = shared.snareSerial; st.tr.hits.push({ t: st.t, a: 0.45 * sens, sharp: 1 }); }
-    st.prev = st.pos;
-    if (follow === "pitch") {
-      let sum = 0, wsum = 0;
-      for (let i = 0; i < 40; i++) {
-        const b = bandAt(0.08 + (0.82 * i) / 39), q = b * b;
-        sum += q * (i / 39);
-        wsum += q;
-      }
-      if (wsum > 1e-4) st.pos += (sum / wsum - st.pos) * Math.min(1, dt * (3 + 6 * (1 - p.smoothing)));
+    const st = v.ekg || (v.ekg = { tr: ekgNew(), pos: 0.5, lv: 0, avg: 0, y: 0 });
+    let sum = 0, wsum = 0, lv = 0;
+    for (let i = 0; i < 40; i++) {
+      const b = bandAt(0.04 + (0.9 * i) / 39), q = b * b;
+      sum += q * (i / 39);
+      wsum += q;
+      lv += b / 40;
     }
-    const t0 = st.t - dt, p0 = st.prev, p1 = st.pos, e = shared.energy;
-    ekgWrite(st.tr, st.t, dt, 3.2 / p.speed, (ts) => {
-      let y = ekgHits(st.tr, ts) + 0.025 * e * (Math.sin(ts * 23) + Math.sin(ts * 37.7));
-      if (follow === "pitch") y = y * 0.45 + (p0 + (p1 - p0) * Math.min(1, (ts - t0) / Math.max(dt, 1e-3)) - 0.5) * 1.3;
-      return y;
-    });
+    if (wsum > 1e-4) st.pos += (sum / wsum - st.pos) * Math.min(1, dt * (3 + 6 * (1 - p.smoothing)));
+    st.lv += (lv - st.lv) * Math.min(1, dt * (10 + 15 * (1 - p.smoothing)));
+    st.avg += (st.lv - st.avg) * Math.min(1, dt * 1.5);
+    const y0 = st.y;
+    st.y = (st.pos - 0.5) * 1.5 + (st.lv - st.avg) * 3 * (0.6 + 0.4 * p.sensitivity);
+    ekgWrite(st.tr, dt, ekgSecs(p), y0, st.y);
     ctx.save();
     ctx.globalCompositeOperation = "lighter";
     ctx.globalAlpha = A_(1, v);
-    const col = colorAt(0.5), amp = h * 0.2 * p.size, cy = h * 0.55;
-    (mode === "scroll" ? ekgScroll : ekgSweep)(ctx, v, st.tr, w * 0.05, w * 0.95, cy, amp, col);
+    ekgSweep(ctx, v, st.tr, w * 0.05, w * 0.95, h * 0.55, h * 0.2 * p.size, colorAt(0.5));
     ctx.restore();
-  }
-  DRAW.ekg = (v, p, dt) => ekgOne(v, p, dt, "hits", "sweep");
-  DRAW.ekgpitch = (v, p, dt) => ekgOne(v, p, dt, "pitch", "sweep");
-  DRAW.ekgscroll = (v, p, dt) => ekgOne(v, p, dt, "hits", "scroll");
+  };
+  // EKG x3: three lines for the bass and drums, the middle of the sound
+  // (where voices mostly sit) and the highs. Each moves only with its own
+  // part: up when it gets louder than it just was, down when it drops.
   DRAW.ekg3 = (v, p, dt) => {
     const { ctx, w, h } = v;
-    const st = v.ekg3 || (v.ekg3 = { t: 0, kSeen: shared.beatSerial, ch: [0, 1, 2].map(() => ({ tr: ekgNew(), avg: 0, dev: 0.05, last: -1, lv: 0, d: 0 })) });
-    st.t += dt;
-    const sens = 0.6 + 0.4 * p.sensitivity;
-    const band = (a, b) => { let s = 0; for (let i = 0; i < 6; i++) s += bandAt(a + ((b - a) * i) / 5); return s / 6; };
-    const lv = [band(0, 0.12), band(0.28, 0.6), band(0.72, 0.96)];
+    const st = v.ekg3 || (v.ekg3 = { ch: [0, 1, 2].map(() => ({ tr: ekgNew(), lv: 0, avg: 0, dev: 0.05, y: 0 })) });
+    const band = (a, b) => { let s = 0; for (let i = 0; i < 8; i++) s += bandAt(a + ((b - a) * i) / 7); return s / 8; };
+    const lv = [band(0, 0.14), band(0.28, 0.6), band(0.7, 0.98)];
+    const secs = ekgSecs(p), sens = 0.6 + 0.4 * p.sensitivity;
     ctx.save();
     ctx.globalCompositeOperation = "lighter";
     ctx.globalAlpha = A_(1, v);
     st.ch.forEach((c, i) => {
-      const d0 = c.d, d = lv[i] - c.avg;
-      c.d = d;
-      // a hit: the beat detector's kick for the bass line, or the band
-      // jumping well above its recent level for the others
-      let hit = 0;
-      if (i === 0) {
-        if (st.kSeen !== shared.beatSerial) { st.kSeen = shared.beatSerial; hit = 0.55 + 0.5 * Math.min(1, shared.kick); }
-      } else if (d > Math.max(0.04, 1.6 * c.dev) && st.t - c.last > 0.14) hit = Math.min(1.1, 0.4 + d / (4 * c.dev + 0.05));
-      c.avg += d * Math.min(1, dt * 2);
-      c.dev += (Math.abs(d) - c.dev) * Math.min(1, dt * 2);
-      if (hit) { c.last = st.t; c.tr.hits.push({ t: st.t, a: hit * sens, sharp: i === 2 ? 1 : 0 }); }
-      const t0 = st.t - dt;
-      ekgWrite(c.tr, st.t, dt, 3.2 / p.speed, (ts) => ekgHits(c.tr, ts) + (d0 + (d - d0) * Math.min(1, (ts - t0) / Math.max(dt, 1e-3))) * 0.8);
-      ekgSweep(ctx, v, c.tr, w * 0.05, w * 0.95, h * (0.3 + 0.23 * i), h * 0.1 * p.size, colorAt([0.1, 0.5, 0.9][i]));
+      c.lv += (lv[i] - c.lv) * Math.min(1, dt * (10 + 15 * (1 - p.smoothing)));
+      const d = c.lv - c.avg;
+      c.avg += d * Math.min(1, dt * 1.5);
+      c.dev += (Math.abs(d) - c.dev) * Math.min(1, dt * 0.8);
+      const y0 = c.y;
+      // scaled by how much this part usually moves, so a quiet part still shows
+      c.y = Math.max(-1.3, Math.min(1.3, (d / (2.5 * c.dev + 0.02)) * sens));
+      ekgWrite(c.tr, dt, secs, y0, c.y);
+      ekgSweep(ctx, v, c.tr, w * 0.05, w * 0.95, h * (0.3 + 0.23 * i), h * 0.08 * p.size, colorAt([0.1, 0.5, 0.9][i]));
     });
     ctx.restore();
   };
@@ -3302,44 +3169,66 @@ void main() {
   // beat (Change every); the bass and loudness move them and kicks light
   // them up a little.
 
-  // Ocean: seen from the side, layers of waves rolling across the bottom,
-  // the far ones small and dim, the near ones big. The bass raises the
-  // swell; kicks brighten the foam along the crests.
+  // Ocean: the open sea at dusk, stretching to the horizon. The water is
+  // lit only by the sky it reflects (in the album's colours), with a low
+  // sun glinting off the waves. The bass raises the swell; kicks brighten
+  // the glint.
   const OCEAN_FS = `
 uniform float uT, uE, uBass, uKick;
 uniform vec3 uC0, uC1, uC2;
-float swell(float x, float k, float t, float s) {
-  return sin(x * k + t) * 0.55 + sin(x * k * 2.3 - t * 1.4 + s) * 0.22 + sin(x * k * 0.47 + t * 0.6 + s * 2.) * 0.45 + (noise(vec2(x * k * 1.7 + t * 0.5, s)) - 0.5) * 0.5;
+const vec3 SUN = vec3(0.0, 0.0995, 0.995);
+vec3 sky(vec3 r, float glint) {
+  float y = max(r.y, 0.);
+  vec3 hor = mix(uC1, vec3(1.), 0.1) * 0.32;
+  vec3 c = mix(hor, uC0 * 0.05, pow(y, 0.4));
+  float s = max(dot(r, SUN), 0.);
+  c += mix(uC2, vec3(1.), 0.45) * (smoothstep(0.99955, 0.9998, s) * 1.6 + pow(s, 3000.) * 2. * glint + pow(s, 60.) * 0.12 + pow(s, 6.) * 0.12);
+  return c;
 }
 void main() {
-  vec2 uv = gl_FragCoord.xy / uRes;
-  float x = uv.x * uRes.x / uRes.y;
-  vec3 col = vec3(0.);
-  float a = 0.;
-  for (int i = 0; i < 5; i++) {
-    float fi = float(i);
-    float base = 0.4 - fi * 0.065;
-    float amp = (0.018 + 0.01 * fi) * (1. + 1.8 * uBass + 0.6 * uE);
-    float dir = mod(fi, 2.) < 0.5 ? 1. : -0.8;
-    float y = base + amp * swell(x, 3.2 - fi * 0.4, uT * (0.5 + 0.12 * fi) * dir, fi * 3.1);
-    if (uv.y < y) {
-      float depth = clamp((y - uv.y) / 0.3, 0., 1.);
-      vec3 c = mix(mix(uC0, uC1, fi / 4.), uC2 * 0.3, depth * 0.7);
-      col = c * (0.18 + 0.12 * fi) * (1. - 0.6 * depth);
-      col += mix(uC2, vec3(1.), 0.4) * smoothstep(0.04, 0., y - uv.y) * (0.08 + 0.04 * fi);
-      a = 1.;
-    }
-    float crest = smoothstep(0.0045, 0., abs(uv.y - y));
-    col += mix(uC1, vec3(1.), 0.6) * crest * (0.25 + 0.1 * fi) * (0.6 + 0.9 * uKick + 0.4 * uE);
+  vec2 uv = (gl_FragCoord.xy - vec2(0.5 * uRes.x, 0.58 * uRes.y)) / uRes.y;
+  vec3 d = normalize(vec3(uv.x, uv.y, 1.4));
+  float glint = 0.8 + 0.3 * uE + 0.8 * uKick;
+  if (d.y >= 0.) {
+    // the sky, with a few thin bands of cloud near the horizon
+    vec3 col = sky(d, glint);
+    float cl = fbm(vec2(d.x / (d.y + 0.08) * 0.8 + uT * 0.01, d.y * 18.));
+    col = mix(col, col * 0.55, smoothstep(0.55, 0.8, cl) * smoothstep(0.35, 0.02, d.y));
+    o = vec4(min(col, vec3(1.)), 0.95);
+    return;
   }
-  col = min(col, vec3(1.));
-  o = vec4(col, max(a * 0.85, max(col.r, max(col.g, col.b))));
+  float t = 1. / -d.y;
+  vec2 P = d.xz * t;
+  float amp = 1. + 1.6 * uBass + 0.4 * uE;
+  vec2 g = vec2(0.);
+  float hgt = 0., a = 0.08, k = 0.6;
+  for (int i = 0; i < 10; i++) {
+    float fi = float(i);
+    float ang = fi * 2.39996 + 0.4;
+    vec2 D = vec2(cos(ang), sin(ang));
+    float ph = dot(D, P) * k + uT * sqrt(9.8 * k) * 0.5 + fi * 1.7;
+    // small waves far away fade out instead of flickering
+    float A = a * amp / (1. + pow(k * t * 0.01, 2.));
+    hgt += A * sin(ph);
+    g += A * k * cos(ph) * D;
+    a *= 0.7;
+    k *= 1.45;
+  }
+  vec3 n = normalize(vec3(-g.x, 1., -g.y));
+  vec3 r = reflect(d, n);
+  r.y = abs(r.y);
+  float fr = 0.02 + 0.98 * pow(1. - max(dot(n, -d), 0.), 5.);
+  vec3 deep = uC0 * 0.04 + vec3(0.003, 0.006, 0.01);
+  vec3 col = mix(deep, sky(r, glint), fr);
+  col += uC1 * 0.03 * max(hgt * 8., 0.);
+  col = mix(col, sky(normalize(vec3(d.x, 0.002, d.z)), 0.), 1. - exp(-t * 0.025));
+  o = vec4(min(col, vec3(1.)), 0.95);
 }`;
   DRAW.ocean = (v, p, dt) => {
     const st = v.ocean || (v.ocean = {});
-    fxClock(st, p, dt, 0.5, 5, 1.2, 3);
-    const pal = easePal(st, beatSteps(st, p), dt, 0.6);
-    fxDraw(v, "ocean", OCEAN_FS, { uT: st.T, uE: shared.energy, uBass: Math.min(1, 0.6 * st.lift + 0.5 * st.punch), uKick: st.flash, uC0: rgb1(pal[0]), uC1: rgb1(pal[1]), uC2: rgb1(pal[2]) }, 1);
+    fxClock(st, p, dt, 0.4, 3, 0.8, 3);
+    const pal = easePal(st, beatSteps(st, p), dt, 0.4);
+    fxDraw(v, "ocean", OCEAN_FS, { uT: st.T, uE: shared.energy, uBass: Math.min(1, 0.6 * st.lift + 0.4 * st.punch), uKick: st.flash, uC0: rgb1(pal[0]), uC1: rgb1(pal[1]), uC2: rgb1(pal[2]) }, 1);
   };
 
   // Underwater: looking up from under the sea. Rippling nets of light
@@ -3370,47 +3259,6 @@ void main() {
     fxClock(st, p, dt, 0.5, 5, 1.2, 3);
     const pal = easePal(st, beatSteps(st, p), dt, 0.6);
     fxDraw(v, "underwater", UNDER_FS, { uT: st.T, uE: shared.energy, uBass: Math.min(1, 0.6 * st.lift + 0.5 * st.punch), uKick: st.flash, uC0: rgb1(pal[0]), uC1: rgb1(pal[1]), uC2: rgb1(pal[2]) }, 1);
-  };
-
-  // Pond: looking down at still dark water that reflects a soft sky. Each
-  // kick drops a ring of ripples that spreads and crosses the others.
-  const POND_FS = `
-uniform float uT, uE, uBass, uKick;
-uniform vec3 uC0, uC1, uC2;
-uniform vec4 uRip[4];
-float hgt(vec2 p) {
-  float s = (fbm(p * 1.5 + vec2(uT * 0.05, uT * 0.03)) - 0.5) * (0.03 + 0.04 * uE);
-  for (int i = 0; i < 4; i++) {
-    vec4 r = uRip[i];
-    if (r.w <= 0.) continue;
-    float d = length(p - r.xy), front = r.z * 0.5;
-    float env = exp(-abs(d - front) * 9.) * exp(-r.z * 0.9) * r.w;
-    s += sin(d * 34. - r.z * 16.) * env * 0.12;
-  }
-  return s;
-}
-void main() {
-  vec2 uv = gl_FragCoord.xy / uRes;
-  vec2 p = (uv - 0.5) * vec2(uRes.x / uRes.y, 1.) * 2.;
-  float e = 2. / uRes.y;
-  float h0 = hgt(p);
-  vec2 g = vec2(hgt(p + vec2(e, 0.)) - h0, hgt(p + vec2(0., e)) - h0) / e;
-  vec2 rp = p + g * 0.06;
-  vec3 sky = mix(uC0, uC1, smoothstep(-1., 1., rp.y + 0.4 * fbm(rp * 1.2 + uT * 0.02)));
-  vec3 col = sky * (0.14 + 0.06 * uE);
-  float sl = dot(g, normalize(vec2(0.5, 0.8)));
-  vec3 light = mix(uC2, vec3(1.), 0.45);
-  col += light * max(0., sl) * 0.09 * (0.7 + 0.5 * uE + 0.4 * uKick);
-  col -= col * clamp(-sl * 0.08, 0., 0.5);
-  col = min(max(col, vec3(0.)), vec3(1.));
-  o = vec4(col, max(0.55, max(col.r, max(col.g, col.b))));
-}`;
-  DRAW.pond = (v, p, dt) => {
-    const st = v.pond || (v.pond = {});
-    fxClock(st, p, dt, 0.3, 5, 1.2, 3);
-    const pal = easePal(st, beatSteps(st, p), dt, 0.5);
-    const rip = fxRipples(st, dt * p.speed, v.w / Math.max(1, v.h), st.newKick ? 0.55 + 0.45 * Math.min(1, shared.kick) : 0);
-    fxDraw(v, "pond", POND_FS, { uT: st.T, uE: shared.energy, uBass: st.lift, uKick: st.flash, uRip: rip, uC0: rgb1(pal[0]), uC1: rgb1(pal[1]), uC2: rgb1(pal[2]) }, 1);
   };
 
   // Sunset: a sky in the album's colours, warm at the horizon with the sun
@@ -3444,74 +3292,6 @@ void main() {
     st.drift += dt * (0.025 + 0.05 * shared.energy) * p.speed;
     const pal = easePal(st, beatSteps(st, p), dt, 0.4);
     fxDraw(v, "sunset", SUNSET_FS, { uT: st.T, uE: shared.energy, uBass: st.lift, uKick: st.flash, uDrift: st.drift, uC0: rgb1(pal[0]), uC1: rgb1(pal[1]), uC2: rgb1(pal[2]) }, 1);
-  };
-
-  // Storm: dark clouds rolling and churning (harder on the bass), with
-  // lightning lighting them from inside on kicks and snares, and now and
-  // then a forked bolt on the biggest hits.
-  const STORM_FS = `
-uniform float uT, uE, uBass, uKick, uDrift;
-uniform vec3 uC0, uC1, uC2, uBolt;
-void main() {
-  vec2 uv = gl_FragCoord.xy / uRes;
-  float asp = uRes.x / uRes.y;
-  vec2 p = vec2(uv.x * asp, uv.y) * 2.2;
-  vec2 fl = vec2(uDrift, uT * 0.03);
-  vec2 q = vec2(fbm(p * 0.8 + fl), fbm(p * 0.8 + vec2(4.3, 2.1) - fl * 0.7));
-  float d = fbm(p + 1.6 * (1. + 0.6 * uBass) * q + fl);
-  float cl = smoothstep(0.3, 0.8, d);
-  vec3 grey = mix(vec3(0.07, 0.075, 0.09), uC0 * 0.25, 0.35);
-  vec3 col = mix(vec3(0.015, 0.018, 0.025), grey, cl) * (0.8 + 0.4 * uE);
-  vec2 b = vec2(uBolt.x * asp, uBolt.y) * 2.2;
-  float glow = exp(-length(p - b) * 1.1) * uBolt.z;
-  vec3 flash = mix(uC2, vec3(0.85, 0.9, 1.), 0.6);
-  col += flash * glow * (0.35 + 0.9 * cl) + flash * uBolt.z * 0.05;
-  o = vec4(min(col, vec3(1.)), 1.);
-}`;
-  DRAW.storm = (v, p, dt) => {
-    const { ctx, w, h, U } = v;
-    const st = v.storm || (v.storm = { drift: 0, bolt: null, sSeen: shared.snareSerial });
-    fxClock(st, p, dt, 0.5, 6, 1.5, 4);
-    st.drift += dt * (0.03 + 0.06 * shared.energy + 0.08 * st.lift) * p.speed;
-    let strike = st.newKick ? 0.6 + 0.4 * Math.min(1, shared.kick) : 0;
-    if (st.sSeen !== shared.snareSerial) { st.sSeen = shared.snareSerial; strike = Math.max(strike, 0.55); }
-    if (strike) {
-      // a forked bolt only on the big hits, and not every time
-      let line = null;
-      if (strike > 0.85 && Math.random() < 0.5) {
-        line = [];
-        let x = 0;
-        for (let k = 0; k <= 14; k++) { line.push(x); x += (Math.random() - 0.5) * 0.05; }
-      }
-      st.bolt = { x: 0.1 + 0.8 * Math.random(), y: 0.55 + 0.35 * Math.random(), s: strike, age: 0, line, len: 0.3 + 0.35 * Math.random() };
-    }
-    let z = 0;
-    if (st.bolt) {
-      const b = st.bolt;
-      b.age += dt;
-      z = b.s * Math.exp(-b.age * 7) * (Math.sin(b.age * 70) > -0.3 ? 1 : 0.35); // flickers as it fades
-      if (b.age > 1) st.bolt = null;
-    }
-    const pal = easePal(st, beatSteps(st, p), dt, 0.4);
-    fxDraw(v, "storm", STORM_FS, { uT: st.T, uE: shared.energy, uBass: st.lift, uKick: st.flash, uDrift: st.drift, uBolt: st.bolt ? [st.bolt.x, st.bolt.y, z] : [0.5, 0.7, 0], uC0: rgb1(pal[0]), uC1: rgb1(pal[1]), uC2: rgb1(pal[2]) }, 1);
-    const b = st.bolt;
-    if (b && b.line && b.age < 0.3) {
-      const x0 = b.x * w, y0 = (1 - b.y) * h, step = (b.len * h) / (b.line.length - 1);
-      const path = new Path2D();
-      b.line.forEach((dx, k) => (k ? path.lineTo(x0 + dx * w, y0 + k * step) : path.moveTo(x0, y0)));
-      const a = Math.min(1, z * 1.3);
-      ctx.save();
-      ctx.globalCompositeOperation = "lighter";
-      ctx.globalAlpha = A_(1, v);
-      ctx.lineJoin = "round";
-      ctx.strokeStyle = v.rgba(mix(colorAt(0.9), WHITE, 0.5), 0.25 * a);
-      ctx.lineWidth = 10 * U;
-      ctx.stroke(path);
-      ctx.strokeStyle = v.rgba(WHITE, 0.95 * a);
-      ctx.lineWidth = Math.max(1.2, 1.6 * U);
-      ctx.stroke(path);
-      ctx.restore();
-    }
   };
 
   // Night Sky: a dark sky with twinkling stars and a moon, thin clouds
@@ -3550,117 +3330,123 @@ void main() {
     fxDraw(v, "nightsky", NIGHT_FS, { uT: st.T, uE: shared.energy, uBass: st.lift, uKick: st.flash, uDrift: st.drift, uGlow: st.glow, uC0: rgb1(pal[0]), uC1: rgb1(pal[1]), uC2: rgb1(pal[2]) }, 1);
   };
 
-  // Mercury: blobs of liquid metal that drift, merge and split, pushed
-  // apart and swollen by the bass, with sharp chrome reflections of
-  // stripes of light in the album's colours. Kicks flash the highlights.
-  const MERCURY_FS = `
+  // Silk: slow flowing folds of shiny fabric in the album's colours, with a
+  // soft satin sheen. The bass deepens the folds; kicks brighten the sheen.
+  const SILK_FS = `
 uniform float uT, uE, uBass, uKick;
 uniform vec3 uC0, uC1, uC2;
-float field(vec2 p) {
-  float f = 0.;
-  for (int i = 0; i < 7; i++) {
-    float fi = float(i);
-    vec2 c = vec2(sin(uT * (0.31 + fi * 0.07) + fi * 1.7) * (0.4 + 0.08 * fi), cos(uT * (0.27 + fi * 0.05) + fi * 2.3) * 0.32);
-    c.x *= 1. + 0.3 * uBass;
-    float r = (0.19 + 0.04 * sin(fi * 3.1 + uT * 0.7)) * (1. + 0.3 * uBass);
-    vec2 d = p - c;
-    f += r * r / max(dot(d, d), 1e-4);
-  }
-  return f;
+float folds(vec2 p) {
+  float bend = 0.9 * sin(p.x * 0.9 + uT * 0.13) + 0.5 * sin(p.x * 1.7 - p.y * 0.6 - uT * 0.19) + 0.3 * (fbm(p * 0.5 + uT * 0.03) - 0.5);
+  float u = p.y + bend;
+  float h = sin(u * 3.2 + uT * 0.25) * 0.5
+          + sin(u * 5.3 - p.x * 0.8 - uT * 0.31 + 1.7) * 0.22
+          + sin(u * 8.1 + p.x * 1.3 + uT * 0.4) * 0.08;
+  return h * (1. + 0.4 * uBass);
 }
 void main() {
   vec2 uv = (gl_FragCoord.xy - 0.5 * uRes) / uRes.y;
-  vec2 p = uv * 1.7;
-  float f = field(p);
-  float edge = smoothstep(0.92, 1.08, f);
-  if (edge <= 0.) { o = vec4(0.); return; }
-  float e = 1.5 / uRes.y;
-  vec2 g = vec2(field(p + vec2(e, 0.)) - f, field(p + vec2(0., e)) - f) / e;
-  // a rounded dome: steep at the rim, flat on top
-  float hh = sqrt(max(1e-3, 1. - 1. / f));
-  vec3 n = normalize(vec3(-g / (f * f) / (2. * hh) * 0.22, 1.));
-  vec3 r = reflect(vec3(0., 0., -1.), n);
-  // what the metal mirrors: a bright sky above a sharp horizon, dark
-  // ground below, and a few soft streaks of light
-  float hy = r.y + 0.08 * sin(r.x * 3. + uT * 0.15);
-  vec3 skyc = mix(mix(uC1, vec3(1.), 0.55), uC2 * 0.7, smoothstep(0., 0.9, hy));
-  vec3 ground = mix(uC0 * 0.45, vec3(0.015), smoothstep(0., -0.6, hy));
-  vec3 env = mix(ground, skyc, smoothstep(-0.015, 0.015, hy));
-  env += vec3(1.) * pow(0.5 + 0.5 * sin(r.x * 7. + uT * 0.3), 24.) * 0.5 * step(0., hy);
-  float fres = pow(1. - n.z, 2.);
-  vec3 col = env * (0.35 + 0.65 * fres) + vec3(1.) * pow(max(0., dot(n, normalize(vec3(-0.4, 0.6, 1.)))), 60.) * (0.5 + 0.7 * uKick);
-  col *= 0.7 + 0.3 * uE;
-  o = vec4(min(col, vec3(1.)) * edge, edge);
+  vec2 p = uv * 3.;
+  float e = 3. / uRes.y;
+  float h = folds(p);
+  vec2 g = vec2(folds(p + vec2(e, 0.)) - h, folds(p + vec2(0., e)) - h) / e;
+  vec3 n = normalize(vec3(-g * 0.22, 1.));
+  vec3 L = normalize(vec3(-0.5, 0.6, 0.65));
+  vec3 H = normalize(L + vec3(0., 0., 1.));
+  float diff = max(dot(n, L), 0.);
+  float sheen = pow(max(dot(n, H), 0.), 40.) + 0.25 * pow(max(dot(n, H), 0.), 6.);
+  vec3 base = mix(uC0, uC1, smoothstep(-0.7, 0.7, h + 0.3 * uv.x));
+  vec3 col = base * (0.06 + 0.3 * diff) + mix(base, vec3(1.), 0.35) * sheen * (0.3 + 0.2 * uE + 0.3 * uKick) + uC2 * pow(1. - n.z, 1.5) * 0.12;
+  col *= 0.55 + 0.45 * smoothstep(-0.7, 0.5, h);
+  o = vec4(min(col, vec3(1.)), 0.95);
 }`;
-  DRAW.mercury = (v, p, dt) => {
-    const st = v.mercury || (v.mercury = {});
-    fxClock(st, p, dt, 0.4, 5, 1.2, 4);
-    const pal = easePal(st, beatSteps(st, p), dt, 0.5);
-    fxDraw(v, "mercury", MERCURY_FS, { uT: st.T, uE: shared.energy, uBass: Math.min(1, 0.6 * st.lift + 0.4 * st.punch), uKick: st.flash, uC0: rgb1(pal[0]), uC1: rgb1(pal[1]), uC2: rgb1(pal[2]) }, 1);
+  DRAW.silk = (v, p, dt) => {
+    const st = v.silk || (v.silk = {});
+    fxClock(st, p, dt, 0.35, 3, 0.8, 3);
+    const pal = easePal(st, beatSteps(st, p), dt, 0.4);
+    fxDraw(v, "silk", SILK_FS, { uT: st.T, uE: shared.energy, uBass: Math.min(1, 0.6 * st.lift + 0.4 * st.punch), uKick: st.flash, uC0: rgb1(pal[0]), uC1: rgb1(pal[1]), uC2: rgb1(pal[2]) }, 1);
   };
 
-  // Chip Scope: four channels of wave readings, like the scope view of a
-  // chiptune tracker: bass as a square wave, low mids as a thin pulse, high
-  // mids as a triangle, highs as noise. Each moves with its part of the
-  // sound: louder makes it taller, higher in that part makes the waves
-  // closer together.
+  // TV Pixels: a close-up of a TV screen, so you can see each pixel's red,
+  // green and blue strips. The picture on it is the album's colours
+  // flowing like Plasma; loudness and kicks brighten it.
+  const TVPIX_FS = `
+uniform float uT, uE, uBass, uKick, uCell;
+uniform vec3 uC0, uC1, uC2;
+vec3 picture(vec2 uv) {
+  vec2 p = uv * vec2(uRes.x / uRes.y, 1.) * 2.2;
+  vec2 w = vec2(fbm(p * 0.6 + vec2(uT * 0.08, 0.)), fbm(p * 0.6 + vec2(4.2, 1.3) - uT * 0.07));
+  float a = fbm(p * 0.8 + w * (1.6 + 0.8 * uBass) + uT * 0.05);
+  float b = fbm(p * 0.9 - w * 1.4 + vec2(7., 3.) - uT * 0.04);
+  vec3 c = mix(uC0, uC1, smoothstep(0.3, 0.7, a));
+  c = mix(c, uC2, smoothstep(0.45, 0.75, b));
+  c = pow(c, vec3(1.8));
+  float lum = smoothstep(0.42, 0.8, 0.65 * a + 0.65 * b);
+  return c * (0.03 + 1.1 * lum * lum) * (0.7 + 0.35 * uE + 0.4 * uKick);
+}
+void main() {
+  vec2 px = gl_FragCoord.xy / uCell;
+  vec2 cell = floor(px), f = fract(px);
+  vec3 c = picture((cell + 0.5) * uCell / uRes);
+  float sx = f.x * 3., i = floor(sx), fx = fract(sx);
+  float m = smoothstep(0.1, 0.22, fx) * smoothstep(0.9, 0.78, fx) * smoothstep(0.06, 0.16, f.y) * smoothstep(0.94, 0.84, f.y);
+  vec3 sub = i < 0.5 ? vec3(c.r, 0., 0.) : i < 1.5 ? vec3(0., c.g, 0.) : vec3(0., 0., c.b);
+  vec3 col = sub * m * 2.6;
+  o = vec4(min(col, vec3(1.)), 0.95);
+}`;
+  DRAW.tvpixels = (v, p, dt) => {
+    const st = v.tvpixels || (v.tvpixels = {});
+    fxClock(st, p, dt, 0.4, 4, 1, 3);
+    const pal = easePal(st, beatSteps(st, p), dt, 0.5);
+    fxDraw(v, "tvpixels", TVPIX_FS, { uT: st.T, uE: shared.energy, uBass: st.lift, uKick: st.flash, uCell: 14, uC0: rgb1(pal[0]), uC1: rgb1(pal[1]), uC2: rgb1(pal[2]) }, 1);
+  };
+
+  // Scope x4: four rows of wave readings for the bass, low mids, high mids
+  // and highs. Each row's wave is made from the real levels in its part of
+  // the sound: each band in it adds a wave of its own pitch (higher bands,
+  // tighter waves), so the shape changes with what's actually playing.
   DRAW.chipscope = (v, p, dt) => {
     const { ctx, w, h, U } = v;
-    const st = v.chip || (v.chip = { t: 0, ph: [0, 0, 0, 0], lv: [0, 0, 0, 0], pos: [0.5, 0.5, 0.5, 0.5], seed: 0 });
-    st.t += dt;
-    const CH = [[0, 0.14, 3], [0.16, 0.42, 6], [0.42, 0.72, 10], [0.72, 0.97, 16]];
+    const CH = [[0, 0.14, 2], [0.16, 0.42, 4], [0.42, 0.72, 7], [0.72, 0.97, 11]];
+    const st = v.chip || (v.chip = { b: CH.map(() => new Float32Array(8)), ph: CH.map(() => Array.from({ length: 8 }, () => Math.random() * 6.28)) });
     const down = 0.8 + 2.5 * (1 - Math.max(0, Math.min(1, p.smoothing)));
-    const x0 = w * 0.06, x1 = w * 0.94, step = Math.max(2, 3 * U);
-    const amp = h * 0.075 * p.size;
-    if (Math.floor(st.t * 30) !== st.seed) st.seed = Math.floor(st.t * 30); // the noise changes 30 times a second
+    const x0 = w * 0.06, x1 = w * 0.94, step = Math.max(2, 2 * U);
+    const amp = h * 0.08 * p.size;
     ctx.save();
     ctx.globalCompositeOperation = "lighter";
     ctx.globalAlpha = A_(1, v);
-    ctx.lineJoin = "miter";
-    ctx.lineCap = "butt";
-    CH.forEach(([a, b, cyc], k) => {
-      let sum = 0, ws = 0, mx = 0;
+    ctx.lineJoin = "round";
+    ctx.lineCap = "round";
+    CH.forEach(([a, b, cyc], r) => {
+      const bb = st.b[r], ph = st.ph[r];
+      let tot = 0;
       for (let i = 0; i < 8; i++) {
         const q = bandAt(a + ((b - a) * i) / 7);
-        sum += q * q * (i / 7);
-        ws += q * q;
-        mx += q;
+        bb[i] += (q - bb[i]) * Math.min(1, dt * (q > bb[i] ? 18 : down));
+        tot += bb[i];
+        ph[i] += dt * p.speed * (1 + i * 0.4) * (1 + r) * 0.8;
       }
-      const lvl = Math.min(1, (mx / 8) * 1.3);
-      st.lv[k] += (lvl - st.lv[k]) * Math.min(1, dt * (lvl > st.lv[k] ? 18 : down));
-      if (ws > 1e-4) st.pos[k] += (sum / ws - st.pos[k]) * Math.min(1, dt * 4);
-      const cycles = cyc * (0.75 + 0.6 * st.pos[k]);
-      st.ph[k] += dt * p.speed * (0.4 + k * 0.3);
-      const cy = h * (0.2 + 0.2 * k), A = amp * (0.06 + st.lv[k]);
-      const shape = (x) => {
-        const f = ((x * cycles + st.ph[k]) % 1 + 1) % 1;
-        if (k === 0) return f < 0.5 ? 1 : -1;
-        if (k === 1) return f < 0.25 ? 1 : -0.6;
-        if (k === 2) return 1 - 4 * Math.abs(f - 0.5);
-        const n = Math.sin((Math.floor(x * 140) + st.seed * 57.3) * 12.9898) * 43758.5453;
-        return (n - Math.floor(n)) * 2 - 1;
-      };
+      const A = amp * (0.05 + Math.min(1, (tot / 8) * 1.4));
+      const cy = h * (0.2 + 0.2 * r);
       const path = new Path2D();
-      let prev = null;
-      for (let x = x0; x <= x1; x += step) {
-        const y = cy - shape((x - x0) / (x1 - x0)) * A;
-        if (prev === null) path.moveTo(x, y);
-        else { path.lineTo(x, prev); path.lineTo(x, y); } // stepped, like the real thing
-        prev = y;
+      for (let x = x0; x <= x1 + 0.5; x += step) {
+        const u = (x - x0) / (x1 - x0);
+        let s = 0;
+        for (let i = 0; i < 8; i++) s += bb[i] * Math.sin(6.2832 * cyc * (1 + i * 0.35) * u + ph[i]);
+        const y = cy - (s / (tot + 0.15)) * A;
+        if (x === x0) path.moveTo(x, y); else path.lineTo(x, y);
       }
-      const c = colorAt([0.1, 0.4, 0.7, 0.95][k]);
-      // a faint centre line, like the scope's zero line
+      const c = colorAt([0.1, 0.4, 0.7, 0.95][r]);
       ctx.strokeStyle = v.rgba(c, 0.08);
       ctx.lineWidth = 1;
       ctx.beginPath();
       ctx.moveTo(x0, cy);
       ctx.lineTo(x1, cy);
       ctx.stroke();
-      ctx.strokeStyle = v.rgba(c, 0.15);
-      ctx.lineWidth = 8 * U;
+      ctx.strokeStyle = v.rgba(c, 0.12);
+      ctx.lineWidth = 6 * U;
       ctx.stroke(path);
-      ctx.strokeStyle = v.rgba(mix(c, WHITE, 0.3), 0.95);
-      ctx.lineWidth = Math.max(1.5, 2.2 * U);
+      ctx.strokeStyle = v.rgba(mix(c, WHITE, 0.25), 0.9);
+      ctx.lineWidth = Math.max(1.2, 1.6 * U);
       ctx.stroke(path);
     });
     ctx.restore();
@@ -5588,7 +5374,7 @@ void main() {
             <div class="lp-row"><div class="lp-label"><span>Colour changes</span></div>${seg("colorMove", [["move", "Moving"], ["still", "Still"]], "style")}</div>
             <div class="lp-colors" data-show-color><label><input type="color" data-key="color1" data-scope="style">Colour 1</label><label><input type="color" data-key="color2" data-scope="style">Colour 2</label></div>`)}
           ${group("Appearance", slider("opacity", "Opacity", 0.1, 1, 0.05, "style") + slider("blur", "Blur", 0, 20, 0.5, "style") + slider("brightness", "Brightness", 0.2, 1.6, 0.05, "style") + slider("size", "Size", 0.4, 2, 0.05, "style"))}
-          ${group("Layout", slider("barCount", "Bar count", 16, 128, 1, "style", u("barCount")) + `<div class="lp-row" data-uses="${u("position")}"><div class="lp-label"><span>Position</span></div>${seg("position", [["bottom", "Bottom"], ["top", "Top"], ["both", "Both"]], "style")}</div><div class="lp-row" data-uses="${u("variant")}"><div class="lp-label"><span>Look</span></div>${seg("variant", [["poster", "Poster"], ["brutalist", "Brutalist"]], "style")}</div><div class="lp-row" data-uses="${u("neuroLook")}"><div class="lp-label"><span>Look</span></div>${seg("neuroLook", [["mesh", "Mesh"], ["lines", "Lines"], ["ridges", "Ridges"]], "style")}</div><div class="lp-row" data-uses="${u("vuFace")}"><div class="lp-label"><span>Look</span></div>${seg("vuFace", [["night", "Classic"], ["minimal", "Minimal"], ["broadcast", "Broadcast"], ["holo", "Holo"], ["hud", "HUD"]], "style")}</div><div class="lp-row" data-uses="${u("circleAt")}"><div class="lp-label"><span>Circle at</span></div>${seg("circleAt", [["middle", "Middle"], ["art", "Album art"]], "style")}</div><div class="lp-row" data-uses="${u("mcColor")}"><div class="lp-label"><span>Bar colour</span></div>${seg("mcColor", [["flow", "Flow"], ["frequency", "Freq."], ["height", "Area"], ["bar", "Bar"], ["solid", "Solid"]], "style")}</div><div class="lp-row" data-uses="${u("beatEvery")}"><div class="lp-label"><span>Change every</span></div>${seg("beatEvery", [["1", "Beat"], ["2", "2"], ["4", "4"], ["8", "8 beats"]], "style")}</div>`, [...new Set([...USES.barCount, ...USES.position, ...USES.variant, ...USES.neuroLook, ...USES.vuFace, ...USES.circleAt, ...USES.mcColor, ...USES.beatEvery])].join(","))}
+          ${group("Layout", slider("barCount", "Bar count", 16, 128, 1, "style", u("barCount")) + `<div class="lp-row" data-uses="${u("position")}"><div class="lp-label"><span>Position</span></div>${seg("position", [["bottom", "Bottom"], ["top", "Top"], ["both", "Both"]], "style")}</div><div class="lp-row" data-uses="${u("variant")}"><div class="lp-label"><span>Look</span></div>${seg("variant", [["poster", "Poster"], ["brutalist", "Brutalist"]], "style")}</div><div class="lp-row" data-uses="${u("neuroLook")}"><div class="lp-label"><span>Look</span></div>${seg("neuroLook", [["mesh", "Mesh"], ["lines", "Lines"], ["ridges", "Ridges"]], "style")}</div><div class="lp-row" data-uses="${u("vuFace")}"><div class="lp-label"><span>Look</span></div>${seg("vuFace", [["night", "Classic"], ["minimal", "Minimal"], ["holo", "Holo"], ["hud", "HUD"]], "style")}</div><div class="lp-row" data-uses="${u("circleAt")}"><div class="lp-label"><span>Circle at</span></div>${seg("circleAt", [["middle", "Middle"], ["art", "Album art"]], "style")}</div><div class="lp-row" data-uses="${u("mcColor")}"><div class="lp-label"><span>Bar colour</span></div>${seg("mcColor", [["flow", "Flow"], ["frequency", "Freq."], ["height", "Area"], ["bar", "Bar"], ["solid", "Solid"]], "style")}</div><div class="lp-row" data-uses="${u("beatEvery")}"><div class="lp-label"><span>Change every</span></div>${seg("beatEvery", [["1", "Beat"], ["2", "2"], ["4", "4"], ["8", "8 beats"]], "style")}</div>`, [...new Set([...USES.barCount, ...USES.position, ...USES.variant, ...USES.neuroLook, ...USES.vuFace, ...USES.circleAt, ...USES.mcColor, ...USES.beatEvery])].join(","))}
         </div>
         ${group("Background", slider("bgDim", "Darken background", 0, 0.9, 0.05, "global") + `<div class="lp-note">Calms Spicy Lyrics' moving background so the visual stands out. The lyrics and album art aren't touched.</div>`)}
       </div>
