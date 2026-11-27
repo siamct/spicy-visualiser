@@ -54,7 +54,6 @@
     ["ledplasma", "LED Plasma"],
     ["ekg", "EKG"],
     ["rgbsplit", "RGB Split"],
-    ["ocean", "Ocean"],
     ["underwater", "Underwater"],
     ["sunset", "Sunset"],
     ["nightsky", "Night Sky"],
@@ -64,7 +63,6 @@
   const STYLE_ICON = {
     ekg: '<path d="M1 13h5l2-3 2.5 9L14 4l2.5 9H23" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round"/>',
     rgbsplit: '<g style="mix-blend-mode:screen"><path d="M3 21V12h3v9zm5 0V6h3v15zm5 0V9h3v12zm5 0V4h3v17z" opacity=".55" transform="translate(-1 0)"/><path d="M3 21V12h3v9zm5 0V6h3v15zm5 0V9h3v12zm5 0V4h3v17z" opacity=".55" transform="translate(1 1)"/></g>',
-    ocean: '<g fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><path d="M1 10c3-3 5 3 8 0s5 3 8 0 4 2 6 0"/><path d="M1 15c3-3 5 3 8 0s5 3 8 0 4 2 6 0" opacity=".7"/><path d="M1 20c3-3 5 3 8 0s5 3 8 0 4 2 6 0" opacity=".45"/></g>',
     underwater: '<g fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M1 5c3-2 5 2 8 0s5 2 8 0 4 1 6 0"/><path d="M6 21l2.5-12M12 21V9M18 21l-2.5-12" opacity=".45"/></g><circle cx="9" cy="15" r="1.2"/><circle cx="15" cy="12" r="1"/>',
     sunset: '<path d="M5 16a7 7 0 0 1 14 0z"/><g stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M1 19h22"/><path d="M4 22h16" opacity=".5"/></g><path d="M3 8c2-1.5 4-1.5 6 0s4 1.5 6 0" fill="none" stroke="currentColor" stroke-width="1.4" opacity=".6"/>',
     nightsky: '<path d="M15 3a8 8 0 1 0 6 12 6.5 6.5 0 0 1-6-12z"/><circle cx="5" cy="5" r="1"/><circle cx="9" cy="2.5" r=".8"/><circle cx="3" cy="11" r=".8"/>',
@@ -108,13 +106,13 @@
   // Styles that still look right on Spotify's data (it has loudness and
   // beats, not a real spectrum). With that source they're listed first and
   // the rest fold away under "More styles".
-  const SONG_DATA_OK = new Set(["ocean", "underwater", "sunset", "nightsky", "silk", "tvpixels", "drumpads", "particles", "plasma", "ledplasma", "warp", "dnb", "ribbon", "rain", "lava", "smoke", "tunnel", "aurora", "oil", "galaxy", "prism", "ombre", "geometric", "bauhaus", "sub", "off"]);
+  const SONG_DATA_OK = new Set(["underwater", "sunset", "nightsky", "silk", "tvpixels", "drumpads", "particles", "plasma", "ledplasma", "warp", "dnb", "ribbon", "rain", "lava", "smoke", "tunnel", "aurora", "oil", "galaxy", "prism", "ombre", "geometric", "bauhaus", "sub", "off"]);
   const STYLE_GROUPS = [
     ["Bars", ["monstercat", "mirror", "holospec", "ledm", "led", "ascii", "rgbsplit"]],
     ["Meters & lines", ["vu", "scope", "ekg", "ribbon", "dnb"]],
     ["Circles", ["radial", "ncs", "sub", "trap", "tunnel"]],
     ["On the beat", ["drumpads", "geometric", "bauhaus", "particles"]],
-    ["Liquid & water", ["plasma", "ledplasma", "tvpixels", "oil", "silk", "lava", "ocean", "underwater"]],
+    ["Liquid & water", ["plasma", "ledplasma", "tvpixels", "oil", "silk", "lava", "underwater"]],
     ["Sky & space", ["aurora", "galaxy", "sunset", "nightsky", "warp", "ombre"]],
     ["Textures", ["prism", "rain", "smoke", "neuro"]],
     ["", ["off"]],
@@ -126,13 +124,13 @@
     particles: ["particles", "monstercat", "warp", "dnb", "trap"],
     position: ["monstercat", "mirror", "ascii"],
     variant: ["geometric"],
-    beatEvery: ["ocean", "underwater", "sunset", "nightsky", "silk", "tvpixels", "geometric", "bauhaus", "plasma", "ledplasma", "sub", "trap", "neuro", "ribbon", "rain", "lava", "smoke", "tunnel", "aurora", "oil", "galaxy", "prism", "ombre"],
+    beatEvery: ["underwater", "sunset", "nightsky", "silk", "tvpixels", "geometric", "bauhaus", "plasma", "ledplasma", "sub", "trap", "neuro", "ribbon", "rain", "lava", "smoke", "tunnel", "aurora", "oil", "galaxy", "prism", "ombre"],
     neuroLook: ["neuro"],
     mcColor: ["monstercat"],
     vuFace: ["vu"],
     circleAt: ["trap", "radial", "ncs", "sub"],
-    speed: ["ekg", "ocean", "underwater", "sunset", "nightsky", "silk", "tvpixels", "scope", "trap", "neuro", "ribbon", "rain", "lava", "smoke", "tunnel", "aurora", "oil", "particles", "monstercat", "ncs", "radial", "plasma", "warp", "dnb", "ascii", "led", "ledplasma", "galaxy", "prism", "ombre"],
-    bassBoost: ["rgbsplit", "ocean", "underwater", "sunset", "nightsky", "silk", "tvpixels", "scope", "particles", "monstercat", "radial", "mirror", "ncs", "warp", "plasma", "dnb", "ascii", "geometric", "bauhaus", "led", "ledplasma", "sub", "trap", "ledm", "neuro", "ribbon", "rain", "lava", "smoke", "tunnel", "aurora", "oil", "galaxy", "prism", "ombre"],
+    speed: ["ekg", "underwater", "sunset", "nightsky", "silk", "tvpixels", "scope", "trap", "neuro", "ribbon", "rain", "lava", "smoke", "tunnel", "aurora", "oil", "particles", "monstercat", "ncs", "radial", "plasma", "warp", "dnb", "ascii", "led", "ledplasma", "galaxy", "prism", "ombre"],
+    bassBoost: ["rgbsplit", "underwater", "sunset", "nightsky", "silk", "tvpixels", "scope", "particles", "monstercat", "radial", "mirror", "ncs", "warp", "plasma", "dnb", "ascii", "geometric", "bauhaus", "led", "ledplasma", "sub", "trap", "ledm", "neuro", "ribbon", "rain", "lava", "smoke", "tunnel", "aurora", "oil", "galaxy", "prism", "ombre"],
     smoothing: ["rgbsplit", "ekg", "particles", "monstercat", "radial", "mirror", "ncs", "warp", "plasma", "dnb", "ascii", "geometric", "bauhaus", "led", "ledplasma", "sub", "trap", "ledm", "neuro", "aurora", "vu", "drumpads", "holospec"],
   };
 
@@ -192,7 +190,6 @@
     monstercat: { barCount: 63, bassBoost: 0.8, smoothing: 0.45, beatEvery: "4" },
     ledm: { shake: 0 },
     ekg: { shake: 0 },
-    ocean: { shake: 0 },
     underwater: { shake: 0 },
     sunset: { shake: 0 },
     nightsky: { shake: 0 },
@@ -244,7 +241,7 @@
   if (!Array.isArray(S.favs)) S.favs = [];
   // Retro Bars became LED Meters.
   // (and Drum Bars was taken out)
-  const MOVED = { retro: "ledm", drumbars: "drumpads", drums: "drumpads", holoradar: "holospec", holorings: "holospec", pitchtrail: "ekg", kaleido: "plasma", bubbles: "lava", chrome: "silk", ekgpitch: "ekg", ekgscroll: "ekg", pond: "ocean", storm: "sunset", mercury: "silk", ekg3: "ekg", chipscope: "scope", drumwaves: "drumpads" };
+  const MOVED = { retro: "ledm", drumbars: "drumpads", drums: "drumpads", holoradar: "holospec", holorings: "holospec", pitchtrail: "ekg", kaleido: "plasma", bubbles: "lava", chrome: "silk", ekgpitch: "ekg", ekgscroll: "ekg", pond: "underwater", ocean: "underwater", storm: "sunset", mercury: "silk", ekg3: "ekg", chipscope: "scope", drumwaves: "drumpads" };
   if (MOVED[S.style]) S.style = MOVED[S.style];
   S.favs = [...new Set(S.favs.map((f) => MOVED[f] || f))];
   if (!validStyle(S.style)) S.style = GLOBAL_DEFAULTS.style;
@@ -3175,73 +3172,6 @@ void main() {
   // Water and sky scenes. All use the album's colours, which turn on the
   // beat (Change every); the bass and loudness move them and kicks light
   // them up a little.
-
-  // Ocean: a beach seen from straight above, flat like a map. The sea at
-  // the top, sand at the bottom. Each kick sends a wave washing down over
-  // the sand with a lacy line of foam at its front; it slides back, leaving
-  // the sand dark and wet for a moment. The bass pushes the water's edge
-  // further in.
-  const OCEAN_FS = `
-uniform float uT, uE, uBass;
-uniform vec3 uC0, uC1, uC2;
-uniform vec4 uW[3];
-float wob(float x, float s) {
-  return 0.03 * sin(x * 3.1 + s) + 0.018 * sin(x * 7.3 - s * 1.7) + 0.02 * (noise(vec2(x * 4. + s * 3., s)) - 0.5);
-}
-void main() {
-  vec2 uv = gl_FragCoord.xy / uRes;
-  float x = uv.x * uRes.x / uRes.y, y = uv.y;
-  float base = 0.62 - 0.06 * uBass + 0.015 * sin(uT * 0.5);
-  float edge = base + wob(x, uT * 0.07);
-  float wet = 0., foam = 0.;
-  // foam: a net of thin bubbly lines, like the lace a wave leaves behind
-  float lace = pow(1. - abs(fbm3(vec2(x * 7., y * 11.) + vec2(uT * 0.05, -uT * 0.08)) * 2. - 1.), 7.);
-  for (int i = 0; i < 3; i++) {
-    vec4 w = uW[i];
-    if (w.y <= 0.) continue;
-    float e = base - w.x + wob(x, w.w);
-    edge = min(edge, e);
-    // the sand the wave reached stays dark and wet for a moment
-    wet = max(wet, w.y * step(base - w.z + wob(x, w.w), y));
-    // foam along the front, thinning out behind it
-    float d = y - e;
-    float rim = exp(-abs(d + 0.006) * 70.) * (0.45 + 0.55 * smoothstep(0.3, 0.6, noise(vec2(x * 18., w.w))));
-    foam = max(foam, w.y * (rim * 0.75 + step(0., d) * exp(-d * 14.) * lace * 0.9));
-  }
-  float d = y - edge;
-  vec3 sand = mix(uC2, vec3(0.78, 0.68, 0.52), 0.75) * 0.2;
-  sand *= 1. - 0.45 * wet;
-  vec3 shallow = mix(uC1, vec3(0.6, 0.9, 0.9), 0.15) * 0.32;
-  vec3 deep = uC0 * 0.05;
-  vec3 sea = mix(shallow, deep, smoothstep(0., 0.35, d));
-  sea += mix(uC1, vec3(1.), 0.5) * lace * exp(-d * 8.) * 0.18;
-  vec3 col = mix(sand, sea, smoothstep(-0.002, 0.002, d));
-  col += mix(uC1, vec3(1.), 0.75) * foam * (0.55 + 0.25 * uE);
-  // a thin line of foam where the calm water meets the sand
-  col += mix(uC1, vec3(1.), 0.7) * exp(-abs(d) * 90.) * 0.18;
-  o = vec4(min(col, vec3(1.)), 0.95);
-}`;
-  DRAW.ocean = (v, p, dt) => {
-    const st = v.ocean || (v.ocean = { waves: [] });
-    fxClock(st, p, dt, 0.3, 4, 1, 3);
-    if (st.newKick) {
-      if (st.waves.length >= 3) st.waves.shift();
-      st.waves.push({ ph: 0, s: Math.min(1, 0.45 + 0.6 * Math.min(1, shared.kick)), seed: Math.random() * 50 });
-    }
-    const W = new Float32Array(12);
-    st.waves = st.waves.filter((w) => (w.ph += (dt * p.speed) / 3.2) < 1);
-    st.waves.forEach((w, i) => {
-      // rushes in fast, then slides back slowly
-      const out = w.ph < 0.25 ? Math.sin((w.ph / 0.25) * Math.PI * 0.5) : 1 - (w.ph - 0.25) / 0.75;
-      const reach = 0.16 + 0.22 * w.s;
-      W[i * 4] = reach * out * out * (3 - 2 * out);
-      W[i * 4 + 1] = (1 - w.ph) * (1 - w.ph * 0.5);
-      W[i * 4 + 2] = reach;
-      W[i * 4 + 3] = w.seed;
-    });
-    const pal = easePal(st, beatSteps(st, p), dt, 0.4);
-    fxDraw(v, "ocean", OCEAN_FS, { uT: st.T, uE: shared.energy, uBass: Math.min(1, 0.6 * st.lift + 0.4 * st.punch), uW: W, uC0: rgb1(pal[0]), uC1: rgb1(pal[1]), uC2: rgb1(pal[2]) }, 1);
-  };
 
   // Underwater: looking up from under the sea. Rippling nets of light
   // (caustics) wobble across, with soft shafts of light from the surface.

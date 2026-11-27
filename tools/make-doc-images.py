@@ -19,7 +19,7 @@ GROUPS = [
     ("Meters & lines", [("vu", "VU Meters"), ("scope", "Oscilloscope"), ("ekg", "EKG"), ("ribbon", "Ribbon"), ("dnb", "Liquid")]),
     ("Circles", [("radial", "Radial Bars"), ("ncs", "Sphere"), ("sub", "Subwoofer"), ("trap", "Trap"), ("tunnel", "Starfield Tunnel")]),
     ("On the beat", [("drumpads", "Drum Pads"), ("geometric", "Geometric"), ("bauhaus", "Bauhaus"), ("particles", "Particles")]),
-    ("Liquid & water", [("plasma", "Plasma"), ("ledplasma", "LED Plasma"), ("tvpixels", "TV Pixels"), ("oil", "Oil Slick"), ("silk", "Silk"), ("lava", "Lava Lamp"), ("ocean", "Ocean"), ("underwater", "Underwater")]),
+    ("Liquid & water", [("plasma", "Plasma"), ("ledplasma", "LED Plasma"), ("tvpixels", "TV Pixels"), ("oil", "Oil Slick"), ("silk", "Silk"), ("lava", "Lava Lamp"), ("underwater", "Underwater")]),
     ("Sky & space", [("aurora", "Aurora"), ("galaxy", "Galaxy"), ("sunset", "Sunset"), ("nightsky", "Night Sky"), ("warp", "Warp"), ("ombre", "Ombre")]),
     ("Textures", [("prism", "Graphite"), ("rain", "Rain on Glass"), ("smoke", "Smoke"), ("neuro", "Neuro Mesh")]),
 ]

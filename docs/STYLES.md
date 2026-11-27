@@ -206,11 +206,6 @@ Lumpy blobs of colour rising and sinking, stretching, merging and splitting:
 - the bass swells them and kicks give them a wobble;
 - the colours step round on the beat.
 
-### Ocean
-![Ocean](screenshots/styles/ocean.jpg)
-
-A beach seen from straight above, flat like a map: the sea at the top, sand at the bottom. Each kick sends a wave washing down over the sand with a lacy line of foam at its front; it slides back and leaves the sand dark and wet for a moment. The bass pushes the water's edge further in.
-
 ### Underwater
 ![Underwater](screenshots/styles/underwater.jpg)
 

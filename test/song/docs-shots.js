@@ -26,7 +26,7 @@ const SHOTS = [
   ["radial", 26], ["ncs", 23], ["sub", 13], ["trap", 25], ["tunnel", 27],
   ["drumpads", 22], ["geometric", 11], ["bauhaus", 29],
   ["plasma", 18], ["ledplasma", 24], ["tvpixels", 22], ["oil", 20], ["silk", 22], ["dnb", 26],
-  ["ocean", 23], ["underwater", 21],
+  ["underwater", 21],
   ["aurora", 23], ["galaxy", 21], ["sunset", 24], ["nightsky", 20], ["ribbon", 27], ["ombre", 25], ["warp", 30], ["particles", 22],
   ["prism", 22], ["rain", 19], ["smoke", 24], ["lava", 20], ["neuro", 14],
 ];
