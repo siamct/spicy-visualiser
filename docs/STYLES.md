@@ -67,31 +67,43 @@ A glowing line tracing the sound like an old scope, over a faint grid:
 - the line glows on for a moment after it passes, like a real scope screen;
 - **Colours: Classic** (default) is green phosphor; the other colour modes use those colours.
 
+### Chip Scope
+![Chip Scope](screenshots/styles/chipscope.jpg)
+
+Four channels of wave readings, like the scope view in a chiptune tracker: the bass as a square wave, low mids as a thin pulse, high mids as a triangle and the highs as noise. Each moves with its part of the sound: louder makes it taller, and higher notes in that part pack the waves closer together.
+
 ---
 
-## Holo
+## Holo & EKG
 
-Thin ticks that glow when lit and stay faintly visible when not, a slow shimmer running down them and scanlines drifting over, in the album's colours (the same look as the VU Meters' Holo face). Their levels are heavy: they rise quickly and sink slowly, so they don't flicker. **Smoothing** sets how slowly they sink.
-
-### Holo Radar
-![Holo Radar](screenshots/styles/holoradar.jpg)
-
-A ring of ticks round the middle, one for each part of the spectrum (bass at the top, mirrored on both sides), lit by the sound. A sweep line turns slowly and lights the ticks it passes, and each kick leaves a blip that fades. It sits beside the album art when the art is showing.
+Glowing lines and ticks in the album's colours. Holo Spectrum has the look of the VU Meters' Holo face: ticks that glow when lit and stay faintly visible when not, a slow shimmer and drifting scanlines. The EKG styles are glowing lines like a heart monitor. **Speed** sets how fast the EKG lines sweep.
 
 ### Holo Spectrum
 ![Holo Spectrum](screenshots/styles/holospec.jpg)
 
-The spectrum as a row of columns made of short glowing ticks along the bottom, coloured across from the album. A peak tick hangs over each column, then drops.
+Monstercat-style bars (bass on the left, neighbours smoothed into hills), each a stack of short glowing ticks, with a peak tick that hangs over each bar. **Bar count** sets how many.
 
-### Holo Rings
-![Holo Rings](screenshots/styles/holorings.jpg)
+### EKG
+![EKG](screenshots/styles/ekg.jpg)
 
-Three nested rings of ticks: bass inside, then mids, highs outside. Each turns its own way at its own speed (faster on heavy bass) and lights up with its part of the sound.
+Like a heart monitor: the line writes across from left to right and wipes just ahead of itself. It stays flat between hits; each kick makes a heartbeat shape and each snare a short sharp blip.
 
-### Pitch Trail
-![Pitch Trail](screenshots/styles/pitchtrail.jpg)
+### EKG Pitch
+![EKG Pitch](screenshots/styles/ekgpitch.jpg)
 
-Like a piano roll turned sideways, but only looking back. A glowing line follows where the sound sits in pitch (low at the bottom, high at the top) and scrolls left, leaving a trail. The strongest pitches at each moment leave short dashes, like notes on a roll. It's the rough pitch (each step is about two piano keys), not exact notes or chords.
+The same sweep, but the line also rises and falls with where the sound sits in pitch. It's the rough pitch (about two piano keys a step), not exact notes.
+
+### EKG Scroll
+![EKG Scroll](screenshots/styles/ekgscroll.jpg)
+
+The heartbeat line scrolling left from the right edge, instead of sweeping across.
+
+### EKG x3
+![EKG x3](screenshots/styles/ekg3.jpg)
+
+Three sweeping lines, each spiking on its own hits: the bass and drums, the middle of the sound (where voices mostly sit), and the high sounds.
+
+---
 
 ## Circles
 
@@ -135,20 +147,15 @@ Flying down a gently bending tunnel of glowing rings, with stars streaming past:
 
 These styles follow the song's beat more than the raw spectrum, so they keep a steady rhythm.
 
-Three drum styles show only the drum hits, nothing else, in the album's colours. They spring up on each hit and swing a little past before settling, like a VU needle (**Smoothing** sets how loose), and with **Fit each song** on they learn each song's drum levels, so quiet and loud songs both hit hard.
-
-### Drum Pulses
-![Drum Pulses](screenshots/styles/drums.jpg)
-
-Two big soft shapes, kick on the left (a deep, heavy thump), snare on the right (a sharp, quick snap). A thin ring marks each one's peak, hangs, then shrinks back.
+Two drum styles show only the drum hits, nothing else, in the album's colours. They spring up on each hit and swing a little past before settling, like a VU needle (**Smoothing** sets how loose), and with **Fit each song** on they learn each song's drum levels, so quiet and loud songs both hit hard.
 
 ### Drum Pads
 ![Drum Pads](screenshots/styles/drumpads.jpg)
 
 Four drum-machine pads (kick, snare, hi-hat, bass) that light up as each is hit, then fade.
 
-### Drum Waves
-![Drum Waves](screenshots/styles/drumwaves.jpg)
+### Impact
+![Impact](screenshots/styles/drumwaves.jpg)
 
 Each kick sends a wave in from the left, each snare one in from the right. Where two meet they burst into a flash that spreads up and down. Harder hits make brighter waves.
 
@@ -181,30 +188,39 @@ The same fluid as Plasma, shown on the LED dot panel.
 ### Oil Slick
 ![Oil Slick](screenshots/styles/oil.jpg)
 
-Rainbow swirls like oil on a wet road at night:
+Patches of rainbow swirls like oil on a wet road at night, with plenty of dark road between them:
 - it just flows; the bass stirs the swirls harder and moves the colours;
 - the colours shift slowly round on the beat;
 - **Colours: Classic** (default) is the oil rainbow; the other colour modes tint it.
 
-### Liquid Chrome
-![Liquid Chrome](screenshots/styles/chrome.jpg)
+### Mercury
+![Mercury](screenshots/styles/mercury.jpg)
 
-A sheet of glossy black liquid metal:
-- mostly dark, so the lyrics stay easy to read, with thin highlights in the album's colours sliding over its curves;
-- it rolls slowly and the bass swells the waves; no beat effects, it just flows.
+Blobs of liquid metal that drift, merge and split apart. The bass swells them and pushes them apart; they mirror a bright sky over a sharp horizon in the album's colours, and kicks flash the highlights.
 
 ### Liquid
 ![Liquid](screenshots/styles/dnb.jpg)
 
 A flowing three-strand bass wave that pumps on kicks, with speed streaks racing past and a flash on every snare. Made with drum & bass in mind.
 
-### Kaleidoscope
-![Kaleidoscope](screenshots/styles/kaleido.jpg)
+---
 
-Mirrored trails of colour that keep zooming out from the middle, warping and smearing with the music, like the old media-player visualisers:
-- the spectrum drops in sharp shards of colour, mirrored round the middle;
-- the bass makes it zoom and swirl faster, kicks flash it;
-- darker in the middle so the lyrics stay readable.
+## Water
+
+### Ocean
+![Ocean](screenshots/styles/ocean.jpg)
+
+Seen from the side: layers of waves rolling across the bottom, the far ones small and dim, the near ones big. The bass raises the swell and kicks brighten the foam along the crests.
+
+### Underwater
+![Underwater](screenshots/styles/underwater.jpg)
+
+Looking up from under the sea: rippling nets of light wobble across, with soft shafts of light from the surface. The bass makes the light wobble harder; loudness and kicks brighten it.
+
+### Pond
+![Pond](screenshots/styles/pond.jpg)
+
+Looking down at still dark water that reflects a soft sky. Each kick drops a ring of ripples that spreads out and crosses the others.
 
 ---
 
@@ -220,9 +236,22 @@ Northern lights over a starry sky:
 ### Galaxy
 ![Galaxy](screenshots/styles/galaxy.jpg)
 
-Drifting slowly through a coloured nebula, stars streaming past:
-- the bass makes the gas glow brighter and swirl;
-- loudness speeds up the flight, kicks make the stars flash.
+Drifting slowly through a coloured nebula, stars streaming past. One slow, smooth drive from the loudness and bass sets how fast it flies and how brightly the gas glows, easing up and down over a couple of seconds, so it never lurches on a hit or stalls in a quiet bit.
+
+### Sunset
+![Sunset](screenshots/styles/sunset.jpg)
+
+A sky in the album's colours, warm at the horizon with the sun low in the middle. Soft clouds drift across, lit from below; they glow a little on the beat and drift faster when it's busy.
+
+### Storm
+![Storm](screenshots/styles/storm.jpg)
+
+Dark clouds rolling and churning, harder on the bass. Lightning lights them from inside on kicks and snares, and now and then a forked bolt cracks down on the biggest hits.
+
+### Night Sky
+![Night Sky](screenshots/styles/nightsky.jpg)
+
+A dark sky with twinkling stars and a moon, and thin clouds drifting past it, silver at the edges near the moon. It slowly brightens as the music gets fuller.
 
 ### Ribbon
 ![Ribbon](screenshots/styles/ribbon.jpg)
@@ -243,6 +272,11 @@ Rich colour glowing in from the left and right sides, with the middle left dark 
 ![Warp](screenshots/styles/warp.jpg)
 
 Hyperspace stars flying past, faster on the bass, with a surge on every beat.
+
+### Particles
+![Particles](screenshots/styles/particles.jpg)
+
+A field of light that drifts in a gentle flow and links up into constellations. It bursts outwards on kicks and twinkles with the hi-hats.
 
 ---
 
@@ -279,18 +313,6 @@ Lumpy blobs of colour rising and sinking, stretching, merging and splitting:
 - the bass swells them and kicks give them a wobble;
 - the colours step round on the beat.
 
-### Bubbles
-![Bubbles](screenshots/styles/bubbles.jpg)
-
-Soap bubbles floating up, each a clear film with a thin rainbow rim and a bright window reflection:
-- the bass sends more up, and faster; kicks pop a few;
-- **Colours: Classic** (default) is the soap-film rainbow; the other colour modes tint the rims;
-- **Particles** sets how many.
-
----
-
-## 3D
-
 ### Neuro Mesh
 ![Neuro Mesh](screenshots/styles/neuro.jpg)
 
@@ -300,11 +322,6 @@ Three looks (**Look**):
 - Mesh (above);
 - Lines: stacked wave lines;
 - Ridges: flat stacked lines like the classic pulsar-plot album cover (below).
-
-### Particles
-![Particles](screenshots/styles/particles.jpg)
-
-A field of light that drifts in a gentle flow and links up into constellations. It bursts outwards on kicks and twinkles with the hi-hats.
 
 ---
 

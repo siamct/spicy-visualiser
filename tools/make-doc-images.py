@@ -15,14 +15,14 @@ SRC = os.path.join(ROOT, "test", "out")
 DOCS = os.path.join(ROOT, "docs", "screenshots")
 
 GROUPS = [
-    ("Bars & meters", [("monstercat", "Monstercat"), ("mirror", "Mirror Bars"), ("ledm", "LED Meters"), ("led", "LED Wall"), ("ascii", "ASCII"), ("vu", "VU Meters"), ("scope", "Oscilloscope")]),
-    ("Holo", [("holoradar", "Holo Radar"), ("holospec", "Holo Spectrum"), ("holorings", "Holo Rings"), ("pitchtrail", "Pitch Trail")]),
+    ("Bars & meters", [("monstercat", "Monstercat"), ("mirror", "Mirror Bars"), ("ledm", "LED Meters"), ("led", "LED Wall"), ("ascii", "ASCII"), ("vu", "VU Meters"), ("scope", "Oscilloscope"), ("chipscope", "Chip Scope")]),
+    ("Holo & EKG", [("holospec", "Holo Spectrum"), ("ekg", "EKG"), ("ekgpitch", "EKG Pitch"), ("ekgscroll", "EKG Scroll"), ("ekg3", "EKG x3")]),
     ("Circles", [("radial", "Radial Bars"), ("ncs", "Sphere"), ("sub", "Subwoofer"), ("trap", "Trap"), ("tunnel", "Starfield Tunnel")]),
-    ("On the beat", [("drums", "Drum Pulses"), ("drumpads", "Drum Pads"), ("drumwaves", "Drum Waves"), ("geometric", "Geometric"), ("bauhaus", "Bauhaus")]),
-    ("Liquid colour", [("plasma", "Plasma"), ("ledplasma", "LED Plasma"), ("oil", "Oil Slick"), ("chrome", "Liquid Chrome"), ("dnb", "Liquid"), ("kaleido", "Kaleidoscope")]),
-    ("Sky & light", [("aurora", "Aurora"), ("galaxy", "Galaxy"), ("ribbon", "Ribbon"), ("ombre", "Ombre"), ("warp", "Warp")]),
-    ("Textures", [("prism", "Graphite"), ("rain", "Rain on Glass"), ("smoke", "Smoke"), ("lava", "Lava Lamp"), ("bubbles", "Bubbles")]),
-    ("3D", [("neuro", "Neuro Mesh"), ("particles", "Particles")]),
+    ("On the beat", [("drumpads", "Drum Pads"), ("drumwaves", "Impact"), ("geometric", "Geometric"), ("bauhaus", "Bauhaus")]),
+    ("Liquid colour", [("plasma", "Plasma"), ("ledplasma", "LED Plasma"), ("oil", "Oil Slick"), ("mercury", "Mercury"), ("dnb", "Liquid")]),
+    ("Water", [("ocean", "Ocean"), ("underwater", "Underwater"), ("pond", "Pond")]),
+    ("Sky & light", [("aurora", "Aurora"), ("galaxy", "Galaxy"), ("sunset", "Sunset"), ("storm", "Storm"), ("nightsky", "Night Sky"), ("ribbon", "Ribbon"), ("ombre", "Ombre"), ("warp", "Warp"), ("particles", "Particles")]),
+    ("Textures", [("prism", "Graphite"), ("rain", "Rain on Glass"), ("smoke", "Smoke"), ("lava", "Lava Lamp"), ("neuro", "Neuro Mesh")]),
 ]
 BG = (12, 11, 16)
 

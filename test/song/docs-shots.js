@@ -22,14 +22,14 @@ const ALBUMS = [
 
 // [style, moment in the track (bar)]
 const SHOTS = [
-  ["monstercat", 22], ["mirror", 9], ["ledm", 12], ["led", 21], ["ascii", 28], ["vu", 24], ["scope", 22],
-  ["holoradar", 22], ["holospec", 24], ["holorings", 23], ["pitchtrail", 26],
+  ["monstercat", 22], ["mirror", 9], ["ledm", 12], ["led", 21], ["ascii", 28], ["vu", 24], ["scope", 22], ["chipscope", 24],
+  ["holospec", 24], ["ekg", 22], ["ekgpitch", 26], ["ekgscroll", 23], ["ekg3", 25],
   ["radial", 26], ["ncs", 23], ["sub", 13], ["trap", 25], ["tunnel", 27],
-  ["drums", 22], ["drumpads", 22], ["drumwaves", 22], ["geometric", 11], ["bauhaus", 29],
-  ["plasma", 18], ["ledplasma", 24], ["oil", 20], ["chrome", 22], ["dnb", 26], ["kaleido", 24],
-  ["aurora", 23], ["galaxy", 21], ["ribbon", 27], ["ombre", 25], ["warp", 30],
-  ["prism", 22], ["rain", 19], ["smoke", 24], ["lava", 20], ["bubbles", 26],
-  ["neuro", 14], ["particles", 22],
+  ["drumpads", 22], ["drumwaves", 22], ["geometric", 11], ["bauhaus", 29],
+  ["plasma", 18], ["ledplasma", 24], ["oil", 20], ["mercury", 22], ["dnb", 26],
+  ["ocean", 23], ["underwater", 21], ["pond", 25],
+  ["aurora", 23], ["galaxy", 21], ["sunset", 24], ["storm", 26], ["nightsky", 20], ["ribbon", 27], ["ombre", 25], ["warp", 30], ["particles", 22],
+  ["prism", 22], ["rain", 19], ["smoke", 24], ["lava", 20], ["neuro", 14],
 ];
 
 const HIDE = ".NowBar,.LyricsContainer,.ViewControls,.lp-nolyr{visibility:hidden!important}";
@@ -85,7 +85,7 @@ const setter = (p) => (k, v) => p.evaluate(([k, v]) => { const btn = document.qu
     await set("lyricGlow", "off");
     await set("__style", style);
     await p.addStyleTag({ content: HIDE });
-    await p.waitForTimeout(["bubbles", "rain", "lava"].includes(style) ? 8000 : 2600);
+    await p.waitForTimeout(["rain", "lava", "pond", "ekg", "ekgpitch", "ekgscroll", "ekg3"].includes(style) ? 6000 : 2600);
     const out = path.join(OUT, `doc-${style}.png`);
     await p.screenshot({ path: out });
     console.log(out);
