@@ -107,6 +107,11 @@
 :is(#SpicyLyricsPage, .lp-modal-wrap) .lp-panel .lp-group { padding: 10px 12px 12px; margin-bottom: 8px; border-radius: 14px; background: rgba(255,255,255,.045); }
 :is(#SpicyLyricsPage, .lp-modal-wrap) .lp-panel .lp-gtitle { font-size: 11px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: rgba(255,255,255,.5); margin-bottom: 6px; }
 :is(#SpicyLyricsPage, .lp-modal-wrap) .lp-panel .lp-row { margin-top: 8px; }
+:is(#SpicyLyricsPage, .lp-modal-wrap) .lp-panel .lp-fine > summary { cursor: pointer; list-style: none; margin-bottom: 0; display: flex; justify-content: space-between; }
+:is(#SpicyLyricsPage, .lp-modal-wrap) .lp-panel .lp-fine > summary::-webkit-details-marker { display: none; }
+:is(#SpicyLyricsPage, .lp-modal-wrap) .lp-panel .lp-fine > summary::after { content: "+"; font-size: 14px; line-height: 11px; }
+:is(#SpicyLyricsPage, .lp-modal-wrap) .lp-panel .lp-fine[open] > summary { margin-bottom: 6px; }
+:is(#SpicyLyricsPage, .lp-modal-wrap) .lp-panel .lp-fine[open] > summary::after { content: "\2212"; }
 :is(#SpicyLyricsPage, .lp-modal-wrap) .lp-panel .lp-label { margin: 8px 0 5px; display: flex; justify-content: space-between; font-size: 12px; color: rgba(255,255,255,.8); }
 :is(#SpicyLyricsPage, .lp-modal-wrap) .lp-panel .lp-row .lp-label { margin-top: 0; }
 :is(#SpicyLyricsPage, .lp-modal-wrap) .lp-panel .lp-val { color: rgba(255,255,255,.5); font-variant-numeric: tabular-nums; }

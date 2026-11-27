@@ -2,7 +2,7 @@
 
 A quick tour of every Spicy Visualiser style: what you're looking at, what it reacts to, and the settings worth trying.
 
-Open the visualiser panel with the bars button at the top right of Spicy Lyrics. The **Style** tab picks the style. Most settings live in **Look**, and **Sound** holds the beat options.
+Open the visualiser panel with the bars button at the top right of Spicy Lyrics. The **Style** tab picks the style. Most settings live in **Look**. **Sound** holds how it reacts and the beat options, including **Fit each song** (on by default), which learns each song's levels as it plays so quiet and loud songs both move well.
 
 Every style:
 - sits behind the lyrics, which stay on top and readable;
@@ -34,10 +34,10 @@ The spectrum as a row of bars, with bass on the left and treble on the right. Ba
 
 Bars reflected up and down from a centre line, with the bass in the middle. Thin and calm, so it suits busy lyric pages.
 
-### Retro Bars
-![Retro Bars](screenshots/styles/retro.jpg)
+### LED Meters
+![LED Meters](screenshots/styles/ledm.jpg)
 
-The old media-player look: segmented bars coloured by height, from blue and green at the bottom to orange and red at the top. Peak caps hang for a moment, then drop. Its colours step on the beat (**Change every**).
+Studio LED ladders along the bottom, one per part of the spectrum: green, then yellow, then red at the top, each lit segment glowing. A peak light hangs for a moment, then drops.
 
 ### LED Wall
 ![LED Wall](screenshots/styles/led.jpg)
@@ -52,9 +52,12 @@ A terminal-style spectrum made of characters, with falling peak markers.
 ### VU Meters
 ![VU Meters](screenshots/styles/vu.jpg)
 
-Two looks (**Look**):
-- **Night hi-fi** (default): two needle meters on an amp in a dark room. Only the faces glow warm amber from behind, with the print and needles as dark silhouettes. Left is the bass, right the mids and highs. The needles are a little sluggish and swing past before settling (**Smoothing** sets how sluggish), and a red **Peak** lamp lights when a needle goes into the red.
-- **LED**: studio LED ladders (green, yellow, red) along the bottom, one per part of the spectrum, with a peak dot that hangs for a moment, then drops.
+Two needle meters: left is the bass, right the mids and highs. The needles are a little sluggish and swing past before settling (**Smoothing** sets how sluggish), and a peak light comes on when a needle goes into the red. Five looks (**Look**):
+- **Classic** (above): night hi-fi, two faces glowing warm amber from behind in a dark room, the print and needles as dark silhouettes;
+- **Minimal**: no box, just a thin scale in the album's colours, a red zone and a thin bright needle;
+- **Studio**: grey meters like a music app's plug-in, white scale, orange needle and a small dB readout of the peak;
+- **Holo**: floating arcs of ticks that light up to the needle, with a glowing needle line and a faint scanline shimmer;
+- **HUD**: cyan sci-fi gauges with turning rings, a level arc, dB readouts and corner brackets.
 
 ### Oscilloscope
 ![Oscilloscope](screenshots/styles/scope.jpg)
@@ -108,14 +111,27 @@ Flying down a gently bending tunnel of glowing rings, with stars streaming past:
 
 These styles follow the song's beat more than the raw spectrum, so they keep a steady rhythm.
 
-### Drums
-![Drums](screenshots/styles/drums.jpg)
+Four drum styles show only the drum hits, nothing else, in the album's colours. They spring up on each hit and swing a little past before settling, like a VU needle (**Smoothing** sets how loose), and with **Fit each song** on they learn each song's drum levels, so quiet and loud songs both hit hard.
 
-Only the drum hits, nothing else, in the album's colours. Four looks (**Look**):
-- **Pulses**: two big soft shapes, kick on the left (a deep, heavy thump), snare on the right (a sharp, quick snap);
-- **Bars**: two thick bars that shoot up on each hit, swing a little past and fall back smoothly (**Smoothing** sets how loose they are);
-- **Pads**: four drum-machine pads (kick, snare, hi-hat, bass) that light up and fade as each is hit;
-- **Waves**: each kick sends a big soft ring up from the bottom, each snare a thinner, faster ring down from the top.
+### Drum Pulses
+![Drum Pulses](screenshots/styles/drums.jpg)
+
+Two big soft shapes, kick on the left (a deep, heavy thump), snare on the right (a sharp, quick snap). A thin ring marks each one's peak, hangs, then shrinks back.
+
+### Drum Bars
+![Drum Bars](screenshots/styles/drumbars.jpg)
+
+Kick and snare as two thick glowing bars that shoot up on each hit, with a peak line that hangs for a moment, then drops.
+
+### Drum Pads
+![Drum Pads](screenshots/styles/drumpads.jpg)
+
+Four drum-machine pads (kick, snare, hi-hat, bass) that light up as each is hit, then fade.
+
+### Drum Waves
+![Drum Waves](screenshots/styles/drumwaves.jpg)
+
+Each kick sends a big soft ring up from the bottom, each snare a thinner, faster ring down from the top. Harder hits make brighter rings.
 
 ### Geometric
 ![Geometric](screenshots/styles/geometric.jpg)
@@ -261,14 +277,10 @@ Soap bubbles floating up, each a clear film with a thin rainbow rim and a bright
 
 A wireframe landscape rolling towards you, shaped by the spectrum. It glitches on snares.
 
-Settings to try:
-- **Twist** (slider): makes it wobble with the bass like a reese.
-- **Mirror**: reflects the landscape.
-- **Look**:
-  - Mesh (above);
-  - Lines: stacked wave lines;
-  - Ridges: flat stacked lines like the classic pulsar-plot album cover (below).
-- **Ridges line**: rough or smooth.
+Three looks (**Look**):
+- Mesh (above);
+- Lines: stacked wave lines;
+- Ridges: flat stacked lines like the classic pulsar-plot album cover (below).
 
 ### Particles
 ![Particles](screenshots/styles/particles.jpg)
@@ -279,9 +291,9 @@ A field of light that drifts in a gentle flow and links up into constellations. 
 
 ## If the beat feels off
 
-**Auto-tune beats** (Sound tab, on by default) learns each song's kick level in its first few seconds, so busy bass doesn't fire on every note and quiet songs still catch their kicks. Beat sensitivity still works on top of it.
+**Fit each song** (Sound tab, on by default) learns each song's kick level in its first few seconds, so busy bass doesn't fire on every note and quiet songs still catch their kicks. Beat sensitivity still works on top of it.
 
-Open the **Sound** tab:
+Open the **Sound** tab, then **Fine-tune**:
 - **Tap to the beat**: tap the button along with the song 4 or more times, and everything locks to your tempo for that song.
 - **Beat sensitivity**: lower it if it's catching beats that aren't there, raise it if it misses soft kicks.
 - The panel also shows where the beat is coming from: your taps, the song's own beat data, or the kicks it hears.
