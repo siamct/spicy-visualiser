@@ -78,6 +78,13 @@ One meter with two needles, like a stereo meter: one for the bass (low), one for
 
 **Meters** picks how they're laid out: **Both** needles in one meter, **Split** into two meters (bass on the left, highs on the right), or **Bass only**. **Left / right** and **Up / down** move it anywhere on the screen, and **Size** makes it bigger or smaller.
 
+### Rev Counter
+![Rev Counter](screenshots/styles/revs.jpg)
+
+A car's rev counter. The needle follows how loud it is (the bass pushes it harder), each kick blips it, and in the red the shift light comes on. **Smoothing** sets how heavy the needle feels. Two looks (**Look**):
+- **Modern**: flat glowing segments round the dial in the album's colours, a thin needle and a big speed number in the middle that rises slowly with the song;
+- **Classic**: a plain round dial with printed numbers, a red zone and an orange needle.
+
 ### Oscilloscope
 ![Oscilloscope](screenshots/styles/scope.jpg)
 
@@ -85,6 +92,11 @@ A glowing line tracing the sound like an old scope, over a faint grid:
 - quiet parts are a calm wave; as the music gets busy the trace curls round into looping figure shapes;
 - the line glows on for a moment after it passes, like a real scope screen;
 - **Colours: Classic** (default) is green phosphor; the other colour modes use those colours.
+
+### CRT
+![CRT](screenshots/styles/crt.jpg)
+
+An old tube TV up close. The picture is the spectrum, mirrored round a bright line through the middle, drawn in visible scanlines. A brighter band rolls slowly down the screen (**Speed**), the corners fall dark like curved glass, and on a kick the picture tears sideways for a moment with its red, green and blue splitting apart.
 
 ### EKG
 ![EKG](screenshots/styles/ekg.jpg)
@@ -128,6 +140,11 @@ A speaker drawn in light:
 - kicks punch the cone out and it springs back;
 - the surround wobbles with the bass;
 - the light ring fades to a new colour on the beat.
+
+### Holo Ring
+![Holo Ring](screenshots/styles/holoring.jpg)
+
+The Holo VU's glowing ticks, but right round a circle whose middle sits on the edge of the screen, so only the half facing in shows. Each tick is a slice of the spectrum: the bass points straight in and the highs reach up and down. **Sides** puts it on one side (away from the album art) or one on each side.
 
 ### Trap
 ![Trap](screenshots/styles/trap.jpg)
