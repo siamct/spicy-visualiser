@@ -24,7 +24,7 @@ const ALBUMS = [
 const SHOTS = [
   ["monstercat", 22], ["mirror", 9], ["ledm", 12], ["led", 21], ["ascii", 28], ["vu", 24], ["scope", 22],
   ["radial", 26], ["ncs", 23], ["sub", 13], ["trap", 25], ["tunnel", 27],
-  ["drums", 22], ["drumbars", 22], ["drumpads", 22], ["drumwaves", 22], ["geometric", 11], ["bauhaus", 29],
+  ["drums", 22], ["drumpads", 22], ["drumwaves", 22], ["geometric", 11], ["bauhaus", 29],
   ["plasma", 18], ["ledplasma", 24], ["oil", 20], ["chrome", 22], ["dnb", 26], ["kaleido", 24],
   ["aurora", 23], ["galaxy", 21], ["ribbon", 27], ["ombre", 25], ["warp", 30],
   ["prism", 22], ["rain", 19], ["smoke", 24], ["lava", 20], ["bubbles", 26],

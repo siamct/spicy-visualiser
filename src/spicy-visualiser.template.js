@@ -29,7 +29,6 @@
     ["scope", "Oscilloscope"],
     ["kaleido", "Kaleidoscope"],
     ["drums", "Drum Pulses"],
-    ["drumbars", "Drum Bars"],
     ["drumpads", "Drum Pads"],
     ["drumwaves", "Drum Waves"],
     ["plasma", "Plasma"],
@@ -60,7 +59,6 @@
   // Little pictures for the style picker.
   const STYLE_ICON = {
     drums: '<g fill="none" stroke="currentColor" stroke-width="1.6"><ellipse cx="12" cy="9" rx="8" ry="3"/><path d="M4 9v6c0 1.7 3.6 3 8 3s8-1.3 8-3V9"/><path d="M6 4l4 3M18 4l-4 3" stroke-linecap="round"/></g>',
-    drumbars: '<rect x="5" y="10" width="5" height="10" rx="1"/><rect x="14" y="6" width="5" height="14" rx="1"/><rect x="5" y="6.5" width="5" height="1.6" rx=".6" opacity=".6"/><rect x="14" y="2.5" width="5" height="1.6" rx=".6" opacity=".6"/>',
     drumpads: '<rect x="3" y="3" width="8" height="8" rx="1.6"/><rect x="13" y="3" width="8" height="8" rx="1.6" opacity=".4"/><rect x="3" y="13" width="8" height="8" rx="1.6" opacity=".4"/><rect x="13" y="13" width="8" height="8" rx="1.6"/>',
     drumwaves: '<g fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M8.5 20a3.5 3.5 0 0 1 7 0"/><path d="M5 20a7 7 0 0 1 14 0" opacity=".7"/><path d="M1.5 20a10.5 10.5 0 0 1 21 0" opacity=".4"/><path d="M9 3.5a3 3 0 0 0 6 0" opacity=".7"/></g>',
     scope: '<g fill="none" stroke="currentColor"><rect x="2.5" y="4.5" width="19" height="15" rx="2" stroke-width="1.5"/><path d="M4.5 12c1.5 0 1.8-4 3.2-4s1.7 8 3.3 8 1.8-6 3.3-6 1.6 3 3 3 1.2-1 2.2-1" stroke-width="1.6" stroke-linecap="round"/></g>',
@@ -102,11 +100,11 @@
   // Styles that still look right on Spotify's data (it has loudness and
   // beats, not a real spectrum). With that source they're listed first and
   // the rest fold away under "More styles".
-  const SONG_DATA_OK = new Set(["drums", "drumbars", "drumpads", "drumwaves", "particles", "plasma", "ledplasma", "warp", "dnb", "ribbon", "rain", "lava", "smoke", "tunnel", "aurora", "chrome", "oil", "galaxy", "prism", "ombre", "bubbles", "geometric", "bauhaus", "sub", "off"]);
+  const SONG_DATA_OK = new Set(["drums", "drumpads", "drumwaves", "particles", "plasma", "ledplasma", "warp", "dnb", "ribbon", "rain", "lava", "smoke", "tunnel", "aurora", "chrome", "oil", "galaxy", "prism", "ombre", "bubbles", "geometric", "bauhaus", "sub", "off"]);
   const STYLE_GROUPS = [
     ["Bars & meters", ["monstercat", "mirror", "ledm", "led", "ascii", "vu", "scope"]],
     ["Circles", ["radial", "ncs", "sub", "trap", "tunnel"]],
-    ["On the beat", ["drums", "drumbars", "drumpads", "drumwaves", "geometric", "bauhaus"]],
+    ["On the beat", ["drums", "drumpads", "drumwaves", "geometric", "bauhaus"]],
     ["Liquid colour", ["plasma", "ledplasma", "oil", "chrome", "dnb", "kaleido"]],
     ["Sky & light", ["aurora", "galaxy", "ribbon", "ombre", "warp"]],
     ["Textures", ["prism", "rain", "smoke", "lava", "bubbles"]],
@@ -127,7 +125,7 @@
     circleAt: ["trap", "radial", "ncs", "sub"],
     speed: ["drumwaves", "scope", "kaleido", "trap", "neuro", "ribbon", "rain", "lava", "smoke", "tunnel", "aurora", "chrome", "oil", "particles", "monstercat", "ncs", "radial", "plasma", "warp", "dnb", "ascii", "led", "ledplasma", "galaxy", "prism", "ombre", "bubbles"],
     bassBoost: ["scope", "kaleido", "particles", "monstercat", "radial", "mirror", "ncs", "warp", "plasma", "dnb", "ascii", "geometric", "bauhaus", "led", "ledplasma", "sub", "trap", "ledm", "neuro", "ribbon", "rain", "lava", "smoke", "tunnel", "aurora", "chrome", "oil", "galaxy", "prism", "ombre", "bubbles"],
-    smoothing: ["particles", "monstercat", "radial", "mirror", "ncs", "warp", "plasma", "dnb", "ascii", "geometric", "bauhaus", "led", "ledplasma", "sub", "trap", "ledm", "neuro", "aurora", "vu", "drums", "drumbars", "drumpads", "drumwaves"],
+    smoothing: ["particles", "monstercat", "radial", "mirror", "ncs", "warp", "plasma", "dnb", "ascii", "geometric", "bauhaus", "led", "ledplasma", "sub", "trap", "ledm", "neuro", "aurora", "vu", "drums", "drumpads", "drumwaves"],
   };
 
   const STYLE_BASE = {
@@ -149,7 +147,7 @@
     neuroLine: "rough", // Ridges look: rough (a little jagged) or smooth
     neuroTwist: 0, // Neuro Mesh: how much it rolls along its length (0 = still)
     neuroMirror: "off",
-    vuFace: "night", // VU Meters look: night (classic) | minimal | studio | holo | hud
+    vuFace: "night", // VU Meters look: night (classic) | minimal | broadcast | holo | hud
     circleAt: "middle", // circle styles: middle of the view, or round the album art
     beatEvery: "1", // beat-stepping styles change every 1, 2, 4 or 8 beats
     colorMove: "move", // move = colours shift on the beat and drift; still = they stay put
@@ -182,7 +180,6 @@
     scope: { shake: 0, colorMode: "classic" },
     kaleido: { shake: 0 },
     drums: { shake: 0 },
-    drumbars: { shake: 0 },
     drumpads: { shake: 0 },
     drumwaves: { shake: 0 },
     led: { colorMode: "classic", shake: 0 },
@@ -234,8 +231,10 @@
   if (!["glide", "fade"].includes(S.glowMove)) S.glowMove = "glide";
   if (!Array.isArray(S.favs)) S.favs = [];
   // Retro Bars became LED Meters.
-  if (S.style === "retro") S.style = "ledm";
-  S.favs = S.favs.map((f) => (f === "retro" ? "ledm" : f));
+  // (and Drum Bars was taken out)
+  const MOVED = { retro: "ledm", drumbars: "drums" };
+  if (MOVED[S.style]) S.style = MOVED[S.style];
+  S.favs = [...new Set(S.favs.map((f) => MOVED[f] || f))];
   if (!validStyle(S.style)) S.style = GLOBAL_DEFAULTS.style;
   if (S.source !== "spotify") S.source = "helper";
   if (!S.per || typeof S.per !== "object") S.per = {};
@@ -245,6 +244,7 @@
   if (S.per.neuro) for (const k of ["neuroLine", "neuroTwist", "neuroMirror"]) delete S.per.neuro[k];
   if (S.per.drums) delete S.per.drums.drumLook;
   if (S.per.vu && S.per.vu.vuFace === "led") delete S.per.vu.vuFace;
+  if (S.per.vu && S.per.vu.vuFace === "studio") S.per.vu.vuFace = "broadcast";
   for (const k of Object.keys(S.per)) if (S.per[k]) delete S.per[k].autoRange;
   // Shake used to go to 300% (and 40% was already a lot): convert old values so
   // they look the same on the new 0-100% scale.
@@ -2549,25 +2549,27 @@ void main() {
   };
 
   // ---------------------------------------------------------------------------
-  // VU Meters: a pair of needle meters, left = bass, right = mids and highs.
-  // The needles are a little sluggish and swing past before settling
-  // (Smoothing sets how much); a peak light comes on in the red. Five looks
-  // (the Look setting):
-  //  - Classic: night hi-fi, two faces backlit warm amber in a dark room,
-  //    the print and needles dark silhouettes.
-  //  - Minimal: no box, just a thin scale in the album colours, a red zone
-  //    and a thin bright needle.
-  //  - Studio: grey plug-in meters like in a music app, white scale, orange
-  //    needle and a small dB readout of the peak.
-  //  - Holo: floating arcs of lit ticks with a glowing needle line and a
-  //    faint scanline shimmer.
-  //  - HUD: cyan sci-fi gauges with turning rings, a level arc and readouts.
+  // VU Meters: one meter with two needles, like a stereo meter: one for
+  // the bass (low), one for the mids and highs (high). It sits in the
+  // middle, or beside the album art when the art is showing. The needles are
+  // a little sluggish and swing past before settling (Smoothing sets how
+  // much); a peak light comes on in the red. Five looks (the Look setting):
+  //  - Classic: night hi-fi, a face backlit warm amber in a dark room, the
+  //    print and needles dark silhouettes (black = low, red = high).
+  //  - Minimal: no box, a thin scale, a glowing red zone and two thin
+  //    needles in the album colours.
+  //  - Broadcast: an old radio-studio meter, black face, white print, 1 to
+  //    7, red and green needles.
+  //  - Holo: two floating arcs of lit ticks (outer = low, inner = high) with
+  //    glowing needle lines and a faint scanline shimmer. Its needles are
+  //    heavier and ignore flickers.
+  //  - HUD: a sci-fi gauge, two segmented level arcs in a slowly turning ring.
   const VU_DB = [-20, -10, -7, -5, -3, -2, -1, 0, 1, 2, 3];
   const vuPos = (db) => (Math.pow(10, db / 20) - 0.1) / (Math.pow(10, 3 / 20) - 0.1); // 0..1 along the scale
   const vuDb = (t) => Math.max(-20, 20 * Math.log10(Math.max(1e-4, t * (Math.pow(10, 3 / 20) - 0.1) + 0.1)));
   const vuTxt = (db) => (db <= -19.95 ? "-20" : (db > 0 ? "+" : "") + db.toFixed(1));
   DRAW.vu = (v, p, dt) => {
-    const st = v.vu || (v.vu = { t: 0, m: [0, 1].map(() => ({ a: 0, v: 0, lamp: 0, pk: 0, hold: 0 })) });
+    const st = v.vu || (v.vu = { t: 0, m: [0, 1].map(() => ({ a: 0, v: 0, lamp: 0, pk: 0, hold: 0, tg: 0, ha: 0, hv: 0, hpk: 0, hh: 0 })) });
     st.t += dt;
     const sens = p.sensitivity;
     let lo = 0, hi = 0;
@@ -2585,6 +2587,14 @@ void main() {
       m.lamp = m.a > red ? 1 : m.lamp * Math.exp(-dt * 3);
       if (m.a >= m.pk) { m.pk = m.a; m.hold = 1; }
       else if ((m.hold -= dt) < 0) m.pk = Math.max(m.a, m.pk - dt * 0.5);
+      // a heavier needle (Holo): follows a smoothed level, so small
+      // flickers don't move it, on a softer spring with less swing
+      m.tg += (want[i] - m.tg) * Math.min(1, dt * 4);
+      const k2 = 55 - 25 * sm, d2 = 2 * Math.sqrt(k2) * 0.7;
+      m.hv += (k2 * (m.tg - m.ha) - d2 * m.hv) * Math.min(dt, 0.05);
+      m.ha = Math.max(0, Math.min(1.12, m.ha + m.hv * Math.min(dt, 0.05)));
+      if (m.ha >= m.hpk) { m.hpk = m.ha; m.hh = 1.2; }
+      else if ((m.hh -= dt) < 0) m.hpk = Math.max(m.ha, m.hpk - dt * 0.35);
     }
     (VU_LOOKS[p.vuFace] || vuNight)(v, p, st, red);
   };
@@ -2601,431 +2611,395 @@ void main() {
     ctx.moveTo(cx + Math.cos(a) * r0, cy + Math.sin(a) * r0);
     ctx.lineTo(cx + Math.cos(a) * r1, cy + Math.sin(a) * r1);
   };
+  // Where one centred piece goes: the middle of the view, or the middle of
+  // the space beside the album art when the art takes up the left (as in
+  // fullscreen), so it isn't hidden behind it.
+  function freeSpot(v) {
+    const art = v.artCircle && v.artCircle();
+    if (art && art.x + art.r < v.w * 0.6) {
+      const l = art.x + art.r;
+      return { x: (l + v.w) / 2, y: v.h / 2, wmax: v.w - l };
+    }
+    return { x: v.w / 2, y: v.h / 2, wmax: v.w };
+  }
+  const UI_FONT = '"SpotifyMixUI", "CircularSp", "Helvetica Neue", Arial, sans-serif';
 
   function vuNight(v, p, st, red) {
-    const { ctx, w, h } = v;
-    const gap = w * 0.04;
-    const fw = Math.min((w * 0.9 - gap) / 2, h * 0.62 * 1.55), fh = fw / 1.55;
-    const y0 = (h - fh) / 2, x0 = (w - fw * 2 - gap) / 2;
+    const { ctx, h } = v;
+    const sp = freeSpot(v);
+    const fw = Math.min(sp.wmax * 0.55, h * 0.55 * 1.55) * p.size, fh = fw / 1.55;
+    const fx = sp.x - fw / 2, y0 = sp.y - fh / 2, cx = sp.x;
     const glow = 0.75 + 0.25 * Math.min(1, shared.energy * 1.3); // the lamps behind brighten a touch when it's loud
     const ink = [34, 20, 8], inkRed = [120, 22, 12];
-    const path = (x, y, ww, hh, r) => vuPath(ctx, x, y, ww, hh, r);
+    const NEEDLE = [[16, 10, 6], [150, 26, 14]]; // low: black, high: red
+    const lamp = Math.max(st.m[0].lamp, st.m[1].lamp);
+    const px = cx, py = y0 + fh * 1.25, R = fh * 0.95, A = 0.72;
+    const ang = (t) => -Math.PI / 2 - A + 2 * A * t;
     ctx.save();
     ctx.globalCompositeOperation = "source-over";
     const base = A_(0.8, v);
-    for (let i = 0; i < 2; i++) {
-      const m = st.m[i];
-      const fx = x0 + i * (fw + gap), cx = fx + fw / 2;
-      const px = cx, py = y0 + fh * 1.25;
-      const R = fh * 0.95, A = 0.72;
-      const ang = (t) => -Math.PI / 2 - A + 2 * A * t;
-      // warm light spilling round the meter
-      ctx.globalAlpha = base * 0.5 * glow;
-      const sp = ctx.createRadialGradient(cx, y0 + fh * 0.6, fh * 0.2, cx, y0 + fh * 0.6, fw * 0.85);
-      sp.addColorStop(0, "rgba(255,150,50,0.35)");
-      sp.addColorStop(1, "rgba(255,150,50,0)");
-      ctx.fillStyle = sp;
-      ctx.fillRect(cx - fw, y0 - fh * 0.6, fw * 2, fh * 2.2);
-      ctx.globalAlpha = base;
-      // black bezel, then the backlit face
-      ctx.fillStyle = "rgb(8,6,5)";
-      path(fx - fw * 0.03, y0 - fw * 0.03, fw * 1.06, fh + fw * 0.06, fw * 0.04);
-      ctx.fill();
-      path(fx, y0, fw, fh, fw * 0.02);
-      ctx.save();
-      ctx.clip();
-      const g = ctx.createRadialGradient(cx, y0 + fh * 0.78, fh * 0.05, cx, y0 + fh * 0.7, fw * 0.62);
-      g.addColorStop(0, `rgb(${Math.round(255 * glow)},${Math.round(196 * glow)},${Math.round(110 * glow)})`);
-      g.addColorStop(0.45, `rgb(${Math.round(225 * glow)},${Math.round(140 * glow)},${Math.round(50 * glow)})`);
-      g.addColorStop(1, "rgb(60,28,8)");
-      ctx.fillStyle = g;
-      ctx.fillRect(fx, y0, fw, fh);
-      // scale
-      ctx.lineCap = "butt";
-      ctx.strokeStyle = v.rgba(ink, 1);
-      ctx.lineWidth = Math.max(1, fh * 0.009);
-      ctx.beginPath();
-      ctx.arc(px, py, R, ang(0), ang(red));
-      ctx.stroke();
-      ctx.strokeStyle = v.rgba(inkRed, 1);
-      ctx.lineWidth = Math.max(2, fh * 0.032);
-      ctx.beginPath();
-      ctx.arc(px, py, R + fh * 0.012, ang(red), ang(1));
-      ctx.stroke();
-      ctx.font = `600 ${Math.round(fh * 0.07)}px "Helvetica Neue", Arial, sans-serif`;
-      ctx.textAlign = "center";
-      ctx.textBaseline = "middle";
-      for (const db of VU_DB) {
-        const a = ang(vuPos(db)), c = Math.cos(a), s = Math.sin(a);
-        const col = db > 0 ? inkRed : ink;
-        ctx.strokeStyle = v.rgba(col, 1);
-        ctx.lineWidth = Math.max(1, fh * 0.011);
-        ctx.beginPath();
-        vuLine(ctx, px, py, a, R, R + fh * 0.06);
-        ctx.stroke();
-        ctx.fillStyle = v.rgba(col, 1);
-        ctx.fillText(String(Math.abs(db)), px + c * (R + fh * 0.13), py + s * (R + fh * 0.13));
-      }
-      ctx.strokeStyle = v.rgba(ink, 0.85);
-      ctx.lineWidth = Math.max(1, fh * 0.006);
-      ctx.beginPath();
-      for (let j = 0; j <= 20; j++) vuLine(ctx, px, py, ang(j / 20), R, R + fh * 0.03);
-      ctx.stroke();
-      ctx.font = `700 ${Math.round(fh * 0.14)}px "Times New Roman", Georgia, serif`;
-      ctx.fillStyle = v.rgba(ink, 1);
-      ctx.fillText("VU", cx, y0 + fh * 0.66);
-      ctx.font = `600 ${Math.round(fh * 0.05)}px "Helvetica Neue", Arial, sans-serif`;
-      ctx.fillText(i ? "HIGH" : "LOW", cx, y0 + fh * 0.77);
-      // needle: a dark silhouette
-      const na = ang(Math.max(-0.04, Math.min(1.12, m.a)));
-      ctx.strokeStyle = "rgb(16,10,6)";
-      ctx.lineCap = "round";
-      ctx.lineWidth = Math.max(1.4, fh * 0.013);
-      ctx.beginPath();
-      vuLine(ctx, px, py, na, fh * 0.3, R + fh * 0.05);
-      ctx.stroke();
-      // bottom bezel over the pivot
-      ctx.fillStyle = "rgb(12,8,6)";
-      ctx.fillRect(fx, y0 + fh * 0.86, fw, fh * 0.14);
-      // shadow round the edges of the face (light falls off)
-      const vg = ctx.createRadialGradient(cx, y0 + fh * 0.6, fw * 0.3, cx, y0 + fh * 0.6, fw * 0.75);
-      vg.addColorStop(0, "rgba(0,0,0,0)");
-      vg.addColorStop(1, "rgba(0,0,0,0.55)");
-      ctx.fillStyle = vg;
-      ctx.fillRect(fx, y0, fw, fh);
-      // glass glare
-      const gg = ctx.createLinearGradient(fx, y0, fx + fw * 0.45, y0 + fh * 0.7);
-      gg.addColorStop(0, "rgba(255,240,220,0.12)");
-      gg.addColorStop(0.5, "rgba(255,240,220,0.03)");
-      gg.addColorStop(0.51, "rgba(255,240,220,0)");
-      ctx.fillStyle = gg;
-      ctx.fillRect(fx, y0, fw, fh);
-      ctx.restore();
-      // peak lamp on the amp, just under the meter
-      const lx = fx + fw * 0.92, ly = y0 + fh + fw * 0.08, lr = fh * 0.03;
-      if (m.lamp > 0.02) {
-        const lg = ctx.createRadialGradient(lx, ly, 0, lx, ly, lr * 6);
-        lg.addColorStop(0, `rgba(255,60,30,${0.7 * m.lamp})`);
-        lg.addColorStop(1, "rgba(255,60,30,0)");
-        ctx.fillStyle = lg;
-        ctx.fillRect(lx - lr * 6, ly - lr * 6, lr * 12, lr * 12);
-      }
-      ctx.fillStyle = `rgb(${Math.round(70 + 185 * m.lamp)},${Math.round(14 + 60 * m.lamp)},${Math.round(10 + 30 * m.lamp)})`;
-      ctx.beginPath();
-      ctx.arc(lx, ly, lr, 0, Math.PI * 2);
-      ctx.fill();
-      ctx.font = `600 ${Math.round(fh * 0.04)}px "Helvetica Neue", Arial, sans-serif`;
-      ctx.textAlign = "right";
-      ctx.fillStyle = "rgba(200,170,130,0.55)";
-      ctx.fillText("PEAK", lx - lr * 2, ly);
-    }
-    ctx.restore();
-  }
-
-  // Minimal: a thin open scale and needle, no box.
-  function vuMinimal(v, p, st, red) {
-    const { ctx, w, h } = v;
-    const R = Math.min(w * 0.19, h * 0.36) * p.size, A = 0.85;
-    const ang = (t) => -Math.PI / 2 - A + 2 * A * t;
-    const RED = [255, 72, 60];
+    // warm light spilling round the meter
+    ctx.globalAlpha = base * 0.5 * glow;
+    const sg = ctx.createRadialGradient(cx, y0 + fh * 0.6, fh * 0.2, cx, y0 + fh * 0.6, fw * 0.85);
+    sg.addColorStop(0, "rgba(255,150,50,0.35)");
+    sg.addColorStop(1, "rgba(255,150,50,0)");
+    ctx.fillStyle = sg;
+    ctx.fillRect(cx - fw * 0.9, y0 + fh * 0.6 - fw * 0.9, fw * 1.8, fw * 1.8);
+    ctx.globalAlpha = base;
+    // black bezel, then the backlit face
+    ctx.fillStyle = "rgb(8,6,5)";
+    vuPath(ctx, fx - fw * 0.03, y0 - fw * 0.03, fw * 1.06, fh + fw * 0.06, fw * 0.04);
+    ctx.fill();
+    vuPath(ctx, fx, y0, fw, fh, fw * 0.02);
     ctx.save();
-    ctx.globalCompositeOperation = "source-over";
-    ctx.globalAlpha = A_(0.9, v);
+    ctx.clip();
+    const g = ctx.createRadialGradient(cx, y0 + fh * 0.78, fh * 0.05, cx, y0 + fh * 0.7, fw * 0.62);
+    g.addColorStop(0, `rgb(${Math.round(255 * glow)},${Math.round(196 * glow)},${Math.round(110 * glow)})`);
+    g.addColorStop(0.45, `rgb(${Math.round(225 * glow)},${Math.round(140 * glow)},${Math.round(50 * glow)})`);
+    g.addColorStop(1, "rgb(60,28,8)");
+    ctx.fillStyle = g;
+    ctx.fillRect(fx, y0, fw, fh);
+    // scale
+    ctx.lineCap = "butt";
+    ctx.strokeStyle = v.rgba(ink, 1);
+    ctx.lineWidth = Math.max(1, fh * 0.009);
+    ctx.beginPath();
+    ctx.arc(px, py, R, ang(0), ang(red));
+    ctx.stroke();
+    ctx.strokeStyle = v.rgba(inkRed, 1);
+    ctx.lineWidth = Math.max(2, fh * 0.032);
+    ctx.beginPath();
+    ctx.arc(px, py, R + fh * 0.012, ang(red), ang(1));
+    ctx.stroke();
+    ctx.font = `600 ${Math.round(fh * 0.07)}px "Helvetica Neue", Arial, sans-serif`;
     ctx.textAlign = "center";
     ctx.textBaseline = "middle";
-    for (let i = 0; i < 2; i++) {
-      const m = st.m[i], col = colorAt(i ? 0.8 : 0.2);
-      const cx = w * (i ? 0.72 : 0.28), cy = h * 0.5 + R * 0.45;
-      ctx.lineCap = "round";
-      ctx.strokeStyle = v.rgba(col, 0.7);
-      ctx.lineWidth = Math.max(1.5, R * 0.012);
+    for (const db of VU_DB) {
+      const a = ang(vuPos(db)), c = Math.cos(a), s = Math.sin(a);
+      const col = db > 0 ? inkRed : ink;
+      ctx.strokeStyle = v.rgba(col, 1);
+      ctx.lineWidth = Math.max(1, fh * 0.011);
       ctx.beginPath();
-      ctx.arc(cx, cy, R, ang(0), ang(red));
-      ctx.stroke();
-      ctx.strokeStyle = v.rgba(RED, 0.9);
-      ctx.lineWidth = Math.max(3, R * 0.03);
-      ctx.beginPath();
-      ctx.arc(cx, cy, R, ang(red) + 0.02, ang(1));
-      ctx.stroke();
-      ctx.font = `400 ${Math.round(R * 0.065)}px "Segoe UI", "Helvetica Neue", Arial, sans-serif`;
-      ctx.lineWidth = Math.max(1, R * 0.008);
-      for (const db of VU_DB) {
-        const a = ang(vuPos(db));
-        ctx.strokeStyle = db > 0 ? v.rgba(RED, 0.9) : "rgba(255,255,255,0.55)";
-        ctx.beginPath();
-        vuLine(ctx, cx, cy, a, R * 1.04, R * 1.1);
-        ctx.stroke();
-        ctx.fillStyle = db > 0 ? v.rgba(RED, 0.9) : "rgba(255,255,255,0.55)";
-        ctx.fillText(String(Math.abs(db)), cx + Math.cos(a) * R * 1.19, cy + Math.sin(a) * R * 1.19);
-      }
-      // needle and pivot
-      const na = ang(Math.max(-0.04, Math.min(1.12, m.a)));
-      ctx.strokeStyle = "rgba(255,255,255,0.95)";
-      ctx.lineWidth = Math.max(1.5, R * 0.011);
-      ctx.beginPath();
-      vuLine(ctx, cx, cy, na, R * 0.12, R * 1.07);
+      vuLine(ctx, px, py, a, R, R + fh * 0.06);
       ctx.stroke();
       ctx.fillStyle = v.rgba(col, 1);
-      ctx.beginPath();
-      ctx.arc(cx, cy, R * 0.035, 0, Math.PI * 2);
-      ctx.fill();
-      // peak dot past the end of the scale
-      const pa = ang(1.06);
-      ctx.fillStyle = v.rgba(RED, 0.15 + 0.85 * m.lamp);
-      ctx.beginPath();
-      ctx.arc(cx + Math.cos(pa) * R * 0.88, cy + Math.sin(pa) * R * 0.88, R * 0.022, 0, Math.PI * 2);
-      ctx.fill();
-      ctx.font = `600 ${Math.round(R * 0.06)}px "Segoe UI", "Helvetica Neue", Arial, sans-serif`;
-      ctx.fillStyle = "rgba(255,255,255,0.45)";
-      ctx.fillText(i ? "HIGH" : "LOW", cx, cy + R * 0.17);
+      ctx.fillText(String(Math.abs(db)), px + c * (R + fh * 0.13), py + s * (R + fh * 0.13));
     }
+    ctx.strokeStyle = v.rgba(ink, 0.85);
+    ctx.lineWidth = Math.max(1, fh * 0.006);
+    ctx.beginPath();
+    for (let j = 0; j <= 20; j++) vuLine(ctx, px, py, ang(j / 20), R, R + fh * 0.03);
+    ctx.stroke();
+    ctx.font = `700 ${Math.round(fh * 0.14)}px "Times New Roman", Georgia, serif`;
+    ctx.fillStyle = v.rgba(ink, 1);
+    ctx.fillText("VU", cx, y0 + fh * 0.66);
+    // which needle is which, printed in its colour
+    ctx.font = `600 ${Math.round(fh * 0.05)}px "Helvetica Neue", Arial, sans-serif`;
+    ctx.fillStyle = v.rgba(NEEDLE[0], 1);
+    ctx.fillText("LOW", cx - fw * 0.24, y0 + fh * 0.7);
+    ctx.fillStyle = v.rgba(NEEDLE[1], 1);
+    ctx.fillText("HIGH", cx + fw * 0.24, y0 + fh * 0.7);
+    // the two needles, dark silhouettes
+    ctx.lineCap = "round";
+    ctx.lineWidth = Math.max(1.4, fh * 0.012);
+    for (const i of [1, 0]) {
+      ctx.strokeStyle = v.rgba(NEEDLE[i], 1);
+      ctx.beginPath();
+      vuLine(ctx, px, py, ang(Math.max(-0.04, Math.min(1.12, st.m[i].a))), fh * 0.3, R + fh * 0.05);
+      ctx.stroke();
+    }
+    // bottom bezel over the pivot
+    ctx.fillStyle = "rgb(12,8,6)";
+    ctx.fillRect(fx, y0 + fh * 0.86, fw, fh * 0.14);
+    // shadow round the edges of the face (light falls off)
+    const vg = ctx.createRadialGradient(cx, y0 + fh * 0.6, fw * 0.3, cx, y0 + fh * 0.6, fw * 0.75);
+    vg.addColorStop(0, "rgba(0,0,0,0)");
+    vg.addColorStop(1, "rgba(0,0,0,0.55)");
+    ctx.fillStyle = vg;
+    ctx.fillRect(fx, y0, fw, fh);
+    // glass glare
+    const gg = ctx.createLinearGradient(fx, y0, fx + fw * 0.45, y0 + fh * 0.7);
+    gg.addColorStop(0, "rgba(255,240,220,0.12)");
+    gg.addColorStop(0.5, "rgba(255,240,220,0.03)");
+    gg.addColorStop(0.51, "rgba(255,240,220,0)");
+    ctx.fillStyle = gg;
+    ctx.fillRect(fx, y0, fw, fh);
+    ctx.restore();
+    // peak lamp on the amp, just under the meter
+    const lx = fx + fw * 0.92, ly = y0 + fh + fw * 0.08, lr = fh * 0.03;
+    if (lamp > 0.02) {
+      const lg = ctx.createRadialGradient(lx, ly, 0, lx, ly, lr * 6);
+      lg.addColorStop(0, `rgba(255,60,30,${0.7 * lamp})`);
+      lg.addColorStop(1, "rgba(255,60,30,0)");
+      ctx.fillStyle = lg;
+      ctx.fillRect(lx - lr * 6, ly - lr * 6, lr * 12, lr * 12);
+    }
+    ctx.fillStyle = `rgb(${Math.round(70 + 185 * lamp)},${Math.round(14 + 60 * lamp)},${Math.round(10 + 30 * lamp)})`;
+    ctx.beginPath();
+    ctx.arc(lx, ly, lr, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.font = `600 ${Math.round(fh * 0.04)}px "Helvetica Neue", Arial, sans-serif`;
+    ctx.textAlign = "right";
+    ctx.fillStyle = "rgba(200,170,130,0.55)";
+    ctx.fillText("PEAK", lx - lr * 2, ly);
     ctx.restore();
   }
 
-  // Studio: grey plug-in meters with an orange needle and a peak readout.
-  function vuStudio(v, p, st, red) {
-    const { ctx, w, h } = v;
-    const gap = w * 0.03;
-    const fw = Math.min((w * 0.84 - gap) / 2, h * 0.56 * 1.35) * p.size, fh = fw / 1.35;
-    const y0 = (h - fh) / 2, x0 = (w - fw * 2 - gap) / 2;
-    const OR = [255, 140, 30], RED = [255, 64, 52];
+  // Minimal: a thin open scale, no box, and two thin needles in the album's
+  // colours. The red zone glows, brighter while a needle's in it.
+  function vuMinimal(v, p, st, red) {
+    const { ctx, h } = v;
+    const sp = freeSpot(v);
+    const R = Math.min(sp.wmax * 0.3, h * 0.42) * p.size, A = 0.85;
+    const ang = (t) => -Math.PI / 2 - A + 2 * A * t;
+    const RED = [255, 60, 50];
+    const cx = sp.x, cy = sp.y + R * 0.45;
+    const lamp = Math.max(st.m[0].lamp, st.m[1].lamp);
+    const ncol = [mix(colorAt(0.2), WHITE, 0.35), mix(colorAt(0.8), WHITE, 0.35)];
     ctx.save();
     ctx.globalCompositeOperation = "source-over";
     ctx.globalAlpha = A_(0.9, v);
     ctx.textAlign = "center";
     ctx.textBaseline = "middle";
-    for (let i = 0; i < 2; i++) {
-      const m = st.m[i], fx = x0 + i * (fw + gap), cx = fx + fw / 2;
-      // panel
-      const pg = ctx.createLinearGradient(0, y0, 0, y0 + fh);
-      pg.addColorStop(0, "rgb(62,64,69)");
-      pg.addColorStop(1, "rgb(40,42,46)");
-      ctx.fillStyle = pg;
-      vuPath(ctx, fx, y0, fw, fh, fw * 0.025);
-      ctx.fill();
-      ctx.strokeStyle = "rgba(255,255,255,0.1)";
-      ctx.lineWidth = 1;
-      ctx.stroke();
-      // meter window
-      const wx = fx + fw * 0.05, wy = y0 + fw * 0.05, ww = fw * 0.9, wh = fh * 0.64;
-      ctx.fillStyle = "rgb(24,25,28)";
-      vuPath(ctx, wx, wy, ww, wh, fw * 0.012);
-      ctx.fill();
-      ctx.save();
-      ctx.clip();
-      const px = cx, py = wy + wh * 1.22, R = wh * 0.98, A = 0.66;
-      const ang = (t) => -Math.PI / 2 - A + 2 * A * t;
-      ctx.lineCap = "butt";
-      ctx.strokeStyle = "rgba(245,245,245,0.9)";
-      ctx.lineWidth = Math.max(1, wh * 0.01);
+    ctx.font = `${Math.round(R * 0.06)}px ${UI_FONT}`;
+    ctx.lineCap = "round";
+    ctx.strokeStyle = v.rgba(mix(colorAt(0.2), colorAt(0.8), 0.5), 0.7);
+    ctx.lineWidth = Math.max(1.5, R * 0.01);
+    ctx.beginPath();
+    ctx.arc(cx, cy, R, ang(0), ang(red));
+    ctx.stroke();
+    ctx.shadowColor = v.rgba(RED, 0.9);
+    ctx.shadowBlur = R * (0.05 + 0.14 * lamp);
+    ctx.strokeStyle = v.rgba(mix(RED, WHITE, 0.25 * lamp), 0.85 + 0.15 * lamp);
+    ctx.lineWidth = Math.max(3, R * (0.026 + 0.012 * lamp));
+    ctx.beginPath();
+    ctx.arc(cx, cy, R, ang(red) + 0.02, ang(1));
+    ctx.stroke();
+    ctx.shadowBlur = 0;
+    ctx.lineWidth = Math.max(1, R * 0.007);
+    for (const db of VU_DB) {
+      const a = ang(vuPos(db)), c = db > 0 ? v.rgba(RED, 0.9) : "rgba(255,255,255,0.5)";
+      ctx.strokeStyle = c;
       ctx.beginPath();
-      ctx.arc(px, py, R, ang(0), ang(red));
+      vuLine(ctx, cx, cy, a, R * 1.04, R * (db % 5 === 0 || db === 3 ? 1.1 : 1.07));
       ctx.stroke();
-      ctx.strokeStyle = v.rgba(RED, 1);
-      ctx.lineWidth = Math.max(2, wh * 0.035);
-      ctx.beginPath();
-      ctx.arc(px, py, R + wh * 0.014, ang(red), ang(1));
-      ctx.stroke();
-      ctx.font = `600 ${Math.round(wh * 0.075)}px "Segoe UI", "Helvetica Neue", Arial, sans-serif`;
-      for (const db of VU_DB) {
-        const a = ang(vuPos(db));
-        const c = db > 0 ? v.rgba(RED, 1) : "rgba(245,245,245,0.9)";
-        ctx.strokeStyle = c;
-        ctx.lineWidth = Math.max(1, wh * 0.012);
-        ctx.beginPath();
-        vuLine(ctx, px, py, a, R, R + wh * 0.07);
-        ctx.stroke();
+      if ([-20, -10, -5, 0, 3].includes(db)) {
         ctx.fillStyle = c;
-        ctx.fillText(String(Math.abs(db)), px + Math.cos(a) * (R + wh * 0.15), py + Math.sin(a) * (R + wh * 0.15));
+        ctx.fillText(db > 0 ? "+" + db : String(db), cx + Math.cos(a) * R * 1.18, cy + Math.sin(a) * R * 1.18);
       }
-      ctx.strokeStyle = "rgba(245,245,245,0.5)";
-      ctx.lineWidth = Math.max(1, wh * 0.007);
+    }
+    // needles (each warms to red in the red), then the pivot
+    ctx.lineWidth = Math.max(1.5, R * 0.009);
+    for (const i of [1, 0]) {
+      const m = st.m[i];
+      ctx.strokeStyle = v.rgba(mix(ncol[i], RED, 0.6 * m.lamp), 0.95);
+      if (m.lamp > 0.05) { ctx.shadowColor = v.rgba(RED, 0.8 * m.lamp); ctx.shadowBlur = R * 0.05; }
       ctx.beginPath();
-      for (let j = 0; j <= 20; j++) vuLine(ctx, px, py, ang(j / 20), R, R + wh * 0.035);
+      vuLine(ctx, cx, cy, ang(Math.max(-0.04, Math.min(1.12, m.a))), R * 0.1, R * 1.07);
       ctx.stroke();
-      ctx.font = `700 ${Math.round(wh * 0.12)}px "Segoe UI", "Helvetica Neue", Arial, sans-serif`;
-      ctx.fillStyle = "rgba(245,245,245,0.35)";
-      ctx.fillText("VU", cx, wy + wh * 0.72);
-      const na = ang(Math.max(-0.04, Math.min(1.12, m.a)));
-      ctx.strokeStyle = v.rgba(OR, 1);
-      ctx.lineCap = "round";
-      ctx.lineWidth = Math.max(1.5, wh * 0.014);
-      ctx.beginPath();
-      vuLine(ctx, px, py, na, R * 0.3, R + wh * 0.06);
-      ctx.stroke();
-      ctx.restore();
-      // readout, channel name and peak light along the bottom
-      const by = wy + wh + (y0 + fh - wy - wh) / 2;
-      const rw = fw * 0.34, rh = fh * 0.15;
-      ctx.fillStyle = "rgb(14,14,16)";
-      vuPath(ctx, cx - rw / 2, by - rh / 2, rw, rh, rh * 0.18);
-      ctx.fill();
-      ctx.font = `600 ${Math.round(rh * 0.55)}px Consolas, "SF Mono", Menlo, monospace`;
-      ctx.fillStyle = v.rgba(OR, 0.95);
-      ctx.fillText(vuTxt(vuDb(Math.max(0, m.pk))) + " dB", cx, by + rh * 0.03);
-      ctx.font = `600 ${Math.round(fh * 0.055)}px "Segoe UI", "Helvetica Neue", Arial, sans-serif`;
-      ctx.textAlign = "left";
-      ctx.fillStyle = "rgba(245,245,245,0.55)";
-      ctx.fillText(i ? "HIGH" : "LOW", fx + fw * 0.06, by);
-      ctx.textAlign = "center";
-      const lx = fx + fw * 0.9, lr = fh * 0.028;
-      ctx.fillStyle = v.rgba(mix([70, 20, 16], RED, m.lamp), 1);
-      if (m.lamp > 0.05) { ctx.shadowColor = v.rgba(RED, m.lamp); ctx.shadowBlur = lr * 4; }
-      ctx.beginPath();
-      ctx.arc(lx, by, lr, 0, Math.PI * 2);
-      ctx.fill();
       ctx.shadowBlur = 0;
+    }
+    ctx.fillStyle = "rgba(255,255,255,0.9)";
+    ctx.beginPath();
+    ctx.arc(cx, cy, R * 0.03, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.restore();
+  }
+
+  // Broadcast: an old radio-studio meter, matte black face, white print
+  // marked 1 to 7 like a twin peak programme meter, with a red needle (low)
+  // and a green one (high).
+  function vuBroadcast(v, p, st) {
+    const { ctx, h } = v;
+    const sp = freeSpot(v);
+    const fw = Math.min(sp.wmax * 0.5, h * 0.62 * 1.25) * p.size, fh = fw / 1.25;
+    const fx = sp.x - fw / 2, y0 = sp.y - fh / 2, cx = sp.x;
+    const INK = "rgba(238,238,232,0.92)", NEEDLE = [[240, 70, 55], [80, 215, 110]];
+    ctx.save();
+    ctx.globalCompositeOperation = "source-over";
+    ctx.globalAlpha = A_(0.9, v);
+    ctx.textAlign = "center";
+    ctx.textBaseline = "middle";
+    // case, then the face
+    ctx.fillStyle = "rgb(30,30,30)";
+    vuPath(ctx, fx - fw * 0.035, y0 - fw * 0.035, fw * 1.07, fh + fw * 0.07, fw * 0.03);
+    ctx.fill();
+    ctx.fillStyle = "rgb(11,11,11)";
+    vuPath(ctx, fx, y0, fw, fh, fw * 0.012);
+    ctx.fill();
+    ctx.save();
+    ctx.clip();
+    const px = cx, py = y0 + fh * 0.8, R = fh * 0.56, A = 0.95;
+    const ang = (t) => -Math.PI / 2 - A + 2 * A * t;
+    ctx.strokeStyle = INK;
+    ctx.fillStyle = INK;
+    ctx.lineCap = "butt";
+    ctx.lineWidth = Math.max(1, fh * 0.008);
+    ctx.beginPath();
+    ctx.arc(px, py, R, ang(0), ang(1));
+    ctx.stroke();
+    ctx.font = `700 ${Math.round(fh * 0.085)}px ${UI_FONT}`;
+    for (let n = 1; n <= 7; n++) {
+      const a = ang((n - 1) / 6);
+      ctx.lineWidth = Math.max(1.5, fh * 0.016);
+      ctx.beginPath();
+      vuLine(ctx, px, py, a, R, R + fh * 0.07);
+      ctx.stroke();
+      ctx.fillText(String(n), px + Math.cos(a) * (R + fh * 0.15), py + Math.sin(a) * (R + fh * 0.15));
+      if (n < 7) {
+        ctx.lineWidth = Math.max(1, fh * 0.008);
+        ctx.beginPath();
+        vuLine(ctx, px, py, ang((n - 0.5) / 6), R, R + fh * 0.035);
+        ctx.stroke();
+      }
+    }
+    // the two needles and their black cap
+    ctx.lineCap = "round";
+    ctx.lineWidth = Math.max(1.5, fh * 0.012);
+    for (const i of [1, 0]) {
+      ctx.strokeStyle = v.rgba(NEEDLE[i], 1);
+      ctx.beginPath();
+      vuLine(ctx, px, py, ang(Math.max(-0.02, Math.min(1.12, st.m[i].a)) / 1.06), 0, R + fh * 0.05);
+      ctx.stroke();
+    }
+    ctx.fillStyle = "rgb(34,34,34)";
+    ctx.beginPath();
+    ctx.arc(px, py, fh * 0.075, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.restore();
+    // two screws in the case
+    ctx.fillStyle = "rgb(62,62,62)";
+    for (const sx of [0.04, 0.96]) {
+      ctx.beginPath();
+      ctx.arc(fx + fw * sx, y0 + fh * 0.93, fw * 0.011, 0, Math.PI * 2);
+      ctx.fill();
     }
     ctx.restore();
   }
 
-  // Holo: arcs of glowing ticks floating in space, no face.
+  // Holo: two arcs of glowing ticks floating in space, one inside the
+  // other (outer = low, inner = high), each with its own glowing needle
+  // line. The needles are heavy and ignore flickers.
   function vuHolo(v, p, st, red) {
-    const { ctx, w, h } = v;
-    const R = Math.min(w * 0.19, h * 0.38) * p.size, A = 1;
+    const { ctx, h } = v;
+    const sp = freeSpot(v);
+    const R = Math.min(sp.wmax * 0.27, h * 0.42) * p.size, A = 1;
     const ang = (t) => -Math.PI / 2 - A + 2 * A * t;
-    const NT = 34, HOT = [255, 80, 130];
+    const HOT = [255, 80, 130];
+    const cx = sp.x, cy = sp.y + R * 0.42;
+    const rings = [
+      { m: st.m[0], r0: 0.88, r1: 1.06, n: 34, c0: colorAt(0.1), c1: colorAt(0.45) },
+      { m: st.m[1], r0: 0.64, r1: 0.79, n: 26, c0: colorAt(0.6), c1: colorAt(0.95) },
+    ];
     ctx.save();
     ctx.globalCompositeOperation = "lighter";
     ctx.globalAlpha = A_(1, v);
     ctx.lineCap = "round";
-    for (let i = 0; i < 2; i++) {
-      const m = st.m[i], cx = w * (i ? 0.72 : 0.28), cy = h * 0.5 + R * 0.42;
-      const c0 = colorAt(i ? 0.6 : 0.1), c1 = colorAt(i ? 0.95 : 0.45);
-      const lvl = Math.max(0, Math.min(1.12, m.a));
-      // faint guide arcs
-      ctx.strokeStyle = v.rgba(c0, 0.22);
-      ctx.lineWidth = 1;
-      for (const rr of [0.8, 1.14]) {
-        ctx.beginPath();
-        ctx.arc(cx, cy, R * rr, ang(-0.03), ang(1.03));
-        ctx.stroke();
-      }
-      // the ticks: lit up to the needle, the peak tick stays lit for a moment
-      const tw = Math.max(2, ((R * 2 * A) / NT) * 0.5);
+    // faint guide arcs
+    ctx.strokeStyle = v.rgba(mix(rings[0].c0, rings[1].c0, 0.5), 0.22);
+    ctx.lineWidth = 1;
+    for (const rr of [0.58, 0.835, 1.14]) {
+      ctx.beginPath();
+      ctx.arc(cx, cy, R * rr, ang(-0.03), ang(1.03));
+      ctx.stroke();
+    }
+    for (const rg of rings) {
+      const m = rg.m, lvl = m.ha;
+      const tw = Math.max(2, ((R * rg.r1 * 2 * A) / rg.n) * 0.5);
       ctx.lineWidth = tw;
-      const pkT = Math.min(NT - 1, Math.floor((m.pk / 1.12) * NT));
-      for (let j = 0; j < NT; j++) {
-        const t = (j + 0.5) / NT, a = ang(t);
-        const on = t * 1.12 <= lvl, isPk = j === pkT && m.pk > 0.05;
-        const c = t * 1.12 > red ? HOT : mix(c0, c1, t);
+      const pkT = Math.min(rg.n - 1, Math.floor((m.hpk / 1.12) * rg.n));
+      // the ticks: lit up to the needle, the peak tick stays lit for a moment
+      for (let j = 0; j < rg.n; j++) {
+        const t = (j + 0.5) / rg.n, a = ang(t);
+        const on = t * 1.12 <= lvl, isPk = j === pkT && m.hpk > 0.05;
+        const c = t * 1.12 > red ? HOT : mix(rg.c0, rg.c1, t);
         const y = cy + Math.sin(a) * R;
         const shim = 0.78 + 0.22 * Math.sin(st.t * 5 - y * 0.09);
         ctx.strokeStyle = v.rgba(on || isPk ? mix(c, WHITE, 0.2) : c, (on ? 0.95 : isPk ? 0.7 : 0.1) * shim);
         if (on) { ctx.shadowColor = v.rgba(c, 0.9); ctx.shadowBlur = tw * 2.5; }
         ctx.beginPath();
-        vuLine(ctx, cx, cy, ang(t), R * 0.86, R * 1.06);
+        vuLine(ctx, cx, cy, a, R * rg.r0, R * rg.r1);
         ctx.stroke();
         ctx.shadowBlur = 0;
       }
-      // glowing needle line
-      const na = ang(Math.max(-0.04, Math.min(1.12, m.a)) / 1.12);
-      const nc = mix(c1, WHITE, 0.45);
+      // its glowing needle line, across its own arc
+      const na = ang(lvl / 1.12), nc = mix(rg.c1, WHITE, 0.45);
       ctx.strokeStyle = v.rgba(nc, 0.35);
       ctx.lineWidth = Math.max(4, R * 0.04);
       ctx.beginPath();
-      vuLine(ctx, cx, cy, na, R * 0.25, R * 1.16);
+      vuLine(ctx, cx, cy, na, R * (rg.r0 - 0.08), R * (rg.r1 + 0.08));
       ctx.stroke();
       ctx.strokeStyle = v.rgba(nc, 0.95);
       ctx.lineWidth = Math.max(1.2, R * 0.008);
       ctx.stroke();
-      ctx.fillStyle = v.rgba(nc, 0.8);
-      ctx.beginPath();
-      ctx.arc(cx, cy, R * 0.02, 0, Math.PI * 2);
-      ctx.fill();
-      // scanlines drifting down over the arc
-      ctx.globalCompositeOperation = "destination-out";
-      ctx.fillStyle = "rgba(0,0,0,0.35)";
-      const off = (st.t * 24) % 4;
-      for (let y = cy - R * 1.25 + off; y < cy + R * 0.1; y += 4) ctx.fillRect(cx - R * 1.25, y, R * 2.5, 1.2);
-      ctx.globalCompositeOperation = "lighter";
     }
+    // scanlines drifting down over the arcs
+    ctx.globalCompositeOperation = "destination-out";
+    ctx.fillStyle = "rgba(0,0,0,0.35)";
+    const off = (st.t * 24) % 4;
+    for (let y = cy - R * 1.25 + off; y < cy + R * 0.1; y += 4) ctx.fillRect(cx - R * 1.25, y, R * 2.5, 1.2);
     ctx.restore();
   }
 
-  // HUD: cyan sci-fi gauges with turning rings and number readouts.
+  // HUD: a sci-fi gauge, two segmented level arcs (outer = low, inner =
+  // high) inside a slowly turning ring.
   function vuHud(v, p, st, red) {
-    const { ctx, w, h } = v;
-    const R = Math.min(w * 0.14, h * 0.28) * p.size;
-    const C = mix([80, 225, 255], colorAt(0.5), 0.2), WARN = [255, 90, 80];
+    const { ctx, h } = v;
+    const sp = freeSpot(v);
+    const R = Math.min(sp.wmax * 0.22, h * 0.32) * p.size;
+    const C = mix([90, 220, 255], colorAt(0.5), 0.4), C2 = mix(C, colorAt(0.85), 0.5), WARN = [255, 90, 80];
     const a0 = Math.PI * 0.75, SW = Math.PI * 1.5, angOf = (t) => a0 + SW * Math.max(0, Math.min(1, t / 1.12));
+    const cx = sp.x, cy = sp.y;
     ctx.save();
     ctx.globalCompositeOperation = "lighter";
     ctx.globalAlpha = A_(1, v);
-    ctx.textAlign = "center";
-    ctx.textBaseline = "middle";
-    for (let i = 0; i < 2; i++) {
-      const m = st.m[i], cx = w * (i ? 0.75 : 0.25), cy = h * 0.5, dir = i ? 1 : -1;
-      const ring = (r, a, lw, from = 0, to = Math.PI * 2) => {
-        ctx.strokeStyle = v.rgba(C, a);
-        ctx.lineWidth = lw;
-        ctx.beginPath();
-        ctx.arc(cx, cy, r, from, to);
-        ctx.stroke();
-      };
-      ring(R * 1.22, 0.3, 1);
-      // turning dashed ring and two sweeping brackets
-      ctx.setLineDash([R * 0.07, R * 0.05]);
-      ctx.lineDashOffset = st.t * R * 0.25 * dir;
-      ring(R * 1.1, 0.4, Math.max(1, R * 0.018));
-      ctx.setLineDash([]);
-      const rot = st.t * 0.5 * dir;
-      ring(R * 1.32, 0.55, Math.max(1.5, R * 0.02), rot, rot + 0.7);
-      ring(R * 1.32, 0.55, Math.max(1.5, R * 0.02), rot + Math.PI, rot + Math.PI + 0.7);
-      // level arc on a faint track, red past 0 dB
-      const lw = R * 0.08;
-      ctx.lineCap = "butt";
-      ring(R * 0.9, 0.1, lw, a0, a0 + SW);
-      const lv = Math.max(0, m.a);
-      ctx.shadowColor = v.rgba(C, 0.9);
-      ctx.shadowBlur = lw * 1.5;
-      ring(R * 0.9, 0.85, lw, a0, angOf(Math.min(lv, red)));
-      if (lv > red) {
-        ctx.strokeStyle = v.rgba(WARN, 0.9);
-        ctx.shadowColor = v.rgba(WARN, 0.9);
-        ctx.beginPath();
-        ctx.arc(cx, cy, R * 0.9, angOf(red), angOf(lv));
-        ctx.stroke();
-      }
-      ctx.shadowBlur = 0;
-      // ticks inside the arc, peak marker outside it
-      ctx.strokeStyle = v.rgba(C, 0.5);
-      ctx.lineWidth = 1;
+    // slowly turning outer ring, broken in three places
+    const rot = st.t * 0.25;
+    ctx.strokeStyle = v.rgba(C, 0.35);
+    ctx.lineWidth = Math.max(1, R * 0.012);
+    for (let k = 0; k < 3; k++) {
       ctx.beginPath();
-      for (let j = 0; j <= 10; j++) vuLine(ctx, cx, cy, a0 + (SW * j) / 10, R * 0.75, R * (j % 5 ? 0.79 : 0.82));
-      ctx.stroke();
-      const pa = angOf(m.pk);
-      ctx.strokeStyle = v.rgba(m.pk > red ? WARN : C, 0.95);
-      ctx.lineWidth = Math.max(2, R * 0.02);
-      ctx.beginPath();
-      vuLine(ctx, cx, cy, pa, R * 0.96, R * 1.03);
-      ctx.stroke();
-      // readouts
-      const mono = (px, wt = 600) => `${wt} ${Math.round(px)}px Consolas, "SF Mono", Menlo, monospace`;
-      ctx.fillStyle = v.rgba(m.lamp > 0.5 ? WARN : C, 0.95);
-      ctx.font = mono(R * 0.3);
-      ctx.fillText(vuTxt(vuDb(Math.max(0, m.a))), cx, cy - R * 0.02);
-      ctx.fillStyle = v.rgba(C, 0.6);
-      ctx.font = mono(R * 0.09);
-      ctx.fillText("dB", cx, cy + R * 0.24);
-      ctx.fillText(i ? "CH2 · HIGH" : "CH1 · LOW", cx, cy - R * 0.32);
-      ctx.fillText("PK " + vuTxt(vuDb(Math.max(0, m.pk))), cx, cy + R * 0.72);
-      // corner brackets
-      const B = R * 1.42, L = R * 0.22;
-      ctx.strokeStyle = v.rgba(C, 0.5);
-      ctx.lineWidth = Math.max(1, R * 0.012);
-      ctx.beginPath();
-      for (const [sx, sy] of [[-1, -1], [1, -1], [1, 1], [-1, 1]]) {
-        const x = cx + sx * B, y = cy + sy * B;
-        ctx.moveTo(x - sx * L, y);
-        ctx.lineTo(x, y);
-        ctx.lineTo(x, y - sy * L);
-      }
+      ctx.arc(cx, cy, R * 1.18, rot + (k * Math.PI * 2) / 3 + 0.15, rot + ((k + 1) * Math.PI * 2) / 3 - 0.15);
       ctx.stroke();
     }
+    // fine tick ring
+    ctx.strokeStyle = v.rgba(C, 0.3);
+    ctx.lineWidth = 1;
+    ctx.beginPath();
+    for (let j = 0; j <= 30; j++) vuLine(ctx, cx, cy, a0 + (SW * j) / 30, R * 1.02, R * (j % 5 ? 1.05 : 1.09));
+    ctx.stroke();
+    // the levels: short segments that light up, red past 0 dB
+    ctx.lineCap = "butt";
+    for (const [m, rr, lw, ns, col] of [[st.m[0], 0.88, 0.1, 48, C], [st.m[1], 0.7, 0.075, 40, C2]]) {
+      const lv = Math.max(0, m.a), segA = SW / ns;
+      ctx.lineWidth = R * lw;
+      for (let j = 0; j < ns; j++) {
+        const t = ((j + 0.5) / ns) * 1.12;
+        ctx.strokeStyle = v.rgba(t > red ? WARN : col, t <= lv ? 0.85 : 0.08);
+        ctx.beginPath();
+        ctx.arc(cx, cy, R * rr, a0 + j * segA + segA * 0.18, a0 + (j + 1) * segA - segA * 0.18);
+        ctx.stroke();
+      }
+      // peak marker
+      ctx.strokeStyle = v.rgba(m.pk > red ? WARN : col, 0.9);
+      ctx.lineWidth = Math.max(2, R * 0.018);
+      ctx.beginPath();
+      vuLine(ctx, cx, cy, angOf(m.pk), R * (rr - lw * 0.9), R * (rr + lw * 0.9));
+      ctx.stroke();
+    }
+    // inner ring and centre dot
+    ctx.strokeStyle = v.rgba(C, 0.18);
+    ctx.lineWidth = 1;
+    ctx.beginPath();
+    ctx.arc(cx, cy, R * 0.5, 0, Math.PI * 2);
+    ctx.stroke();
+    ctx.fillStyle = v.rgba(C, 0.25 + 0.5 * Math.min(1, Math.max(st.m[0].a, st.m[1].a)));
+    ctx.beginPath();
+    ctx.arc(cx, cy, R * 0.04, 0, Math.PI * 2);
+    ctx.fill();
     ctx.restore();
   }
-  const VU_LOOKS = { night: vuNight, minimal: vuMinimal, studio: vuStudio, holo: vuHolo, hud: vuHud };
+  const VU_LOOKS = { night: vuNight, minimal: vuMinimal, broadcast: vuBroadcast, holo: vuHolo, hud: vuHud };
 
   // ---------------------------------------------------------------------------
   // LED Meters: studio LED ladders (green, yellow, red) along the bottom, one
@@ -3152,12 +3126,13 @@ void main() {
   // ---------------------------------------------------------------------------
   // Kaleidoscope: mirrored trails of colour that keep zooming out from the
   // middle, warping and smearing with the music, like the old media-player
-  // visualisers. The spectrum drops new colour in (mirrored round the
-  // middle), the bass makes it zoom and swirl faster, kicks flash it.
+  // visualisers. The spectrum drops in sharp shards of colour (mirrored
+  // round the middle), the bass makes it zoom and swirl faster, kicks
+  // flash it.
   // Darker in the middle so the lyrics stay readable.
   DRAW.kaleido = (v, p, dt, t) => {
     const { ctx, w, h } = v;
-    const sc = 0.5; // worked out at half size (soft anyway, and light on the computer)
+    const sc = 0.75; // worked out a bit under full size (light on the computer)
     const W = Math.max(2, Math.round(w * sc)), H = Math.max(2, Math.round(h * sc));
     let st = v.kal;
     if (!st || st.W !== W || st.H !== H) {
@@ -3194,16 +3169,25 @@ void main() {
       const size = R * (0.015 + 0.05 * lv) * (1 + st.flash * 0.6);
       const c = mix(colorAt(((j / 8) + st.spin * 0.05) % 1), colorAt(((j / 8) + 0.5 + st.spin * 0.05) % 1), (j % 2) * 0.6);
       const al = Math.min(1, 0.25 + 0.6 * lv);
+      // a long thin shard pointing at the middle, turned a little either way
+      const len = size * 4.5, wid = size * 0.7, tilt = 0.45 * Math.sin(st.spin * 1.1 + j * 1.7);
+      gb.fillStyle = `rgba(${c[0] | 0},${c[1] | 0},${c[2] | 0},${al})`;
+      gb.strokeStyle = `rgba(${Math.min(255, c[0] + 90) | 0},${Math.min(255, c[1] + 90) | 0},${Math.min(255, c[2] + 90) | 0},${al})`;
+      gb.lineWidth = 1;
+      gb.lineJoin = "miter";
       for (let s = 0; s < SL * 2; s++) {
         const base = (s >> 1) * (Math.PI * 2 / SL) + st.spin * 0.3;
-        const a = base + ((s & 1) ? -a0 : a0) * (Math.PI / SL);
+        const m = s & 1 ? -1 : 1;
+        const a = base + m * a0 * (Math.PI / SL);
         const x = W / 2 + Math.cos(a) * r0, y = H / 2 + Math.sin(a) * r0;
-        const gr = gb.createRadialGradient(x, y, 0, x, y, size);
-        gr.addColorStop(0, `rgba(${c[0] | 0},${c[1] | 0},${c[2] | 0},${al})`);
-        gr.addColorStop(0.55, `rgba(${c[0] | 0},${c[1] | 0},${c[2] | 0},${al * 0.8})`);
-        gr.addColorStop(1, `rgba(${c[0] | 0},${c[1] | 0},${c[2] | 0},0)`);
-        gb.fillStyle = gr;
-        gb.fillRect(x - size, y - size, size * 2, size * 2);
+        const d = a + m * tilt, ex = Math.cos(d), ey = Math.sin(d);
+        gb.beginPath();
+        gb.moveTo(x, y);
+        gb.lineTo(x + ex * len - ey * wid, y + ey * len + ex * wid);
+        gb.lineTo(x + ex * len * 0.8 + ey * wid, y + ey * len * 0.8 - ex * wid);
+        gb.closePath();
+        gb.fill();
+        gb.stroke();
       }
     }
     // swap
@@ -3267,13 +3251,13 @@ void main() {
   }
   const drumCols = () => [colorAt(0.15), colorAt(0.85), mix(colorAt(0.5), WHITE, 0.4), mix(colorAt(0.15), colorAt(0.85), 0.5)];
 
-  // Drum Pulses: two big soft shapes, kick on the left (a deep, heavy
-  // thump), snare on the right (a sharp, quick snap), each with a thin peak
-  // ring that hangs, then shrinks back.
+  // Drum Pulses: the kick as a big soft shape in the middle (a deep, heavy
+  // thump), the snare as a sharp ring round it that snaps out, each with a
+  // thin peak ring that hangs, then shrinks back.
   DRAW.drums = (v, p, dt) => {
     const { ctx, w, h, U } = v;
     const st = drumIn(v, p, dt), [cK, cS] = drumCols();
-    const R = Math.min(w, h) * 0.13 * p.size;
+    const sp = freeSpot(v), R = Math.min(sp.wmax * 0.6, h) * 0.11 * p.size;
     ctx.save();
     ctx.globalCompositeOperation = "lighter";
     const draw = (x, y, c, col, sharp) => {
@@ -3294,38 +3278,23 @@ void main() {
       ctx.arc(x, y, rp + 4 * U, 0, Math.PI * 2);
       ctx.stroke();
     };
-    draw(w * 0.3, h * 0.55, st.ch[0], cK, false);
-    draw(w * 0.7, h * 0.55, st.ch[1], cS, true);
-    ctx.restore();
-  };
-
-  // Drum Bars: kick and snare as two thick glowing bars that shoot up on
-  // each hit, swing a little past and settle, with a peak line that hangs.
-  DRAW.drumbars = (v, p, dt) => {
-    const { ctx, w, h, U } = v;
-    const st = drumIn(v, p, dt), [cK, cS] = drumCols();
-    const bw = Math.min(w * 0.09, 110) * p.size, gap = bw * 0.9, H = h * 0.55, yb = h * 0.9;
-    const x0 = w / 2 - gap / 2 - bw;
-    ctx.save();
-    ctx.globalCompositeOperation = "lighter";
-    for (let i = 0; i < 2; i++) {
-      const c = st.ch[i], col = i ? cS : cK, x = x0 + i * (bw + gap);
-      const top = yb - H * Math.min(1.15, 0.03 + c.y);
-      ctx.fillStyle = v.rgba(col, 0.06);
-      ctx.fillRect(x, yb - H, bw, H);
-      const g = ctx.createLinearGradient(0, top, 0, yb);
-      g.addColorStop(0, v.rgba(mix(col, WHITE, 0.35), 0.95));
-      g.addColorStop(1, v.rgba(col, 0.35));
-      ctx.fillStyle = g;
-      ctx.shadowColor = v.rgba(col, 0.8);
-      ctx.shadowBlur = bw * 0.4;
-      ctx.fillRect(x, top, bw, yb - top);
-      // peak line
-      const pt = yb - H * Math.min(1.15, 0.03 + c.top);
-      ctx.fillStyle = v.rgba(mix(col, WHITE, 0.5), 0.9);
-      ctx.fillRect(x, pt - 6 * U, bw, 3 * U);
-      ctx.shadowBlur = 0;
-    }
+    // kick: the soft shape in the middle (beside the album art if it's showing)
+    draw(sp.x, sp.y, st.ch[0], cK, false);
+    // snare: a sharp ring round it that snaps out on each hit
+    const sn = st.ch[1], e = Math.min(1, sn.y), rs = R * (1.9 + 0.7 * Math.min(1.15, sn.y));
+    ctx.strokeStyle = v.rgba(cS, 0.16 * e);
+    ctx.lineWidth = 16 * U;
+    ctx.beginPath();
+    ctx.arc(sp.x, sp.y, rs, 0, Math.PI * 2);
+    ctx.stroke();
+    ctx.strokeStyle = v.rgba(mix(cS, WHITE, 0.3), 0.15 + 0.8 * e);
+    ctx.lineWidth = Math.max(1.5, 2.2 * U);
+    ctx.stroke();
+    ctx.strokeStyle = v.rgba(mix(cS, WHITE, 0.5), 0.3);
+    ctx.lineWidth = Math.max(1, U);
+    ctx.beginPath();
+    ctx.arc(sp.x, sp.y, R * (1.9 + 0.7 * Math.min(1.15, sn.top)) + 4 * U, 0, Math.PI * 2);
+    ctx.stroke();
     ctx.restore();
   };
 
@@ -3353,40 +3322,71 @@ void main() {
     ctx.restore();
   };
 
-  // Drum Waves: each kick sends a big soft ring up from the bottom, each
-  // snare a thinner, faster ring down from the top. Harder hits, brighter
-  // rings.
+  // Drum Waves: each kick sends a wave in from the left, each snare one in
+  // from the right. Where two meet they burst into a flash that spreads up
+  // and down. Harder hits, brighter waves.
   DRAW.drumwaves = (v, p, dt) => {
     const { ctx, w, h, U } = v;
     const st = drumIn(v, p, dt), [cK, cS] = drumCols();
-    const rs = v.dwave || (v.dwave = { rings: [], kLast: 0, sLast: 0 });
-    // a ring on each hit: the beat detector's, or a channel jumping up
+    const rs = v.dwave || (v.dwave = { waves: [], bursts: [], kLast: 0, sLast: 0, id: 0 });
+    // a wave on each hit: the beat detector's, or a channel jumping up
     const kHit = st.newK || (st.ch[0].y > 0.55 && rs.kLast <= 0.55);
     const sHit = st.newS || (st.ch[1].y > 0.55 && rs.sLast <= 0.55);
     rs.kLast = st.ch[0].y; rs.sLast = st.ch[1].y;
-    if (kHit) rs.rings.push({ k: 1, age: 0, e: Math.max(0.5, Math.min(1, st.ch[0].y)) });
-    if (sHit) rs.rings.push({ k: 0, age: 0, e: Math.max(0.5, Math.min(1, st.ch[1].y)) });
-    if (rs.rings.length > 24) rs.rings.splice(0, rs.rings.length - 24);
-    const D = Math.hypot(w, h);
+    if (kHit) rs.waves.push({ side: -1, x: 0, e: Math.max(0.5, Math.min(1, st.ch[0].y)), id: rs.id++, met: [] });
+    if (sHit) rs.waves.push({ side: 1, x: 0, e: Math.max(0.5, Math.min(1, st.ch[1].y)), id: rs.id++, met: [] });
+    if (rs.waves.length > 16) rs.waves.splice(0, rs.waves.length - 16);
+    const end = w * 1.1;
+    for (let i = rs.waves.length - 1; i >= 0; i--) {
+      rs.waves[i].x += dt * w * 0.75 * p.speed; // about 1.4 s across
+      if (rs.waves[i].x > end) rs.waves.splice(i, 1);
+    }
+    const front = (wv) => (wv.side < 0 ? wv.x : w - wv.x);
+    const life = (wv) => 1 - wv.x / end;
+    // where a left wave and a right wave pass each other: a burst
+    for (const a of rs.waves) {
+      if (a.side > 0) continue;
+      for (const b of rs.waves) {
+        if (b.side < 0 || a.met.includes(b.id) || front(a) < front(b)) continue;
+        a.met.push(b.id);
+        rs.bursts.push({ x: (front(a) + front(b)) / 2, age: 0, e: Math.min(1, 0.25 + 0.6 * (a.e * life(a) + b.e * life(b))), c: mix(cK, cS, 0.5) });
+      }
+    }
+    if (rs.bursts.length > 8) rs.bursts.splice(0, rs.bursts.length - 8);
     ctx.save();
     ctx.globalCompositeOperation = "lighter";
-    for (let i = rs.rings.length - 1; i >= 0; i--) {
-      const r = rs.rings[i];
-      r.age += dt * p.speed;
-      const life = r.k ? 1.8 : 0.9;
-      if (r.age > life) { rs.rings.splice(i, 1); continue; }
-      const f = r.age / life;
-      const rad = D * (r.k ? 0.06 + 0.75 * (1 - Math.pow(1 - f, 2)) : 0.03 + 0.7 * f);
-      const cx = w / 2, cy = r.k ? h * 1.02 : -h * 0.02, c = r.k ? cK : cS;
-      const a = r.e * (1 - f) * (1 - f);
+    const Rc = h * 1.4, span = Math.asin(Math.min(1, (h * 0.62) / Rc)); // the fronts are gentle curves
+    for (const wv of rs.waves) {
+      const f = 1 - life(wv), a = wv.e * Math.pow(1 - f, 1.5);
+      const c = wv.side < 0 ? cK : cS, x = front(wv);
+      const ccx = wv.side < 0 ? x - Rc : x + Rc, mid = wv.side < 0 ? 0 : Math.PI;
       ctx.strokeStyle = v.rgba(c, 0.12 * a);
-      ctx.lineWidth = (r.k ? 40 : 14) * U;
+      ctx.lineWidth = (wv.side < 0 ? 46 : 28) * U;
       ctx.beginPath();
-      ctx.arc(cx, cy, rad, 0, Math.PI * 2);
+      ctx.arc(ccx, h / 2, Rc, mid - span, mid + span);
       ctx.stroke();
-      ctx.strokeStyle = v.rgba(mix(c, WHITE, 0.3), 0.7 * a);
-      ctx.lineWidth = (r.k ? 5 : 2) * U;
+      ctx.strokeStyle = v.rgba(mix(c, WHITE, 0.3), 0.75 * a);
+      ctx.lineWidth = (wv.side < 0 ? 4 : 2.5) * U;
       ctx.stroke();
+    }
+    for (let i = rs.bursts.length - 1; i >= 0; i--) {
+      const b = rs.bursts[i];
+      b.age += dt * p.speed;
+      if (b.age > 1.1) { rs.bursts.splice(i, 1); continue; }
+      const f = b.age / 1.1, a = b.e * (1 - f) * (1 - f), grow = 1 - Math.pow(1 - f, 3);
+      // a flash where they met...
+      v.soft(b.x, h / 2, h * (0.08 + 0.18 * grow), mix(b.c, WHITE, 0.3), 0.55 * a);
+      // ...and a line of light spreading up and down from it
+      const half = h * 0.6 * grow;
+      const g = ctx.createLinearGradient(0, h / 2 - half, 0, h / 2 + half);
+      g.addColorStop(0, v.rgba(b.c, 0));
+      g.addColorStop(0.5, v.rgba(mix(b.c, WHITE, 0.5), 0.9 * a));
+      g.addColorStop(1, v.rgba(b.c, 0));
+      ctx.fillStyle = g;
+      ctx.fillRect(b.x - 1.5 * U, h / 2 - half, 3 * U, half * 2);
+      ctx.globalAlpha = 0.25;
+      ctx.fillRect(b.x - 18 * U, h / 2 - half, 36 * U, half * 2);
+      ctx.globalAlpha = 1;
     }
     ctx.restore();
   };
@@ -4923,7 +4923,7 @@ void main() {
             <div class="lp-row"><div class="lp-label"><span>Colour changes</span></div>${seg("colorMove", [["move", "Moving"], ["still", "Still"]], "style")}</div>
             <div class="lp-colors" data-show-color><label><input type="color" data-key="color1" data-scope="style">Colour 1</label><label><input type="color" data-key="color2" data-scope="style">Colour 2</label></div>`)}
           ${group("Appearance", slider("opacity", "Opacity", 0.1, 1, 0.05, "style") + slider("blur", "Blur", 0, 20, 0.5, "style") + slider("brightness", "Brightness", 0.2, 1.6, 0.05, "style") + slider("size", "Size", 0.4, 2, 0.05, "style"))}
-          ${group("Layout", slider("barCount", "Bar count", 16, 128, 1, "style", u("barCount")) + `<div class="lp-row" data-uses="${u("position")}"><div class="lp-label"><span>Position</span></div>${seg("position", [["bottom", "Bottom"], ["top", "Top"], ["both", "Both"]], "style")}</div><div class="lp-row" data-uses="${u("variant")}"><div class="lp-label"><span>Look</span></div>${seg("variant", [["poster", "Poster"], ["brutalist", "Brutalist"]], "style")}</div><div class="lp-row" data-uses="${u("neuroLook")}"><div class="lp-label"><span>Look</span></div>${seg("neuroLook", [["mesh", "Mesh"], ["lines", "Lines"], ["ridges", "Ridges"]], "style")}</div><div class="lp-row" data-uses="${u("vuFace")}"><div class="lp-label"><span>Look</span></div>${seg("vuFace", [["night", "Classic"], ["minimal", "Minimal"], ["studio", "Studio"], ["holo", "Holo"], ["hud", "HUD"]], "style")}</div><div class="lp-row" data-uses="${u("circleAt")}"><div class="lp-label"><span>Circle at</span></div>${seg("circleAt", [["middle", "Middle"], ["art", "Album art"]], "style")}</div><div class="lp-row" data-uses="${u("mcColor")}"><div class="lp-label"><span>Bar colour</span></div>${seg("mcColor", [["flow", "Flow"], ["frequency", "Freq."], ["height", "Area"], ["bar", "Bar"], ["solid", "Solid"]], "style")}</div><div class="lp-row" data-uses="${u("beatEvery")}"><div class="lp-label"><span>Change every</span></div>${seg("beatEvery", [["1", "Beat"], ["2", "2"], ["4", "4"], ["8", "8 beats"]], "style")}</div>`, [...new Set([...USES.barCount, ...USES.position, ...USES.variant, ...USES.neuroLook, ...USES.vuFace, ...USES.circleAt, ...USES.mcColor, ...USES.beatEvery])].join(","))}
+          ${group("Layout", slider("barCount", "Bar count", 16, 128, 1, "style", u("barCount")) + `<div class="lp-row" data-uses="${u("position")}"><div class="lp-label"><span>Position</span></div>${seg("position", [["bottom", "Bottom"], ["top", "Top"], ["both", "Both"]], "style")}</div><div class="lp-row" data-uses="${u("variant")}"><div class="lp-label"><span>Look</span></div>${seg("variant", [["poster", "Poster"], ["brutalist", "Brutalist"]], "style")}</div><div class="lp-row" data-uses="${u("neuroLook")}"><div class="lp-label"><span>Look</span></div>${seg("neuroLook", [["mesh", "Mesh"], ["lines", "Lines"], ["ridges", "Ridges"]], "style")}</div><div class="lp-row" data-uses="${u("vuFace")}"><div class="lp-label"><span>Look</span></div>${seg("vuFace", [["night", "Classic"], ["minimal", "Minimal"], ["broadcast", "Broadcast"], ["holo", "Holo"], ["hud", "HUD"]], "style")}</div><div class="lp-row" data-uses="${u("circleAt")}"><div class="lp-label"><span>Circle at</span></div>${seg("circleAt", [["middle", "Middle"], ["art", "Album art"]], "style")}</div><div class="lp-row" data-uses="${u("mcColor")}"><div class="lp-label"><span>Bar colour</span></div>${seg("mcColor", [["flow", "Flow"], ["frequency", "Freq."], ["height", "Area"], ["bar", "Bar"], ["solid", "Solid"]], "style")}</div><div class="lp-row" data-uses="${u("beatEvery")}"><div class="lp-label"><span>Change every</span></div>${seg("beatEvery", [["1", "Beat"], ["2", "2"], ["4", "4"], ["8", "8 beats"]], "style")}</div>`, [...new Set([...USES.barCount, ...USES.position, ...USES.variant, ...USES.neuroLook, ...USES.vuFace, ...USES.circleAt, ...USES.mcColor, ...USES.beatEvery])].join(","))}
         </div>
         ${group("Background", slider("bgDim", "Darken background", 0, 0.9, 0.05, "global") + `<div class="lp-note">Calms Spicy Lyrics' moving background so the visual stands out. The lyrics and album art aren't touched.</div>`)}
       </div>

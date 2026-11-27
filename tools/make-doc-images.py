@@ -17,7 +17,7 @@ DOCS = os.path.join(ROOT, "docs", "screenshots")
 GROUPS = [
     ("Bars & meters", [("monstercat", "Monstercat"), ("mirror", "Mirror Bars"), ("ledm", "LED Meters"), ("led", "LED Wall"), ("ascii", "ASCII"), ("vu", "VU Meters"), ("scope", "Oscilloscope")]),
     ("Circles", [("radial", "Radial Bars"), ("ncs", "Sphere"), ("sub", "Subwoofer"), ("trap", "Trap"), ("tunnel", "Starfield Tunnel")]),
-    ("On the beat", [("drums", "Drum Pulses"), ("drumbars", "Drum Bars"), ("drumpads", "Drum Pads"), ("drumwaves", "Drum Waves"), ("geometric", "Geometric"), ("bauhaus", "Bauhaus")]),
+    ("On the beat", [("drums", "Drum Pulses"), ("drumpads", "Drum Pads"), ("drumwaves", "Drum Waves"), ("geometric", "Geometric"), ("bauhaus", "Bauhaus")]),
     ("Liquid colour", [("plasma", "Plasma"), ("ledplasma", "LED Plasma"), ("oil", "Oil Slick"), ("chrome", "Liquid Chrome"), ("dnb", "Liquid"), ("kaleido", "Kaleidoscope")]),
     ("Sky & light", [("aurora", "Aurora"), ("galaxy", "Galaxy"), ("ribbon", "Ribbon"), ("ombre", "Ombre"), ("warp", "Warp")]),
     ("Textures", [("prism", "Graphite"), ("rain", "Rain on Glass"), ("smoke", "Smoke"), ("lava", "Lava Lamp"), ("bubbles", "Bubbles")]),

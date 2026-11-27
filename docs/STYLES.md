@@ -54,10 +54,10 @@ A terminal-style spectrum made of characters, with falling peak markers.
 
 Two needle meters: left is the bass, right the mids and highs. The needles are a little sluggish and swing past before settling (**Smoothing** sets how sluggish), and a peak light comes on when a needle goes into the red. Five looks (**Look**):
 - **Classic** (above): night hi-fi, two faces glowing warm amber from behind in a dark room, the print and needles as dark silhouettes;
-- **Minimal**: no box, just a thin scale in the album's colours, a red zone and a thin bright needle;
-- **Studio**: grey meters like a music app's plug-in, white scale, orange needle and a small dB readout of the peak;
-- **Holo**: floating arcs of ticks that light up to the needle, with a glowing needle line and a faint scanline shimmer;
-- **HUD**: cyan sci-fi gauges with turning rings, a level arc, dB readouts and corner brackets.
+- **Minimal**: no box, just a thin scale in the album's colours, a red zone that glows (brighter when the needle's in it) and a thin bright needle;
+- **Broadcast**: an old radio-studio meter, matte black face, white print marked 1 to 7 and a white needle;
+- **Holo**: floating arcs of ticks that light up to the needle, with a glowing needle line and a faint scanline shimmer. Its needle is heavier and only really moves on bigger changes;
+- **HUD**: sci-fi gauges, a segmented level arc inside a slowly turning ring.
 
 ### Oscilloscope
 ![Oscilloscope](screenshots/styles/scope.jpg)
@@ -111,17 +111,12 @@ Flying down a gently bending tunnel of glowing rings, with stars streaming past:
 
 These styles follow the song's beat more than the raw spectrum, so they keep a steady rhythm.
 
-Four drum styles show only the drum hits, nothing else, in the album's colours. They spring up on each hit and swing a little past before settling, like a VU needle (**Smoothing** sets how loose), and with **Fit each song** on they learn each song's drum levels, so quiet and loud songs both hit hard.
+Three drum styles show only the drum hits, nothing else, in the album's colours. They spring up on each hit and swing a little past before settling, like a VU needle (**Smoothing** sets how loose), and with **Fit each song** on they learn each song's drum levels, so quiet and loud songs both hit hard.
 
 ### Drum Pulses
 ![Drum Pulses](screenshots/styles/drums.jpg)
 
 Two big soft shapes, kick on the left (a deep, heavy thump), snare on the right (a sharp, quick snap). A thin ring marks each one's peak, hangs, then shrinks back.
-
-### Drum Bars
-![Drum Bars](screenshots/styles/drumbars.jpg)
-
-Kick and snare as two thick glowing bars that shoot up on each hit, with a peak line that hangs for a moment, then drops.
 
 ### Drum Pads
 ![Drum Pads](screenshots/styles/drumpads.jpg)
@@ -131,7 +126,7 @@ Four drum-machine pads (kick, snare, hi-hat, bass) that light up as each is hit,
 ### Drum Waves
 ![Drum Waves](screenshots/styles/drumwaves.jpg)
 
-Each kick sends a big soft ring up from the bottom, each snare a thinner, faster ring down from the top. Harder hits make brighter rings.
+Each kick sends a wave in from the left, each snare one in from the right. Where two meet they burst into a flash that spreads up and down. Harder hits make brighter waves.
 
 ### Geometric
 ![Geometric](screenshots/styles/geometric.jpg)
@@ -183,7 +178,7 @@ A flowing three-strand bass wave that pumps on kicks, with speed streaks racing 
 ![Kaleidoscope](screenshots/styles/kaleido.jpg)
 
 Mirrored trails of colour that keep zooming out from the middle, warping and smearing with the music, like the old media-player visualisers:
-- the spectrum drops new colour in, mirrored round the middle;
+- the spectrum drops in sharp shards of colour, mirrored round the middle;
 - the bass makes it zoom and swirl faster, kicks flash it;
 - darker in the middle so the lyrics stay readable.
 
