@@ -110,13 +110,13 @@
   // the rest fold away under "More styles".
   const SONG_DATA_OK = new Set(["ocean", "underwater", "sunset", "nightsky", "silk", "tvpixels", "drumpads", "particles", "plasma", "ledplasma", "warp", "dnb", "ribbon", "rain", "lava", "smoke", "tunnel", "aurora", "oil", "galaxy", "prism", "ombre", "geometric", "bauhaus", "sub", "off"]);
   const STYLE_GROUPS = [
-    ["Bars & meters", ["monstercat", "mirror", "holospec", "ledm", "led", "ascii", "vu", "scope", "ekg", "rgbsplit"]],
+    ["Bars", ["monstercat", "mirror", "holospec", "ledm", "led", "ascii", "rgbsplit"]],
+    ["Meters & lines", ["vu", "scope", "ekg", "ribbon", "dnb"]],
     ["Circles", ["radial", "ncs", "sub", "trap", "tunnel"]],
-    ["On the beat", ["drumpads", "geometric", "bauhaus"]],
-    ["Liquid colour", ["plasma", "ledplasma", "tvpixels", "oil", "silk", "dnb"]],
-    ["Water", ["ocean", "underwater"]],
-    ["Sky & light", ["aurora", "galaxy", "sunset", "nightsky", "ribbon", "ombre", "warp", "particles"]],
-    ["Textures", ["prism", "rain", "smoke", "lava", "neuro"]],
+    ["On the beat", ["drumpads", "geometric", "bauhaus", "particles"]],
+    ["Liquid & water", ["plasma", "ledplasma", "tvpixels", "oil", "silk", "lava", "ocean", "underwater"]],
+    ["Sky & space", ["aurora", "galaxy", "sunset", "nightsky", "warp", "ombre"]],
+    ["Textures", ["prism", "rain", "smoke", "neuro"]],
     ["", ["off"]],
   ];
   // Which bands each style reads: "punch" snaps up and falls with gravity.
@@ -3176,66 +3176,71 @@ void main() {
   // beat (Change every); the bass and loudness move them and kicks light
   // them up a little.
 
-  // Ocean: the open sea at dusk, stretching to the horizon. The water is
-  // lit only by the sky it reflects (in the album's colours), with a low
-  // sun glinting off the waves. The bass raises the swell; kicks brighten
-  // the glint.
+  // Ocean: a beach seen from straight above, flat like a map. The sea at
+  // the top, sand at the bottom. Each kick sends a wave washing down over
+  // the sand with a lacy line of foam at its front; it slides back, leaving
+  // the sand dark and wet for a moment. The bass pushes the water's edge
+  // further in.
   const OCEAN_FS = `
-uniform float uT, uE, uBass, uKick;
+uniform float uT, uE, uBass;
 uniform vec3 uC0, uC1, uC2;
-const vec3 SUN = vec3(0.0, 0.0995, 0.995);
-vec3 sky(vec3 r, float glint) {
-  float y = max(r.y, 0.);
-  vec3 hor = mix(uC1, vec3(1.), 0.1) * 0.32;
-  vec3 c = mix(hor, uC0 * 0.05, pow(y, 0.4));
-  float s = max(dot(r, SUN), 0.);
-  c += mix(uC2, vec3(1.), 0.45) * (smoothstep(0.99955, 0.9998, s) * 1.6 + pow(s, 3000.) * 2. * glint + pow(s, 60.) * 0.12 + pow(s, 6.) * 0.12);
-  return c;
+uniform vec4 uW[3];
+float wob(float x, float s) {
+  return 0.03 * sin(x * 3.1 + s) + 0.018 * sin(x * 7.3 - s * 1.7) + 0.02 * (noise(vec2(x * 4. + s * 3., s)) - 0.5);
 }
 void main() {
-  vec2 uv = (gl_FragCoord.xy - vec2(0.5 * uRes.x, 0.58 * uRes.y)) / uRes.y;
-  vec3 d = normalize(vec3(uv.x, uv.y, 1.4));
-  float glint = 0.8 + 0.3 * uE + 0.8 * uKick;
-  if (d.y >= 0.) {
-    // the sky, with a few thin bands of cloud near the horizon
-    vec3 col = sky(d, glint);
-    float cl = fbm3(vec2(d.x / (d.y + 0.08) * 0.8 + uT * 0.01, d.y * 18.));
-    col = mix(col, col * 0.55, smoothstep(0.55, 0.8, cl) * smoothstep(0.35, 0.02, d.y));
-    o = vec4(min(col, vec3(1.)), 0.95);
-    return;
+  vec2 uv = gl_FragCoord.xy / uRes;
+  float x = uv.x * uRes.x / uRes.y, y = uv.y;
+  float base = 0.62 - 0.06 * uBass + 0.015 * sin(uT * 0.5);
+  float edge = base + wob(x, uT * 0.07);
+  float wet = 0., foam = 0.;
+  // foam: a net of thin bubbly lines, like the lace a wave leaves behind
+  float lace = pow(1. - abs(fbm3(vec2(x * 7., y * 11.) + vec2(uT * 0.05, -uT * 0.08)) * 2. - 1.), 7.);
+  for (int i = 0; i < 3; i++) {
+    vec4 w = uW[i];
+    if (w.y <= 0.) continue;
+    float e = base - w.x + wob(x, w.w);
+    edge = min(edge, e);
+    // the sand the wave reached stays dark and wet for a moment
+    wet = max(wet, w.y * step(base - w.z + wob(x, w.w), y));
+    // foam along the front, thinning out behind it
+    float d = y - e;
+    float rim = exp(-abs(d + 0.006) * 70.) * (0.45 + 0.55 * smoothstep(0.3, 0.6, noise(vec2(x * 18., w.w))));
+    foam = max(foam, w.y * (rim * 0.75 + step(0., d) * exp(-d * 14.) * lace * 0.9));
   }
-  float t = 1. / -d.y;
-  vec2 P = d.xz * t;
-  float amp = 1. + 1.6 * uBass + 0.4 * uE;
-  vec2 g = vec2(0.);
-  float hgt = 0., a = 0.08, k = 0.6;
-  for (int i = 0; i < 7; i++) {
-    float fi = float(i);
-    float ang = fi * 2.39996 + 0.4;
-    vec2 D = vec2(cos(ang), sin(ang));
-    float ph = dot(D, P) * k + uT * sqrt(9.8 * k) * 0.5 + fi * 1.7;
-    // small waves far away fade out instead of flickering
-    float A = a * amp / (1. + pow(k * t * 0.01, 2.));
-    hgt += A * sin(ph);
-    g += A * k * cos(ph) * D;
-    a *= 0.68;
-    k *= 1.6;
-  }
-  vec3 n = normalize(vec3(-g.x, 1., -g.y));
-  vec3 r = reflect(d, n);
-  r.y = abs(r.y);
-  float fr = 0.02 + 0.98 * pow(1. - max(dot(n, -d), 0.), 5.);
-  vec3 deep = uC0 * 0.04 + vec3(0.003, 0.006, 0.01);
-  vec3 col = mix(deep, sky(r, glint), fr);
-  col += uC1 * 0.03 * max(hgt * 8., 0.);
-  col = mix(col, sky(normalize(vec3(d.x, 0.002, d.z)), 0.), 1. - exp(-t * 0.025));
+  float d = y - edge;
+  vec3 sand = mix(uC2, vec3(0.78, 0.68, 0.52), 0.75) * 0.2;
+  sand *= 1. - 0.45 * wet;
+  vec3 shallow = mix(uC1, vec3(0.6, 0.9, 0.9), 0.15) * 0.32;
+  vec3 deep = uC0 * 0.05;
+  vec3 sea = mix(shallow, deep, smoothstep(0., 0.35, d));
+  sea += mix(uC1, vec3(1.), 0.5) * lace * exp(-d * 8.) * 0.18;
+  vec3 col = mix(sand, sea, smoothstep(-0.002, 0.002, d));
+  col += mix(uC1, vec3(1.), 0.75) * foam * (0.55 + 0.25 * uE);
+  // a thin line of foam where the calm water meets the sand
+  col += mix(uC1, vec3(1.), 0.7) * exp(-abs(d) * 90.) * 0.18;
   o = vec4(min(col, vec3(1.)), 0.95);
 }`;
   DRAW.ocean = (v, p, dt) => {
-    const st = v.ocean || (v.ocean = {});
-    fxClock(st, p, dt, 0.4, 3, 0.8, 3);
+    const st = v.ocean || (v.ocean = { waves: [] });
+    fxClock(st, p, dt, 0.3, 4, 1, 3);
+    if (st.newKick) {
+      if (st.waves.length >= 3) st.waves.shift();
+      st.waves.push({ ph: 0, s: Math.min(1, 0.45 + 0.6 * Math.min(1, shared.kick)), seed: Math.random() * 50 });
+    }
+    const W = new Float32Array(12);
+    st.waves = st.waves.filter((w) => (w.ph += (dt * p.speed) / 3.2) < 1);
+    st.waves.forEach((w, i) => {
+      // rushes in fast, then slides back slowly
+      const out = w.ph < 0.25 ? Math.sin((w.ph / 0.25) * Math.PI * 0.5) : 1 - (w.ph - 0.25) / 0.75;
+      const reach = 0.16 + 0.22 * w.s;
+      W[i * 4] = reach * out * out * (3 - 2 * out);
+      W[i * 4 + 1] = (1 - w.ph) * (1 - w.ph * 0.5);
+      W[i * 4 + 2] = reach;
+      W[i * 4 + 3] = w.seed;
+    });
     const pal = easePal(st, beatSteps(st, p), dt, 0.4);
-    fxDraw(v, "ocean", OCEAN_FS, { uT: st.T, uE: shared.energy, uBass: Math.min(1, 0.6 * st.lift + 0.4 * st.punch), uKick: st.flash, uC0: rgb1(pal[0]), uC1: rgb1(pal[1]), uC2: rgb1(pal[2]) }, 1);
+    fxDraw(v, "ocean", OCEAN_FS, { uT: st.T, uE: shared.energy, uBass: Math.min(1, 0.6 * st.lift + 0.4 * st.punch), uW: W, uC0: rgb1(pal[0]), uC1: rgb1(pal[1]), uC2: rgb1(pal[2]) }, 1);
   };
 
   // Underwater: looking up from under the sea. Rippling nets of light

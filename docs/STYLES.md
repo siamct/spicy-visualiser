@@ -14,7 +14,7 @@ On songs with no lyrics, the song name and artist take the place of Spicy Lyrics
 > The pictures show just the visualiser (no lyrics), all playing the same test song. The colours come from the album cover, so they change between a few made-up albums.
 ---
 
-## Bars & meters
+## Bars
 
 ### Monstercat
 ![Monstercat](screenshots/styles/monstercat.jpg)
@@ -33,7 +33,6 @@ The spectrum as a row of bars, with bass on the left and treble on the right. Ba
 ![Mirror Bars](screenshots/styles/mirror.jpg)
 
 Bars reflected up and down from a centre line, with the bass in the middle. Thin and calm, so it suits busy lyric pages.
-
 
 ### Holo Spectrum
 ![Holo Spectrum](screenshots/styles/holospec.jpg)
@@ -54,6 +53,15 @@ A panel of LED dots. Unlit dots stay faintly visible, so it reads like real hard
 ![ASCII](screenshots/styles/ascii.jpg)
 
 A terminal-style spectrum made of characters, with falling peak markers.
+
+### RGB Split
+![RGB Split](screenshots/styles/rgbsplit.jpg)
+
+Monstercat-style bars drawn three times, in red, green and blue added together, so they're white where they line up. Kicks and the bass pull the three apart sideways, and they slide back together. **Bar count** sets how many.
+
+---
+
+## Meters & lines
 
 ### VU Meters
 ![VU Meters](screenshots/styles/vu.jpg)
@@ -77,10 +85,18 @@ A glowing line tracing the sound like an old scope, over a faint grid:
 
 A thin glowing line written across the screen like a heart monitor, with the third of the screen just ahead of it wiped clear. It has no made-up heartbeat shapes: its height follows where the sound sits in pitch (roughly), and it jumps up or down as the music gets louder or quieter than it just was. One sweep lasts 8 beats of the song, so faster songs sweep faster; **Speed** changes that, **Smoothing** calms the line.
 
-### RGB Split
-![RGB Split](screenshots/styles/rgbsplit.jpg)
+### Ribbon
+![Ribbon](screenshots/styles/ribbon.jpg)
 
-Monstercat-style bars drawn three times, in red, green and blue added together, so they're white where they line up. Kicks and the bass pull the three apart sideways, and they slide back together. **Bar count** sets how many.
+Soft sheets of light rolling across the screen, like the wave on an old games-console home menu:
+- no drawn lines: each sheet is soft at its edges and brighter where it folds over, and runs right across the screen;
+- the music sets how fast they flow and the bass makes the waves bigger; each kick makes them flash brighter and turns their colours a little further round;
+- a few sparkles drift along with them.
+
+### Liquid
+![Liquid](screenshots/styles/dnb.jpg)
+
+A flowing three-strand bass wave that pumps on kicks, with speed streaks racing past and a flash on every snare. Made with drum & bass in mind.
 
 ---
 
@@ -145,9 +161,14 @@ A poster grid of flat circles, half circles, quarter circles and triangles.
 - Shapes grow with their part of the spectrum.
 - Tiles turn a quarter on the beat and the colours step round.
 
+### Particles
+![Particles](screenshots/styles/particles.jpg)
+
+A field of light that drifts in a gentle flow and links up into constellations. It bursts outwards on kicks and twinkles with the hi-hats.
+
 ---
 
-## Liquid colour
+## Liquid & water
 
 ### Plasma
 ![Plasma](screenshots/styles/plasma.jpg)
@@ -158,7 +179,6 @@ A smooth glowing fluid. It flows faster, swirls harder and glows brighter as the
 ![LED Plasma](screenshots/styles/ledplasma.jpg)
 
 The same fluid as Plasma, shown on the LED dot panel.
-
 
 ### TV Pixels
 ![TV Pixels](screenshots/styles/tvpixels.jpg)
@@ -178,19 +198,18 @@ Patches of rainbow swirls like oil on a wet road at night, with plenty of dark r
 
 Flowing folds of shiny fabric in the album's colours, with a satin sheen. They flow slowly in quiet parts and much faster when it's loud; the bass deepens them and sends ripples along them, and kicks flash the sheen.
 
-### Liquid
-![Liquid](screenshots/styles/dnb.jpg)
+### Lava Lamp
+![Lava Lamp](screenshots/styles/lava.jpg)
 
-A flowing three-strand bass wave that pumps on kicks, with speed streaks racing past and a flash on every snare. Made with drum & bass in mind.
-
----
-
-## Water
+Lumpy blobs of colour rising and sinking, stretching, merging and splitting:
+- louder parts make them move faster;
+- the bass swells them and kicks give them a wobble;
+- the colours step round on the beat.
 
 ### Ocean
 ![Ocean](screenshots/styles/ocean.jpg)
 
-The open sea stretching to the horizon at dusk, lit only by the sky it mirrors (in the album's colours), with a low sun glinting off the waves. The bass raises the swell and kicks brighten the glint.
+A beach seen from straight above, flat like a map: the sea at the top, sand at the bottom. Each kick sends a wave washing down over the sand with a lacy line of foam at its front; it slides back and leaves the sand dark and wet for a moment. The bass pushes the water's edge further in.
 
 ### Underwater
 ![Underwater](screenshots/styles/underwater.jpg)
@@ -199,7 +218,7 @@ Looking up from under the sea: rippling nets of light wobble across, with soft s
 
 ---
 
-## Sky & light
+## Sky & space
 
 ### Aurora
 ![Aurora](screenshots/styles/aurora.jpg)
@@ -223,13 +242,10 @@ A sky in the album's colours, warm at the horizon with the sun low in the middle
 
 A dark sky with twinkling stars and a moon, and thin clouds drifting past it, silver at the edges near the moon. Kicks light the moon's glow and the cloud edges, the bass churns the clouds, and they drift much faster when the music is loud.
 
-### Ribbon
-![Ribbon](screenshots/styles/ribbon.jpg)
+### Warp
+![Warp](screenshots/styles/warp.jpg)
 
-Soft sheets of light rolling across the screen, like the wave on an old games-console home menu:
-- no drawn lines: each sheet is soft at its edges and brighter where it folds over, and runs right across the screen;
-- the music sets how fast they flow and the bass makes the waves bigger; each kick makes them flash brighter and turns their colours a little further round;
-- a few sparkles drift along with them.
+Hyperspace stars flying past, faster on the bass, with a surge on every beat.
 
 ### Ombre
 ![Ombre](screenshots/styles/ombre.jpg)
@@ -237,16 +253,6 @@ Soft sheets of light rolling across the screen, like the wave on an old games-co
 Rich colour glowing in from the left and right sides, with the middle left dark behind the lyrics:
 - the colours run down each side as a soft gradient and slowly turn;
 - the bass drives it: it pushes the glow further in and makes it brighter, and kicks give it a soft pulse.
-
-### Warp
-![Warp](screenshots/styles/warp.jpg)
-
-Hyperspace stars flying past, faster on the bass, with a surge on every beat.
-
-### Particles
-![Particles](screenshots/styles/particles.jpg)
-
-A field of light that drifts in a gentle flow and links up into constellations. It bursts outwards on kicks and twinkles with the hi-hats.
 
 ---
 
@@ -274,14 +280,6 @@ Soft coloured smoke curling up from the bottom:
 - louder parts make it thicker and rise faster;
 - the bass stirs it into curls, and kicks puff out a burst from below;
 - the colours turn on the beat.
-
-### Lava Lamp
-![Lava Lamp](screenshots/styles/lava.jpg)
-
-Lumpy blobs of colour rising and sinking, stretching, merging and splitting:
-- louder parts make them move faster;
-- the bass swells them and kicks give them a wobble;
-- the colours step round on the beat.
 
 ### Neuro Mesh
 ![Neuro Mesh](screenshots/styles/neuro.jpg)
