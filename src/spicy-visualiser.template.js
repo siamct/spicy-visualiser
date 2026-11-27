@@ -1351,7 +1351,9 @@
         const ex = Math.max(0, (target - fl) / Math.max(0.25, ce - fl));
         target = target * (1 - ar) + Math.min(1, ex) * 0.92 * ar;
       }
-      target = Math.min(1, target);
+      // Soft top: above 0.75 it eases towards 1 instead of slamming into
+      // it, so loud parts don't pin every bar and needle at the top.
+      if (target > 0.75) target = 0.75 + 0.25 * (1 - Math.exp(-(target - 0.75) / 0.25));
       // Punch: up almost instantly, down with gravity (Monstercat / cava feel).
       if (target >= shared.punch[i]) {
         shared.punch[i] += (target - shared.punch[i]) * Math.min(1, dt * 45);
@@ -2564,7 +2566,7 @@ void main() {
     const st = v.ombre || (v.ombre = {});
     fxClock(st, p, dt, 0.6, 9, 2, 3);
     const pal = easePal(st, beatSteps(st, p), dt, 0.5);
-    fxDraw(v, "ombre", OMBRE_FS, { uT: st.T, uE: shared.energy, uBass: st.lift, uKick: st.flash, uC0: rgb1(pal[0]), uC1: rgb1(pal[1]), uC2: rgb1(pal[2]) }, 1);
+    fxDraw(v, "ombre", OMBRE_FS, { uT: st.T, uE: st.ce, uBass: st.lift, uKick: st.flash, uC0: rgb1(pal[0]), uC1: rgb1(pal[1]), uC2: rgb1(pal[2]) }, 1);
   };
 
   // ---------------------------------------------------------------------------
@@ -2607,9 +2609,9 @@ void main() {
 }`;
   DRAW.prism = (v, p, dt) => {
     const st = v.prism || (v.prism = {});
-    fxClock(st, p, dt, 0.9, 8, 2, 4);
+    fxClock(st, p, dt, 0.6, 8, 2, 4);
     const pal = easePal(st, beatSteps(st, p), dt, 0.5);
-    fxDraw(v, "prism", PRISM_FS, { uT: st.T, uE: shared.energy, uBass: st.lift, uKick: st.flash, uTint: p.colorMode === "classic" ? 0 : 1, uC0: rgb1(pal[0]), uC1: rgb1(pal[1]), uC2: rgb1(pal[2]) }, 1);
+    fxDraw(v, "prism", PRISM_FS, { uT: st.T, uE: st.ce, uBass: st.lift, uKick: st.flash, uTint: p.colorMode === "classic" ? 0 : 1, uC0: rgb1(pal[0]), uC1: rgb1(pal[1]), uC2: rgb1(pal[2]) }, 1);
   };
 
   // ---------------------------------------------------------------------------
@@ -3237,7 +3239,7 @@ void main() {
     const st = v.underwater || (v.underwater = {});
     fxClock(st, p, dt, 0.5, 5, 1.2, 3);
     const pal = easePal(st, beatSteps(st, p), dt, 0.6);
-    fxDraw(v, "underwater", UNDER_FS, { uT: st.T, uE: shared.energy, uBass: Math.min(1, 0.6 * st.lift + 0.5 * st.punch), uKick: st.flash, uC0: rgb1(pal[0]), uC1: rgb1(pal[1]), uC2: rgb1(pal[2]) }, 1);
+    fxDraw(v, "underwater", UNDER_FS, { uT: st.T, uE: st.ce, uBass: Math.min(1, 0.6 * st.lift + 0.5 * st.punch), uKick: st.flash, uC0: rgb1(pal[0]), uC1: rgb1(pal[1]), uC2: rgb1(pal[2]) }, 1);
   };
 
   // Sunset: a sky in the album's colours, warm at the horizon with the sun
@@ -3272,7 +3274,7 @@ void main() {
     st.e = (st.e || 0) + (shared.energy - (st.e || 0)) * Math.min(1, dt * 1.5);
     st.drift += dt * (0.015 + 0.3 * st.e * st.e) * p.speed;
     const pal = easePal(st, beatSteps(st, p), dt, 0.4);
-    fxDraw(v, "sunset", SUNSET_FS, { uT: st.T, uE: shared.energy, uBass: Math.min(1, 0.6 * st.lift + 0.5 * st.punch), uKick: st.flash, uDrift: st.drift, uC0: rgb1(pal[0]), uC1: rgb1(pal[1]), uC2: rgb1(pal[2]) }, 1);
+    fxDraw(v, "sunset", SUNSET_FS, { uT: st.T, uE: st.ce, uBass: Math.min(1, 0.6 * st.lift + 0.5 * st.punch), uKick: st.flash, uDrift: st.drift, uC0: rgb1(pal[0]), uC1: rgb1(pal[1]), uC2: rgb1(pal[2]) }, 1);
   };
 
   // Night Sky: a dark sky with twinkling stars and a moon, thin clouds
@@ -3310,7 +3312,7 @@ void main() {
     st.drift += dt * (0.01 + 0.22 * st.e * st.e) * p.speed;
     st.glow += (Math.min(1, shared.energy * 1.2) - st.glow) * Math.min(1, dt * 0.4);
     const pal = easePal(st, beatSteps(st, p), dt, 0.3);
-    fxDraw(v, "nightsky", NIGHT_FS, { uT: st.T, uE: shared.energy, uBass: Math.min(1, 0.6 * st.lift + 0.5 * st.punch), uKick: st.flash, uDrift: st.drift, uGlow: st.glow, uC0: rgb1(pal[0]), uC1: rgb1(pal[1]), uC2: rgb1(pal[2]) }, 1);
+    fxDraw(v, "nightsky", NIGHT_FS, { uT: st.T, uE: st.ce, uBass: Math.min(1, 0.6 * st.lift + 0.5 * st.punch), uKick: st.flash, uDrift: st.drift, uGlow: st.glow, uC0: rgb1(pal[0]), uC1: rgb1(pal[1]), uC2: rgb1(pal[2]) }, 1);
   };
 
   // Silk: slow flowing folds of shiny fabric in the album's colours, with a
@@ -3351,7 +3353,7 @@ void main() {
     st.e += (shared.energy - st.e) * Math.min(1, dt * 1.5);
     st.t += dt * p.speed * (0.12 + 1.6 * st.e * st.e);
     const pal = easePal(st, beatSteps(st, p), dt, 0.4);
-    fxDraw(v, "silk", SILK_FS, { uT: st.t, uE: shared.energy, uBass: Math.min(1, 0.6 * st.lift + 0.4 * st.punch), uKick: st.flash, uC0: rgb1(pal[0]), uC1: rgb1(pal[1]), uC2: rgb1(pal[2]) }, 1);
+    fxDraw(v, "silk", SILK_FS, { uT: st.t, uE: st.ce, uBass: Math.min(1, 0.6 * st.lift + 0.4 * st.punch), uKick: st.flash, uC0: rgb1(pal[0]), uC1: rgb1(pal[1]), uC2: rgb1(pal[2]) }, 1);
   };
 
   // TV Pixels: a close-up of a TV screen, so you can see each pixel's red,
@@ -3385,7 +3387,7 @@ void main() {
     const st = v.tvpixels || (v.tvpixels = {});
     fxClock(st, p, dt, 0.4, 4, 1, 3);
     const pal = easePal(st, beatSteps(st, p), dt, 0.5);
-    fxDraw(v, "tvpixels", TVPIX_FS, { uT: st.T, uE: shared.energy, uBass: st.lift, uKick: st.flash, uCell: 14, uC0: rgb1(pal[0]), uC1: rgb1(pal[1]), uC2: rgb1(pal[2]) }, 1);
+    fxDraw(v, "tvpixels", TVPIX_FS, { uT: st.T, uE: st.ce, uBass: st.lift, uKick: st.flash, uCell: 14, uC0: rgb1(pal[0]), uC1: rgb1(pal[1]), uC2: rgb1(pal[2]) }, 1);
   };
 
   // ---------------------------------------------------------------------------
@@ -4579,7 +4581,11 @@ float fbm3(vec2 p) {
   // Common music inputs for the shader styles: a clock that runs faster
   // when it's loud, a kick flash and a slow bass swell.
   function fxClock(st, p, dt, rate, up = 6, down = 1.5, flashFade = 3) {
-    const e = shared.energy, bass = shared.bassPunch || 0;
+    const bass = shared.bassPunch || 0;
+    // loudness eased over about half a second, so the speed and brightness
+    // of the scenes glide instead of twitching with every note
+    st.ce = (st.ce === undefined ? shared.energy : st.ce) + (shared.energy - (st.ce || 0)) * Math.min(1, dt * 2);
+    const e = st.ce;
     st.T = (st.T || Math.random() * 100) + dt * p.speed * (0.35 + rate * e);
     if (st.kickSeen === undefined) st.kickSeen = shared.beatSerial;
     st.newKick = false;
@@ -4712,13 +4718,13 @@ void main() {
 }`;
   DRAW.ribbon = (v, p, dt) => {
     const st = v.ribbon || (v.ribbon = {});
-    fxClock(st, p, dt, 1.4, 12, 3, 4);
+    fxClock(st, p, dt, 0.8, 9, 2.5, 4);
     const pal = easePal(st, beatSteps(st, p), dt, 2.5);
     // each kick turns the colours a little further round (a smooth glide)
     if (st.hueTo === undefined) st.hueTo = st.hue = 0;
     if (st.newKick && p.colorMove !== "still") st.hueTo += 0.06 * Math.min(1, shared.kick + 0.4);
     st.hue += (st.hueTo - st.hue) * Math.min(1, dt * 4);
-    fxDraw(v, "ribbon", RIBBON_FS, { uT: st.T, uE: shared.energy, uBass: Math.min(1, 0.45 * st.lift + st.punch), uKick: st.flash, uHue: st.hue % 1, uC0: rgb1(pal[0]), uC1: rgb1(pal[1]), uC2: rgb1(pal[2]) }, 1);
+    fxDraw(v, "ribbon", RIBBON_FS, { uT: st.T, uE: st.ce, uBass: Math.min(1, 0.5 * st.lift + 0.6 * st.punch), uKick: st.flash, uHue: st.hue % 1, uC0: rgb1(pal[0]), uC1: rgb1(pal[1]), uC2: rgb1(pal[2]) }, 1);
   };
 
   // ---------------------------------------------------------------------------
@@ -4748,10 +4754,10 @@ void main() {
 }`;
   DRAW.smoke = (v, p, dt) => {
     const st = v.smoke || (v.smoke = { rise: 0 });
-    fxClock(st, p, dt, 0.7, 10, 2, 3);
+    fxClock(st, p, dt, 0.5, 8, 2, 3);
     st.rise += dt * (0.2 + 0.2 * shared.energy + 0.2 * st.lift) * p.speed;
     const pal = easePal(st, beatSteps(st, p), dt, 0.8);
-    fxDraw(v, "smoke", SMOKE_FS, { uT: st.T, uE: shared.energy, uBass: st.lift, uKick: st.flash, uRise: st.rise, uC0: rgb1(pal[0]), uC1: rgb1(pal[1]), uC2: rgb1(pal[2]) }, 1);
+    fxDraw(v, "smoke", SMOKE_FS, { uT: st.T, uE: st.ce, uBass: st.lift, uKick: st.flash, uRise: st.rise, uC0: rgb1(pal[0]), uC1: rgb1(pal[1]), uC2: rgb1(pal[2]) }, 1);
   };
 
   // ---------------------------------------------------------------------------
@@ -4779,7 +4785,7 @@ void main() {
 }`;
   DRAW.oil = (v, p, dt) => {
     const st = v.oil || (v.oil = {});
-    fxClock(st, p, dt, 0.7, 4, 1.2);
+    fxClock(st, p, dt, 0.5, 4, 1.2);
     const step = beatSteps(st, p);
     const pal = easePal(st, step, dt, 0.4);
     if (st.shift === undefined) st.shift = step * 0.17; // no colour rush when you switch to it
@@ -4787,7 +4793,7 @@ void main() {
     let dS = step * 0.17 - st.shift;
     dS -= Math.round(dS);
     st.shift = step * 0.17 - dS + dS * Math.min(1, dt * 0.3);
-    fxDraw(v, "oil", OIL_FS, { uT: st.T, uE: shared.energy, uBass: st.lift, uShift: st.shift + st.T * 0.015, uTint: p.colorMode === "classic" ? 0 : 1, uC0: rgb1(pal[0]), uC1: rgb1(pal[1]), uC2: rgb1(pal[2]) }, 1);
+    fxDraw(v, "oil", OIL_FS, { uT: st.T, uE: st.ce, uBass: st.lift, uShift: st.shift + st.T * 0.015, uTint: p.colorMode === "classic" ? 0 : 1, uC0: rgb1(pal[0]), uC1: rgb1(pal[1]), uC2: rgb1(pal[2]) }, 1);
   };
 
   // ---------------------------------------------------------------------------
