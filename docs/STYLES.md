@@ -69,6 +69,30 @@ A glowing line tracing the sound like an old scope, over a faint grid:
 
 ---
 
+## Holo
+
+Thin ticks that glow when lit and stay faintly visible when not, a slow shimmer running down them and scanlines drifting over, in the album's colours (the same look as the VU Meters' Holo face). Their levels are heavy: they rise quickly and sink slowly, so they don't flicker. **Smoothing** sets how slowly they sink.
+
+### Holo Radar
+![Holo Radar](screenshots/styles/holoradar.jpg)
+
+A ring of ticks round the middle, one for each part of the spectrum (bass at the top, mirrored on both sides), lit by the sound. A sweep line turns slowly and lights the ticks it passes, and each kick leaves a blip that fades. It sits beside the album art when the art is showing.
+
+### Holo Spectrum
+![Holo Spectrum](screenshots/styles/holospec.jpg)
+
+The spectrum as a row of columns made of short glowing ticks along the bottom, coloured across from the album. A peak tick hangs over each column, then drops.
+
+### Holo Rings
+![Holo Rings](screenshots/styles/holorings.jpg)
+
+Three nested rings of ticks: bass inside, then mids, highs outside. Each turns its own way at its own speed (faster on heavy bass) and lights up with its part of the sound.
+
+### Pitch Trail
+![Pitch Trail](screenshots/styles/pitchtrail.jpg)
+
+Like a piano roll turned sideways, but only looking back. A glowing line follows where the sound sits in pitch (low at the bottom, high at the top) and scrolls left, leaving a trail. The strongest pitches at each moment leave short dashes, like notes on a roll. It's the rough pitch (each step is about two piano keys), not exact notes or chords.
+
 ## Circles
 
 ### Radial Bars

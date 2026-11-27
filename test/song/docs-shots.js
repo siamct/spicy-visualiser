@@ -23,6 +23,7 @@ const ALBUMS = [
 // [style, moment in the track (bar)]
 const SHOTS = [
   ["monstercat", 22], ["mirror", 9], ["ledm", 12], ["led", 21], ["ascii", 28], ["vu", 24], ["scope", 22],
+  ["holoradar", 22], ["holospec", 24], ["holorings", 23], ["pitchtrail", 26],
   ["radial", 26], ["ncs", 23], ["sub", 13], ["trap", 25], ["tunnel", 27],
   ["drums", 22], ["drumpads", 22], ["drumwaves", 22], ["geometric", 11], ["bauhaus", 29],
   ["plasma", 18], ["ledplasma", 24], ["oil", 20], ["chrome", 22], ["dnb", 26], ["kaleido", 24],

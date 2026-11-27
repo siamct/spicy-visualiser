@@ -27,6 +27,10 @@
     ["ledm", "LED Meters"],
     ["vu", "VU Meters"],
     ["scope", "Oscilloscope"],
+    ["holoradar", "Holo Radar"],
+    ["holospec", "Holo Spectrum"],
+    ["holorings", "Holo Rings"],
+    ["pitchtrail", "Pitch Trail"],
     ["kaleido", "Kaleidoscope"],
     ["drums", "Drum Pulses"],
     ["drumpads", "Drum Pads"],
@@ -58,6 +62,10 @@
   ];
   // Little pictures for the style picker.
   const STYLE_ICON = {
+    holoradar: '<g fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="9" opacity=".5"/><circle cx="12" cy="12" r="4.5" opacity=".35"/><path d="M12 12l6.4-6.4" stroke-linecap="round"/></g><circle cx="8" cy="15" r="1.4"/>',
+    holospec: '<g>'+[[3,4],[7,6],[11,3],[15,5],[19,2]].map(([x,n])=>[...Array(n)].map((_,s)=>`<rect x="${x}" y="${19-s*3}" width="3" height="1.3" rx=".5" opacity="${(0.45+s*0.1).toFixed(2)}"/>`).join('')).join('')+'</g>',
+    holorings: '<g fill="none" stroke="currentColor" stroke-width="1.6" stroke-dasharray="1.6 1.4"><circle cx="12" cy="12" r="9.5"/><circle cx="12" cy="12" r="6.3" opacity=".75"/><circle cx="12" cy="12" r="3.2" opacity=".55"/></g>',
+    pitchtrail: '<g fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><path d="M2 15c3 0 3-6 6-6s3 4 6 4 2-6 4.5-6.5"/></g><circle cx="20" cy="6.5" r="2"/><rect x="4" y="19" width="3" height="1.3" opacity=".5"/><rect x="10" y="17.5" width="3" height="1.3" opacity=".5"/><rect x="15" y="20" width="3" height="1.3" opacity=".5"/>',
     drums: '<g fill="none" stroke="currentColor" stroke-width="1.6"><ellipse cx="12" cy="9" rx="8" ry="3"/><path d="M4 9v6c0 1.7 3.6 3 8 3s8-1.3 8-3V9"/><path d="M6 4l4 3M18 4l-4 3" stroke-linecap="round"/></g>',
     drumpads: '<rect x="3" y="3" width="8" height="8" rx="1.6"/><rect x="13" y="3" width="8" height="8" rx="1.6" opacity=".4"/><rect x="3" y="13" width="8" height="8" rx="1.6" opacity=".4"/><rect x="13" y="13" width="8" height="8" rx="1.6"/>',
     drumwaves: '<g fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M8.5 20a3.5 3.5 0 0 1 7 0"/><path d="M5 20a7 7 0 0 1 14 0" opacity=".7"/><path d="M1.5 20a10.5 10.5 0 0 1 21 0" opacity=".4"/><path d="M9 3.5a3 3 0 0 0 6 0" opacity=".7"/></g>',
@@ -103,6 +111,7 @@
   const SONG_DATA_OK = new Set(["drums", "drumpads", "drumwaves", "particles", "plasma", "ledplasma", "warp", "dnb", "ribbon", "rain", "lava", "smoke", "tunnel", "aurora", "chrome", "oil", "galaxy", "prism", "ombre", "bubbles", "geometric", "bauhaus", "sub", "off"]);
   const STYLE_GROUPS = [
     ["Bars & meters", ["monstercat", "mirror", "ledm", "led", "ascii", "vu", "scope"]],
+    ["Holo", ["holoradar", "holospec", "holorings", "pitchtrail"]],
     ["Circles", ["radial", "ncs", "sub", "trap", "tunnel"]],
     ["On the beat", ["drums", "drumpads", "drumwaves", "geometric", "bauhaus"]],
     ["Liquid colour", ["plasma", "ledplasma", "oil", "chrome", "dnb", "kaleido"]],
@@ -123,9 +132,9 @@
     mcColor: ["monstercat"],
     vuFace: ["vu"],
     circleAt: ["trap", "radial", "ncs", "sub"],
-    speed: ["drumwaves", "scope", "kaleido", "trap", "neuro", "ribbon", "rain", "lava", "smoke", "tunnel", "aurora", "chrome", "oil", "particles", "monstercat", "ncs", "radial", "plasma", "warp", "dnb", "ascii", "led", "ledplasma", "galaxy", "prism", "ombre", "bubbles"],
+    speed: ["holoradar", "holorings", "pitchtrail", "drumwaves", "scope", "kaleido", "trap", "neuro", "ribbon", "rain", "lava", "smoke", "tunnel", "aurora", "chrome", "oil", "particles", "monstercat", "ncs", "radial", "plasma", "warp", "dnb", "ascii", "led", "ledplasma", "galaxy", "prism", "ombre", "bubbles"],
     bassBoost: ["scope", "kaleido", "particles", "monstercat", "radial", "mirror", "ncs", "warp", "plasma", "dnb", "ascii", "geometric", "bauhaus", "led", "ledplasma", "sub", "trap", "ledm", "neuro", "ribbon", "rain", "lava", "smoke", "tunnel", "aurora", "chrome", "oil", "galaxy", "prism", "ombre", "bubbles"],
-    smoothing: ["particles", "monstercat", "radial", "mirror", "ncs", "warp", "plasma", "dnb", "ascii", "geometric", "bauhaus", "led", "ledplasma", "sub", "trap", "ledm", "neuro", "aurora", "vu", "drums", "drumpads", "drumwaves"],
+    smoothing: ["particles", "monstercat", "radial", "mirror", "ncs", "warp", "plasma", "dnb", "ascii", "geometric", "bauhaus", "led", "ledplasma", "sub", "trap", "ledm", "neuro", "aurora", "vu", "drums", "drumpads", "drumwaves", "holoradar", "holospec", "holorings", "pitchtrail"],
   };
 
   const STYLE_BASE = {
@@ -186,6 +195,10 @@
     ledplasma: { shake: 0 },
     monstercat: { barCount: 63, bassBoost: 0.8, smoothing: 0.45, beatEvery: "4" },
     ledm: { shake: 0 },
+    holoradar: { shake: 0 },
+    holospec: { shake: 0 },
+    holorings: { shake: 0 },
+    pitchtrail: { shake: 0 },
   };
   const GLOBAL_DEFAULTS = {
     style: "plasma", // first install: a flowing style, not bars
@@ -3045,6 +3058,279 @@ void main() {
       ctx.shadowBlur = 0;
     }
     ctx.restore();
+  };
+
+  // ---------------------------------------------------------------------------
+  // Holo styles: the look of the VU Meters' Holo face. Thin ticks that glow
+  // when lit and stay faintly visible when not, a slow shimmer running down
+  // them, scanlines drifting over, and the album's colours. Levels are
+  // heavy: they rise quickly but sink slowly, so they don't flicker.
+  const holoShim = (t, y) => 0.78 + 0.22 * Math.sin(t * 5 - y * 0.09);
+  // scanlines: thin dark lines cut out of what's been drawn, drifting down
+  function holoScan(ctx, x, y, ww, hh, t) {
+    ctx.save();
+    ctx.globalCompositeOperation = "destination-out";
+    ctx.fillStyle = "rgba(0,0,0,0.35)";
+    const off = (t * 24) % 4;
+    for (let yy = y + off; yy < y + hh; yy += 4) ctx.fillRect(x, yy, ww, 1.2);
+    ctx.restore();
+  }
+  // one level per slot, quick up, slow down (Smoothing sets how slow)
+  function holoLevels(st, n, dt, p, get) {
+    if (!st.lv || st.lv.length !== n) { st.lv = new Float32Array(n); st.pk = new Float32Array(n); st.hold = new Float32Array(n); }
+    const down = 0.6 + 2.2 * (1 - Math.max(0, Math.min(1, p.smoothing)));
+    for (let i = 0; i < n; i++) {
+      const x = Math.min(1, get(i) * p.sensitivity);
+      st.lv[i] += (x - st.lv[i]) * Math.min(1, dt * (x > st.lv[i] ? 14 : down));
+      if (st.lv[i] >= st.pk[i]) { st.pk[i] = st.lv[i]; st.hold[i] = 0.9; }
+      else if ((st.hold[i] -= dt) < 0) st.pk[i] = Math.max(st.lv[i], st.pk[i] - dt * 0.4);
+    }
+  }
+  // a tick from (x0,y0) to (x1,y1): glowing when lit, faint when not
+  function holoTick(ctx, v, x0, y0, x1, y1, c, a, lw) {
+    ctx.lineWidth = lw;
+    ctx.strokeStyle = v.rgba(a > 0.3 ? mix(c, WHITE, 0.2) : c, a);
+    if (a > 0.3) { ctx.shadowColor = v.rgba(c, 0.9); ctx.shadowBlur = lw * 2.5; }
+    ctx.beginPath();
+    ctx.moveTo(x0, y0);
+    ctx.lineTo(x1, y1);
+    ctx.stroke();
+    ctx.shadowBlur = 0;
+  }
+
+  // Holo Radar: a ring of ticks round the middle, one per part of the
+  // spectrum (mirrored, bass at the top), lit by the sound. A sweep line
+  // turns slowly and lights the ticks it passes; kicks leave blips that fade.
+  DRAW.holoradar = (v, p, dt) => {
+    const { ctx, h } = v;
+    const st = v.hradar || (v.hradar = { t: 0, sw: 0, blips: [], kickSeen: shared.beatSerial });
+    st.t += dt;
+    st.sw += dt * 0.9 * p.speed;
+    const N = 72, sp = freeSpot(v), R = Math.min(sp.wmax * 0.28, h * 0.4) * p.size;
+    const cx = sp.x, cy = sp.y;
+    holoLevels(st, N, dt, p, (i) => bandAt((i < N / 2 ? i : N - 1 - i) / (N / 2) * 0.9) * 1.15);
+    if (st.kickSeen !== shared.beatSerial) {
+      st.kickSeen = shared.beatSerial;
+      st.blips.push({ a: st.sw - 0.15, r: 0.25 + 0.45 * Math.random(), age: 0 });
+      if (st.blips.length > 12) st.blips.shift();
+    }
+    ctx.save();
+    ctx.globalCompositeOperation = "lighter";
+    ctx.globalAlpha = A_(1, v);
+    ctx.lineCap = "round";
+    const c0 = colorAt(0.15), c1 = colorAt(0.85);
+    // faint guide rings and cross
+    ctx.strokeStyle = v.rgba(mix(c0, c1, 0.5), 0.18);
+    ctx.lineWidth = 1;
+    for (const rr of [0.33, 0.66, 1.16]) {
+      ctx.beginPath();
+      ctx.arc(cx, cy, R * rr, 0, Math.PI * 2);
+      ctx.stroke();
+    }
+    ctx.beginPath();
+    ctx.moveTo(cx - R * 1.16, cy); ctx.lineTo(cx + R * 1.16, cy);
+    ctx.moveTo(cx, cy - R * 1.16); ctx.lineTo(cx, cy + R * 1.16);
+    ctx.stroke();
+    // the ticks
+    const sw = ((st.sw % (Math.PI * 2)) + Math.PI * 2) % (Math.PI * 2);
+    const tw = Math.max(2, ((R * Math.PI * 2) / N) * 0.4);
+    for (let i = 0; i < N; i++) {
+      const a = -Math.PI / 2 + (i / N) * Math.PI * 2;
+      const behind = ((sw - ((a + Math.PI * 2) % (Math.PI * 2))) + Math.PI * 2) % (Math.PI * 2); // how long since the sweep passed
+      const lit = Math.max(0, 1 - behind / 1.2);
+      const lv = st.lv[i], c = mix(c0, c1, Math.abs(i / N - 0.5) * 2);
+      const r1 = R * (0.82 + 0.3 * lv);
+      const al = Math.min(1, 0.1 + 0.9 * lv + 0.35 * lit) * holoShim(st.t, cy + Math.sin(a) * R);
+      holoTick(ctx, v, cx + Math.cos(a) * R * 0.78, cy + Math.sin(a) * R * 0.78, cx + Math.cos(a) * r1, cy + Math.sin(a) * r1, c, al, tw);
+      // peak tick hangs just outside
+      const rp = R * (0.86 + 0.3 * st.pk[i]);
+      if (st.pk[i] > 0.08) holoTick(ctx, v, cx + Math.cos(a) * rp, cy + Math.sin(a) * rp, cx + Math.cos(a) * (rp + R * 0.02), cy + Math.sin(a) * (rp + R * 0.02), c, 0.6, tw);
+    }
+    // the sweep: a glowing line with a fading wake behind it
+    const sc = mix(c1, WHITE, 0.4);
+    for (let k = 10; k >= 0; k--) {
+      const a = st.sw - k * 0.06;
+      ctx.strokeStyle = v.rgba(sc, k ? 0.05 * (1 - k / 11) : 0.9);
+      ctx.lineWidth = k ? Math.max(3, R * 0.05) : Math.max(1.2, R * 0.008);
+      ctx.beginPath();
+      vuLine(ctx, cx, cy, a, R * 0.05, R * 1.16);
+      ctx.stroke();
+    }
+    // kick blips
+    for (let i = st.blips.length - 1; i >= 0; i--) {
+      const b = st.blips[i];
+      b.age += dt;
+      if (b.age > 2.5) { st.blips.splice(i, 1); continue; }
+      const f = 1 - b.age / 2.5, x = cx + Math.cos(b.a) * R * b.r, y = cy + Math.sin(b.a) * R * b.r;
+      v.soft(x, y, R * 0.06, c0, 0.5 * f);
+      ctx.strokeStyle = v.rgba(mix(c0, WHITE, 0.4), 0.8 * f);
+      ctx.lineWidth = 1.2;
+      ctx.beginPath();
+      ctx.arc(x, y, R * (0.02 + 0.04 * (1 - f)), 0, Math.PI * 2);
+      ctx.stroke();
+    }
+    ctx.restore();
+    holoScan(ctx, cx - R * 1.3, cy - R * 1.3, R * 2.6, R * 2.6, st.t);
+  };
+
+  // Holo Spectrum: the spectrum as a row of columns made of short glowing
+  // ticks along the bottom, coloured across from the album. A peak tick
+  // hangs over each column, then drops.
+  DRAW.holospec = (v, p, dt) => {
+    const { ctx, w, h } = v;
+    const st = v.hspec || (v.hspec = { t: 0 });
+    st.t += dt;
+    const N = 40, SEG = 22;
+    holoLevels(st, N, dt, p, (i) => bandAt((i / N) * 0.92) * 1.1);
+    const W = w * 0.82 * Math.min(1.2, p.size), H = h * 0.42 * p.size, x0 = (w - W) / 2, yb = h * 0.93;
+    const cw = W / N, sh = H / SEG, tw = Math.max(1.5, sh * 0.32);
+    ctx.save();
+    ctx.globalCompositeOperation = "lighter";
+    ctx.globalAlpha = A_(1, v);
+    ctx.lineCap = "round";
+    for (let i = 0; i < N; i++) {
+      const c = colorAt(i / (N - 1)), x = x0 + i * cw + cw * 0.18, x1 = x + cw * 0.64;
+      const top = st.lv[i] * SEG, pk = Math.min(SEG - 1, Math.floor(st.pk[i] * SEG));
+      for (let s = 0; s < SEG; s++) {
+        const y = yb - (s + 0.5) * sh;
+        const on = s < top, isPk = s === pk && st.pk[i] > 0.05;
+        const a = (on ? 0.92 : isPk ? 0.7 : 0.08) * holoShim(st.t, y);
+        holoTick(ctx, v, x, y, x1, y, s >= SEG - 3 && (on || isPk) ? mix(c, [255, 80, 130], 0.6) : c, a, tw);
+      }
+    }
+    // a faint line along the base
+    ctx.strokeStyle = v.rgba(colorAt(0.5), 0.25);
+    ctx.lineWidth = 1;
+    ctx.beginPath();
+    ctx.moveTo(x0, yb + sh * 0.4);
+    ctx.lineTo(x0 + W, yb + sh * 0.4);
+    ctx.stroke();
+    ctx.restore();
+    holoScan(ctx, x0 - 10, yb - H - 10, W + 20, H + 20, st.t);
+  };
+
+  // Holo Rings: three nested rings of ticks, bass inside, mids, highs
+  // outside, each turning its own way at its own speed and lighting up with
+  // its part of the sound (each ring is its part of the spectrum, mirrored).
+  DRAW.holorings = (v, p, dt) => {
+    const { ctx, h } = v;
+    const st = v.hrings || (v.hrings = { t: 0, rot: [0, 0, 0], rings: [{}, {}, {}] });
+    st.t += dt;
+    const sp = freeSpot(v), R = Math.min(sp.wmax * 0.3, h * 0.42) * p.size, cx = sp.x, cy = sp.y;
+    const RINGS = [
+      { r: 0.42, n: 36, from: 0, to: 0.16, spin: 0.16, c: 0.1 },
+      { r: 0.7, n: 54, from: 0.18, to: 0.55, spin: -0.1, c: 0.5 },
+      { r: 0.98, n: 72, from: 0.55, to: 0.95, spin: 0.06, c: 0.9 },
+    ];
+    ctx.save();
+    ctx.globalCompositeOperation = "lighter";
+    ctx.globalAlpha = A_(1, v);
+    ctx.lineCap = "round";
+    RINGS.forEach((rg, k) => {
+      const rs = st.rings[k], half = rg.n / 2;
+      holoLevels(rs, rg.n, dt, p, (i) => bandAt(rg.from + ((rg.to - rg.from) * (i < half ? i : rg.n - 1 - i)) / half) * (k ? 1.4 : 1.1));
+      st.rot[k] += dt * rg.spin * p.speed * (1 + 1.5 * (shared.bassPunch || 0));
+      const c = colorAt(rg.c), tw = Math.max(2, ((R * rg.r * Math.PI * 2) / rg.n) * 0.38);
+      // faint guide circle
+      ctx.strokeStyle = v.rgba(c, 0.16);
+      ctx.lineWidth = 1;
+      ctx.beginPath();
+      ctx.arc(cx, cy, R * (rg.r - 0.06), 0, Math.PI * 2);
+      ctx.stroke();
+      for (let i = 0; i < rg.n; i++) {
+        const a = st.rot[k] + (i / rg.n) * Math.PI * 2, lv = rs.lv[i];
+        const r0 = R * (rg.r - 0.03), r1 = R * (rg.r + 0.02 + 0.17 * lv);
+        const al = (0.1 + 0.88 * lv) * holoShim(st.t, cy + Math.sin(a) * R * rg.r);
+        holoTick(ctx, v, cx + Math.cos(a) * r0, cy + Math.sin(a) * r0, cx + Math.cos(a) * r1, cy + Math.sin(a) * r1, c, Math.min(1, al), tw);
+      }
+    });
+    ctx.restore();
+    holoScan(ctx, cx - R * 1.25, cy - R * 1.25, R * 2.5, R * 2.5, st.t);
+  };
+
+  // Pitch Trail: like a piano roll turned sideways, but only looking back.
+  // A glowing line follows where the sound sits in pitch (low at the bottom,
+  // high at the top) and scrolls left, leaving a trail; the strongest
+  // pitches at each moment leave short glowing dashes, like notes on a roll.
+  // It's the rough pitch from the sound's bands (about two piano keys
+  // each), not exact notes.
+  DRAW.pitchtrail = (v, p, dt) => {
+    const { ctx, w, h, U } = v;
+    const st = v.ptrail || (v.ptrail = { t: 0, pos: 0.5, loud: 0, smp: [] });
+    st.t += dt;
+    const NB = 48, F0 = 0.08, F1 = 0.9;
+    const b = new Float32Array(NB);
+    let sum = 0, wsum = 0, tot = 0;
+    for (let i = 0; i < NB; i++) {
+      b[i] = bandAt(F0 + ((F1 - F0) * i) / (NB - 1)) * p.sensitivity;
+      const q = b[i] * b[i];
+      sum += q * (i / (NB - 1));
+      wsum += q;
+      tot += b[i];
+    }
+    const mean = tot / NB;
+    if (wsum > 1e-4) st.pos += (sum / wsum - st.pos) * Math.min(1, dt * (4 + 6 * (1 - p.smoothing)));
+    st.loud += (Math.min(1, mean * 2.2) - st.loud) * Math.min(1, dt * 8);
+    // the strongest peaks right now
+    const peaks = [];
+    for (let i = 1; i < NB - 1; i++) {
+      if (b[i] > b[i - 1] && b[i] >= b[i + 1] && b[i] > 0.22 && b[i] > mean * 1.35) peaks.push([i / (NB - 1), Math.min(1, b[i])]);
+    }
+    peaks.sort((a, c) => c[1] - a[1]);
+    st.smp.push({ age: 0, y: st.pos, a: st.loud, pk: peaks.slice(0, 4) });
+    const head = w * 0.8, pxs = w * 0.16 * p.speed; // px per second
+    for (const s of st.smp) s.age += dt;
+    while (st.smp.length && head - st.smp[0].age * pxs < -10) st.smp.shift();
+    const yOf = (q) => h * 0.86 - q * h * 0.72 * Math.min(1.2, p.size);
+    ctx.save();
+    ctx.globalCompositeOperation = "lighter";
+    ctx.globalAlpha = A_(1, v);
+    // faint rows, like the keys of a roll
+    for (let r = 0; r <= 24; r++) {
+      const y = yOf(r / 24);
+      ctx.strokeStyle = v.rgba(colorAt(r / 24), r % 4 ? 0.05 : 0.12);
+      ctx.lineWidth = 1;
+      ctx.beginPath();
+      ctx.moveTo(0, y);
+      ctx.lineTo(head + 6 * U, y);
+      ctx.stroke();
+    }
+    // the note dashes
+    const dw = Math.max(2, pxs * dt * 1.6);
+    for (const s of st.smp) {
+      const x = head - s.age * pxs, fade = Math.max(0, 1 - s.age * pxs / head);
+      for (const [q, a] of s.pk) {
+        const c = colorAt(q), y = yOf(q);
+        ctx.fillStyle = v.rgba(c, 0.55 * a * fade * holoShim(st.t, y));
+        ctx.fillRect(x - dw / 2, y - 1.5 * U, dw, 3 * U);
+      }
+    }
+    // the trail line, glowing, brighter where it was loud
+    ctx.lineCap = "round";
+    for (let i = 1; i < st.smp.length; i++) {
+      const s0 = st.smp[i - 1], s1 = st.smp[i];
+      const x0 = head - s0.age * pxs, x1 = head - s1.age * pxs, fade = Math.max(0, 1 - s1.age * pxs / head);
+      const c = colorAt(s1.y), a = (0.25 + 0.75 * s1.a) * fade;
+      ctx.strokeStyle = v.rgba(c, 0.14 * a);
+      ctx.lineWidth = 10 * U;
+      ctx.beginPath();
+      ctx.moveTo(x0, yOf(s0.y));
+      ctx.lineTo(x1, yOf(s1.y));
+      ctx.stroke();
+      ctx.strokeStyle = v.rgba(mix(c, WHITE, 0.3), 0.9 * a);
+      ctx.lineWidth = Math.max(1.5, 2 * U);
+      ctx.stroke();
+    }
+    // the head: a dot with a ring
+    const hy = yOf(st.pos), hc = colorAt(st.pos);
+    v.soft(head, hy, 22 * U, hc, 0.5 + 0.4 * st.loud);
+    ctx.strokeStyle = v.rgba(mix(hc, WHITE, 0.4), 0.8);
+    ctx.lineWidth = 1.5;
+    ctx.beginPath();
+    ctx.arc(head, hy, (6 + 6 * st.loud) * U, 0, Math.PI * 2);
+    ctx.stroke();
+    ctx.restore();
+    holoScan(ctx, 0, yOf(1.05), w, yOf(-0.05) - yOf(1.05), st.t);
   };
 
   // ---------------------------------------------------------------------------
