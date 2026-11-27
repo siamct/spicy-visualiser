@@ -3,7 +3,8 @@ test/song/docs-shots.js):
   docs/screenshots/styles/<style>.jpg   one per style (styles guide)
   docs/screenshots/all-styles.jpg       labelled grid of every style
   docs/screenshots/styles.jpg           README header: styles blending into each other, with the name
-  docs/screenshots/card.png             Marketplace card, same idea, square
+  docs/screenshots/card.png             Marketplace card: solid bar with the icon and name on top
+                                        (like the other Spicy add-ons' cards), styles blending below
   docs/screenshots/panel.png            settings panel tabs side by side
   node test/song/docs-shots.js && python tools/make-doc-images.py"""
 import os
@@ -14,10 +15,10 @@ SRC = os.path.join(ROOT, "test", "out")
 DOCS = os.path.join(ROOT, "docs", "screenshots")
 
 GROUPS = [
-    ("Bars & meters", [("monstercat", "Monstercat"), ("mirror", "Mirror Bars"), ("retro", "Retro Bars"), ("led", "LED Wall"), ("ascii", "ASCII"), ("vu", "VU Meters")]),
+    ("Bars & meters", [("monstercat", "Monstercat"), ("mirror", "Mirror Bars"), ("retro", "Retro Bars"), ("led", "LED Wall"), ("ascii", "ASCII"), ("vu", "VU Meters"), ("scope", "Oscilloscope")]),
     ("Circles", [("radial", "Radial Bars"), ("ncs", "Sphere"), ("sub", "Subwoofer"), ("trap", "Trap"), ("tunnel", "Starfield Tunnel")]),
-    ("On the beat", [("geometric", "Geometric"), ("bauhaus", "Bauhaus")]),
-    ("Liquid colour", [("plasma", "Plasma"), ("ledplasma", "LED Plasma"), ("oil", "Oil Slick"), ("chrome", "Liquid Chrome"), ("dnb", "Liquid")]),
+    ("On the beat", [("drums", "Drums"), ("geometric", "Geometric"), ("bauhaus", "Bauhaus")]),
+    ("Liquid colour", [("plasma", "Plasma"), ("ledplasma", "LED Plasma"), ("oil", "Oil Slick"), ("chrome", "Liquid Chrome"), ("dnb", "Liquid"), ("kaleido", "Kaleidoscope")]),
     ("Sky & light", [("aurora", "Aurora"), ("galaxy", "Galaxy"), ("ribbon", "Ribbon"), ("ombre", "Ombre"), ("warp", "Warp")]),
     ("Textures", [("prism", "Graphite"), ("rain", "Rain on Glass"), ("smoke", "Smoke"), ("lava", "Lava Lamp"), ("bubbles", "Bubbles")]),
     ("3D", [("neuro", "Neuro Mesh"), ("particles", "Particles")]),
@@ -115,9 +116,18 @@ FOCUS = {"monstercat": 0.3, "aurora": 0.45, "ncs": 0.5, "aurora": 0.5, "oil": 0.
 # 3. README header
 head = blend(["monstercat", "ncs", "galaxy", "aurora", "oil"], 1760, 440, FOCUS)
 title(head, 96, 30, "A music visualiser for Spicy Lyrics").save(os.path.join(DOCS, "styles.jpg"), quality=88)
-# 4. Marketplace card (square)
-card = blend(["monstercat", "ncs", "aurora", "oil"], 1000, 1000, FOCUS)
-title(card, 100, 34, "Music visualiser for Spicy Lyrics").resize((600, 600), Image.LANCZOS).save(os.path.join(DOCS, "card.png"), optimize=True)
+# 4. Marketplace card (square): coloured bar on top with the icon and name
+S, BH, PINK = 1000, 190, (232, 53, 111)
+card = Image.new("RGB", (S, S), BG)
+card.paste(blend(["monstercat", "ncs", "aurora", "oil"], S, S - BH, FOCUS), (0, BH))
+d = ImageDraw.Draw(card)
+d.rectangle((0, 0, S, BH), fill=PINK)
+for i, hh in enumerate((52, 88, 64, 104, 40)):
+    x = 72 + i * 24
+    d.rounded_rectangle((x, BH // 2 + 52 - hh, x + 15, BH // 2 + 52), 6, fill=(255, 255, 255))
+f = font(False, 96)
+d.text((232, BH // 2), "Spicy Visualiser", fill=(255, 255, 255), font=f, anchor="lm")
+card.resize((600, 600), Image.LANCZOS).save(os.path.join(DOCS, "card.png"), optimize=True)
 
 # 5. settings panel tabs side by side
 tabs = [Image.open(os.path.join(SRC, f"doc-panel-{t}.png")).convert("RGB") for t in ("style", "look", "sound", "more")]

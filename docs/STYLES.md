@@ -52,11 +52,17 @@ A terminal-style spectrum made of characters, with falling peak markers.
 ### VU Meters
 ![VU Meters](screenshots/styles/vu.jpg)
 
-A pair of old hi-fi VU meters filling the screen, drawn faint so the lyrics stay readable:
-- the left one shows the bass, the right one the mids and highs;
-- the needles are a little sluggish and overshoot before settling, like real ones (**Smoothing** sets how sluggish);
-- a red **Peak** lamp lights when a needle goes into the red, and a faint glass glare sits over each face;
-- **Faces: Cream** (warm backlit, default) or **Dark** (black, with the scale and needle glowing in the album's colours).
+Two looks (**Look**):
+- **Night hi-fi** (default): two needle meters on an amp in a dark room. Only the faces glow warm amber from behind, with the print and needles as dark silhouettes. Left is the bass, right the mids and highs. The needles are a little sluggish and swing past before settling (**Smoothing** sets how sluggish), and a red **Peak** lamp lights when a needle goes into the red.
+- **LED**: studio LED ladders (green, yellow, red) along the bottom, one per part of the spectrum, with a peak dot that hangs for a moment, then drops.
+
+### Oscilloscope
+![Oscilloscope](screenshots/styles/scope.jpg)
+
+A glowing line tracing the sound like an old scope, over a faint grid:
+- quiet parts are a calm wave; as the music gets busy the trace curls round into looping figure shapes;
+- the line glows on for a moment after it passes, like a real scope screen;
+- **Colours: Classic** (default) is green phosphor; the other colour modes use those colours.
 
 ---
 
@@ -101,6 +107,15 @@ Flying down a gently bending tunnel of glowing rings, with stars streaming past:
 ## On the beat
 
 These styles follow the song's beat more than the raw spectrum, so they keep a steady rhythm.
+
+### Drums
+![Drums](screenshots/styles/drums.jpg)
+
+Only the drum hits, nothing else, in the album's colours. Four looks (**Look**):
+- **Pulses**: two big soft shapes, kick on the left (a deep, heavy thump), snare on the right (a sharp, quick snap);
+- **Bars**: two thick bars that shoot up on each hit, swing a little past and fall back smoothly (**Smoothing** sets how loose they are);
+- **Pads**: four drum-machine pads (kick, snare, hi-hat, bass) that light up and fade as each is hit;
+- **Waves**: each kick sends a big soft ring up from the bottom, each snare a thinner, faster ring down from the top.
 
 ### Geometric
 ![Geometric](screenshots/styles/geometric.jpg)
@@ -147,6 +162,14 @@ A sheet of glossy black liquid metal:
 ![Liquid](screenshots/styles/dnb.jpg)
 
 A flowing three-strand bass wave that pumps on kicks, with speed streaks racing past and a flash on every snare. Made with drum & bass in mind.
+
+### Kaleidoscope
+![Kaleidoscope](screenshots/styles/kaleido.jpg)
+
+Mirrored trails of colour that keep zooming out from the middle, warping and smearing with the music, like the old media-player visualisers:
+- the spectrum drops new colour in, mirrored round the middle;
+- the bass makes it zoom and swirl faster, kicks flash it;
+- darker in the middle so the lyrics stay readable.
 
 ---
 

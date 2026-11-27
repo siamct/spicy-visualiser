@@ -26,6 +26,9 @@
     ["mirror", "Mirror Bars"],
     ["retro", "Retro Bars"],
     ["vu", "VU Meters"],
+    ["scope", "Oscilloscope"],
+    ["kaleido", "Kaleidoscope"],
+    ["drums", "Drums"],
     ["plasma", "Plasma"],
     ["ribbon", "Ribbon"],
     ["rain", "Rain on Glass"],
@@ -53,6 +56,9 @@
   ];
   // Little pictures for the style picker.
   const STYLE_ICON = {
+    drums: '<g fill="none" stroke="currentColor" stroke-width="1.6"><ellipse cx="12" cy="9" rx="8" ry="3"/><path d="M4 9v6c0 1.7 3.6 3 8 3s8-1.3 8-3V9"/><path d="M6 4l4 3M18 4l-4 3" stroke-linecap="round"/></g>',
+    scope: '<g fill="none" stroke="currentColor"><rect x="2.5" y="4.5" width="19" height="15" rx="2" stroke-width="1.5"/><path d="M4.5 12c1.5 0 1.8-4 3.2-4s1.7 8 3.3 8 1.8-6 3.3-6 1.6 3 3 3 1.2-1 2.2-1" stroke-width="1.6" stroke-linecap="round"/></g>',
+    kaleido: '<g fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"><path d="M12 3l2.5 6.5L21 12l-6.5 2.5L12 21l-2.5-6.5L3 12l6.5-2.5z"/><path d="M12 8.5l1 2.5 2.5 1-2.5 1-1 2.5-1-2.5-2.5-1 2.5-1z"/></g>',
     vu: '<g fill="none" stroke="currentColor" stroke-linecap="round"><rect x="2.5" y="5" width="19" height="14" rx="1.5" stroke-width="1.5"/><path d="M6 13.5a7 7 0 0 1 12 0" stroke-width="1.4"/><path d="M12 17l3.5-6.5" stroke-width="1.6"/></g>',
     particles: '<g stroke="currentColor" stroke-width="1" opacity=".55"><path d="M5 7l6 4 7-5M11 11l-4 7M11 11l7 5"/></g><circle cx="5" cy="7" r="2"/><circle cx="11" cy="11" r="2.4"/><circle cx="18" cy="6" r="1.6"/><circle cx="7" cy="18" r="1.7"/><circle cx="18" cy="16" r="2"/>',
     monstercat: '<rect x="3" y="11" width="2.5" height="9" rx=".6"/><rect x="7" y="6" width="2.5" height="14" rx=".6"/><rect x="11" y="9" width="2.5" height="11" rx=".6"/><rect x="15" y="4" width="2.5" height="16" rx=".6"/><rect x="19" y="13" width="2.5" height="7" rx=".6"/>',
@@ -90,12 +96,12 @@
   // Styles that still look right on Spotify's data (it has loudness and
   // beats, not a real spectrum). With that source they're listed first and
   // the rest fold away under "More styles".
-  const SONG_DATA_OK = new Set(["particles", "plasma", "ledplasma", "warp", "dnb", "ribbon", "rain", "lava", "smoke", "tunnel", "aurora", "chrome", "oil", "galaxy", "prism", "ombre", "bubbles", "geometric", "bauhaus", "sub", "off"]);
+  const SONG_DATA_OK = new Set(["drums", "particles", "plasma", "ledplasma", "warp", "dnb", "ribbon", "rain", "lava", "smoke", "tunnel", "aurora", "chrome", "oil", "galaxy", "prism", "ombre", "bubbles", "geometric", "bauhaus", "sub", "off"]);
   const STYLE_GROUPS = [
-    ["Bars & meters", ["monstercat", "mirror", "retro", "led", "ascii", "vu"]],
+    ["Bars & meters", ["monstercat", "mirror", "retro", "led", "ascii", "vu", "scope"]],
     ["Circles", ["radial", "ncs", "sub", "trap", "tunnel"]],
-    ["On the beat", ["geometric", "bauhaus"]],
-    ["Liquid colour", ["plasma", "ledplasma", "oil", "chrome", "dnb"]],
+    ["On the beat", ["drums", "geometric", "bauhaus"]],
+    ["Liquid colour", ["plasma", "ledplasma", "oil", "chrome", "dnb", "kaleido"]],
     ["Sky & light", ["aurora", "galaxy", "ribbon", "ombre", "warp"]],
     ["Textures", ["prism", "rain", "smoke", "lava", "bubbles"]],
     ["3D", ["neuro", "particles"]],
@@ -115,10 +121,11 @@
     neuroTwist: ["neuro"],
     neuroMirror: ["neuro"],
     vuFace: ["vu"],
+    drumLook: ["drums"],
     circleAt: ["trap", "radial", "ncs", "sub"],
-    speed: ["trap", "retro", "neuro", "ribbon", "rain", "lava", "smoke", "tunnel", "aurora", "chrome", "oil", "particles", "monstercat", "ncs", "radial", "plasma", "warp", "dnb", "ascii", "led", "ledplasma", "galaxy", "prism", "ombre", "bubbles"],
-    bassBoost: ["particles", "monstercat", "radial", "mirror", "ncs", "warp", "plasma", "dnb", "ascii", "geometric", "bauhaus", "led", "ledplasma", "sub", "trap", "retro", "neuro", "ribbon", "rain", "lava", "smoke", "tunnel", "aurora", "chrome", "oil", "galaxy", "prism", "ombre", "bubbles"],
-    smoothing: ["particles", "monstercat", "radial", "mirror", "ncs", "warp", "plasma", "dnb", "ascii", "geometric", "bauhaus", "led", "ledplasma", "sub", "trap", "retro", "neuro", "aurora", "vu"],
+    speed: ["drums", "scope", "kaleido", "trap", "retro", "neuro", "ribbon", "rain", "lava", "smoke", "tunnel", "aurora", "chrome", "oil", "particles", "monstercat", "ncs", "radial", "plasma", "warp", "dnb", "ascii", "led", "ledplasma", "galaxy", "prism", "ombre", "bubbles"],
+    bassBoost: ["scope", "kaleido", "particles", "monstercat", "radial", "mirror", "ncs", "warp", "plasma", "dnb", "ascii", "geometric", "bauhaus", "led", "ledplasma", "sub", "trap", "retro", "neuro", "ribbon", "rain", "lava", "smoke", "tunnel", "aurora", "chrome", "oil", "galaxy", "prism", "ombre", "bubbles"],
+    smoothing: ["particles", "monstercat", "radial", "mirror", "ncs", "warp", "plasma", "dnb", "ascii", "geometric", "bauhaus", "led", "ledplasma", "sub", "trap", "retro", "neuro", "aurora", "vu", "drums"],
   };
 
   const STYLE_BASE = {
@@ -140,7 +147,8 @@
     neuroLine: "rough", // Ridges look: rough (a little jagged) or smooth
     neuroTwist: 0, // Neuro Mesh: how much it rolls along its length (0 = still)
     neuroMirror: "off",
-    vuFace: "cream", // VU Meters: cream (backlit) or dark faces
+    drumLook: "pulses", // Drums look: pulses | bars | pads | waves
+    vuFace: "night", // VU Meters look: night (backlit needle meters) or led (LED ladders)
     circleAt: "middle", // circle styles: middle of the view, or round the album art
     autoRange: 0.6, // 0 = raw levels, 1 = each band fully auto-ranged
     beatEvery: "1", // beat-stepping styles change every 1, 2, 4 or 8 beats
@@ -171,6 +179,9 @@
     ombre: { shake: 0 },
     bubbles: { shake: 0, colorMode: "classic" },
     vu: { shake: 0 },
+    scope: { shake: 0, colorMode: "classic" },
+    kaleido: { shake: 0 },
+    drums: { shake: 0 },
     led: { colorMode: "classic", shake: 0 },
     ledplasma: { shake: 0 },
     monstercat: { barCount: 63, bassBoost: 0.8, smoothing: 0.45, beatEvery: "4" },
@@ -2427,7 +2438,7 @@ void main() {
   float n = fbm(p * 1.5 + (2. + 1.2 * uBass) * q + vec2(-zz * 0.6, zz * 0.4));
   vec3 col = mix(uC0, uC1, smoothstep(0.3, 0.8, q.x));
   col = mix(col, uC2, smoothstep(0.5, 0.9, q.y) * 0.7);
-  col *= smoothstep(0.35, 0.95, n) * (0.3 + 0.3 * uE + 0.55 * uBass);
+  col *= smoothstep(0.35, 0.95, n) * (0.3 + 0.25 * uE + 0.55 * uBass + 0.4 * uKick);
   col *= 0.55 + 0.45 * smoothstep(0.2, 0.6, fbm(p * 3. - q * 2.)); // darker dust lanes
   for (int i = 0; i < 4; i++) {
     float fi = float(i);
@@ -2445,7 +2456,7 @@ void main() {
     st.e = (st.e || 0) + (shared.energy - (st.e || 0)) * Math.min(1, dt * 0.8);
     st.z += dt * (0.14 + 0.3 * st.e * st.e + 0.2 * st.lift) * p.speed;
     const pal = easePal(st, beatSteps(st, p), dt, 0.6);
-    fxDraw(v, "galaxy", GALAXY_FS, { uT: st.T, uE: st.e, uBass: st.lift, uKick: st.flash, uZ: st.z, uC0: rgb1(pal[0]), uC1: rgb1(pal[1]), uC2: rgb1(pal[2]) }, 1);
+    fxDraw(v, "galaxy", GALAXY_FS, { uT: st.T, uE: st.e, uBass: Math.min(1, 0.45 * st.lift + st.punch), uKick: st.flash, uZ: st.z, uC0: rgb1(pal[0]), uC1: rgb1(pal[1]), uC2: rgb1(pal[2]) }, 1);
   };
 
   // ---------------------------------------------------------------------------
@@ -2533,24 +2544,25 @@ void main() {
   };
 
   // ---------------------------------------------------------------------------
-  // VU Meters: a pair of old hi-fi VU meters filling the screen, drawn faint
-  // so the lyrics stay readable. The left one shows the low end (bass), the
-  // right one the mids and highs. The needles are a little sluggish and
-  // overshoot before settling, like real ones (Smoothing sets how sluggish);
-  // a red lamp lights when a needle goes into the red. Look: Cream (warm
-  // backlit faces, default) or Dark (black faces, scale and needle glowing
-  // in the album's colours). A faint glass glare sits over each face.
+  // VU Meters, two looks (the Look setting):
+  //  - Night hi-fi (default): two needle meters on an amp in a dark room;
+  //    only the faces glow warm amber from behind, the print and needles
+  //    stand out as dark silhouettes, and a little light spills round them.
+  //    Left = bass, right = mids and highs. The needles are a little
+  //    sluggish and overshoot before settling (Smoothing sets how sluggish);
+  //    a red lamp lights when a needle goes into the red.
+  //  - LED: studio LED ladders (green, yellow, red) along the bottom, one
+  //    per part of the spectrum, with a peak dot that hangs, then drops.
   const VU_DB = [-20, -10, -7, -5, -3, -2, -1, 0, 1, 2, 3];
   const vuPos = (db) => (Math.pow(10, db / 20) - 0.1) / (Math.pow(10, 3 / 20) - 0.1); // 0..1 along the scale
   DRAW.vu = (v, p, dt) => {
+    if (p.vuFace === "led") return drawLedMeters(v, p, dt);
     const { ctx, w, h } = v;
     const st = v.vu || (v.vu = { m: [{ a: 0, v: 0, lamp: 0 }, { a: 0, v: 0, lamp: 0 }] });
-    const dark = p.vuFace === "dark";
     const sens = p.sensitivity;
     let lo = 0, hi = 0;
     for (let i = 0; i < 8; i++) { lo += bandAt((i / 7) * 0.25); hi += bandAt(0.3 + (i / 7) * 0.6); }
     const want = [Math.min(1.1, (lo / 8) * 1.25 * sens), Math.min(1.1, (hi / 8) * 1.9 * sens)];
-    // needle: a spring that overshoots a little, then settles
     const sm = Math.max(0, Math.min(1, p.smoothing));
     const k = 140 - 90 * sm, damp = 2 * Math.sqrt(k) * 0.42;
     const red = vuPos(0);
@@ -2558,17 +2570,15 @@ void main() {
       const m = st.m[i];
       m.v += (k * (want[i] - m.a) - damp * m.v) * Math.min(dt, 0.05);
       m.a += m.v * Math.min(dt, 0.05);
-      if (m.a > 1.12) { m.a = 1.12; m.v = -Math.abs(m.v) * 0.3; } // hits the end stop
+      if (m.a > 1.12) { m.a = 1.12; m.v = -Math.abs(m.v) * 0.3; }
       if (m.a < -0.04) { m.a = -0.04; m.v = Math.abs(m.v) * 0.2; }
       m.lamp = m.a > red ? 1 : m.lamp * Math.exp(-dt * 3);
     }
-
-    // layout: two faces side by side, as big as fits
-    const gap = w * 0.03;
-    const fw = Math.min((w * 0.94 - gap) / 2, h * 0.8 * 1.55), fh = fw / 1.55;
+    const gap = w * 0.04;
+    const fw = Math.min((w * 0.9 - gap) / 2, h * 0.62 * 1.55), fh = fw / 1.55;
     const y0 = (h - fh) / 2, x0 = (w - fw * 2 - gap) / 2;
-    const ink = dark ? colorAt(0.3) : [30, 26, 22];
-    const inkRed = dark ? mix(colorAt(0.9), [255, 60, 50], 0.5) : [196, 40, 30];
+    const glow = 0.75 + 0.25 * Math.min(1, shared.energy * 1.3); // the lamps behind brighten a touch when it's loud
+    const ink = [34, 20, 8], inkRed = [120, 22, 12];
     const path = (x, y, ww, hh, r) => {
       ctx.beginPath();
       ctx.moveTo(x + r, y);
@@ -2580,40 +2590,43 @@ void main() {
     };
     ctx.save();
     ctx.globalCompositeOperation = "source-over";
-    ctx.globalAlpha = A_(dark ? 0.75 : 0.3, v);
+    const base = A_(0.8, v);
     for (let i = 0; i < 2; i++) {
       const m = st.m[i];
       const fx = x0 + i * (fw + gap), cx = fx + fw / 2;
-      const px = cx, py = y0 + fh * 1.25; // needle pivot, hidden under the bottom bezel
-      const R = fh * 0.95, A = 0.72; // scale radius and half-angle
+      const px = cx, py = y0 + fh * 1.25;
+      const R = fh * 0.95, A = 0.72;
       const ang = (t) => -Math.PI / 2 - A + 2 * A * t;
-      // frame and face
-      ctx.fillStyle = dark ? "rgb(6,6,8)" : "rgb(40,34,28)";
-      path(fx - fw * 0.025, y0 - fw * 0.025, fw * 1.05, fh + fw * 0.05, fw * 0.04);
+      // warm light spilling round the meter
+      ctx.globalAlpha = base * 0.5 * glow;
+      const sp = ctx.createRadialGradient(cx, y0 + fh * 0.6, fh * 0.2, cx, y0 + fh * 0.6, fw * 0.85);
+      sp.addColorStop(0, "rgba(255,150,50,0.35)");
+      sp.addColorStop(1, "rgba(255,150,50,0)");
+      ctx.fillStyle = sp;
+      ctx.fillRect(cx - fw, y0 - fh * 0.6, fw * 2, fh * 2.2);
+      ctx.globalAlpha = base;
+      // black bezel, then the backlit face
+      ctx.fillStyle = "rgb(8,6,5)";
+      path(fx - fw * 0.03, y0 - fw * 0.03, fw * 1.06, fh + fw * 0.06, fw * 0.04);
       ctx.fill();
       path(fx, y0, fw, fh, fw * 0.02);
       ctx.save();
       ctx.clip();
-      if (dark) {
-        ctx.fillStyle = "rgb(12,12,15)";
-        ctx.fillRect(fx, y0, fw, fh);
-      } else {
-        const g = ctx.createRadialGradient(cx, y0 + fh * 0.75, fh * 0.1, cx, y0 + fh * 0.6, fw * 0.75);
-        g.addColorStop(0, "rgb(255,236,190)");
-        g.addColorStop(0.6, "rgb(236,214,160)");
-        g.addColorStop(1, "rgb(170,140,90)");
-        ctx.fillStyle = g;
-        ctx.fillRect(fx, y0, fw, fh);
-      }
-      // the scale: a thin arc, a thick red stretch from 0 to +3, ticks and numbers
+      const g = ctx.createRadialGradient(cx, y0 + fh * 0.78, fh * 0.05, cx, y0 + fh * 0.7, fw * 0.62);
+      g.addColorStop(0, `rgb(${Math.round(255 * glow)},${Math.round(196 * glow)},${Math.round(110 * glow)})`);
+      g.addColorStop(0.45, `rgb(${Math.round(225 * glow)},${Math.round(140 * glow)},${Math.round(50 * glow)})`);
+      g.addColorStop(1, "rgb(60,28,8)");
+      ctx.fillStyle = g;
+      ctx.fillRect(fx, y0, fw, fh);
+      // scale
       ctx.lineCap = "butt";
       ctx.strokeStyle = v.rgba(ink, 1);
-      ctx.lineWidth = Math.max(1, fh * 0.008);
+      ctx.lineWidth = Math.max(1, fh * 0.009);
       ctx.beginPath();
       ctx.arc(px, py, R, ang(0), ang(red));
       ctx.stroke();
       ctx.strokeStyle = v.rgba(inkRed, 1);
-      ctx.lineWidth = Math.max(2, fh * 0.03);
+      ctx.lineWidth = Math.max(2, fh * 0.032);
       ctx.beginPath();
       ctx.arc(px, py, R + fh * 0.012, ang(red), ang(1));
       ctx.stroke();
@@ -2624,7 +2637,7 @@ void main() {
         const a = ang(vuPos(db)), c = Math.cos(a), s = Math.sin(a);
         const col = db > 0 ? inkRed : ink;
         ctx.strokeStyle = v.rgba(col, 1);
-        ctx.lineWidth = Math.max(1, fh * 0.01);
+        ctx.lineWidth = Math.max(1, fh * 0.011);
         ctx.beginPath();
         ctx.moveTo(px + c * R, py + s * R);
         ctx.lineTo(px + c * (R + fh * 0.06), py + s * (R + fh * 0.06));
@@ -2632,8 +2645,7 @@ void main() {
         ctx.fillStyle = v.rgba(col, 1);
         ctx.fillText(String(Math.abs(db)), px + c * (R + fh * 0.13), py + s * (R + fh * 0.13));
       }
-      // small in-between ticks
-      ctx.strokeStyle = v.rgba(ink, 0.8);
+      ctx.strokeStyle = v.rgba(ink, 0.85);
       ctx.lineWidth = Math.max(1, fh * 0.006);
       ctx.beginPath();
       for (let j = 0; j <= 20; j++) {
@@ -2647,49 +2659,360 @@ void main() {
       ctx.fillText("VU", cx, y0 + fh * 0.66);
       ctx.font = `600 ${Math.round(fh * 0.05)}px "Helvetica Neue", Arial, sans-serif`;
       ctx.fillText(i ? "HIGH" : "LOW", cx, y0 + fh * 0.77);
-      ctx.fillStyle = v.rgba(ink, 0.8);
-      ctx.fillText("-", fx + fw * 0.1, y0 + fh * 0.62);
-      ctx.fillStyle = v.rgba(inkRed, 1);
-      ctx.fillText("+", fx + fw * 0.9, y0 + fh * 0.62);
-      // the needle
+      // needle: a dark silhouette
       const na = ang(Math.max(-0.04, Math.min(1.12, m.a)));
-      const nc = dark ? mix(colorAt(0.6), [255, 255, 255], 0.5) : [20, 18, 16];
-      ctx.strokeStyle = v.rgba(nc, 1);
+      ctx.strokeStyle = "rgb(16,10,6)";
       ctx.lineCap = "round";
-      ctx.lineWidth = Math.max(1.2, fh * 0.012);
-      if (dark) { ctx.shadowColor = v.rgba(colorAt(0.6), 0.9); ctx.shadowBlur = fh * 0.04; }
+      ctx.lineWidth = Math.max(1.4, fh * 0.013);
       ctx.beginPath();
       ctx.moveTo(px + Math.cos(na) * fh * 0.3, py + Math.sin(na) * fh * 0.3);
       ctx.lineTo(px + Math.cos(na) * (R + fh * 0.05), py + Math.sin(na) * (R + fh * 0.05));
       ctx.stroke();
-      ctx.shadowBlur = 0;
       // bottom bezel over the pivot
-      ctx.fillStyle = dark ? "rgb(4,4,6)" : "rgb(52,44,36)";
+      ctx.fillStyle = "rgb(12,8,6)";
       ctx.fillRect(fx, y0 + fh * 0.86, fw, fh * 0.14);
-      // peak lamp
-      const lx = fx + fw * 0.88, ly = y0 + fh * 0.12, lr = fh * 0.035;
+      // shadow round the edges of the face (light falls off)
+      const vg = ctx.createRadialGradient(cx, y0 + fh * 0.6, fw * 0.3, cx, y0 + fh * 0.6, fw * 0.75);
+      vg.addColorStop(0, "rgba(0,0,0,0)");
+      vg.addColorStop(1, "rgba(0,0,0,0.55)");
+      ctx.fillStyle = vg;
+      ctx.fillRect(fx, y0, fw, fh);
+      // glass glare
+      const gg = ctx.createLinearGradient(fx, y0, fx + fw * 0.45, y0 + fh * 0.7);
+      gg.addColorStop(0, "rgba(255,240,220,0.12)");
+      gg.addColorStop(0.5, "rgba(255,240,220,0.03)");
+      gg.addColorStop(0.51, "rgba(255,240,220,0)");
+      ctx.fillStyle = gg;
+      ctx.fillRect(fx, y0, fw, fh);
+      ctx.restore();
+      // peak lamp on the amp, just under the meter
+      const lx = fx + fw * 0.92, ly = y0 + fh + fw * 0.08, lr = fh * 0.03;
       if (m.lamp > 0.02) {
-        const g = ctx.createRadialGradient(lx, ly, 0, lx, ly, lr * 5);
-        g.addColorStop(0, `rgba(255,70,40,${0.6 * m.lamp})`);
-        g.addColorStop(1, "rgba(255,70,40,0)");
-        ctx.fillStyle = g;
-        ctx.fillRect(lx - lr * 5, ly - lr * 5, lr * 10, lr * 10);
+        const lg = ctx.createRadialGradient(lx, ly, 0, lx, ly, lr * 6);
+        lg.addColorStop(0, `rgba(255,60,30,${0.7 * m.lamp})`);
+        lg.addColorStop(1, "rgba(255,60,30,0)");
+        ctx.fillStyle = lg;
+        ctx.fillRect(lx - lr * 6, ly - lr * 6, lr * 12, lr * 12);
       }
-      ctx.fillStyle = `rgb(${Math.round(90 + 165 * m.lamp)},${Math.round(20 + 70 * m.lamp)},${Math.round(16 + 40 * m.lamp)})`;
+      ctx.fillStyle = `rgb(${Math.round(70 + 185 * m.lamp)},${Math.round(14 + 60 * m.lamp)},${Math.round(10 + 30 * m.lamp)})`;
       ctx.beginPath();
       ctx.arc(lx, ly, lr, 0, Math.PI * 2);
       ctx.fill();
       ctx.font = `600 ${Math.round(fh * 0.04)}px "Helvetica Neue", Arial, sans-serif`;
-      ctx.fillStyle = v.rgba(ink, 0.8);
-      ctx.fillText("PEAK", lx, ly + lr * 2.4);
-      // glass glare: a soft diagonal sheen across the top
-      const gg = ctx.createLinearGradient(fx, y0, fx + fw * 0.45, y0 + fh * 0.7);
-      gg.addColorStop(0, "rgba(255,255,255,0.18)");
-      gg.addColorStop(0.5, "rgba(255,255,255,0.05)");
-      gg.addColorStop(0.51, "rgba(255,255,255,0)");
-      ctx.fillStyle = gg;
-      ctx.fillRect(fx, y0, fw, fh);
-      ctx.restore();
+      ctx.textAlign = "right";
+      ctx.fillStyle = "rgba(200,170,130,0.55)";
+      ctx.fillText("PEAK", lx - lr * 2, ly);
+    }
+    ctx.restore();
+  };
+
+  // LED level meters: ladders of lit segments, green -> yellow -> red.
+  function drawLedMeters(v, p, dt) {
+    const { ctx, w, h } = v;
+    const N = 8, SEG = 22;
+    const st = v.ledm || (v.ledm = { lv: new Float32Array(N), pk: new Float32Array(N), hold: new Float32Array(N) });
+    const sens = p.sensitivity;
+    const fall = 1.5 + 3 * (1 - p.smoothing);
+    for (let i = 0; i < N; i++) {
+      let x = 0;
+      for (let j = 0; j < 4; j++) x += bandAt((i + j / 4) / N * 0.92);
+      x = Math.min(1, (x / 4) * 1.35 * sens);
+      st.lv[i] = x > st.lv[i] ? x : Math.max(x, st.lv[i] - dt * fall * 0.5);
+      if (st.lv[i] >= st.pk[i]) { st.pk[i] = st.lv[i]; st.hold[i] = 0.8; }
+      else if ((st.hold[i] -= dt) < 0) st.pk[i] = Math.max(st.lv[i], st.pk[i] - dt * 0.6);
+    }
+    const H = h * 0.42, colW = Math.min(w * 0.06, 70), gap = colW * 0.55;
+    const totalW = N * colW + (N - 1) * gap;
+    const x0 = (w - totalW) / 2, yb = h - h * 0.07;
+    const sh = H / SEG, segH = sh * 0.72;
+    const colOf = (s) => (s >= SEG - 3 ? [255, 50, 40] : s >= SEG - 7 ? [255, 200, 40] : [60, 230, 90]);
+    ctx.save();
+    ctx.globalCompositeOperation = "lighter";
+    for (let s = 0; s < SEG; s++) {
+      const c = colOf(s);
+      const lit = new Path2D(), off = new Path2D();
+      for (let i = 0; i < N; i++) {
+        const on = (s + 0.5) / SEG <= st.lv[i];
+        const isPk = Math.min(SEG - 1, Math.floor(st.pk[i] * SEG)) === s && st.pk[i] > 0.04;
+        const r = (on || isPk ? lit : off);
+        r.rect(x0 + i * (colW + gap), yb - (s + 1) * sh + (sh - segH) / 2, colW, segH);
+      }
+      ctx.fillStyle = v.rgba(c, 0.07);
+      ctx.fill(off);
+      ctx.shadowColor = v.rgba(c, 0.9);
+      ctx.shadowBlur = sh * 0.9;
+      ctx.fillStyle = v.rgba(mix(c, [255, 255, 255], 0.15), 0.9);
+      ctx.fill(lit);
+      ctx.shadowBlur = 0;
+    }
+    ctx.restore();
+  }
+
+  // ---------------------------------------------------------------------------
+  // Oscilloscope: a glowing line tracing the sound like an old scope, with a
+  // faint grid. Quiet parts are a calm wave; as it gets busy the trace
+  // curls round into looping figure shapes. The phosphor glows on for a
+  // moment after the beam has passed. Colours: Classic = green phosphor
+  // (default); other colour modes use those colours.
+  DRAW.scope = (v, p, dt, t) => {
+    const { ctx, w, h, U } = v;
+    let st = v.scope;
+    if (!st || st.w !== w || st.h !== h) {
+      const c = document.createElement("canvas");
+      c.width = Math.max(2, Math.round(w)); c.height = Math.max(2, Math.round(h));
+      st = v.scope = { w, h, c, g: c.getContext("2d"), ph: new Float32Array(12), xy: 0 };
+    }
+    const g = st.g, e = shared.energy, bass = shared.bassPunch || 0, sp = p.speed;
+    const col = p.colorMode === "classic" ? [90, 255, 140] : colorAt(0.5);
+    // phosphor afterglow: what was drawn fades out over a fraction of a second
+    g.globalCompositeOperation = "destination-out";
+    g.fillStyle = `rgba(0,0,0,${Math.min(1, dt * 16)})`;
+    g.fillRect(0, 0, st.c.width, st.c.height);
+    g.globalCompositeOperation = "lighter";
+    // the signal: a few tones whose strength comes from the spectrum
+    const K = 7;
+    const amp = new Float32Array(K);
+    for (let k = 0; k < K; k++) {
+      amp[k] = Math.pow(bandAt((k / K) * 0.85), 1.3) / (1 + k * 0.35);
+      st.ph[k] += dt * sp * (0.4 + k * 0.23) * (0.6 + e);
+    }
+    // busy music (lots of mids/highs) curls it into figure shapes
+    let busy = 0;
+    for (let k = 3; k < K; k++) busy += amp[k] * (1 + k * 0.35);
+    st.xy += (Math.min(0.75, busy * 0.8 * p.sensitivity) - st.xy) * Math.min(1, dt * 1.5);
+    const cx = w / 2, cy = h / 2, A = Math.min(w, h) * 0.3 * p.size * p.sensitivity;
+    const NP = 700;
+    const pts = new Float32Array(NP * 2);
+    for (let i = 0; i < NP; i++) {
+      const s = i / (NP - 1);
+      let y = 0, x2 = 0;
+      for (let k = 0; k < K; k++) {
+        const f = (k + 1) * 2;
+        y += amp[k] * Math.sin(f * Math.PI * 2 * s + st.ph[k]);
+        x2 += amp[k] * Math.cos((f + 1) * Math.PI * 2 * s + st.ph[k] * 1.3);
+      }
+      const xLine = (s - 0.5) * w * 0.86;
+      const x = xLine * (1 - st.xy) + x2 * A * 1.3 * st.xy;
+      pts[i * 2] = cx + x;
+      pts[i * 2 + 1] = cy - y * A * (1.4 - 0.4 * st.xy) - 0;
+    }
+    const line = (width, a) => {
+      g.strokeStyle = v.rgba(col, a);
+      g.lineWidth = width;
+      g.beginPath();
+      g.moveTo(pts[0], pts[1]);
+      for (let i = 1; i < NP; i++) g.lineTo(pts[i * 2], pts[i * 2 + 1]);
+      g.stroke();
+    };
+    g.lineJoin = "round";
+    g.lineCap = "round";
+    line(Math.max(4, U * 7), 0.07 + 0.06 * bass);
+    line(Math.max(2, U * 3), 0.16);
+    line(Math.max(1, U * 1.3), 0.75 + 0.25 * Math.min(1, shared.kick));
+    // faint grid, like the scope's screen
+    ctx.save();
+    ctx.globalCompositeOperation = "lighter";
+    ctx.strokeStyle = v.rgba(col, 0.06);
+    ctx.lineWidth = 1;
+    ctx.beginPath();
+    const gs = Math.min(w, h) / 8;
+    for (let x = cx % gs; x < w; x += gs) { ctx.moveTo(x, 0); ctx.lineTo(x, h); }
+    for (let y = cy % gs; y < h; y += gs) { ctx.moveTo(0, y); ctx.lineTo(w, y); }
+    ctx.stroke();
+    ctx.globalAlpha = A_(1, v);
+    ctx.drawImage(st.c, 0, 0, w, h);
+    ctx.restore();
+  };
+
+  // ---------------------------------------------------------------------------
+  // Kaleidoscope: mirrored trails of colour that keep zooming out from the
+  // middle, warping and smearing with the music, like the old media-player
+  // visualisers. The spectrum drops new colour in (mirrored round the
+  // middle), the bass makes it zoom and swirl faster, kicks flash it.
+  // Darker in the middle so the lyrics stay readable.
+  DRAW.kaleido = (v, p, dt, t) => {
+    const { ctx, w, h } = v;
+    const sc = 0.5; // worked out at half size (soft anyway, and light on the computer)
+    const W = Math.max(2, Math.round(w * sc)), H = Math.max(2, Math.round(h * sc));
+    let st = v.kal;
+    if (!st || st.W !== W || st.H !== H) {
+      const mk = () => { const c = document.createElement("canvas"); c.width = W; c.height = H; return c; };
+      st = v.kal = { W, H, a: mk(), b: mk(), rot: 0, spin: 0, kickSeen: shared.beatSerial, flash: 0 };
+    }
+    const e = shared.energy, bass = shared.bassPunch || 0, sp = p.speed;
+    if (st.kickSeen !== shared.beatSerial) { st.kickSeen = shared.beatSerial; st.flash = Math.min(1, st.flash + 0.5 * Math.min(1, shared.kick + 0.3)); }
+    st.flash *= Math.exp(-dt * 4);
+    st.spin += dt * sp * (0.05 + 0.25 * e + 0.3 * bass);
+    // 1. feedback: last frame, zoomed out a little and turned, slightly faded
+    const gb = st.b.getContext("2d");
+    gb.setTransform(1, 0, 0, 1, 0, 0);
+    gb.globalCompositeOperation = "source-over";
+    gb.globalAlpha = 1;
+    gb.clearRect(0, 0, W, H);
+    const zoom = 1 + dt * 60 * (0.012 + 0.025 * bass + 0.01 * e) * sp;
+    const turn = dt * sp * (0.15 + 0.5 * bass) * Math.sin(st.spin * 0.7);
+    gb.translate(W / 2, H / 2);
+    gb.rotate(turn);
+    gb.scale(zoom, zoom);
+    gb.globalAlpha = Math.exp(-dt * (2.8 - 0.9 * Math.min(1, e)));
+    gb.drawImage(st.a, -W / 2, -H / 2);
+    gb.setTransform(1, 0, 0, 1, 0, 0);
+    // 2. new colour from the spectrum, mirrored into 12 slices
+    gb.globalCompositeOperation = "source-over";
+    gb.globalAlpha = 1;
+    const SL = 6, R = Math.min(W, H) * 0.5;
+    for (let j = 0; j < 8; j++) {
+      const lv = bandAt((j / 8) * 0.85);
+      if (lv < 0.08) continue;
+      const r0 = R * (0.06 + 0.5 * (j / 8)) * (1 + 0.2 * Math.sin(st.spin * 1.3 + j));
+      const a0 = 0.25 + 0.2 * Math.sin(st.spin * (0.9 + j * 0.13) + j * 2.1);
+      const size = R * (0.015 + 0.05 * lv) * (1 + st.flash * 0.6);
+      const c = mix(colorAt(((j / 8) + st.spin * 0.05) % 1), colorAt(((j / 8) + 0.5 + st.spin * 0.05) % 1), (j % 2) * 0.6);
+      const al = Math.min(1, 0.25 + 0.6 * lv);
+      for (let s = 0; s < SL * 2; s++) {
+        const base = (s >> 1) * (Math.PI * 2 / SL) + st.spin * 0.3;
+        const a = base + ((s & 1) ? -a0 : a0) * (Math.PI / SL);
+        const x = W / 2 + Math.cos(a) * r0, y = H / 2 + Math.sin(a) * r0;
+        const gr = gb.createRadialGradient(x, y, 0, x, y, size);
+        gr.addColorStop(0, `rgba(${c[0] | 0},${c[1] | 0},${c[2] | 0},${al})`);
+        gr.addColorStop(0.55, `rgba(${c[0] | 0},${c[1] | 0},${c[2] | 0},${al * 0.8})`);
+        gr.addColorStop(1, `rgba(${c[0] | 0},${c[1] | 0},${c[2] | 0},0)`);
+        gb.fillStyle = gr;
+        gb.fillRect(x - size, y - size, size * 2, size * 2);
+      }
+    }
+    // swap
+    const tmp = st.a; st.a = st.b; st.b = tmp;
+    // 3. onto the screen, then dim the middle (behind the lyrics)
+    ctx.save();
+    ctx.globalCompositeOperation = "source-over";
+    ctx.globalAlpha = A_(0.8 + 0.2 * st.flash, v);
+    ctx.imageSmoothingEnabled = true;
+    ctx.drawImage(st.a, 0, 0, w, h);
+    ctx.globalAlpha = 1;
+    ctx.globalCompositeOperation = "destination-out";
+    const dg = ctx.createRadialGradient(w / 2, h / 2, 0, w / 2, h / 2, Math.min(w, h) * 0.55);
+    dg.addColorStop(0, "rgba(0,0,0,0.7)");
+    dg.addColorStop(1, "rgba(0,0,0,0)");
+    ctx.fillStyle = dg;
+    ctx.fillRect(0, 0, w, h);
+    ctx.restore();
+  };
+
+  // ---------------------------------------------------------------------------
+  // Drums: only the drum hits, nothing else. Four looks (Look setting):
+  //  - Pulses: two big soft shapes, kick on the left (a deep, heavy thump),
+  //    snare on the right (a sharp, quick snap).
+  //  - Bars: two thick bars that shoot up on each hit, swing a little past
+  //    and fall back smoothly.
+  //  - Pads: four drum-machine pads (kick, snare, hi-hat, bass) that light
+  //    up and fade as each is hit.
+  //  - Shockwaves: each kick sends a big soft ring up from the bottom, each
+  //    snare a thinner, faster ring down from the top.
+  // Colours from the album (kick and snare get different ones).
+  DRAW.drums = (v, p, dt) => {
+    const { ctx, w, h, U } = v;
+    const st = v.drums || (v.drums = { k: 0, s: 0, hh: 0, kickSeen: shared.beatSerial, snSeen: shared.snareSerial, trPrev: 0, bars: [{ y: 0, v: 0 }, { y: 0, v: 0 }], rings: [] });
+    const sens = p.sensitivity;
+    let newK = 0, newS = 0;
+    if (st.kickSeen !== shared.beatSerial) { st.kickSeen = shared.beatSerial; newK = Math.min(1, (0.55 + 0.6 * Math.min(1, shared.kick)) * sens); st.k = Math.max(st.k, newK); }
+    if (st.snSeen !== shared.snareSerial) { st.snSeen = shared.snareSerial; newS = Math.min(1, (0.55 + 0.6 * Math.min(1, shared.snare)) * sens); st.s = Math.max(st.s, newS); }
+    // hi-hat: a quick jump in the highest band
+    const tr = bandAt(0.9);
+    if (tr - st.trPrev > 0.08) st.hh = Math.min(1, st.hh + (tr - st.trPrev) * 3 * sens);
+    st.trPrev += (tr - st.trPrev) * Math.min(1, dt * 20);
+    st.k *= Math.exp(-dt * 4.5);
+    st.s *= Math.exp(-dt * 9);
+    st.hh *= Math.exp(-dt * 12);
+    const cK = colorAt(0.15), cS = colorAt(0.85), cH = mix(colorAt(0.5), WHITE, 0.4);
+    const look = p.drumLook || "pulses";
+    ctx.save();
+    ctx.globalCompositeOperation = "lighter";
+    if (look === "pulses") {
+      const R = Math.min(w, h) * 0.13 * p.size;
+      const draw = (x, y, e, c, sharp) => {
+        const r = R * (sharp ? 0.8 + 0.45 * e : 0.85 + 0.8 * e);
+        v.soft(x, y, r * (sharp ? 2 : 2.6), c, 0.08 + 0.4 * e);
+        v.soft(x, y, r, mix(c, WHITE, 0.25 * e), 0.12 + (sharp ? 0.75 : 0.6) * e);
+        ctx.strokeStyle = v.rgba(mix(c, WHITE, 0.3), 0.18 + 0.6 * e);
+        ctx.lineWidth = Math.max(1, (sharp ? 1.5 : 3) * U * (0.6 + e));
+        ctx.beginPath();
+        ctx.arc(x, y, r * (sharp ? 0.95 : 1.05), 0, Math.PI * 2);
+        ctx.stroke();
+      };
+      draw(w * 0.3, h * 0.55, st.k, cK, false);
+      draw(w * 0.7, h * 0.55, st.s, cS, true);
+    } else if (look === "bars") {
+      const sm = Math.max(0, Math.min(1, p.smoothing));
+      const kk = 160 - 90 * sm, damp = 2 * Math.sqrt(kk) * 0.45;
+      const want = [st.k, st.s];
+      const bw = Math.min(w * 0.09, 110) * p.size, gap = bw * 0.9, H = h * 0.55, yb = h * 0.9;
+      const x0 = w / 2 - gap / 2 - bw;
+      for (let i = 0; i < 2; i++) {
+        const b = st.bars[i];
+        b.v += (kk * (want[i] - b.y) - damp * b.v) * Math.min(dt, 0.05);
+        b.y = Math.max(0, b.y + b.v * Math.min(dt, 0.05));
+        const x = x0 + i * (bw + gap), c = i ? cS : cK;
+        const top = yb - H * Math.min(1.15, 0.04 + b.y);
+        // faint track
+        ctx.fillStyle = v.rgba(c, 0.06);
+        v.roundRect(x, yb - H, bw, H, bw * 0.2);
+        // the bar, brightest at the top
+        const g = ctx.createLinearGradient(0, top, 0, yb);
+        g.addColorStop(0, v.rgba(mix(c, WHITE, 0.35), 0.95));
+        g.addColorStop(1, v.rgba(c, 0.35));
+        ctx.fillStyle = g;
+        ctx.shadowColor = v.rgba(c, 0.8);
+        ctx.shadowBlur = bw * 0.4;
+        v.roundRect(x, top, bw, yb - top, bw * 0.2);
+        ctx.shadowBlur = 0;
+      }
+    } else if (look === "pads") {
+      const pads = [[st.k, cK], [st.s, cS], [st.hh, cH], [Math.min(1, (shared.bassPunch || 0) * 1.2), mix(cK, cS, 0.5)]];
+      const ps = Math.min(w * 0.13, h * 0.2) * p.size, gap = ps * 0.18;
+      const x0 = (w - (ps * 4 + gap * 3)) / 2, y = h * 0.62;
+      pads.forEach(([e, c], i) => {
+        const x = x0 + i * (ps + gap);
+        ctx.fillStyle = v.rgba(c, 0.07 + 0.08 * e);
+        v.roundRect(x, y, ps, ps, ps * 0.14);
+        if (e > 0.02) {
+          ctx.shadowColor = v.rgba(c, 0.9);
+          ctx.shadowBlur = ps * 0.35 * e;
+          ctx.fillStyle = v.rgba(mix(c, WHITE, 0.2 * e), 0.85 * e);
+          v.roundRect(x + ps * 0.04, y + ps * 0.04, ps * 0.92, ps * 0.92, ps * 0.12);
+          ctx.shadowBlur = 0;
+        }
+        ctx.strokeStyle = v.rgba(c, 0.25 + 0.5 * e);
+        ctx.lineWidth = Math.max(1, U);
+        ctx.beginPath();
+        ctx.roundRect ? ctx.roundRect(x, y, ps, ps, ps * 0.14) : ctx.rect(x, y, ps, ps);
+        ctx.stroke();
+      });
+    } else {
+      // shockwaves
+      if (newK) st.rings.push({ k: 1, age: 0, e: newK });
+      if (newS) st.rings.push({ k: 0, age: 0, e: newS });
+      if (st.rings.length > 24) st.rings.splice(0, st.rings.length - 24);
+      const D = Math.hypot(w, h);
+      for (let i = st.rings.length - 1; i >= 0; i--) {
+        const r = st.rings[i];
+        r.age += dt * p.speed;
+        const life = r.k ? 1.8 : 0.9;
+        if (r.age > life) { st.rings.splice(i, 1); continue; }
+        const f = r.age / life;
+        const rad = D * (r.k ? 0.06 + 0.75 * (1 - Math.pow(1 - f, 2)) : 0.03 + 0.7 * f);
+        const cx = w / 2, cy = r.k ? h * 1.02 : -h * 0.02;
+        const c = r.k ? cK : cS;
+        const a = r.e * (1 - f) * (1 - f);
+        ctx.strokeStyle = v.rgba(c, 0.12 * a);
+        ctx.lineWidth = (r.k ? 40 : 14) * U;
+        ctx.beginPath();
+        ctx.arc(cx, cy, rad, 0, Math.PI * 2);
+        ctx.stroke();
+        ctx.strokeStyle = v.rgba(mix(c, WHITE, 0.3), 0.7 * a);
+        ctx.lineWidth = (r.k ? 5 : 2) * U;
+        ctx.stroke();
+      }
     }
     ctx.restore();
   };
@@ -3888,6 +4211,13 @@ float fbm(vec2 p) {
     }
     st.flash = (st.flash || 0) * Math.exp(-dt * flashFade);
     st.lift = (st.lift || 0) + (bass - (st.lift || 0)) * Math.min(1, dt * (bass > (st.lift || 0) ? up : down));
+    // How much the bass stands out above its level over the last few
+    // seconds: in songs where the bass never lets up, the level just sits
+    // high, but each hit still pokes out above it.
+    if (st.avg === undefined) st.avg = bass;
+    st.avg += (bass - st.avg) * Math.min(1, dt * 0.35);
+    const over = Math.min(1, Math.max(0, bass - st.avg * 0.8) * 1.8);
+    st.punch = (st.punch || 0) + (over - (st.punch || 0)) * Math.min(1, dt * (over > (st.punch || 0) ? 20 : 4));
   }
   // Ripples that kicks start (up to four at once), packed for the shader.
   function fxRipples(st, dt, asp, make) {
@@ -3922,7 +4252,7 @@ void main() {
     float tall = exp(-max(d, 0.) * (6. - 3.8 * uBass));
     float rays = fbm(vec2(x * 7. + sin(uT * 0.2 + fl) * 2., uT * 0.5 + fl * 7.));
     rays = 0.25 + 1.4 * rays * rays;
-    float I = edge * tall * rays * (0.1 + 0.35 * uE + 0.55 * uBass + 0.35 * uKick) * (1. - 0.22 * fl);
+    float I = edge * tall * rays * (0.1 + 0.3 * uE + 0.55 * uBass + 0.6 * uKick) * (1. - 0.22 * fl);
     vec3 lo = fl < 0.5 ? uC0 : fl < 1.5 ? uC1 : uC2;
     vec3 hi = fl < 0.5 ? uC1 : fl < 1.5 ? uC2 : uC0;
     vec3 c = mix(lo, hi, smoothstep(0.0, 0.35, d));
@@ -3941,7 +4271,7 @@ void main() {
     const sm = Math.max(0, Math.min(1, p.smoothing));
     fxClock(st, p, dt, 0.65, 11 - 8 * sm, 2.6 - 1.6 * sm, 5 - 2.5 * sm);
     const pal = easePal(st, beatSteps(st, p), dt, 1.2);
-    fxDraw(v, "aurora", AURORA_FS, { uT: st.T, uE: shared.energy, uBass: st.lift, uKick: st.flash, uC0: rgb1(pal[0]), uC1: rgb1(pal[1]), uC2: rgb1(pal[2]) }, 1);
+    fxDraw(v, "aurora", AURORA_FS, { uT: st.T, uE: shared.energy, uBass: Math.min(1, 0.45 * st.lift + st.punch), uKick: st.flash, uC0: rgb1(pal[0]), uC1: rgb1(pal[1]), uC2: rgb1(pal[2]) }, 1);
   };
 
   // ---------------------------------------------------------------------------
@@ -4047,7 +4377,7 @@ void main() {
     if (st.hueTo === undefined) st.hueTo = st.hue = 0;
     if (st.newKick && p.colorMove !== "still") st.hueTo += 0.06 * Math.min(1, shared.kick + 0.4);
     st.hue += (st.hueTo - st.hue) * Math.min(1, dt * 4);
-    fxDraw(v, "ribbon", RIBBON_FS, { uT: st.T, uE: shared.energy, uBass: st.lift, uKick: st.flash, uHue: st.hue % 1, uC0: rgb1(pal[0]), uC1: rgb1(pal[1]), uC2: rgb1(pal[2]) }, 1);
+    fxDraw(v, "ribbon", RIBBON_FS, { uT: st.T, uE: shared.energy, uBass: Math.min(1, 0.45 * st.lift + st.punch), uKick: st.flash, uHue: st.hue % 1, uC0: rgb1(pal[0]), uC1: rgb1(pal[1]), uC2: rgb1(pal[2]) }, 1);
   };
 
   // ---------------------------------------------------------------------------
@@ -4581,7 +4911,7 @@ void main() {
             <div class="lp-row"><div class="lp-label"><span>Colour changes</span></div>${seg("colorMove", [["move", "Moving"], ["still", "Still"]], "style")}</div>
             <div class="lp-colors" data-show-color><label><input type="color" data-key="color1" data-scope="style">Colour 1</label><label><input type="color" data-key="color2" data-scope="style">Colour 2</label></div>`)}
           ${group("Appearance", slider("opacity", "Opacity", 0.1, 1, 0.05, "style") + slider("blur", "Blur", 0, 20, 0.5, "style") + slider("brightness", "Brightness", 0.2, 1.6, 0.05, "style") + slider("size", "Size", 0.4, 2, 0.05, "style"))}
-          ${group("Layout", slider("barCount", "Bar count", 16, 128, 1, "style", u("barCount")) + slider("neuroTwist", "Twist", 0, 1, 0.05, "style", u("neuroTwist")) + `<div class="lp-row" data-uses="${u("position")}"><div class="lp-label"><span>Position</span></div>${seg("position", [["bottom", "Bottom"], ["top", "Top"], ["both", "Both"]], "style")}</div><div class="lp-row" data-uses="${u("variant")}"><div class="lp-label"><span>Look</span></div>${seg("variant", [["poster", "Poster"], ["brutalist", "Brutalist"]], "style")}</div><div class="lp-row" data-uses="${u("neuroLook")}"><div class="lp-label"><span>Look</span></div>${seg("neuroLook", [["mesh", "Mesh"], ["lines", "Lines"], ["ridges", "Ridges"]], "style")}</div><div class="lp-row" data-uses="${u("neuroLine")}"><div class="lp-label"><span>Ridges line</span></div>${seg("neuroLine", [["rough", "Rough"], ["smooth", "Smooth"]], "style")}</div><div class="lp-row" data-uses="${u("neuroMirror")}"><div class="lp-label"><span>Mirror</span></div>${seg("neuroMirror", [["off", "Off"], ["on", "On"]], "style")}</div><div class="lp-row" data-uses="${u("vuFace")}"><div class="lp-label"><span>Faces</span></div>${seg("vuFace", [["cream", "Cream"], ["dark", "Dark"]], "style")}</div><div class="lp-row" data-uses="${u("circleAt")}"><div class="lp-label"><span>Circle at</span></div>${seg("circleAt", [["middle", "Middle"], ["art", "Album art"]], "style")}</div><div class="lp-row" data-uses="${u("mcColor")}"><div class="lp-label"><span>Bar colour</span></div>${seg("mcColor", [["flow", "Flow"], ["frequency", "Freq."], ["height", "Area"], ["bar", "Bar"], ["solid", "Solid"]], "style")}</div><div class="lp-row" data-uses="${u("beatEvery")}"><div class="lp-label"><span>Change every</span></div>${seg("beatEvery", [["1", "Beat"], ["2", "2"], ["4", "4"], ["8", "8 beats"]], "style")}</div>`, [...new Set([...USES.barCount, ...USES.position, ...USES.variant, ...USES.neuroLook, ...USES.neuroLine, ...USES.neuroTwist, ...USES.neuroMirror, ...USES.vuFace, ...USES.circleAt, ...USES.mcColor, ...USES.beatEvery])].join(","))}
+          ${group("Layout", slider("barCount", "Bar count", 16, 128, 1, "style", u("barCount")) + slider("neuroTwist", "Twist", 0, 1, 0.05, "style", u("neuroTwist")) + `<div class="lp-row" data-uses="${u("position")}"><div class="lp-label"><span>Position</span></div>${seg("position", [["bottom", "Bottom"], ["top", "Top"], ["both", "Both"]], "style")}</div><div class="lp-row" data-uses="${u("variant")}"><div class="lp-label"><span>Look</span></div>${seg("variant", [["poster", "Poster"], ["brutalist", "Brutalist"]], "style")}</div><div class="lp-row" data-uses="${u("neuroLook")}"><div class="lp-label"><span>Look</span></div>${seg("neuroLook", [["mesh", "Mesh"], ["lines", "Lines"], ["ridges", "Ridges"]], "style")}</div><div class="lp-row" data-uses="${u("neuroLine")}"><div class="lp-label"><span>Ridges line</span></div>${seg("neuroLine", [["rough", "Rough"], ["smooth", "Smooth"]], "style")}</div><div class="lp-row" data-uses="${u("neuroMirror")}"><div class="lp-label"><span>Mirror</span></div>${seg("neuroMirror", [["off", "Off"], ["on", "On"]], "style")}</div><div class="lp-row" data-uses="${u("vuFace")}"><div class="lp-label"><span>Look</span></div>${seg("vuFace", [["night", "Night hi-fi"], ["led", "LED"]], "style")}</div><div class="lp-row" data-uses="${u("drumLook")}"><div class="lp-label"><span>Look</span></div>${seg("drumLook", [["pulses", "Pulses"], ["bars", "Bars"], ["pads", "Pads"], ["waves", "Waves"]], "style")}</div><div class="lp-row" data-uses="${u("circleAt")}"><div class="lp-label"><span>Circle at</span></div>${seg("circleAt", [["middle", "Middle"], ["art", "Album art"]], "style")}</div><div class="lp-row" data-uses="${u("mcColor")}"><div class="lp-label"><span>Bar colour</span></div>${seg("mcColor", [["flow", "Flow"], ["frequency", "Freq."], ["height", "Area"], ["bar", "Bar"], ["solid", "Solid"]], "style")}</div><div class="lp-row" data-uses="${u("beatEvery")}"><div class="lp-label"><span>Change every</span></div>${seg("beatEvery", [["1", "Beat"], ["2", "2"], ["4", "4"], ["8", "8 beats"]], "style")}</div>`, [...new Set([...USES.barCount, ...USES.position, ...USES.variant, ...USES.neuroLook, ...USES.neuroLine, ...USES.neuroTwist, ...USES.neuroMirror, ...USES.vuFace, ...USES.drumLook, ...USES.circleAt, ...USES.mcColor, ...USES.beatEvery])].join(","))}
         </div>
       </div>
 

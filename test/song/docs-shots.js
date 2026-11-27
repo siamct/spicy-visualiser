@@ -22,12 +22,12 @@ const ALBUMS = [
 
 // [style, moment in the track (bar)]
 const SHOTS = [
-  ["monstercat", 22], ["mirror", 9], ["retro", 12], ["led", 21], ["ascii", 28], ["vu", 24],
+  ["monstercat", 22], ["mirror", 9], ["retro", 12], ["led", 21], ["ascii", 28], ["vu", 24], ["scope", 22],
   ["radial", 26], ["ncs", 23], ["sub", 13], ["trap", 25], ["tunnel", 27],
-  ["geometric", 11], ["bauhaus", 29],
-  ["plasma", 18], ["ledplasma", 24], ["oil", 20], ["chrome", 22], ["dnb", 26],
+  ["drums", 22], ["geometric", 11], ["bauhaus", 29],
+  ["plasma", 18], ["ledplasma", 24], ["oil", 20], ["chrome", 22], ["dnb", 26], ["kaleido", 24],
   ["aurora", 23], ["galaxy", 21], ["ribbon", 27], ["ombre", 25], ["warp", 30],
-  ["prism", 22], ["rain", 19], ["smoke", 24], ["lava", 20], ["bubbles", 23],
+  ["prism", 22], ["rain", 19], ["smoke", 24], ["lava", 20], ["bubbles", 26],
   ["neuro", 14], ["particles", 22],
 ];
 
@@ -84,7 +84,7 @@ const setter = (p) => (k, v) => p.evaluate(([k, v]) => { const btn = document.qu
     await set("lyricGlow", "off");
     await set("__style", style);
     await p.addStyleTag({ content: HIDE });
-    await p.waitForTimeout(2600);
+    await p.waitForTimeout(["bubbles", "rain", "lava"].includes(style) ? 8000 : 2600);
     const out = path.join(OUT, `doc-${style}.png`);
     await p.screenshot({ path: out });
     console.log(out);
