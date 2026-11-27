@@ -128,6 +128,9 @@
     neuroLook: ["neuro"],
     mcColor: ["monstercat"],
     vuFace: ["vu"],
+    vuMeters: ["vu"],
+    vuX: ["vu"],
+    vuY: ["vu"],
     circleAt: ["trap", "radial", "ncs", "sub"],
     speed: ["ekg", "underwater", "sunset", "nightsky", "silk", "tvpixels", "scope", "trap", "neuro", "ribbon", "rain", "lava", "smoke", "tunnel", "aurora", "oil", "particles", "monstercat", "ncs", "radial", "plasma", "warp", "dnb", "ascii", "led", "ledplasma", "galaxy", "prism", "ombre"],
     bassBoost: ["rgbsplit", "underwater", "sunset", "nightsky", "silk", "tvpixels", "scope", "particles", "monstercat", "radial", "mirror", "ncs", "warp", "plasma", "dnb", "ascii", "geometric", "bauhaus", "led", "ledplasma", "sub", "trap", "ledm", "neuro", "ribbon", "rain", "lava", "smoke", "tunnel", "aurora", "oil", "galaxy", "prism", "ombre"],
@@ -154,6 +157,9 @@
     neuroTwist: 0, // Neuro Mesh: how much it rolls along its length (0 = still)
     neuroMirror: "off",
     vuFace: "night", // VU Meters look: night (classic) | minimal | holo | hud
+    vuMeters: "both", // VU Meters: both needles in one meter | split (bass left, highs right) | bass (one meter)
+    vuX: 0, // VU Meters: move left (-1) / right (+1)
+    vuY: 0, // VU Meters: move down (-1) / up (+1)
     circleAt: "middle", // circle styles: middle of the view, or round the album art
     beatEvery: "1", // beat-stepping styles change every 1, 2, 4 or 8 beats
     colorMove: "move", // move = colours shift on the beat and drift; still = they stay put
@@ -2604,7 +2610,10 @@ void main() {
   // the bass (low), one for the mids and highs (high). It sits in the
   // middle, or beside the album art when the art is showing. The needles are
   // a little sluggish and swing past before settling (Smoothing sets how
-  // much); a peak light comes on in the red. Four looks (the Look setting; Holo is the default):
+  // much); a peak light comes on in the red. Meters: both needles in one
+  // meter, split into two meters (bass on the left, highs on the right),
+  // or one bass meter. Left/right and Up/down move it; Size scales it.
+  // Four looks (the Look setting; Holo is the default):
   //  - Classic: night hi-fi, a face backlit warm amber in a dark room, the
   //    print and needles dark silhouettes (black = low, red = high).
   //  - Minimal: no box, a thin scale, a glowing red zone and two thin
@@ -2636,7 +2645,15 @@ void main() {
       if (m.a >= m.pk) { m.pk = m.a; m.hold = 1; }
       else if ((m.hold -= dt) < 0) m.pk = Math.max(m.a, m.pk - dt * 0.5);
     }
-    (VU_LOOKS[p.vuFace] || vuNight)(v, p, st, red);
+    const look = VU_LOOKS[p.vuFace] || vuNight;
+    const sp = freeSpot(v);
+    sp.x += Math.max(-1, Math.min(1, +p.vuX || 0)) * v.w * 0.4;
+    sp.y -= Math.max(-1, Math.min(1, +p.vuY || 0)) * v.h * 0.4;
+    if (p.vuMeters === "split") {
+      const half = { wmax: sp.wmax * 0.62, y: sp.y }; // each a bit bigger than half, they still clear each other
+      look(v, p, st, red, { ...half, x: sp.x - sp.wmax / 4 }, [0]);
+      look(v, p, st, red, { ...half, x: sp.x + sp.wmax / 4 }, [1]);
+    } else look(v, p, st, red, sp, p.vuMeters === "bass" ? [0] : [0, 1]);
   };
   const vuPath = (ctx, x, y, ww, hh, r) => {
     ctx.beginPath();
@@ -2652,27 +2669,31 @@ void main() {
     ctx.lineTo(cx + Math.cos(a) * r1, cy + Math.sin(a) * r1);
   };
   // Where one centred piece goes: the middle of the view, or the middle of
-  // the space beside the album art when the art takes up the left (as in
-  // fullscreen), so it isn't hidden behind it.
+  // the space beside the album art when the art sits on the left or right
+  // (as in fullscreen), so it isn't hidden behind it.
   function freeSpot(v) {
     const art = v.artCircle && v.artCircle();
     if (art && art.x + art.r < v.w * 0.6) {
       const l = art.x + art.r;
       return { x: (l + v.w) / 2, y: v.h / 2, wmax: v.w - l };
     }
+    // art moved to the right (fullscreen lets you): use the space on its left
+    if (art && art.x - art.r > v.w * 0.4) {
+      const r = art.x - art.r;
+      return { x: r / 2, y: v.h / 2, wmax: r };
+    }
     return { x: v.w / 2, y: v.h / 2, wmax: v.w };
   }
   const UI_FONT = '"SpotifyMixUI", "CircularSp", "Helvetica Neue", Arial, sans-serif';
 
-  function vuNight(v, p, st, red) {
+  function vuNight(v, p, st, red, sp, ms) {
     const { ctx, h } = v;
-    const sp = freeSpot(v);
     const fw = Math.min(sp.wmax * 0.55, h * 0.55 * 1.55) * p.size, fh = fw / 1.55;
     const fx = sp.x - fw / 2, y0 = sp.y - fh / 2, cx = sp.x;
     const glow = 0.75 + 0.25 * Math.min(1, shared.energy * 1.3); // the lamps behind brighten a touch when it's loud
     const ink = [34, 20, 8], inkRed = [120, 22, 12];
     const NEEDLE = [[16, 10, 6], [150, 26, 14]]; // low: black, high: red
-    const lamp = Math.max(st.m[0].lamp, st.m[1].lamp);
+    const lamp = Math.max(...ms.map((i) => st.m[i].lamp));
     const px = cx, py = y0 + fh * 1.25, R = fh * 0.95, A = 0.72;
     const ang = (t) => -Math.PI / 2 - A + 2 * A * t;
     ctx.save();
@@ -2735,14 +2756,14 @@ void main() {
     ctx.fillText("VU", cx, y0 + fh * 0.66);
     // which needle is which, printed in its colour
     ctx.font = `600 ${Math.round(fh * 0.05)}px "Helvetica Neue", Arial, sans-serif`;
-    ctx.fillStyle = v.rgba(NEEDLE[0], 1);
-    ctx.fillText("LOW", cx - fw * 0.24, y0 + fh * 0.7);
-    ctx.fillStyle = v.rgba(NEEDLE[1], 1);
-    ctx.fillText("HIGH", cx + fw * 0.24, y0 + fh * 0.7);
+    for (const i of ms) {
+      ctx.fillStyle = v.rgba(NEEDLE[i], 1);
+      ctx.fillText(i ? "HIGH" : "LOW", ms.length > 1 ? cx + (i ? 1 : -1) * fw * 0.24 : cx, y0 + fh * (ms.length > 1 ? 0.7 : 0.78));
+    }
     // the two needles, dark silhouettes
     ctx.lineCap = "round";
     ctx.lineWidth = Math.max(1.4, fh * 0.012);
-    for (const i of [1, 0]) {
+    for (const i of [...ms].reverse()) {
       ctx.strokeStyle = v.rgba(NEEDLE[i], 1);
       ctx.beginPath();
       vuLine(ctx, px, py, ang(Math.max(-0.04, Math.min(1.12, st.m[i].a))), fh * 0.3, R + fh * 0.05);
@@ -2787,14 +2808,13 @@ void main() {
 
   // Minimal: a thin open scale, no box, and two thin needles in the album's
   // colours. The red zone glows, brighter while a needle's in it.
-  function vuMinimal(v, p, st, red) {
+  function vuMinimal(v, p, st, red, sp, ms) {
     const { ctx, h } = v;
-    const sp = freeSpot(v);
     const R = Math.min(sp.wmax * 0.3, h * 0.42) * p.size, A = 0.85;
     const ang = (t) => -Math.PI / 2 - A + 2 * A * t;
     const RED = [255, 60, 50];
     const cx = sp.x, cy = sp.y + R * 0.45;
-    const lamp = Math.max(st.m[0].lamp, st.m[1].lamp);
+    const lamp = Math.max(...ms.map((i) => st.m[i].lamp));
     const ncol = [mix(colorAt(0.2), WHITE, 0.35), mix(colorAt(0.8), WHITE, 0.35)];
     ctx.save();
     ctx.globalCompositeOperation = "source-over";
@@ -2830,7 +2850,7 @@ void main() {
     }
     // needles (each warms to red in the red), then the pivot
     ctx.lineWidth = Math.max(1.5, R * 0.009);
-    for (const i of [1, 0]) {
+    for (const i of [...ms].reverse()) {
       const m = st.m[i];
       ctx.strokeStyle = v.rgba(mix(ncol[i], RED, 0.6 * m.lamp), 0.95);
       if (m.lamp > 0.05) { ctx.shadowColor = v.rgba(RED, 0.8 * m.lamp); ctx.shadowBlur = R * 0.05; }
@@ -2849,25 +2869,24 @@ void main() {
   // Holo: two arcs of glowing ticks floating in space, one inside the
   // other (outer = low, inner = high), each with its own glowing needle
   // line.
-  function vuHolo(v, p, st, red) {
+  function vuHolo(v, p, st, red, sp, ms) {
     const { ctx, h } = v;
-    const sp = freeSpot(v);
     const R = Math.min(sp.wmax * 0.27, h * 0.42) * p.size, A = 1;
     const ang = (t) => -Math.PI / 2 - A + 2 * A * t;
     const HOT = [255, 80, 130];
     const cx = sp.x, cy = sp.y + R * 0.42;
-    const rings = [
-      { m: st.m[0], r0: 0.88, r1: 1.06, n: 34, c0: colorAt(0.1), c1: colorAt(0.45) },
-      { m: st.m[1], r0: 0.64, r1: 0.79, n: 26, c0: colorAt(0.6), c1: colorAt(0.95) },
-    ];
+    const COL = [[colorAt(0.1), colorAt(0.45)], [colorAt(0.6), colorAt(0.95)]];
+    const GEO = [{ r0: 0.88, r1: 1.06, n: 34 }, { r0: 0.64, r1: 0.79, n: 26 }];
+    // one meter alone takes the outer ring
+    const rings = ms.map((i, k) => ({ m: st.m[i], ...GEO[ms.length > 1 ? k : 0], c0: COL[i][0], c1: COL[i][1] }));
     ctx.save();
     ctx.globalCompositeOperation = "lighter";
     ctx.globalAlpha = A_(1, v);
     ctx.lineCap = "round";
     // faint guide arcs
-    ctx.strokeStyle = v.rgba(mix(rings[0].c0, rings[1].c0, 0.5), 0.22);
+    ctx.strokeStyle = v.rgba(mix(rings[0].c0, rings[rings.length - 1].c0, 0.5), 0.22);
     ctx.lineWidth = 1;
-    for (const rr of [0.58, 0.835, 1.14]) {
+    for (const rr of ms.length > 1 ? [0.58, 0.835, 1.14] : [0.8, 1.14]) {
       ctx.beginPath();
       ctx.arc(cx, cy, R * rr, ang(-0.03), ang(1.03));
       ctx.stroke();
@@ -2912,9 +2931,8 @@ void main() {
 
   // HUD: a sci-fi gauge, two segmented level arcs (outer = low, inner =
   // high) inside a slowly turning ring.
-  function vuHud(v, p, st, red) {
+  function vuHud(v, p, st, red, sp, ms) {
     const { ctx, h } = v;
-    const sp = freeSpot(v);
     const R = Math.min(sp.wmax * 0.22, h * 0.32) * p.size;
     const C = mix([90, 220, 255], colorAt(0.5), 0.4), C2 = mix(C, colorAt(0.85), 0.5), WARN = [255, 90, 80];
     const a0 = Math.PI * 0.75, SW = Math.PI * 1.5, angOf = (t) => a0 + SW * Math.max(0, Math.min(1, t / 1.12));
@@ -2939,7 +2957,8 @@ void main() {
     ctx.stroke();
     // the levels: short segments that light up, red past 0 dB
     ctx.lineCap = "butt";
-    for (const [m, rr, lw, ns, col] of [[st.m[0], 0.88, 0.1, 48, C], [st.m[1], 0.7, 0.075, 40, C2]]) {
+    const ARCS = [[0.88, 0.1, 48], [0.7, 0.075, 40]];
+    for (const [m, rr, lw, ns, col] of ms.map((i, k) => [st.m[i], ...ARCS[ms.length > 1 ? k : 0], i ? C2 : C])) {
       const lv = Math.max(0, m.a), segA = SW / ns;
       ctx.lineWidth = R * lw;
       for (let j = 0; j < ns; j++) {
@@ -2962,7 +2981,7 @@ void main() {
     ctx.beginPath();
     ctx.arc(cx, cy, R * 0.5, 0, Math.PI * 2);
     ctx.stroke();
-    ctx.fillStyle = v.rgba(C, 0.25 + 0.5 * Math.min(1, Math.max(st.m[0].a, st.m[1].a)));
+    ctx.fillStyle = v.rgba(C, 0.25 + 0.5 * Math.min(1, Math.max(...ms.map((i) => st.m[i].a))));
     ctx.beginPath();
     ctx.arc(cx, cy, R * 0.04, 0, Math.PI * 2);
     ctx.fill();
@@ -4574,9 +4593,10 @@ float fbm3(vec2 p) {
 
   // ---------------------------------------------------------------------------
   // Aurora: northern lights over a starry sky. Three curtains of light in
-  // the album's colours ripple sideways, with fine rays running up them; the
-  // bass lifts them higher and taller, loudness makes them brighter and
-  // faster, kicks make them flare.
+  // the album's colours drift slowly sideways, with fine rays running up
+  // them. It stays calm: the bass mostly brightens them (and lifts them a
+  // little), loudness makes them a touch brighter and quicker, kicks give a
+  // soft glow.
   const AURORA_FS = `
 uniform float uT, uE, uBass, uKick;
 uniform vec3 uC0, uC1, uC2;
@@ -4588,13 +4608,13 @@ void main() {
     float fl = float(L);
     float x = uv.x * asp * (0.9 + 0.35 * fl) + fl * 4.7;
     float base = 0.4 + 0.1 * fl + 0.14 * sin(x * 1.1 + uT * 0.3 + fl * 2.) + 0.26 * (fbm3(vec2(x * 0.7, uT * 0.12 + fl * 3.)) - 0.5);
-    base -= 0.15 * uBass;
+    base -= 0.04 * uBass;
     float d = uv.y - base;
     float edge = smoothstep(-0.015, 0.02, d);
-    float tall = exp(-max(d, 0.) * (6. - 3.8 * uBass));
-    float rays = fbm(vec2(x * 7. + sin(uT * 0.2 + fl) * 2., uT * 0.5 + fl * 7.));
+    float tall = exp(-max(d, 0.) * (6. - 1.6 * uBass));
+    float rays = fbm(vec2(x * 7. + sin(uT * 0.2 + fl) * 2., uT * 0.3 + fl * 7.));
     rays = 0.25 + 1.4 * rays * rays;
-    float I = edge * tall * rays * (0.1 + 0.3 * uE + 0.55 * uBass + 0.6 * uKick) * (1. - 0.22 * fl);
+    float I = edge * tall * rays * (0.12 + 0.25 * uE + 0.75 * uBass + 0.3 * uKick) * (1. - 0.22 * fl);
     vec3 lo = fl < 0.5 ? uC0 : fl < 1.5 ? uC1 : uC2;
     vec3 hi = fl < 0.5 ? uC1 : fl < 1.5 ? uC2 : uC0;
     vec3 c = mix(lo, hi, smoothstep(0.0, 0.35, d));
@@ -4609,11 +4629,18 @@ void main() {
 }`;
   DRAW.aurora = (v, p, dt) => {
     const st = v.aurora || (v.aurora = {});
-    // Smoothing sets how it bounces: low = snaps up and drops fast, high = slow and floaty.
+    // Smoothing sets how it bounces: low = quicker, high = slow and floaty.
+    // Kept calm either way: time runs slowly and only speeds up a little
+    // with loudness, and the bass is eased so it glows rather than jumps.
     const sm = Math.max(0, Math.min(1, p.smoothing));
-    fxClock(st, p, dt, 0.65, 11 - 8 * sm, 2.6 - 1.6 * sm, 5 - 2.5 * sm);
+    const T0 = st.T;
+    fxClock(st, p, dt, 0.2, 6 - 4 * sm, 1.6 - 0.9 * sm, 2.5 - 1 * sm);
+    st.e = (st.e || 0) + (shared.energy - (st.e || 0)) * Math.min(1, dt * 1.5);
+    if (T0 !== undefined) st.T = T0 + dt * p.speed * (0.22 + 0.18 * st.e);
+    const bt = Math.min(1, 0.6 * st.lift + 0.5 * st.punch);
+    st.b = (st.b || 0) + (bt - (st.b || 0)) * Math.min(1, dt * (bt > (st.b || 0) ? 5 - 2 * sm : 1.5 - 0.6 * sm));
     const pal = easePal(st, beatSteps(st, p), dt, 1.2);
-    fxDraw(v, "aurora", AURORA_FS, { uT: st.T, uE: shared.energy, uBass: Math.min(1, 0.45 * st.lift + st.punch), uKick: st.flash, uC0: rgb1(pal[0]), uC1: rgb1(pal[1]), uC2: rgb1(pal[2]) }, 1);
+    fxDraw(v, "aurora", AURORA_FS, { uT: st.T, uE: st.e, uBass: st.b, uKick: st.flash * 0.6, uC0: rgb1(pal[0]), uC1: rgb1(pal[1]), uC2: rgb1(pal[2]) }, 1);
   };
 
   // ---------------------------------------------------------------------------
@@ -5211,7 +5238,7 @@ void main() {
             <div class="lp-row"><div class="lp-label"><span>Colour changes</span></div>${seg("colorMove", [["move", "Moving"], ["still", "Still"]], "style")}</div>
             <div class="lp-colors" data-show-color><label><input type="color" data-key="color1" data-scope="style">Colour 1</label><label><input type="color" data-key="color2" data-scope="style">Colour 2</label></div>`)}
           ${group("Appearance", slider("opacity", "Opacity", 0.1, 1, 0.05, "style") + slider("blur", "Blur", 0, 20, 0.5, "style") + slider("brightness", "Brightness", 0.2, 1.6, 0.05, "style") + slider("size", "Size", 0.4, 2, 0.05, "style"))}
-          ${group("Layout", slider("barCount", "Bar count", 16, 128, 1, "style", u("barCount")) + `<div class="lp-row" data-uses="${u("position")}"><div class="lp-label"><span>Position</span></div>${seg("position", [["bottom", "Bottom"], ["top", "Top"], ["both", "Both"]], "style")}</div><div class="lp-row" data-uses="${u("variant")}"><div class="lp-label"><span>Look</span></div>${seg("variant", [["poster", "Poster"], ["brutalist", "Brutalist"]], "style")}</div><div class="lp-row" data-uses="${u("neuroLook")}"><div class="lp-label"><span>Look</span></div>${seg("neuroLook", [["mesh", "Mesh"], ["lines", "Lines"], ["ridges", "Ridges"]], "style")}</div><div class="lp-row" data-uses="${u("vuFace")}"><div class="lp-label"><span>Look</span></div>${seg("vuFace", [["night", "Classic"], ["minimal", "Minimal"], ["holo", "Holo"], ["hud", "HUD"]], "style")}</div><div class="lp-row" data-uses="${u("circleAt")}"><div class="lp-label"><span>Circle at</span></div>${seg("circleAt", [["middle", "Middle"], ["art", "Album art"]], "style")}</div><div class="lp-row" data-uses="${u("mcColor")}"><div class="lp-label"><span>Bar colour</span></div>${seg("mcColor", [["flow", "Flow"], ["frequency", "Freq."], ["height", "Area"], ["bar", "Bar"], ["solid", "Solid"]], "style")}</div><div class="lp-row" data-uses="${u("beatEvery")}"><div class="lp-label"><span>Change every</span></div>${seg("beatEvery", [["1", "Beat"], ["2", "2"], ["4", "4"], ["8", "8 beats"]], "style")}</div>`, [...new Set([...USES.barCount, ...USES.position, ...USES.variant, ...USES.neuroLook, ...USES.vuFace, ...USES.circleAt, ...USES.mcColor, ...USES.beatEvery])].join(","))}
+          ${group("Layout", slider("barCount", "Bar count", 16, 128, 1, "style", u("barCount")) + `<div class="lp-row" data-uses="${u("position")}"><div class="lp-label"><span>Position</span></div>${seg("position", [["bottom", "Bottom"], ["top", "Top"], ["both", "Both"]], "style")}</div><div class="lp-row" data-uses="${u("variant")}"><div class="lp-label"><span>Look</span></div>${seg("variant", [["poster", "Poster"], ["brutalist", "Brutalist"]], "style")}</div><div class="lp-row" data-uses="${u("neuroLook")}"><div class="lp-label"><span>Look</span></div>${seg("neuroLook", [["mesh", "Mesh"], ["lines", "Lines"], ["ridges", "Ridges"]], "style")}</div><div class="lp-row" data-uses="${u("vuFace")}"><div class="lp-label"><span>Look</span></div>${seg("vuFace", [["night", "Classic"], ["minimal", "Minimal"], ["holo", "Holo"], ["hud", "HUD"]], "style")}</div><div class="lp-row" data-uses="${u("vuMeters")}"><div class="lp-label"><span>Meters</span></div>${seg("vuMeters", [["both", "Both"], ["split", "Split"], ["bass", "Bass only"]], "style")}</div>${slider("vuX", "Left / right", -1, 1, 0.05, "style", u("vuX"))}${slider("vuY", "Up / down", -1, 1, 0.05, "style", u("vuY"))}<div class="lp-row" data-uses="${u("circleAt")}"><div class="lp-label"><span>Circle at</span></div>${seg("circleAt", [["middle", "Middle"], ["art", "Album art"]], "style")}</div><div class="lp-row" data-uses="${u("mcColor")}"><div class="lp-label"><span>Bar colour</span></div>${seg("mcColor", [["flow", "Flow"], ["frequency", "Freq."], ["height", "Area"], ["bar", "Bar"], ["solid", "Solid"]], "style")}</div><div class="lp-row" data-uses="${u("beatEvery")}"><div class="lp-label"><span>Change every</span></div>${seg("beatEvery", [["1", "Beat"], ["2", "2"], ["4", "4"], ["8", "8 beats"]], "style")}</div>`, [...new Set([...USES.barCount, ...USES.position, ...USES.variant, ...USES.neuroLook, ...USES.vuFace, ...USES.vuMeters, ...USES.circleAt, ...USES.mcColor, ...USES.beatEvery])].join(","))}
         </div>
         ${group("Background", slider("bgDim", "Darken background", 0, 0.9, 0.05, "global") + `<div class="lp-note">Calms Spicy Lyrics' moving background so the visual stands out. The lyrics and album art aren't touched.</div>`)}
       </div>
@@ -5361,7 +5388,7 @@ void main() {
     p.querySelectorAll(".lp-val").forEach((el) => {
       const key = el.dataset.for;
       const val = read(el.dataset.scope, key);
-      el.textContent = key === "barCount" ? String(Math.round(val)) : key === "blur" ? val + "px" : key === "syncDelay" ? Math.round(val) + " ms" : key === "beatSens" && val <= 0 ? "Off" : Math.round(val * 100) + "%";
+      el.textContent = key === "barCount" ? String(Math.round(val)) : key === "blur" ? val + "px" : key === "syncDelay" ? Math.round(val) + " ms" : key === "beatSens" && val <= 0 ? "Off" : key === "vuX" || key === "vuY" ? (Math.abs(val) < 0.025 ? "Centre" : (key === "vuX" ? (val < 0 ? "Left " : "Right ") : val < 0 ? "Down " : "Up ") + Math.round(Math.abs(val) * 100) + "%") : Math.round(val * 100) + "%";
     });
     p.querySelectorAll("[data-uses]").forEach((el) => el.classList.toggle("lp-hidden", !el.dataset.uses.split(",").includes(style)));
     p.querySelectorAll("[data-show-if]").forEach((el) => el.classList.toggle("lp-hidden", S[el.dataset.showIf] === "off"));

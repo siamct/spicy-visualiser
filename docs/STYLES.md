@@ -66,11 +66,13 @@ Monstercat-style bars drawn three times, in red, green and blue added together, 
 ### VU Meters
 ![VU Meters](screenshots/styles/vu.jpg)
 
-One meter with two needles, like a stereo meter: one for the bass (low), one for the mids and highs (high). It sits in the middle, or beside the album art when the art is showing. The needles are a little sluggish and swing past before settling (**Smoothing** sets how sluggish), and a peak light comes on when a needle goes into the red. Four looks (**Look**, Holo to start with):
+One meter with two needles, like a stereo meter: one for the bass (low), one for the mids and highs (high). It sits in the middle, or in the free space beside the album art when the art is showing (left or right). The needles are a little sluggish and swing past before settling (**Smoothing** sets how sluggish), and a peak light comes on when a needle goes into the red. Four looks (**Look**, Holo to start with):
 - **Classic**: night hi-fi, a face glowing warm amber from behind in a dark room, the print and needles as dark silhouettes (black is low, red is high);
 - **Minimal**: no box, just a thin scale in the album's colours, a red zone that glows (brighter when a needle's in it) and two thin needles in the album's colours;
 - **Holo** (above): two floating arcs of ticks (outer low, inner high) that light up to their needles, with a glowing needle line and a faint scanline shimmer. This is the look it starts with;
 - **HUD**: a sci-fi gauge, two segmented level arcs inside a slowly turning ring.
+
+**Meters** picks how they're laid out: **Both** needles in one meter, **Split** into two meters (bass on the left, highs on the right), or **Bass only**. **Left / right** and **Up / down** move it anywhere on the screen, and **Size** makes it bigger or smaller.
 
 ### Oscilloscope
 ![Oscilloscope](screenshots/styles/scope.jpg)
@@ -219,8 +221,8 @@ Looking up from under the sea: rippling nets of light wobble across, with soft s
 ![Aurora](screenshots/styles/aurora.jpg)
 
 Northern lights over a starry sky:
-- three curtains of light in the album's colours ripple sideways, with fine rays running up them;
-- the bass lifts them higher and taller, loudness makes them brighter and faster, kicks make them flare.
+- three curtains of light in the album's colours drift slowly sideways, with fine rays running up them;
+- it stays calm: the bass mostly makes them glow brighter (and lifts them a little), loudness makes them a touch brighter and quicker, and kicks give a soft glow.
 
 ### Galaxy
 ![Galaxy](screenshots/styles/galaxy.jpg)
