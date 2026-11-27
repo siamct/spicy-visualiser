@@ -129,8 +129,11 @@
     mcColor: ["monstercat"],
     vuFace: ["vu"],
     vuMeters: ["vu"],
-    vuX: ["vu"],
-    vuY: ["vu"],
+    // styles that can sit beside the album art and be moved (not the
+    // full-screen scenes)
+    fit: ["monstercat", "mirror", "holospec", "ledm", "led", "ascii", "rgbsplit", "scope", "ekg", "dnb", "radial", "ncs", "sub", "trap", "drumpads", "geometric", "bauhaus", "neuro"],
+    moveX: ["vu", "monstercat", "mirror", "holospec", "ledm", "led", "ascii", "rgbsplit", "scope", "ekg", "dnb", "radial", "ncs", "sub", "trap", "drumpads", "geometric", "bauhaus", "neuro"],
+    moveY: ["vu", "monstercat", "mirror", "holospec", "ledm", "led", "ascii", "rgbsplit", "scope", "ekg", "dnb", "radial", "ncs", "sub", "trap", "drumpads", "geometric", "bauhaus", "neuro"],
     circleAt: ["trap", "radial", "ncs", "sub"],
     speed: ["ekg", "underwater", "sunset", "nightsky", "silk", "tvpixels", "scope", "trap", "neuro", "ribbon", "rain", "lava", "smoke", "tunnel", "aurora", "oil", "particles", "monstercat", "ncs", "radial", "plasma", "warp", "dnb", "ascii", "led", "ledplasma", "galaxy", "prism", "ombre"],
     bassBoost: ["rgbsplit", "underwater", "sunset", "nightsky", "silk", "tvpixels", "scope", "particles", "monstercat", "radial", "mirror", "ncs", "warp", "plasma", "dnb", "ascii", "geometric", "bauhaus", "led", "ledplasma", "sub", "trap", "ledm", "neuro", "ribbon", "rain", "lava", "smoke", "tunnel", "aurora", "oil", "galaxy", "prism", "ombre"],
@@ -158,8 +161,9 @@
     neuroMirror: "off",
     vuFace: "night", // VU Meters look: night (classic) | minimal | holo | hud
     vuMeters: "both", // VU Meters: both needles in one meter | split (bass left, highs right) | bass (one meter)
-    vuX: 0, // VU Meters: move left (-1) / right (+1)
-    vuY: 0, // VU Meters: move down (-1) / up (+1)
+    fit: "full", // full = the whole view; art = the free space beside the album art (either side)
+    moveX: 0, // move left (-1) / right (+1)
+    moveY: 0, // move down (-1) / up (+1)
     circleAt: "middle", // circle styles: middle of the view, or round the album art
     beatEvery: "1", // beat-stepping styles change every 1, 2, 4 or 8 beats
     colorMove: "move", // move = colours shift on the beat and drift; still = they stay put
@@ -168,13 +172,15 @@
     color2: "#5b8cff",
   };
   const STYLE_DEFAULTS = {
+    radial: { fit: "art" },
+    ncs: { fit: "art" },
     mirror: { barCount: 56, bassBoost: 0.6 },
     plasma: { shake: 0 },
     ascii: { colorMode: "classic" },
     geometric: { shake: 0, opacity: 0.85 },
     bauhaus: { shake: 0, opacity: 0.85, beatEvery: "4" },
-    sub: { shake: 0.4 },
-    trap: { shake: 0.4, bassBoost: 0.7, colorMode: "classic" },
+    sub: { shake: 0.4, fit: "art" },
+    trap: { shake: 0.4, bassBoost: 0.7, colorMode: "classic", fit: "art" },
     neuro: { shake: 0.2, colorMode: "classic", neuroTwist: 0.05 },
     ribbon: { shake: 0 },
     rain: { shake: 0 },
@@ -189,13 +195,13 @@
     prism: { shake: 0, colorMode: "classic" },
     ombre: { shake: 0 },
     vu: { shake: 0, vuFace: "holo" },
-    scope: { shake: 0, colorMode: "classic" },
-    drumpads: { shake: 0 },
+    scope: { shake: 0, colorMode: "classic", fit: "art" },
+    drumpads: { shake: 0, fit: "art" },
     led: { colorMode: "classic", shake: 0 },
     ledplasma: { shake: 0 },
     monstercat: { barCount: 63, bassBoost: 0.8, smoothing: 0.45, beatEvery: "4" },
     ledm: { shake: 0 },
-    ekg: { shake: 0 },
+    ekg: { shake: 0, fit: "art" },
     underwater: { shake: 0 },
     sunset: { shake: 0 },
     nightsky: { shake: 0 },
@@ -258,6 +264,7 @@
   // Settings that were taken out of the panel go back to their defaults.
   if (S.per.neuro) for (const k of ["neuroLine", "neuroTwist", "neuroMirror"]) delete S.per.neuro[k];
   if (S.per.vu && S.per.vu.vuFace === "led") delete S.per.vu.vuFace;
+  if (S.per.vu && "vuX" in S.per.vu) { S.per.vu.moveX = S.per.vu.vuX; S.per.vu.moveY = S.per.vu.vuY || 0; delete S.per.vu.vuX; delete S.per.vu.vuY; }
   if (S.per.vu && (S.per.vu.vuFace === "studio" || S.per.vu.vuFace === "broadcast")) S.per.vu.vuFace = "holo";
   for (const k of Object.keys(S.per)) if (S.per[k]) delete S.per[k].autoRange;
   // Shake used to go to 300% (and 40% was already a lot): convert old values so
@@ -2647,8 +2654,8 @@ void main() {
     }
     const look = VU_LOOKS[p.vuFace] || vuNight;
     const sp = freeSpot(v);
-    sp.x += Math.max(-1, Math.min(1, +p.vuX || 0)) * v.w * 0.4;
-    sp.y -= Math.max(-1, Math.min(1, +p.vuY || 0)) * v.h * 0.4;
+    sp.x += Math.max(-1, Math.min(1, +p.moveX || 0)) * v.w * 0.4;
+    sp.y -= Math.max(-1, Math.min(1, +p.moveY || 0)) * v.h * 0.4;
     if (p.vuMeters === "split") {
       const half = { wmax: sp.wmax * 0.62, y: sp.y }; // each a bit bigger than half, they still clear each other
       look(v, p, st, red, { ...half, x: sp.x - sp.wmax / 4 }, [0]);
@@ -2683,6 +2690,17 @@ void main() {
       return { x: r / 2, y: v.h / 2, wmax: r };
     }
     return { x: v.w / 2, y: v.h / 2, wmax: v.w };
+  }
+  // The part of the view a style draws in: the whole view, or (Fit: Beside
+  // art) the free space beside the album art, whichever side the art is.
+  function fitRegion(v, p) {
+    const art = p.fit === "art" && v.artCircle && v.artCircle();
+    if (art) {
+      const gap = art.r * 0.12, m = v.w * 0.03;
+      const [x0, x1] = art.x < v.w / 2 ? [art.x + art.r + gap, v.w - m] : [m, art.x - art.r - gap];
+      if (x1 - x0 > v.w * 0.25) return { x0, w: x1 - x0 };
+    }
+    return { x0: 0, w: v.w };
   }
   const UI_FONT = '"SpotifyMixUI", "CircularSp", "Helvetica Neue", Arial, sans-serif';
 
@@ -4926,7 +4944,7 @@ void main() {
             <div class="lp-row"><div class="lp-label"><span>Colour changes</span></div>${seg("colorMove", [["move", "Moving"], ["still", "Still"]], "style")}</div>
             <div class="lp-colors" data-show-color><label><input type="color" data-key="color1" data-scope="style">Colour 1</label><label><input type="color" data-key="color2" data-scope="style">Colour 2</label></div>`)}
           ${group("Appearance", slider("opacity", "Opacity", 0.1, 1, 0.05, "style") + slider("blur", "Blur", 0, 20, 0.5, "style") + slider("brightness", "Brightness", 0.2, 1.6, 0.05, "style") + slider("size", "Size", 0.4, 2, 0.05, "style"))}
-          ${group("Layout", slider("barCount", "Bar count", 16, 128, 1, "style", u("barCount")) + `<div class="lp-row" data-uses="${u("position")}"><div class="lp-label"><span>Position</span></div>${seg("position", [["bottom", "Bottom"], ["top", "Top"], ["both", "Both"]], "style")}</div><div class="lp-row" data-uses="${u("variant")}"><div class="lp-label"><span>Look</span></div>${seg("variant", [["poster", "Poster"], ["brutalist", "Brutalist"]], "style")}</div><div class="lp-row" data-uses="${u("neuroLook")}"><div class="lp-label"><span>Look</span></div>${seg("neuroLook", [["mesh", "Mesh"], ["lines", "Lines"], ["ridges", "Ridges"]], "style")}</div><div class="lp-row" data-uses="${u("vuFace")}"><div class="lp-label"><span>Look</span></div>${seg("vuFace", [["night", "Classic"], ["minimal", "Minimal"], ["holo", "Holo"], ["hud", "HUD"]], "style")}</div><div class="lp-row" data-uses="${u("vuMeters")}"><div class="lp-label"><span>Meters</span></div>${seg("vuMeters", [["both", "Both"], ["split", "Split"], ["bass", "Bass only"]], "style")}</div>${slider("vuX", "Left / right", -1, 1, 0.05, "style", u("vuX"))}${slider("vuY", "Up / down", -1, 1, 0.05, "style", u("vuY"))}<div class="lp-row" data-uses="${u("circleAt")}"><div class="lp-label"><span>Circle at</span></div>${seg("circleAt", [["middle", "Middle"], ["art", "Album art"]], "style")}</div><div class="lp-row" data-uses="${u("mcColor")}"><div class="lp-label"><span>Bar colour</span></div>${seg("mcColor", [["flow", "Flow"], ["frequency", "Freq."], ["height", "Area"], ["bar", "Bar"], ["solid", "Solid"]], "style")}</div><div class="lp-row" data-uses="${u("beatEvery")}"><div class="lp-label"><span>Change every</span></div>${seg("beatEvery", [["1", "Beat"], ["2", "2"], ["4", "4"], ["8", "8 beats"]], "style")}</div>`, [...new Set([...USES.barCount, ...USES.position, ...USES.variant, ...USES.neuroLook, ...USES.vuFace, ...USES.vuMeters, ...USES.circleAt, ...USES.mcColor, ...USES.beatEvery])].join(","))}
+          ${group("Layout", slider("barCount", "Bar count", 16, 128, 1, "style", u("barCount")) + `<div class="lp-row" data-uses="${u("position")}"><div class="lp-label"><span>Position</span></div>${seg("position", [["bottom", "Bottom"], ["top", "Top"], ["both", "Both"]], "style")}</div><div class="lp-row" data-uses="${u("variant")}"><div class="lp-label"><span>Look</span></div>${seg("variant", [["poster", "Poster"], ["brutalist", "Brutalist"]], "style")}</div><div class="lp-row" data-uses="${u("neuroLook")}"><div class="lp-label"><span>Look</span></div>${seg("neuroLook", [["mesh", "Mesh"], ["lines", "Lines"], ["ridges", "Ridges"]], "style")}</div><div class="lp-row" data-uses="${u("vuFace")}"><div class="lp-label"><span>Look</span></div>${seg("vuFace", [["night", "Classic"], ["minimal", "Minimal"], ["holo", "Holo"], ["hud", "HUD"]], "style")}</div><div class="lp-row" data-uses="${u("vuMeters")}"><div class="lp-label"><span>Meters</span></div>${seg("vuMeters", [["both", "Both"], ["split", "Split"], ["bass", "Bass only"]], "style")}</div><div class="lp-row" data-uses="${u("fit")}"><div class="lp-label"><span>Fit</span></div>${seg("fit", [["full", "Full width"], ["art", "Beside art"]], "style")}</div>${slider("moveX", "Left / right", -1, 1, 0.05, "style", u("moveX"))}${slider("moveY", "Up / down", -1, 1, 0.05, "style", u("moveY"))}<div class="lp-row" data-uses="${u("circleAt")}"><div class="lp-label"><span>Circle at</span></div>${seg("circleAt", [["middle", "Middle"], ["art", "Album art"]], "style")}</div><div class="lp-row" data-uses="${u("mcColor")}"><div class="lp-label"><span>Bar colour</span></div>${seg("mcColor", [["flow", "Flow"], ["frequency", "Freq."], ["height", "Area"], ["bar", "Bar"], ["solid", "Solid"]], "style")}</div><div class="lp-row" data-uses="${u("beatEvery")}"><div class="lp-label"><span>Change every</span></div>${seg("beatEvery", [["1", "Beat"], ["2", "2"], ["4", "4"], ["8", "8 beats"]], "style")}</div>`, [...new Set([...USES.barCount, ...USES.position, ...USES.variant, ...USES.neuroLook, ...USES.vuFace, ...USES.vuMeters, ...USES.moveX, ...USES.circleAt, ...USES.mcColor, ...USES.beatEvery])].join(","))}
         </div>
         ${group("Background", slider("bgDim", "Darken background", 0, 0.9, 0.05, "global") + `<div class="lp-note">Calms Spicy Lyrics' moving background so the visual stands out. The lyrics and album art aren't touched.</div>`)}
       </div>
@@ -5076,7 +5094,7 @@ void main() {
     p.querySelectorAll(".lp-val").forEach((el) => {
       const key = el.dataset.for;
       const val = read(el.dataset.scope, key);
-      el.textContent = key === "barCount" ? String(Math.round(val)) : key === "blur" ? val + "px" : key === "syncDelay" ? Math.round(val) + " ms" : key === "beatSens" && val <= 0 ? "Off" : key === "vuX" || key === "vuY" ? (Math.abs(val) < 0.025 ? "Centre" : (key === "vuX" ? (val < 0 ? "Left " : "Right ") : val < 0 ? "Down " : "Up ") + Math.round(Math.abs(val) * 100) + "%") : Math.round(val * 100) + "%";
+      el.textContent = key === "barCount" ? String(Math.round(val)) : key === "blur" ? val + "px" : key === "syncDelay" ? Math.round(val) + " ms" : key === "beatSens" && val <= 0 ? "Off" : key === "moveX" || key === "moveY" ? (Math.abs(val) < 0.025 ? "Centre" : (key === "moveX" ? (val < 0 ? "Left " : "Right ") : val < 0 ? "Down " : "Up ") + Math.round(Math.abs(val) * 100) + "%") : Math.round(val * 100) + "%";
     });
     p.querySelectorAll("[data-uses]").forEach((el) => el.classList.toggle("lp-hidden", !el.dataset.uses.split(",").includes(style)));
     p.querySelectorAll("[data-show-if]").forEach((el) => el.classList.toggle("lp-hidden", S[el.dataset.showIf] === "off"));
@@ -5729,7 +5747,20 @@ void main() {
         }
         ctx.setTransform(z, 0, 0, z, (v.w / 2) * (1 - z) + dx, (v.h / 2) * (1 - z) + dy);
         ctx.globalCompositeOperation = "lighter";
-        DRAW[style](v, p, dt, t);
+        // Fit and move: the style draws into a view the size of its region,
+        // shifted into place (VU Meters places itself).
+        let vv = v;
+        if (style !== "vu" && USES.moveX.includes(style)) {
+          const R = fitRegion(v, p);
+          ctx.translate(R.x0 + Math.max(-1, Math.min(1, +p.moveX || 0)) * v.w * 0.4, -Math.max(-1, Math.min(1, +p.moveY || 0)) * v.h * 0.4);
+          if (R.x0 || R.w !== v.w) {
+            vv = v.fitV || (v.fitV = Object.create(v));
+            vv.w = R.w;
+            vv.h = v.h;
+            vv.artCircle = () => { const a = v.artCircle(); return a && { ...a, x: a.x - R.x0 }; };
+          }
+        }
+        DRAW[style](vv, p, dt, t);
         ctx.setTransform(1, 0, 0, 1, 0, 0);
         ctx.globalCompositeOperation = "lighter";
         ctx.globalAlpha = 1;

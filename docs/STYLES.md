@@ -9,6 +9,10 @@ Every style:
 - takes its colours from the album cover;
 - gets a little fuller on songs with no lyrics, or with static lyrics that don't move.
 
+Styles that aren't full-screen scenes (bars, meters, lines, circles, drum pads, posters) also have, under **Look → Layout**:
+- **Fit**: **Full width**, or **Beside art**, which keeps it in the free space next to the album art, on whichever side the art is (in fullscreen you can move the art to either side). Circles, drum pads, EKG and the oscilloscope start on Beside art;
+- **Left / right** and **Up / down**, to move it anywhere.
+
 On songs with no lyrics, the song name and artist take the place of Spicy Lyrics' "No lyrics" box, except in fullscreen, where Spicy's box is left alone (click it to see the box again; you can turn it off in the panel's settings).
 
 > The pictures show just the visualiser (no lyrics), all playing the same test song. The colours come from the album cover, so they change between a few made-up albums.
