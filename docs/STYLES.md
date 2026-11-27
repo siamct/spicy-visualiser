@@ -52,12 +52,12 @@ A terminal-style spectrum made of characters, with falling peak markers.
 ### VU Meters
 ![VU Meters](screenshots/styles/vu.jpg)
 
-Two needle meters: left is the bass, right the mids and highs. The needles are a little sluggish and swing past before settling (**Smoothing** sets how sluggish), and a peak light comes on when a needle goes into the red. Five looks (**Look**):
-- **Classic** (above): night hi-fi, two faces glowing warm amber from behind in a dark room, the print and needles as dark silhouettes;
-- **Minimal**: no box, just a thin scale in the album's colours, a red zone that glows (brighter when the needle's in it) and a thin bright needle;
-- **Broadcast**: an old radio-studio meter, matte black face, white print marked 1 to 7 and a white needle;
-- **Holo**: floating arcs of ticks that light up to the needle, with a glowing needle line and a faint scanline shimmer. Its needle is heavier and only really moves on bigger changes;
-- **HUD**: sci-fi gauges, a segmented level arc inside a slowly turning ring.
+One meter with two needles, like a stereo meter: one for the bass (low), one for the mids and highs (high). It sits in the middle, or beside the album art when the art is showing. The needles are a little sluggish and swing past before settling (**Smoothing** sets how sluggish), and a peak light comes on when a needle goes into the red. Five looks (**Look**):
+- **Classic** (above): night hi-fi, a face glowing warm amber from behind in a dark room, the print and needles as dark silhouettes (black is low, red is high);
+- **Minimal**: no box, just a thin scale in the album's colours, a red zone that glows (brighter when a needle's in it) and two thin needles in the album's colours;
+- **Broadcast**: an old radio-studio meter, matte black face, white print marked 1 to 7, with a red needle and a green one;
+- **Holo**: two floating arcs of ticks (outer low, inner high) that light up to their needles, with a glowing needle line and a faint scanline shimmer. Its needle is heavier and only really moves on bigger changes;
+- **HUD**: a sci-fi gauge, two segmented level arcs inside a slowly turning ring.
 
 ### Oscilloscope
 ![Oscilloscope](screenshots/styles/scope.jpg)
