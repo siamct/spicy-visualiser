@@ -72,21 +72,15 @@ A glowing line tracing the sound like an old scope, over a faint grid:
 - the line glows on for a moment after it passes, like a real scope screen;
 - **Colours: Classic** (default) is green phosphor; the other colour modes use those colours.
 
-### Scope x4
-![Scope x4](screenshots/styles/chipscope.jpg)
-
-Four rows of wave readings: the bass, low mids, high mids and highs. Each row's wave is made from the real levels in its part of the sound, every band in it adding a wave of its own pitch (higher bands, tighter waves), so its shape changes with what's actually playing. Louder makes it taller.
-
-
 ### EKG
 ![EKG](screenshots/styles/ekg.jpg)
 
-A thin glowing line written across the screen like a heart monitor, wiping just ahead of itself. It has no made-up heartbeat shapes: its height follows where the sound sits in pitch (roughly), and it jumps up or down as the music gets louder or quieter than it just was. One sweep lasts 8 beats of the song, so faster songs sweep faster; **Speed** changes that, **Smoothing** calms the line.
+A thin glowing line written across the screen like a heart monitor, with the third of the screen just ahead of it wiped clear. It has no made-up heartbeat shapes: its height follows where the sound sits in pitch (roughly), and it jumps up or down as the music gets louder or quieter than it just was. One sweep lasts 8 beats of the song, so faster songs sweep faster; **Speed** changes that, **Smoothing** calms the line.
 
-### EKG x3
-![EKG x3](screenshots/styles/ekg3.jpg)
+### RGB Split
+![RGB Split](screenshots/styles/rgbsplit.jpg)
 
-Three of those lines, one each for the bass and drums, the middle of the sound (where voices mostly sit) and the highs. Each moves only with its own part, scaled to how much that part usually moves, so a quiet part still shows.
+Monstercat-style bars drawn three times, in red, green and blue added together, so they're white where they line up. Kicks and the bass pull the three apart sideways, and they slide back together. **Bar count** sets how many.
 
 ---
 
@@ -132,17 +126,12 @@ Flying down a gently bending tunnel of glowing rings, with stars streaming past:
 
 These styles follow the song's beat more than the raw spectrum, so they keep a steady rhythm.
 
-Two drum styles show only the drum hits, nothing else, in the album's colours. They spring up on each hit and swing a little past before settling, like a VU needle (**Smoothing** sets how loose), and with **Fit each song** on they learn each song's drum levels, so quiet and loud songs both hit hard.
+Drum Pads shows only the drum hits, nothing else, in the album's colours. They spring up on each hit and swing a little past before settling, like a VU needle (**Smoothing** sets how loose), and with **Fit each song** on they learn each song's drum levels, so quiet and loud songs both hit hard.
 
 ### Drum Pads
 ![Drum Pads](screenshots/styles/drumpads.jpg)
 
 Four drum-machine pads (kick, snare, hi-hat, bass) that light up as each is hit, then fade.
-
-### Impact
-![Impact](screenshots/styles/drumwaves.jpg)
-
-Each kick sends a wave in from the left, each snare one in from the right. Where two meet they burst into a flash that spreads up and down. Harder hits make brighter waves.
 
 ### Geometric
 ![Geometric](screenshots/styles/geometric.jpg)
@@ -187,7 +176,7 @@ Patches of rainbow swirls like oil on a wet road at night, with plenty of dark r
 ### Silk
 ![Silk](screenshots/styles/silk.jpg)
 
-Slow flowing folds of shiny fabric in the album's colours, with a soft satin sheen. The bass deepens the folds and kicks brighten the sheen.
+Flowing folds of shiny fabric in the album's colours, with a satin sheen. They flow slowly in quiet parts and much faster when it's loud; the bass deepens them and sends ripples along them, and kicks flash the sheen.
 
 ### Liquid
 ![Liquid](screenshots/styles/dnb.jpg)
@@ -227,12 +216,12 @@ Drifting slowly through a coloured nebula, stars streaming past. One slow, smoot
 ### Sunset
 ![Sunset](screenshots/styles/sunset.jpg)
 
-A sky in the album's colours, warm at the horizon with the sun low in the middle. Soft clouds drift across, lit from below; they glow a little on the beat and drift faster when it's busy.
+A sky in the album's colours, warm at the horizon with the sun low in the middle, and soft clouds lit from below. Kicks light the clouds and swell the sun's glow, the bass makes the clouds billow, and they drift much faster when the music is loud.
 
 ### Night Sky
 ![Night Sky](screenshots/styles/nightsky.jpg)
 
-A dark sky with twinkling stars and a moon, and thin clouds drifting past it, silver at the edges near the moon. It slowly brightens as the music gets fuller.
+A dark sky with twinkling stars and a moon, and thin clouds drifting past it, silver at the edges near the moon. Kicks light the moon's glow and the cloud edges, the bass churns the clouds, and they drift much faster when the music is loud.
 
 ### Ribbon
 ![Ribbon](screenshots/styles/ribbon.jpg)

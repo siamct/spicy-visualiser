@@ -29,7 +29,6 @@
     ["scope", "Oscilloscope"],
     ["holospec", "Holo Spectrum"],
     ["drumpads", "Drum Pads"],
-    ["drumwaves", "Impact"],
     ["plasma", "Plasma"],
     ["ribbon", "Ribbon"],
     ["rain", "Rain on Glass"],
@@ -54,8 +53,7 @@
     ["led", "LED Wall"],
     ["ledplasma", "LED Plasma"],
     ["ekg", "EKG"],
-    ["ekg3", "EKG x3"],
-    ["chipscope", "Scope x4"],
+    ["rgbsplit", "RGB Split"],
     ["ocean", "Ocean"],
     ["underwater", "Underwater"],
     ["sunset", "Sunset"],
@@ -65,15 +63,13 @@
   // Little pictures for the style picker.
   const STYLE_ICON = {
     ekg: '<path d="M1 13h5l2-3 2.5 9L14 4l2.5 9H23" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round"/>',
-    ekg3: '<g fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round"><path d="M1 5h8l1.5-3 2 6 1.5-3H23"/><path d="M1 12h11l1.5-3 2 6 1.5-3H23" opacity=".8"/><path d="M1 19h5l1.5-3 2 6 1.5-3H23" opacity=".6"/></g>',
-    chipscope: '<g fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M1 5c2-3 3 3 5 0s3-3 5 0 3 3 5 0 3-3 5 0"/><path d="M1 12c1-2 2 2 3 0s2-2 3 0 2 2 3 0 2-2 3 0 2 2 3 0 2-2 3 0" opacity=".75"/><path d="M1 19c1 1 1-2 2 0s1 1 2-1 1 2 2 0 1-1 2 1 1-2 2 0 1 1 2-1 1 2 2 0 1-1 2 1" opacity=".55"/></g>',
+    rgbsplit: '<g style="mix-blend-mode:screen"><path d="M3 21V12h3v9zm5 0V6h3v15zm5 0V9h3v12zm5 0V4h3v17z" opacity=".55" transform="translate(-1 0)"/><path d="M3 21V12h3v9zm5 0V6h3v15zm5 0V9h3v12zm5 0V4h3v17z" opacity=".55" transform="translate(1 1)"/></g>',
     ocean: '<g fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><path d="M1 10c3-3 5 3 8 0s5 3 8 0 4 2 6 0"/><path d="M1 15c3-3 5 3 8 0s5 3 8 0 4 2 6 0" opacity=".7"/><path d="M1 20c3-3 5 3 8 0s5 3 8 0 4 2 6 0" opacity=".45"/></g>',
     underwater: '<g fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M1 5c3-2 5 2 8 0s5 2 8 0 4 1 6 0"/><path d="M6 21l2.5-12M12 21V9M18 21l-2.5-12" opacity=".45"/></g><circle cx="9" cy="15" r="1.2"/><circle cx="15" cy="12" r="1"/>',
     sunset: '<path d="M5 16a7 7 0 0 1 14 0z"/><g stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M1 19h22"/><path d="M4 22h16" opacity=".5"/></g><path d="M3 8c2-1.5 4-1.5 6 0s4 1.5 6 0" fill="none" stroke="currentColor" stroke-width="1.4" opacity=".6"/>',
     nightsky: '<path d="M15 3a8 8 0 1 0 6 12 6.5 6.5 0 0 1-6-12z"/><circle cx="5" cy="5" r="1"/><circle cx="9" cy="2.5" r=".8"/><circle cx="3" cy="11" r=".8"/>',
     holospec: '<g>'+[[3,4],[7,6],[11,3],[15,5],[19,2]].map(([x,n])=>[...Array(n)].map((_,s)=>`<rect x="${x}" y="${19-s*3}" width="3" height="1.3" rx=".5" opacity="${(0.45+s*0.1).toFixed(2)}"/>`).join('')).join('')+'</g>',
     drumpads: '<rect x="3" y="3" width="8" height="8" rx="1.6"/><rect x="13" y="3" width="8" height="8" rx="1.6" opacity=".4"/><rect x="3" y="13" width="8" height="8" rx="1.6" opacity=".4"/><rect x="13" y="13" width="8" height="8" rx="1.6"/>',
-    drumwaves: '<g fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M8.5 20a3.5 3.5 0 0 1 7 0"/><path d="M5 20a7 7 0 0 1 14 0" opacity=".7"/><path d="M1.5 20a10.5 10.5 0 0 1 21 0" opacity=".4"/><path d="M9 3.5a3 3 0 0 0 6 0" opacity=".7"/></g>',
     scope: '<g fill="none" stroke="currentColor"><rect x="2.5" y="4.5" width="19" height="15" rx="2" stroke-width="1.5"/><path d="M4.5 12c1.5 0 1.8-4 3.2-4s1.7 8 3.3 8 1.8-6 3.3-6 1.6 3 3 3 1.2-1 2.2-1" stroke-width="1.6" stroke-linecap="round"/></g>',
     vu: '<g fill="none" stroke="currentColor" stroke-linecap="round"><rect x="2.5" y="5" width="19" height="14" rx="1.5" stroke-width="1.5"/><path d="M6 13.5a7 7 0 0 1 12 0" stroke-width="1.4"/><path d="M12 17l3.5-6.5" stroke-width="1.6"/></g>',
     particles: '<g stroke="currentColor" stroke-width="1" opacity=".55"><path d="M5 7l6 4 7-5M11 11l-4 7M11 11l7 5"/></g><circle cx="5" cy="7" r="2"/><circle cx="11" cy="11" r="2.4"/><circle cx="18" cy="6" r="1.6"/><circle cx="7" cy="18" r="1.7"/><circle cx="18" cy="16" r="2"/>',
@@ -112,11 +108,11 @@
   // Styles that still look right on Spotify's data (it has loudness and
   // beats, not a real spectrum). With that source they're listed first and
   // the rest fold away under "More styles".
-  const SONG_DATA_OK = new Set(["ocean", "underwater", "sunset", "nightsky", "silk", "tvpixels", "drumpads", "drumwaves", "particles", "plasma", "ledplasma", "warp", "dnb", "ribbon", "rain", "lava", "smoke", "tunnel", "aurora", "oil", "galaxy", "prism", "ombre", "geometric", "bauhaus", "sub", "off"]);
+  const SONG_DATA_OK = new Set(["ocean", "underwater", "sunset", "nightsky", "silk", "tvpixels", "drumpads", "particles", "plasma", "ledplasma", "warp", "dnb", "ribbon", "rain", "lava", "smoke", "tunnel", "aurora", "oil", "galaxy", "prism", "ombre", "geometric", "bauhaus", "sub", "off"]);
   const STYLE_GROUPS = [
-    ["Bars & meters", ["monstercat", "mirror", "holospec", "ledm", "led", "ascii", "vu", "scope", "chipscope", "ekg", "ekg3"]],
+    ["Bars & meters", ["monstercat", "mirror", "holospec", "ledm", "led", "ascii", "vu", "scope", "ekg", "rgbsplit"]],
     ["Circles", ["radial", "ncs", "sub", "trap", "tunnel"]],
-    ["On the beat", ["drumpads", "drumwaves", "geometric", "bauhaus"]],
+    ["On the beat", ["drumpads", "geometric", "bauhaus"]],
     ["Liquid colour", ["plasma", "ledplasma", "tvpixels", "oil", "silk", "dnb"]],
     ["Water", ["ocean", "underwater"]],
     ["Sky & light", ["aurora", "galaxy", "sunset", "nightsky", "ribbon", "ombre", "warp", "particles"]],
@@ -126,7 +122,7 @@
   // Which bands each style reads: "punch" snaps up and falls with gravity.
   const MODEL = {};
   const USES = {
-    barCount: ["holospec", "monstercat", "mirror", "radial"],
+    barCount: ["rgbsplit", "holospec", "monstercat", "mirror", "radial"],
     particles: ["particles", "monstercat", "warp", "dnb", "trap"],
     position: ["monstercat", "mirror", "ascii"],
     variant: ["geometric"],
@@ -135,9 +131,9 @@
     mcColor: ["monstercat"],
     vuFace: ["vu"],
     circleAt: ["trap", "radial", "ncs", "sub"],
-    speed: ["ekg", "ekg3", "chipscope", "ocean", "underwater", "sunset", "nightsky", "silk", "tvpixels", "drumwaves", "scope", "trap", "neuro", "ribbon", "rain", "lava", "smoke", "tunnel", "aurora", "oil", "particles", "monstercat", "ncs", "radial", "plasma", "warp", "dnb", "ascii", "led", "ledplasma", "galaxy", "prism", "ombre"],
-    bassBoost: ["ocean", "underwater", "sunset", "nightsky", "silk", "tvpixels", "chipscope", "scope", "particles", "monstercat", "radial", "mirror", "ncs", "warp", "plasma", "dnb", "ascii", "geometric", "bauhaus", "led", "ledplasma", "sub", "trap", "ledm", "neuro", "ribbon", "rain", "lava", "smoke", "tunnel", "aurora", "oil", "galaxy", "prism", "ombre"],
-    smoothing: ["ekg", "ekg3", "chipscope", "particles", "monstercat", "radial", "mirror", "ncs", "warp", "plasma", "dnb", "ascii", "geometric", "bauhaus", "led", "ledplasma", "sub", "trap", "ledm", "neuro", "aurora", "vu", "drumpads", "drumwaves", "holospec"],
+    speed: ["ekg", "ocean", "underwater", "sunset", "nightsky", "silk", "tvpixels", "scope", "trap", "neuro", "ribbon", "rain", "lava", "smoke", "tunnel", "aurora", "oil", "particles", "monstercat", "ncs", "radial", "plasma", "warp", "dnb", "ascii", "led", "ledplasma", "galaxy", "prism", "ombre"],
+    bassBoost: ["rgbsplit", "ocean", "underwater", "sunset", "nightsky", "silk", "tvpixels", "scope", "particles", "monstercat", "radial", "mirror", "ncs", "warp", "plasma", "dnb", "ascii", "geometric", "bauhaus", "led", "ledplasma", "sub", "trap", "ledm", "neuro", "ribbon", "rain", "lava", "smoke", "tunnel", "aurora", "oil", "galaxy", "prism", "ombre"],
+    smoothing: ["rgbsplit", "ekg", "particles", "monstercat", "radial", "mirror", "ncs", "warp", "plasma", "dnb", "ascii", "geometric", "bauhaus", "led", "ledplasma", "sub", "trap", "ledm", "neuro", "aurora", "vu", "drumpads", "holospec"],
   };
 
   const STYLE_BASE = {
@@ -191,19 +187,17 @@
     vu: { shake: 0, vuFace: "holo" },
     scope: { shake: 0, colorMode: "classic" },
     drumpads: { shake: 0 },
-    drumwaves: { shake: 0 },
     led: { colorMode: "classic", shake: 0 },
     ledplasma: { shake: 0 },
     monstercat: { barCount: 63, bassBoost: 0.8, smoothing: 0.45, beatEvery: "4" },
     ledm: { shake: 0 },
     ekg: { shake: 0 },
-    ekg3: { shake: 0 },
-    chipscope: { shake: 0 },
     ocean: { shake: 0 },
     underwater: { shake: 0 },
     sunset: { shake: 0 },
     nightsky: { shake: 0 },
     holospec: { shake: 0 },
+    rgbsplit: { shake: 0, barCount: 48 },
   };
   const GLOBAL_DEFAULTS = {
     style: "plasma", // first install: a flowing style, not bars
@@ -250,7 +244,7 @@
   if (!Array.isArray(S.favs)) S.favs = [];
   // Retro Bars became LED Meters.
   // (and Drum Bars was taken out)
-  const MOVED = { retro: "ledm", drumbars: "drumpads", drums: "drumpads", holoradar: "holospec", holorings: "holospec", pitchtrail: "ekg", kaleido: "plasma", bubbles: "lava", chrome: "silk", ekgpitch: "ekg", ekgscroll: "ekg", pond: "ocean", storm: "sunset", mercury: "silk" };
+  const MOVED = { retro: "ledm", drumbars: "drumpads", drums: "drumpads", holoradar: "holospec", holorings: "holospec", pitchtrail: "ekg", kaleido: "plasma", bubbles: "lava", chrome: "silk", ekgpitch: "ekg", ekgscroll: "ekg", pond: "ocean", storm: "sunset", mercury: "silk", ekg3: "ekg", chipscope: "scope", drumwaves: "drumpads" };
   if (MOVED[S.style]) S.style = MOVED[S.style];
   S.favs = [...new Set(S.favs.map((f) => MOVED[f] || f))];
   if (!validStyle(S.style)) S.style = GLOBAL_DEFAULTS.style;
@@ -1602,6 +1596,44 @@
     v.soft(cx, cy, far * 0.35, colorAt(0.5), 0.05 + 0.12 * bass + 0.12 * k);
   };
 
+  // RGB Split: spectrum bars drawn three times, in red, green and blue
+  // added together, so they're white where they line up. Kicks and the bass
+  // pull the three apart sideways (and a little up and down), and they
+  // slide back together.
+  DRAW.rgbsplit = (v, p, dt) => {
+    const { ctx, w, h, U } = v;
+    const st = v.rgbsplit || (v.rgbsplit = { kSeen: shared.beatSerial, sp: 0, lift: 0 });
+    const n = Math.max(8, Math.round(p.barCount));
+    const margin = w * 0.06, slot = (w - margin * 2) / n, bw = slot * 0.7;
+    const maxH = h * 0.34 * p.size;
+    const raw = new Array(n);
+    for (let i = 0; i < n; i++) raw[i] = bandAt(Math.pow(i / (n - 1), 1.1) * 0.95);
+    const vals = monstercatFilter(raw, 1.75 + p.smoothing * 1.5);
+    if (st.kSeen !== shared.beatSerial) {
+      st.kSeen = shared.beatSerial;
+      st.sp = Math.min(1.4, st.sp + 0.5 + 0.6 * Math.min(1, shared.kick));
+    }
+    st.sp *= Math.exp(-dt * 5);
+    const bass = shared.bassPunch || 0;
+    st.lift += (bass - st.lift) * Math.min(1, dt * (bass > st.lift ? 8 : 2));
+    const off = (st.sp * 22 + st.lift * 10) * U * (0.5 + 0.5 * p.sensitivity);
+    const baseY = Math.min(h * 0.88, unitArea(v).floor - h * 0.03);
+    ctx.save();
+    ctx.globalCompositeOperation = "lighter";
+    ctx.globalAlpha = A_(1, v);
+    const LAYERS = [[[255, 30, 50], -1, -0.25], [[30, 255, 80], 0, 0.3], [[50, 90, 255], 1, -0.15]];
+    for (const [col, dx, dy] of LAYERS) {
+      ctx.fillStyle = v.rgba(col, 0.95);
+      ctx.beginPath();
+      for (let i = 0; i < n; i++) {
+        const bh = Math.max(2 * U, vals[i] * maxH);
+        ctx.rect(margin + i * slot + (slot - bw) / 2 + dx * off, baseY - bh + dy * off, bw, bh);
+      }
+      ctx.fill();
+    }
+    ctx.restore();
+  };
+
   DRAW.monstercat = (v, p, dt, t) => {
     const { ctx, w, h, U } = v;
     const n = Math.max(8, Math.round(p.barCount));
@@ -2456,12 +2488,12 @@ void main() {
   vec2 uv = (gl_FragCoord.xy - 0.5 * uRes) / uRes.y;
   float zz = uZ * 0.15, ca = cos(uT * 0.02), sa = sin(uT * 0.02);
   vec2 p = mat2(ca, -sa, sa, ca) * uv * 1.6;
-  vec2 q = vec2(fbm(p * 1.2 + vec2(zz, 0.)), fbm(p * 1.2 + vec2(3.3, -zz)));
+  vec2 q = vec2(fbm3(p * 1.2 + vec2(zz, 0.)), fbm3(p * 1.2 + vec2(3.3, -zz)));
   float n = fbm(p * 1.5 + (2. + 1.2 * uBass) * q + vec2(-zz * 0.6, zz * 0.4));
   vec3 col = mix(uC0, uC1, smoothstep(0.3, 0.8, q.x));
   col = mix(col, uC2, smoothstep(0.5, 0.9, q.y) * 0.7);
   col *= smoothstep(0.35, 0.95, n) * (0.3 + 0.25 * uE + 0.55 * uBass + 0.4 * uKick);
-  col *= 0.55 + 0.45 * smoothstep(0.2, 0.6, fbm(p * 3. - q * 2.)); // darker dust lanes
+  col *= 0.55 + 0.45 * smoothstep(0.2, 0.6, fbm3(p * 3. - q * 2.)); // darker dust lanes
   for (int i = 0; i < 4; i++) {
     float fi = float(i);
     float d = fract(uZ * 0.25 + fi * 0.25);
@@ -2540,16 +2572,16 @@ void main() {
   // the whole surface drifts slowly round in a big loop and gently warps
   vec2 drift = vec2(sin(uT * 0.05) * 1.4 + uT * 0.03, cos(uT * 0.04) * 1.1 - uT * 0.02);
   // the stone: soft blotches with faint cracks
-  vec2 q = vec2(fbm(p * 0.9 + drift), fbm(p * 0.9 + vec2(4.3, 2.1) - drift));
+  vec2 q = vec2(fbm3(p * 0.9 + drift), fbm3(p * 0.9 + vec2(4.3, 2.1) - drift));
   float s = fbm(p * 1.6 + q * 1.5 + drift);
-  float crack = 1. - abs(fbm(p * 3.2 + q * 2.) * 2. - 1.);
+  float crack = 1. - abs(fbm3(p * 3.2 + q * 2.) * 2. - 1.);
   vec3 stone = vec3(0.075, 0.09, 0.085) * (0.4 + 1.2 * s) + vec3(0.03, 0.035, 0.032) * pow(crack, 5.);
   // the shimmer flecks
   float n = fbm(p * 6. + drift * 1.5 + q * 2.5 + vec2(uT * 0.16, -uT * 0.11));
   float m = fbm(p * 14. + drift * 2. - q * 3. + vec2(-uT * 0.2, uT * 0.15));
   // a slow wave of light travels over the stone: where it passes, flecks
   // appear; behind it they fade back into the stone
-  float reveal = fbm(p * 0.45 + vec2(uT * 0.13, -uT * 0.09)) * 2. - 1.;
+  float reveal = fbm3(p * 0.45 + vec2(uT * 0.13, -uT * 0.09)) * 2. - 1.;
   float centre = length((uv - 0.5) * vec2(1.3, 1.6));
   float thr = 0.7 + 0.12 * centre - 0.16 * reveal - 0.05 * uE - 0.1 * uBass - 0.04 * uKick;
   float fleck = smoothstep(thr, thr + 0.02, n) * smoothstep(0.5, 0.6, m);
@@ -3092,9 +3124,9 @@ void main() {
     tr.head = to % EKG_N;
   }
   // a monitor sweep: the line is written left to right over the old one,
-  // with a small wiped gap just ahead of where it's writing
+  // with the third of the screen just ahead of it wiped clear
   function ekgSweep(ctx, v, tr, x0, x1, cy, amp, col) {
-    const dx = (x1 - x0) / (EKG_N - 1), head = Math.floor(tr.head) % EKG_N, gap = Math.round(EKG_N * 0.035);
+    const dx = (x1 - x0) / (EKG_N - 1), head = Math.floor(tr.head) % EKG_N, gap = Math.round(EKG_N * 0.33);
     const path = new Path2D();
     let pen = false;
     for (let i = 0; i < EKG_N; i++) {
@@ -3138,31 +3170,6 @@ void main() {
     ekgSweep(ctx, v, st.tr, w * 0.05, w * 0.95, h * 0.55, h * 0.2 * p.size, colorAt(0.5));
     ctx.restore();
   };
-  // EKG x3: three lines for the bass and drums, the middle of the sound
-  // (where voices mostly sit) and the highs. Each moves only with its own
-  // part: up when it gets louder than it just was, down when it drops.
-  DRAW.ekg3 = (v, p, dt) => {
-    const { ctx, w, h } = v;
-    const st = v.ekg3 || (v.ekg3 = { ch: [0, 1, 2].map(() => ({ tr: ekgNew(), lv: 0, avg: 0, dev: 0.05, y: 0 })) });
-    const band = (a, b) => { let s = 0; for (let i = 0; i < 8; i++) s += bandAt(a + ((b - a) * i) / 7); return s / 8; };
-    const lv = [band(0, 0.14), band(0.28, 0.6), band(0.7, 0.98)];
-    const secs = ekgSecs(p), sens = 0.6 + 0.4 * p.sensitivity;
-    ctx.save();
-    ctx.globalCompositeOperation = "lighter";
-    ctx.globalAlpha = A_(1, v);
-    st.ch.forEach((c, i) => {
-      c.lv += (lv[i] - c.lv) * Math.min(1, dt * (10 + 15 * (1 - p.smoothing)));
-      const d = c.lv - c.avg;
-      c.avg += d * Math.min(1, dt * 1.5);
-      c.dev += (Math.abs(d) - c.dev) * Math.min(1, dt * 0.8);
-      const y0 = c.y;
-      // scaled by how much this part usually moves, so a quiet part still shows
-      c.y = Math.max(-1.3, Math.min(1.3, (d / (2.5 * c.dev + 0.02)) * sens));
-      ekgWrite(c.tr, dt, secs, y0, c.y);
-      ekgSweep(ctx, v, c.tr, w * 0.05, w * 0.95, h * (0.3 + 0.23 * i), h * 0.08 * p.size, colorAt([0.1, 0.5, 0.9][i]));
-    });
-    ctx.restore();
-  };
 
   // ---------------------------------------------------------------------------
   // Water and sky scenes. All use the album's colours, which turn on the
@@ -3192,7 +3199,7 @@ void main() {
   if (d.y >= 0.) {
     // the sky, with a few thin bands of cloud near the horizon
     vec3 col = sky(d, glint);
-    float cl = fbm(vec2(d.x / (d.y + 0.08) * 0.8 + uT * 0.01, d.y * 18.));
+    float cl = fbm3(vec2(d.x / (d.y + 0.08) * 0.8 + uT * 0.01, d.y * 18.));
     col = mix(col, col * 0.55, smoothstep(0.55, 0.8, cl) * smoothstep(0.35, 0.02, d.y));
     o = vec4(min(col, vec3(1.)), 0.95);
     return;
@@ -3202,7 +3209,7 @@ void main() {
   float amp = 1. + 1.6 * uBass + 0.4 * uE;
   vec2 g = vec2(0.);
   float hgt = 0., a = 0.08, k = 0.6;
-  for (int i = 0; i < 10; i++) {
+  for (int i = 0; i < 7; i++) {
     float fi = float(i);
     float ang = fi * 2.39996 + 0.4;
     vec2 D = vec2(cos(ang), sin(ang));
@@ -3211,8 +3218,8 @@ void main() {
     float A = a * amp / (1. + pow(k * t * 0.01, 2.));
     hgt += A * sin(ph);
     g += A * k * cos(ph) * D;
-    a *= 0.7;
-    k *= 1.45;
+    a *= 0.68;
+    k *= 1.6;
   }
   vec3 n = normalize(vec3(-g.x, 1., -g.y));
   vec3 r = reflect(d, n);
@@ -3241,7 +3248,7 @@ void main() {
   vec2 uv = gl_FragCoord.xy / uRes;
   vec2 p = uv * vec2(uRes.x / uRes.y, 1.) * 3.;
   float wob = 1. + 1.2 * uBass;
-  vec2 w = vec2(fbm(p * 0.7 + vec2(uT * 0.13, 0.)), fbm(p * 0.7 + vec2(3.1, 7.7) - uT * 0.11));
+  vec2 w = vec2(fbm3(p * 0.7 + vec2(uT * 0.13, 0.)), fbm3(p * 0.7 + vec2(3.1, 7.7) - uT * 0.11));
   float n1 = noise(p * 1.7 + w * 1.6 * wob + vec2(0., uT * 0.25));
   float n2 = noise(p * 2.3 - w * 1.3 * wob + vec2(5.2, -uT * 0.2));
   float c1 = pow(1. - abs(n1 * 2. - 1.), 10.);
@@ -3263,7 +3270,8 @@ void main() {
 
   // Sunset: a sky in the album's colours, warm at the horizon with the sun
   // low in the middle, and soft clouds drifting across, lit from below.
-  // They glow a little on the beat and drift faster when it's busy.
+  // Kicks light the clouds and swell the sun's glow, the bass makes the
+  // clouds billow, and they drift much faster when the music is loud.
   const SUNSET_FS = `
 uniform float uT, uE, uBass, uKick, uDrift;
 uniform vec3 uC0, uC1, uC2;
@@ -3274,29 +3282,31 @@ void main() {
   vec3 top = uC0 * 0.16, hor = mix(uC2, vec3(1., 0.6, 0.3), 0.35) * 0.7;
   vec3 sky = mix(hor, top, smoothstep(0., 0.85, uv.y));
   float sd = length((p - vec2(asp * 0.5, 0.12)) * vec2(1., 1.2));
-  sky += mix(uC2, vec3(1., 0.85, 0.6), 0.5) * (exp(-sd * 9.) * 0.8 + exp(-sd * 2.5) * 0.22) * (0.8 + 0.3 * uE);
+  sky += mix(uC2, vec3(1., 0.85, 0.6), 0.5) * (exp(-sd * 9.) * 0.8 + exp(-sd * (2.5 - 1.2 * uKick)) * (0.22 + 0.35 * uKick)) * (0.75 + 0.4 * uE);
   vec2 q = vec2(p.x * 1.4 + uDrift, p.y * 3.2);
-  vec2 wq = q + 0.4 * vec2(fbm(q * 0.6 - uDrift * 0.3), 0.);
+  vec2 wq = q + (0.4 + 1.1 * uBass) * vec2(fbm3(q * 0.6 - uDrift * 0.3), fbm3(q * 0.8 + 5.3 + uT * 0.05) - 0.5);
   float d = fbm(wq + vec2(0., uT * 0.02));
   float d2 = fbm(wq + vec2(0.05, uT * 0.02 - 0.12));
-  float cl = smoothstep(0.48, 0.72, d) * smoothstep(0.08, 0.35, uv.y);
+  float cl = smoothstep(0.48 - 0.1 * uBass, 0.72, d) * smoothstep(0.08, 0.35, uv.y);
   float under = clamp((d - d2) * 6. + 0.5, 0., 1.);
   vec3 lit = mix(uC1 * 0.22, mix(uC2, vec3(1., 0.75, 0.5), 0.4), under * (0.55 + 0.45 * smoothstep(0.75, 0.1, uv.y)));
-  lit *= 0.7 + 0.2 * uE + 0.35 * uKick;
+  lit *= 0.65 + 0.3 * uE + 0.9 * uKick;
   vec3 col = mix(sky, lit, cl * 0.9) * 0.85;
   o = vec4(min(col, vec3(1.)), 1.);
 }`;
   DRAW.sunset = (v, p, dt) => {
     const st = v.sunset || (v.sunset = { drift: 0 });
     fxClock(st, p, dt, 0.4, 4, 1, 3);
-    st.drift += dt * (0.025 + 0.05 * shared.energy) * p.speed;
+    st.e = (st.e || 0) + (shared.energy - (st.e || 0)) * Math.min(1, dt * 1.5);
+    st.drift += dt * (0.015 + 0.3 * st.e * st.e) * p.speed;
     const pal = easePal(st, beatSteps(st, p), dt, 0.4);
-    fxDraw(v, "sunset", SUNSET_FS, { uT: st.T, uE: shared.energy, uBass: st.lift, uKick: st.flash, uDrift: st.drift, uC0: rgb1(pal[0]), uC1: rgb1(pal[1]), uC2: rgb1(pal[2]) }, 1);
+    fxDraw(v, "sunset", SUNSET_FS, { uT: st.T, uE: shared.energy, uBass: Math.min(1, 0.6 * st.lift + 0.5 * st.punch), uKick: st.flash, uDrift: st.drift, uC0: rgb1(pal[0]), uC1: rgb1(pal[1]), uC2: rgb1(pal[2]) }, 1);
   };
 
   // Night Sky: a dark sky with twinkling stars and a moon, thin clouds
-  // drifting past it, silver at the edges near the moon. It slowly
-  // brightens as the music gets fuller.
+  // drifting past it, silver at the edges near the moon. Kicks light the
+  // moon's glow and the cloud edges, the bass churns the clouds, and they
+  // drift much faster when the music is loud.
   const NIGHT_FS = `
 uniform float uT, uE, uBass, uKick, uDrift, uGlow;
 uniform vec3 uC0, uC1, uC2;
@@ -3312,36 +3322,40 @@ void main() {
   vec2 m = vec2(asp * 0.78, 0.74);
   float md = length(p - m);
   vec3 mc = mix(vec3(0.95, 0.95, 0.9), uC2, 0.15);
-  col += mc * smoothstep(0.072, 0.066, md) * 0.95 + mc * exp(-md * 5.) * (0.22 + 0.3 * uGlow);
+  col += mc * smoothstep(0.072, 0.066, md) * 0.95 + mc * exp(-md * (5. - 2. * uKick)) * (0.2 + 0.3 * uGlow + 0.45 * uKick);
   vec2 q = vec2(p.x * 1.2 + uDrift, p.y * 2.6);
-  float d = fbm(q + 0.5 * fbm(q * 0.7 + uT * 0.01));
-  float cl = smoothstep(0.5, 0.75, d);
+  float d = fbm(q + (0.5 + 1.2 * uBass) * vec2(fbm3(q * 0.7 + uT * 0.03), fbm3(q * 0.9 - uT * 0.04 + 3.7) - 0.5));
+  float cl = smoothstep(0.5 - 0.08 * uBass, 0.75, d);
   float edge = cl * (1. - cl) * 4.;
   vec3 cc = mix(uC1 * 0.1, mc * 0.45, exp(-md * 2.2));
-  col = mix(col, cc * (0.5 + 0.3 * uGlow), cl * 0.85) + mc * edge * exp(-md * 3.) * (0.3 + 0.4 * uGlow + 0.25 * uKick);
+  col = mix(col, cc * (0.5 + 0.3 * uGlow + 0.5 * uKick), cl * 0.85) + mc * edge * exp(-md * 2.) * (0.3 + 0.4 * uGlow + 0.9 * uKick);
   o = vec4(min(col, vec3(1.)), 1.);
 }`;
   DRAW.nightsky = (v, p, dt) => {
     const st = v.nightsky || (v.nightsky = { drift: 0, glow: 0 });
     fxClock(st, p, dt, 0.3, 4, 1, 3);
-    st.drift += dt * (0.012 + 0.03 * shared.energy) * p.speed;
+    st.e = (st.e || 0) + (shared.energy - (st.e || 0)) * Math.min(1, dt * 1.5);
+    st.drift += dt * (0.01 + 0.22 * st.e * st.e) * p.speed;
     st.glow += (Math.min(1, shared.energy * 1.2) - st.glow) * Math.min(1, dt * 0.4);
     const pal = easePal(st, beatSteps(st, p), dt, 0.3);
-    fxDraw(v, "nightsky", NIGHT_FS, { uT: st.T, uE: shared.energy, uBass: st.lift, uKick: st.flash, uDrift: st.drift, uGlow: st.glow, uC0: rgb1(pal[0]), uC1: rgb1(pal[1]), uC2: rgb1(pal[2]) }, 1);
+    fxDraw(v, "nightsky", NIGHT_FS, { uT: st.T, uE: shared.energy, uBass: Math.min(1, 0.6 * st.lift + 0.5 * st.punch), uKick: st.flash, uDrift: st.drift, uGlow: st.glow, uC0: rgb1(pal[0]), uC1: rgb1(pal[1]), uC2: rgb1(pal[2]) }, 1);
   };
 
   // Silk: slow flowing folds of shiny fabric in the album's colours, with a
-  // soft satin sheen. The bass deepens the folds; kicks brighten the sheen.
+  // soft satin sheen. They flow slowly in quiet parts and much faster when
+  // it's loud; the bass deepens them and sends ripples along them; kicks
+  // flash the sheen.
   const SILK_FS = `
 uniform float uT, uE, uBass, uKick;
 uniform vec3 uC0, uC1, uC2;
 float folds(vec2 p) {
-  float bend = 0.9 * sin(p.x * 0.9 + uT * 0.13) + 0.5 * sin(p.x * 1.7 - p.y * 0.6 - uT * 0.19) + 0.3 * (fbm(p * 0.5 + uT * 0.03) - 0.5);
+  float bend = 0.9 * sin(p.x * 0.9 + uT * 0.13) + 0.5 * sin(p.x * 1.7 - p.y * 0.6 - uT * 0.19) + 0.3 * (fbm3(p * 0.5 + uT * 0.03) - 0.5);
   float u = p.y + bend;
   float h = sin(u * 3.2 + uT * 0.25) * 0.5
           + sin(u * 5.3 - p.x * 0.8 - uT * 0.31 + 1.7) * 0.22
           + sin(u * 8.1 + p.x * 1.3 + uT * 0.4) * 0.08;
-  return h * (1. + 0.4 * uBass);
+  h += sin(u * 11. - uT * 5.) * 0.07 * uBass;
+  return h * (1. + 0.9 * uBass);
 }
 void main() {
   vec2 uv = (gl_FragCoord.xy - 0.5 * uRes) / uRes.y;
@@ -3355,15 +3369,17 @@ void main() {
   float diff = max(dot(n, L), 0.);
   float sheen = pow(max(dot(n, H), 0.), 40.) + 0.25 * pow(max(dot(n, H), 0.), 6.);
   vec3 base = mix(uC0, uC1, smoothstep(-0.7, 0.7, h + 0.3 * uv.x));
-  vec3 col = base * (0.06 + 0.3 * diff) + mix(base, vec3(1.), 0.35) * sheen * (0.3 + 0.2 * uE + 0.3 * uKick) + uC2 * pow(1. - n.z, 1.5) * 0.12;
+  vec3 col = base * (0.06 + 0.3 * diff) + mix(base, vec3(1.), 0.35) * sheen * (0.25 + 0.25 * uE + 1.1 * uKick) + uC2 * pow(1. - n.z, 1.5) * 0.12;
   col *= 0.55 + 0.45 * smoothstep(-0.7, 0.5, h);
   o = vec4(min(col, vec3(1.)), 0.95);
 }`;
   DRAW.silk = (v, p, dt) => {
-    const st = v.silk || (v.silk = {});
-    fxClock(st, p, dt, 0.35, 3, 0.8, 3);
+    const st = v.silk || (v.silk = { t: Math.random() * 100, e: 0 });
+    fxClock(st, p, dt, 0.35, 5, 1.2, 3);
+    st.e += (shared.energy - st.e) * Math.min(1, dt * 1.5);
+    st.t += dt * p.speed * (0.12 + 1.6 * st.e * st.e);
     const pal = easePal(st, beatSteps(st, p), dt, 0.4);
-    fxDraw(v, "silk", SILK_FS, { uT: st.T, uE: shared.energy, uBass: Math.min(1, 0.6 * st.lift + 0.4 * st.punch), uKick: st.flash, uC0: rgb1(pal[0]), uC1: rgb1(pal[1]), uC2: rgb1(pal[2]) }, 1);
+    fxDraw(v, "silk", SILK_FS, { uT: st.t, uE: shared.energy, uBass: Math.min(1, 0.6 * st.lift + 0.4 * st.punch), uKick: st.flash, uC0: rgb1(pal[0]), uC1: rgb1(pal[1]), uC2: rgb1(pal[2]) }, 1);
   };
 
   // TV Pixels: a close-up of a TV screen, so you can see each pixel's red,
@@ -3374,9 +3390,9 @@ uniform float uT, uE, uBass, uKick, uCell;
 uniform vec3 uC0, uC1, uC2;
 vec3 picture(vec2 uv) {
   vec2 p = uv * vec2(uRes.x / uRes.y, 1.) * 2.2;
-  vec2 w = vec2(fbm(p * 0.6 + vec2(uT * 0.08, 0.)), fbm(p * 0.6 + vec2(4.2, 1.3) - uT * 0.07));
-  float a = fbm(p * 0.8 + w * (1.6 + 0.8 * uBass) + uT * 0.05);
-  float b = fbm(p * 0.9 - w * 1.4 + vec2(7., 3.) - uT * 0.04);
+  vec2 w = vec2(fbm3(p * 0.6 + vec2(uT * 0.08, 0.)), fbm3(p * 0.6 + vec2(4.2, 1.3) - uT * 0.07));
+  float a = fbm3(p * 0.8 + w * (1.6 + 0.8 * uBass) + uT * 0.05);
+  float b = fbm3(p * 0.9 - w * 1.4 + vec2(7., 3.) - uT * 0.04);
   vec3 c = mix(uC0, uC1, smoothstep(0.3, 0.7, a));
   c = mix(c, uC2, smoothstep(0.45, 0.75, b));
   c = pow(c, vec3(1.8));
@@ -3398,58 +3414,6 @@ void main() {
     fxClock(st, p, dt, 0.4, 4, 1, 3);
     const pal = easePal(st, beatSteps(st, p), dt, 0.5);
     fxDraw(v, "tvpixels", TVPIX_FS, { uT: st.T, uE: shared.energy, uBass: st.lift, uKick: st.flash, uCell: 14, uC0: rgb1(pal[0]), uC1: rgb1(pal[1]), uC2: rgb1(pal[2]) }, 1);
-  };
-
-  // Scope x4: four rows of wave readings for the bass, low mids, high mids
-  // and highs. Each row's wave is made from the real levels in its part of
-  // the sound: each band in it adds a wave of its own pitch (higher bands,
-  // tighter waves), so the shape changes with what's actually playing.
-  DRAW.chipscope = (v, p, dt) => {
-    const { ctx, w, h, U } = v;
-    const CH = [[0, 0.14, 2], [0.16, 0.42, 4], [0.42, 0.72, 7], [0.72, 0.97, 11]];
-    const st = v.chip || (v.chip = { b: CH.map(() => new Float32Array(8)), ph: CH.map(() => Array.from({ length: 8 }, () => Math.random() * 6.28)) });
-    const down = 0.8 + 2.5 * (1 - Math.max(0, Math.min(1, p.smoothing)));
-    const x0 = w * 0.06, x1 = w * 0.94, step = Math.max(2, 2 * U);
-    const amp = h * 0.08 * p.size;
-    ctx.save();
-    ctx.globalCompositeOperation = "lighter";
-    ctx.globalAlpha = A_(1, v);
-    ctx.lineJoin = "round";
-    ctx.lineCap = "round";
-    CH.forEach(([a, b, cyc], r) => {
-      const bb = st.b[r], ph = st.ph[r];
-      let tot = 0;
-      for (let i = 0; i < 8; i++) {
-        const q = bandAt(a + ((b - a) * i) / 7);
-        bb[i] += (q - bb[i]) * Math.min(1, dt * (q > bb[i] ? 18 : down));
-        tot += bb[i];
-        ph[i] += dt * p.speed * (1 + i * 0.4) * (1 + r) * 0.8;
-      }
-      const A = amp * (0.05 + Math.min(1, (tot / 8) * 1.4));
-      const cy = h * (0.2 + 0.2 * r);
-      const path = new Path2D();
-      for (let x = x0; x <= x1 + 0.5; x += step) {
-        const u = (x - x0) / (x1 - x0);
-        let s = 0;
-        for (let i = 0; i < 8; i++) s += bb[i] * Math.sin(6.2832 * cyc * (1 + i * 0.35) * u + ph[i]);
-        const y = cy - (s / (tot + 0.15)) * A;
-        if (x === x0) path.moveTo(x, y); else path.lineTo(x, y);
-      }
-      const c = colorAt([0.1, 0.4, 0.7, 0.95][r]);
-      ctx.strokeStyle = v.rgba(c, 0.08);
-      ctx.lineWidth = 1;
-      ctx.beginPath();
-      ctx.moveTo(x0, cy);
-      ctx.lineTo(x1, cy);
-      ctx.stroke();
-      ctx.strokeStyle = v.rgba(c, 0.12);
-      ctx.lineWidth = 6 * U;
-      ctx.stroke(path);
-      ctx.strokeStyle = v.rgba(mix(c, WHITE, 0.25), 0.9);
-      ctx.lineWidth = Math.max(1.2, 1.6 * U);
-      ctx.stroke(path);
-    });
-    ctx.restore();
   };
 
   // ---------------------------------------------------------------------------
@@ -3591,75 +3555,6 @@ void main() {
         v.roundRect(x + ps * 0.04, y + ps * 0.04, ps * 0.92, ps * 0.92, ps * 0.06);
         ctx.shadowBlur = 0;
       }
-    }
-    ctx.restore();
-  };
-
-  // Drum Waves: each kick sends a wave in from the left, each snare one in
-  // from the right. Where two meet they burst into a flash that spreads up
-  // and down. Harder hits, brighter waves.
-  DRAW.drumwaves = (v, p, dt) => {
-    const { ctx, w, h, U } = v;
-    const st = drumIn(v, p, dt), [cK, cS] = drumCols();
-    const rs = v.dwave || (v.dwave = { waves: [], bursts: [], kLast: 0, sLast: 0, id: 0 });
-    // a wave on each hit: the beat detector's, or a channel jumping up
-    const kHit = st.newK || (st.ch[0].y > 0.55 && rs.kLast <= 0.55);
-    const sHit = st.newS || (st.ch[1].y > 0.55 && rs.sLast <= 0.55);
-    rs.kLast = st.ch[0].y; rs.sLast = st.ch[1].y;
-    if (kHit) rs.waves.push({ side: -1, x: 0, e: Math.max(0.5, Math.min(1, st.ch[0].y)), id: rs.id++, met: [] });
-    if (sHit) rs.waves.push({ side: 1, x: 0, e: Math.max(0.5, Math.min(1, st.ch[1].y)), id: rs.id++, met: [] });
-    if (rs.waves.length > 16) rs.waves.splice(0, rs.waves.length - 16);
-    const end = w * 1.1;
-    for (let i = rs.waves.length - 1; i >= 0; i--) {
-      rs.waves[i].x += dt * w * 0.75 * p.speed; // about 1.4 s across
-      if (rs.waves[i].x > end) rs.waves.splice(i, 1);
-    }
-    const front = (wv) => (wv.side < 0 ? wv.x : w - wv.x);
-    const life = (wv) => 1 - wv.x / end;
-    // where a left wave and a right wave pass each other: a burst
-    for (const a of rs.waves) {
-      if (a.side > 0) continue;
-      for (const b of rs.waves) {
-        if (b.side < 0 || a.met.includes(b.id) || front(a) < front(b)) continue;
-        a.met.push(b.id);
-        rs.bursts.push({ x: (front(a) + front(b)) / 2, age: 0, e: Math.min(1, 0.25 + 0.6 * (a.e * life(a) + b.e * life(b))), c: mix(cK, cS, 0.5) });
-      }
-    }
-    if (rs.bursts.length > 8) rs.bursts.splice(0, rs.bursts.length - 8);
-    ctx.save();
-    ctx.globalCompositeOperation = "lighter";
-    const Rc = h * 1.4, span = Math.asin(Math.min(1, (h * 0.62) / Rc)); // the fronts are gentle curves
-    for (const wv of rs.waves) {
-      const f = 1 - life(wv), a = wv.e * Math.pow(1 - f, 1.5);
-      const c = wv.side < 0 ? cK : cS, x = front(wv);
-      const ccx = wv.side < 0 ? x - Rc : x + Rc, mid = wv.side < 0 ? 0 : Math.PI;
-      ctx.strokeStyle = v.rgba(c, 0.12 * a);
-      ctx.lineWidth = (wv.side < 0 ? 46 : 28) * U;
-      ctx.beginPath();
-      ctx.arc(ccx, h / 2, Rc, mid - span, mid + span);
-      ctx.stroke();
-      ctx.strokeStyle = v.rgba(mix(c, WHITE, 0.3), 0.75 * a);
-      ctx.lineWidth = (wv.side < 0 ? 4 : 2.5) * U;
-      ctx.stroke();
-    }
-    for (let i = rs.bursts.length - 1; i >= 0; i--) {
-      const b = rs.bursts[i];
-      b.age += dt * p.speed;
-      if (b.age > 1.1) { rs.bursts.splice(i, 1); continue; }
-      const f = b.age / 1.1, a = b.e * (1 - f) * (1 - f), grow = 1 - Math.pow(1 - f, 3);
-      // a flash where they met...
-      v.soft(b.x, h / 2, h * (0.08 + 0.18 * grow), mix(b.c, WHITE, 0.3), 0.55 * a);
-      // ...and a line of light spreading up and down from it
-      const half = h * 0.6 * grow;
-      const g = ctx.createLinearGradient(0, h / 2 - half, 0, h / 2 + half);
-      g.addColorStop(0, v.rgba(b.c, 0));
-      g.addColorStop(0.5, v.rgba(mix(b.c, WHITE, 0.5), 0.9 * a));
-      g.addColorStop(1, v.rgba(b.c, 0));
-      ctx.fillStyle = g;
-      ctx.fillRect(b.x - 1.5 * U, h / 2 - half, 3 * U, half * 2);
-      ctx.globalAlpha = 0.25;
-      ctx.fillRect(b.x - 18 * U, h / 2 - half, 36 * U, half * 2);
-      ctx.globalAlpha = 1;
     }
     ctx.restore();
   };
@@ -4589,10 +4484,17 @@ float noise(vec2 p) {
   f = f * f * (3. - 2. * f);
   return mix(mix(hash(i), hash(i + vec2(1., 0.)), f.x), mix(hash(i + vec2(0., 1.)), hash(i + vec2(1., 1.)), f.x), f.y);
 }
+// 4 layers of noise; the 5th was too fine to see at the canvas's resolution
 float fbm(vec2 p) {
   float s = 0., a = .5;
-  for (int i = 0; i < 5; i++) { s += a * noise(p); p = p * 2.03 + vec2(1.7, 9.2); a *= .5; }
-  return s;
+  for (int i = 0; i < 4; i++) { s += a * noise(p); p = p * 2.03 + vec2(1.7, 9.2); a *= .5; }
+  return s * 1.03;
+}
+// 3 layers: for the soft, slow fields that only bend or mask the others
+float fbm3(vec2 p) {
+  float s = 0., a = .5;
+  for (int i = 0; i < 3; i++) { s += a * noise(p); p = p * 2.03 + vec2(1.7, 9.2); a *= .5; }
+  return s * 1.1;
 }
 `;
   let fxRenderer;
@@ -4750,7 +4652,7 @@ void main() {
   for (int L = 0; L < 3; L++) {
     float fl = float(L);
     float x = uv.x * asp * (0.9 + 0.35 * fl) + fl * 4.7;
-    float base = 0.4 + 0.1 * fl + 0.14 * sin(x * 1.1 + uT * 0.3 + fl * 2.) + 0.26 * (fbm(vec2(x * 0.7, uT * 0.12 + fl * 3.)) - 0.5);
+    float base = 0.4 + 0.1 * fl + 0.14 * sin(x * 1.1 + uT * 0.3 + fl * 2.) + 0.26 * (fbm3(vec2(x * 0.7, uT * 0.12 + fl * 3.)) - 0.5);
     base -= 0.15 * uBass;
     float d = uv.y - base;
     float edge = smoothstep(-0.015, 0.02, d);
@@ -4853,7 +4755,7 @@ void main() {
   // it rises and drifts slowly from side to side; the swirls themselves
   // keep changing shape as they go, so it flows rather than just pulsing
   vec2 flow = vec2(0.45 * sin(uRise * 0.17) + 0.2 * sin(uRise * 0.41 + 1.3), -uRise);
-  vec2 q = vec2(fbm(p * 0.7 + flow * 0.8 + vec2(uT * 0.09, uT * 0.05)), fbm(p * 0.7 + flow * 0.8 + vec2(4.1, 1.7) - vec2(uT * 0.06, uT * 0.1)));
+  vec2 q = vec2(fbm3(p * 0.7 + flow * 0.8 + vec2(uT * 0.09, uT * 0.05)), fbm3(p * 0.7 + flow * 0.8 + vec2(4.1, 1.7) - vec2(uT * 0.06, uT * 0.1)));
   float n = fbm(p + flow + (1.8 + 1.6 * uBass) * (q - 0.5) * 2.);
   float wisp = 1. - abs(fbm(p * 1.6 + flow * 1.4 + q * 2.) * 2. - 1.);
   float d = smoothstep(0.45, 0.85, n) * 0.8 + pow(wisp, 6.) * 0.35;
@@ -4883,13 +4785,13 @@ uniform vec3 uC0, uC1, uC2;
 void main() {
   vec2 uv = gl_FragCoord.xy / uRes;
   vec2 p = (uv - 0.5) * vec2(uRes.x / uRes.y, 1.) * 2.5;
-  vec2 q = vec2(fbm(p + vec2(0., uT * 0.06)), fbm(p + vec2(5.2, 1.3) - uT * 0.05));
-  vec2 r = vec2(fbm(p + 3.5 * q + vec2(1.7, 9.2) + uT * 0.09), fbm(p + 3.5 * q + vec2(8.3, 2.8) - uT * 0.07));
+  vec2 q = vec2(fbm3(p + vec2(0., uT * 0.06)), fbm3(p + vec2(5.2, 1.3) - uT * 0.05));
+  vec2 r = vec2(fbm3(p + 3.5 * q + vec2(1.7, 9.2) + uT * 0.09), fbm3(p + 3.5 * q + vec2(8.3, 2.8) - uT * 0.07));
   float th = fbm(p + (2.2 + 2. * uBass) * r) + 0.25 * uBass;
   vec3 film = 0.5 + 0.5 * cos(6.2832 * (th * 2.6 + uShift + vec3(0., 0.33, 0.67)));
   vec3 tint = mix(mix(uC0, uC1, q.x), uC2, r.y * 0.6);
   film = mix(film, film * (0.4 + 1.2 * tint), 0.45 * uTint);
-  float mask = smoothstep(0.47, 0.62, fbm(p * 0.5 + r * 0.8 - uT * 0.02));
+  float mask = smoothstep(0.46, 0.6, fbm3(p * 0.5 + r * 0.8 - uT * 0.02));
   vec3 col = film * mask * (0.42 + 0.3 * uE + 0.15 * uBass);
   col += vec3(pow(max(0., r.x - 0.55), 3.) * 2. * mask);
   col = min(col * 0.9, vec3(1.));
