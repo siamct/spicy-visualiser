@@ -310,3 +310,23 @@
 :is(#SpicyLyricsPage, .lp-modal-wrap) .lp-panel .lp-cards .lp-fav-cat { display: none; order: -3; margin-top: 0; }
 :is(#SpicyLyricsPage, .lp-modal-wrap) .lp-panel .lp-cards .lp-fav-cat.lp-has { display: block !important; }
 :is(#SpicyLyricsPage, .lp-modal-wrap) .lp-panel .lp-cards .lp-fav-cat.lp-has ~ .lp-cat:not(.lp-fav-cat) { margin-top: 12px; }
+
+/* The one-time update note */
+:is(#SpicyLyricsPage, .lp-modal-wrap) .lp-panel.lp-news {
+  position: relative; inset: auto; top: auto; right: auto; width: min(400px, 100%); max-height: none;
+  padding: 18px 20px 20px; font-size: 14px; border-radius: 20px;
+}
+:is(#SpicyLyricsPage, .lp-modal-wrap) .lp-panel.lp-news .lp-news-head { display: flex; align-items: center; gap: 10px; }
+:is(#SpicyLyricsPage, .lp-modal-wrap) .lp-panel.lp-news .lp-news-head h3 { flex: 1; font-size: 14px; color: rgba(255,255,255,.75); }
+:is(#SpicyLyricsPage, .lp-modal-wrap) .lp-panel.lp-news .lp-news-title { margin: 18px 0 8px; font-size: 22px; font-weight: 700; }
+:is(#SpicyLyricsPage, .lp-modal-wrap) .lp-panel.lp-news .lp-news-text { margin: 0 0 6px; line-height: 1.45; }
+:is(#SpicyLyricsPage, .lp-modal-wrap) .lp-panel.lp-news .lp-news-dim { color: rgba(255,255,255,.6); }
+:is(#SpicyLyricsPage, .lp-modal-wrap) .lp-panel.lp-news .lp-news-btns { display: flex; gap: 8px; margin-top: 18px; }
+:is(#SpicyLyricsPage, .lp-modal-wrap) .lp-panel.lp-news .lp-news-btn {
+  flex: 1; display: block; padding: 10px 12px; border: 0; border-radius: 12px; cursor: pointer; text-align: center;
+  font-size: 13px; font-weight: 600; text-decoration: none; color: #fff; background: rgba(255,255,255,.1);
+  transition: background .15s;
+}
+:is(#SpicyLyricsPage, .lp-modal-wrap) .lp-panel.lp-news .lp-news-btn:hover { background: rgba(255,255,255,.18); }
+:is(#SpicyLyricsPage, .lp-modal-wrap) .lp-panel.lp-news .lp-news-main { background: #fff; color: #111; }
+:is(#SpicyLyricsPage, .lp-modal-wrap) .lp-panel.lp-news .lp-news-main:hover { background: rgba(255,255,255,.85); }

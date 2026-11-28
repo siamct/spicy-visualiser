@@ -6495,6 +6495,35 @@ void main() {
     createInstance(page);
   }
 
+  // The update note: a small window in the middle of Spotify, with a
+  // cross, an Open GitHub button and a Close button.
+  function showUpdateNote() {
+    if (!document.body) return setTimeout(showUpdateNote, 1000);
+    ensureStyle(document);
+    const wrap = document.createElement("div");
+    wrap.className = "lp-modal-wrap";
+    wrap.innerHTML = `<div class="lp-panel lp-open lp-news" role="dialog" aria-label="Spicy Visualiser update">
+      <div class="lp-news-head"><span class="lp-logo">${ICON}</span><h3>Spicy Visualiser</h3>
+        <button class="lp-icon-btn lp-news-x" title="Close"><svg viewBox="0 0 24 24"><path d="M7 7l10 10M17 7 7 17" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button></div>
+      <h2 class="lp-news-title">New update!</h2>
+      <p class="lp-news-text">New styles, new looks and a helper update. Hope you enjoy :D</p>
+      <p class="lp-news-text lp-news-dim">Any issues, please let me know!</p>
+      <div class="lp-news-btns"><a class="lp-news-btn" href="https://github.com/siamct/spicy-visualiser" target="_blank" rel="noopener">Open GitHub</a><button class="lp-news-btn lp-news-main">Close</button></div>
+    </div>`;
+    const shut = () => {
+      wrap.classList.add("lp-closing");
+      setTimeout(() => wrap.remove(), 180);
+      document.removeEventListener("keydown", onKey, true);
+    };
+    const onKey = (e) => { if (e.key === "Escape") { e.stopPropagation(); shut(); } };
+    document.addEventListener("keydown", onKey, true);
+    wrap.addEventListener("pointerdown", (e) => { if (e.target === wrap) shut(); });
+    wrap.querySelector(".lp-news-x").addEventListener("click", shut);
+    wrap.querySelector(".lp-news-main").addEventListener("click", shut);
+    wrap.querySelector("a.lp-news-btn").addEventListener("click", () => setTimeout(shut, 50));
+    document.body.appendChild(wrap);
+  }
+
   // A one-time note after an update. A fresh install doesn't get it (there's
   // nothing "new" to them); it's just marked as seen.
   const UPDATE_NOTE = "1.0.0";
@@ -6502,13 +6531,7 @@ void main() {
     S.noteSeen = UPDATE_NOTE;
     save();
     if (hadSaved) {
-      let tries = 0;
-      const show = () => {
-        const sp = window.Spicetify;
-        if (sp && sp.showNotification) sp.showNotification("Spicy Visualiser: new update! New styles, new looks and a helper update. Hope you enjoy :D Any issues, please let me know!", false, 10000);
-        else if (++tries < 20) setTimeout(show, 1000);
-      };
-      setTimeout(show, 4000);
+      setTimeout(showUpdateNote, 3000);
     }
   }
 
