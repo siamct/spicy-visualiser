@@ -1,21 +1,19 @@
 """Builds the Marketplace card, docs/screenshots/card.webp, from pictures
 made by test/song/card-frames.js: a coloured bar on top with the name and
-the bars icon, and below it one style at a time, each zooming in very
-slowly and then fading softly into the next. The style pictures themselves
-play at their real speed while they show; the icon's bars rise and fall.
+the bars icon, and below it Spectrum, Meters and Wall side by side, blended
+softly into each other and lined up along the bottom. They all move with the
+same slow, calm wave; the icon's bars rise and fall gently.
   node test/song/card-frames.js && python tools/make-card.py"""
 import math
 import os
-from PIL import Image, ImageChops, ImageDraw, ImageFont
+from PIL import Image, ImageChops, ImageDraw, ImageFont, ImageOps
 
 ROOT = os.path.join(os.path.dirname(__file__), "..")
 SRC = os.path.join(ROOT, "test", "out", "card")
 OUT = os.path.join(ROOT, "docs", "screenshots", "card.webp")
 IDS = ["holospec", "ledm", "led"]  # Spectrum, Meters, Wall
 FOCUS = {"holospec": 0.35, "ledm": 0.5, "led": 0.6}
-EACH, FADE = 36, 8  # frames per style and frames of fade into the next (125 ms each)
-N = EACH * len(IDS)  # the whole loop: 13.5 s
-ZOOM = 0.08  # how far each style zooms in while it's showing
+N = 72  # frames in the loop, 125 ms each (9 s, the same as the wave)
 S = 600
 BH = 100  # the bar on top
 PINK = (232, 53, 111)
@@ -79,52 +77,28 @@ def aligned(im, floor=None):
     return out
 
 
-still = Image.new("RGB", (S, S), BG)
+# each style's pictures cropped to its column, all moved by the same amount so
+# the drawing ends on FLOOR (the same line for every style)
+COLS = []
 for (x0, w, m), sid in zip(MASKS, IDS):
-    im = Image.open(os.path.join(SRC, f"{sid}-24.png")).convert("RGB")
-    s = H / im.height
-    im = im.resize((round(im.width * s), H), Image.LANCZOS)
-    left = max(0, min(im.width - w, round(im.width * FOCUS[sid] - w / 2)))
-    still.paste(aligned(im.crop((left, 0, left + w, H))), (x0, BH), m)
-# each style's pictures, cropped to fill the space under the bar (with room
-# to zoom), all moved by the same amount so every style ends on the same line
-def prep(sid, n):
-    im = Image.open(os.path.join(SRC, f"{sid}-{n}.png")).convert("RGB")
-    sc = H * (1 + ZOOM) / im.height
-    im = im.resize((round(im.width * sc), round(im.height * sc)), Image.LANCZOS)
-    w = round(S * (1 + ZOOM))
-    left = max(0, min(im.width - w, round(im.width * 0.5 - w / 2)))
-    return im.crop((left, 0, left + w, im.height))
-
-
-FULL = []
-for sid in IDS:
-    pics = [prep(sid, n) for n in range(EACH + FADE)]
-    ch = pics[0].height
-    dy = ch - round(40 * (1 + ZOOM)) - max(content_bottom(p) for p in pics)
-    FULL.append([aligned(p, content_bottom(p) + dy) for p in pics])
-
-
-def view(i, z, n):
-    """Style i, picture n, zoomed in by z (0..ZOOM), held to the bottom so the bars stay put."""
-    im = FULL[i][n]
-    cw, ch = im.width / (1 + z), im.height / (1 + z)
-    x0 = (im.width - cw) / 2
-    return im.crop((round(x0), round(im.height - ch), round(x0 + cw), im.height)).resize((S, H), Image.LANCZOS)
-
-
-def ease(t):
-    return t * t * (3 - 2 * t)
+    pics = []
+    for n in range(N):
+        im = Image.open(os.path.join(SRC, f"{sid}-{n}.png")).convert("RGB")
+        s = H / im.height
+        im = im.resize((round(im.width * s), H), Image.LANCZOS)
+        left = max(0, min(im.width - w, round(im.width * FOCUS[sid] - w / 2)))
+        # one pink for all three (Meters has its own fixed colours in the app)
+        g = ImageOps.grayscale(im.crop((left, 0, left + w, H)))
+        pics.append(ImageOps.colorize(g, black=BG, mid=PINK, white=(255, 214, 228), midpoint=110))
+    floor = max(content_bottom(p) for p in pics)
+    COLS.append([aligned(p, FLOOR - floor + content_bottom(p)) for p in pics])
 
 
 frames = []
 for k in range(N):
-    i, f = divmod(k, EACH)
-    z = ZOOM * (f + FADE) / (EACH + FADE)  # zooms the whole time it shows, fade included
-    pic = view(i, z, f + FADE)
-    if f >= EACH - FADE:  # fade into the next one, which starts zoomed out
-        nxt = view((i + 1) % len(IDS), ZOOM * (f - (EACH - FADE)) / (EACH + FADE), f - (EACH - FADE))
-        pic = Image.blend(pic, nxt, ease((f - (EACH - FADE) + 1) / (FADE + 1)))
+    pic = Image.new("RGB", (S, H), BG)
+    for (x0, w, m), col in zip(MASKS, COLS):
+        pic.paste(col[k], (x0, 0), m)
     card = Image.new("RGB", (S, S), BG)
     card.paste(pic, (0, BH))
     d = ImageDraw.Draw(card)
@@ -132,7 +106,7 @@ for k in range(N):
     # the icon: five bars, each bouncing a little at its own pace (loops cleanly)
     base, bw, gap = BH // 2 + 22, 9, 5
     for i, (hh, sp, ph) in enumerate(((30, 1, 0.1), (48, 2, 1.7), (36, 1, 3.1), (54, 1, 4.4), (24, 2, 2.2))):
-        t = k / N * 2 * math.pi * 4  # four swings per loop
+        t = k / N * 2 * math.pi * 2  # two slow swings per loop
         h = hh * (0.4 + 0.6 * (0.5 + 0.5 * math.sin(t * sp + ph)))
         x = 30 + i * (bw + gap)
         d.rounded_rectangle((x, base - h, x + bw, base), 3, fill=(255, 255, 255))
