@@ -11,8 +11,8 @@ from PIL import Image, ImageDraw, ImageFont
 ROOT = os.path.join(os.path.dirname(__file__), "..")
 SRC = os.path.join(ROOT, "test", "out", "card")
 OUT = os.path.join(ROOT, "docs", "screenshots", "card.webp")
-IDS = ["monstercat", "ncs", "aurora", "plasma"]
-FOCUS = {"monstercat": 0.3, "ncs": 0.5, "aurora": 0.5, "plasma": 0.6}
+IDS = ["holospec", "ledm", "vu", "led"]  # Spectrum, Meters, VU Meters, Wall
+FOCUS = {"holospec": 0.35, "ledm": 0.5, "vu": 0.5, "led": 0.6}
 N = 60  # frames in the loop (6 s at 100 ms each)
 S = 600
 BH = 100  # the bar on top

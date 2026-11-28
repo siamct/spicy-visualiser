@@ -19,7 +19,7 @@ const ALBUMS = [
   { cover: ["#6fd34a", "#e6f78a", "#1f8a6c"], bg: ["#12301a", "#050c07"] }, // green / lime
 ];
 
-const HIDE = ".NowBar,.LyricsContainer,.ViewControls,.lp-nolyr{visibility:hidden!important}";
+const HIDE = ".LyricsContainer,.ViewControls,.lp-nolyr{visibility:hidden!important}.NowBar{display:none!important}";
 
 function page(album) {
   return harness
@@ -59,8 +59,8 @@ async function open(b, js, album, atBar) {
 const setter = (p) => (k, v) => p.evaluate(([k, v]) => { const btn = document.querySelector(".lp-button"); btn.click(); document.querySelector(`[data-key=${k}] button[data-v=${v}]`).click(); btn.click(); }, [k, v]);
 
 
-const CARD = [["monstercat", 0, 22], ["ncs", 2, 23], ["aurora", 1, 23], ["plasma", 4, 18]];
-const N = 48;
+const CARD = [["holospec", 0, 24], ["ledm", 2, 12], ["vu", 1, 24], ["led", 4, 21]];
+const N = 25; // make-card.py uses picture 24 of each
 
 (async () => {
   const b = await chromium.launch({ channel: process.env.LP_BROWSER || undefined, args: ["--use-gl=angle", "--use-angle=swiftshader", "--enable-unsafe-swiftshader"] });
