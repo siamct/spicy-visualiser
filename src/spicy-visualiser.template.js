@@ -59,6 +59,7 @@
     ["led", "LED Wall"],
     ["ledplasma", "LED Plasma"],
     ["ekg", "EKG"],
+    ["flowline", "Flow Line"],
     ["rgbsplit", "RGB Split"],
     ["underwater", "Underwater"],
     ["sunset", "Sunset"],
@@ -68,6 +69,7 @@
   ];
   // Little pictures for the style picker.
   const STYLE_ICON = {
+    flowline: '<path d="M1 14c3 0 4-6 7-6s3.5 9 7 9 4-7 8-7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M1 14c3 0 4-6 7-6s3.5 9 7 9 4-7 8-7" fill="none" stroke="currentColor" stroke-width="5" stroke-linecap="round" opacity=".2"/>',
     ekg: '<path d="M1 13h5l2-3 2.5 9L14 4l2.5 9H23" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round"/>',
     rgbsplit: '<g style="mix-blend-mode:screen"><path d="M3 21V12h3v9zm5 0V6h3v15zm5 0V9h3v12zm5 0V4h3v17z" opacity=".55" transform="translate(-1 0)"/><path d="M3 21V12h3v9zm5 0V6h3v15zm5 0V9h3v12zm5 0V4h3v17z" opacity=".55" transform="translate(1 1)"/></g>',
     underwater: '<g fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M1 5c3-2 5 2 8 0s5 2 8 0 4 1 6 0"/><path d="M6 21l2.5-12M12 21V9M18 21l-2.5-12" opacity=".45"/></g><circle cx="9" cy="15" r="1.2"/><circle cx="15" cy="12" r="1"/>',
@@ -123,7 +125,7 @@
   const SONG_DATA_OK = new Set(["constellations", "nebula", "lanterns", "underwater", "sunset", "nightsky", "silk", "tvpixels", "drumpads", "particles", "plasma", "ledplasma", "warp", "dnb", "ribbon", "rain", "lava", "smoke", "tunnel", "aurora", "oil", "galaxy", "prism", "ombre", "geometric", "bauhaus", "sub", "off"]);
   const STYLE_GROUPS = [
     ["Bars", ["monstercat", "mirror", "holospec", "ledm", "led", "ascii", "rgbsplit"]],
-    ["Meters & lines", ["vu", "revs", "scope", "crt", "ekg", "ribbon", "dnb"]],
+    ["Meters & lines", ["vu", "revs", "scope", "crt", "ekg", "flowline", "ribbon", "dnb"]],
     ["Circles", ["radial", "ncs", "holoring", "sub", "trap", "tunnel"]],
     ["On the beat", ["drumpads", "geometric", "bauhaus", "particles"]],
     ["Liquid & water", ["plasma", "ledplasma", "tvpixels", "oil", "silk", "lava", "underwater"]],
@@ -151,13 +153,13 @@
     gaugeLook: ["revs"],
     // styles that can sit beside the album art and be moved (not the
     // full-screen scenes)
-    fit: ["runes", "holoring", "revs", "crt", "monstercat", "mirror", "holospec", "ledm", "led", "ascii", "rgbsplit", "scope", "ekg", "dnb", "radial", "ncs", "sub", "trap", "drumpads", "geometric", "bauhaus", "neuro"],
-    moveX: ["runes", "vu", "holoring", "revs", "crt", "monstercat", "mirror", "holospec", "ledm", "led", "ascii", "rgbsplit", "scope", "ekg", "dnb", "radial", "ncs", "sub", "trap", "drumpads", "geometric", "bauhaus", "neuro"],
-    moveY: ["runes", "vu", "holoring", "revs", "crt", "monstercat", "mirror", "holospec", "ledm", "led", "ascii", "rgbsplit", "scope", "ekg", "dnb", "radial", "ncs", "sub", "trap", "drumpads", "geometric", "bauhaus", "neuro"],
+    fit: ["flowline", "runes", "holoring", "revs", "crt", "monstercat", "mirror", "holospec", "ledm", "led", "ascii", "rgbsplit", "scope", "ekg", "dnb", "radial", "ncs", "sub", "trap", "drumpads", "geometric", "bauhaus", "neuro"],
+    moveX: ["flowline", "runes", "vu", "holoring", "revs", "crt", "monstercat", "mirror", "holospec", "ledm", "led", "ascii", "rgbsplit", "scope", "ekg", "dnb", "radial", "ncs", "sub", "trap", "drumpads", "geometric", "bauhaus", "neuro"],
+    moveY: ["flowline", "runes", "vu", "holoring", "revs", "crt", "monstercat", "mirror", "holospec", "ledm", "led", "ascii", "rgbsplit", "scope", "ekg", "dnb", "radial", "ncs", "sub", "trap", "drumpads", "geometric", "bauhaus", "neuro"],
     circleAt: ["runes", "trap", "radial", "ncs", "sub"],
-    speed: ["nebula", "runes", "lanterns", "crt", "ekg", "underwater", "sunset", "nightsky", "silk", "tvpixels", "scope", "trap", "neuro", "ribbon", "rain", "lava", "smoke", "tunnel", "aurora", "oil", "particles", "monstercat", "ncs", "radial", "plasma", "warp", "dnb", "ascii", "led", "ledplasma", "galaxy", "prism", "ombre"],
+    speed: ["flowline", "nebula", "runes", "lanterns", "crt", "ekg", "underwater", "sunset", "nightsky", "silk", "tvpixels", "scope", "trap", "neuro", "ribbon", "rain", "lava", "smoke", "tunnel", "aurora", "oil", "particles", "monstercat", "ncs", "radial", "plasma", "warp", "dnb", "ascii", "led", "ledplasma", "galaxy", "prism", "ombre"],
     bassBoost: ["rgbsplit", "underwater", "sunset", "nightsky", "silk", "tvpixels", "scope", "particles", "monstercat", "radial", "mirror", "ncs", "warp", "plasma", "dnb", "ascii", "geometric", "bauhaus", "led", "ledplasma", "sub", "trap", "ledm", "neuro", "ribbon", "rain", "lava", "smoke", "tunnel", "aurora", "oil", "galaxy", "prism", "ombre"],
-    smoothing: ["holoring", "revs", "crt", "rgbsplit", "ekg", "particles", "monstercat", "radial", "mirror", "ncs", "warp", "plasma", "dnb", "ascii", "geometric", "bauhaus", "led", "ledplasma", "sub", "trap", "ledm", "neuro", "aurora", "vu", "drumpads", "holospec"],
+    smoothing: ["flowline", "holoring", "revs", "crt", "rgbsplit", "ekg", "particles", "monstercat", "radial", "mirror", "ncs", "warp", "plasma", "dnb", "ascii", "geometric", "bauhaus", "led", "ledplasma", "sub", "trap", "ledm", "neuro", "aurora", "vu", "drumpads", "holospec"],
   };
 
   const STYLE_BASE = {
@@ -197,6 +199,7 @@
     color2: "#5b8cff",
   };
   const STYLE_DEFAULTS = {
+    flowline: { shake: 0, fit: "art" },
     constellations: { shake: 0 },
     nebula: { shake: 0 },
     runes: { shake: 0, fit: "art" },
@@ -290,7 +293,7 @@
   if (!Array.isArray(S.favs)) S.favs = [];
   // Retro Bars became LED Meters.
   // (and Drum Bars was taken out)
-  const MOVED = { retro: "ledm", drumbars: "drumpads", drums: "drumpads", holoradar: "holospec", holorings: "holospec", pitchtrail: "ekg", kaleido: "plasma", bubbles: "lava", chrome: "silk", ekgpitch: "ekg", ekgscroll: "ekg", pond: "underwater", ocean: "underwater", storm: "sunset", mercury: "silk", ekg3: "ekg", chipscope: "scope", drumwaves: "drumpads", trails: "particles", circuit: "particles", neon: "particles", grass: "lanterns" };
+  const MOVED = { retro: "ledm", drumbars: "drumpads", drums: "drumpads", holoradar: "holospec", holorings: "holospec", pitchtrail: "ekg", kaleido: "plasma", bubbles: "lava", chrome: "silk", ekgpitch: "ekg", ekgscroll: "ekg", pond: "underwater", ocean: "underwater", storm: "sunset", mercury: "silk", ekg3: "ekg", chipscope: "scope", drumwaves: "drumpads", trails: "particles", circuit: "particles", neon: "particles", grass: "lanterns", notes: "flowline" };
   if (MOVED[S.style]) S.style = MOVED[S.style];
   S.favs = [...new Set(S.favs.map((f) => MOVED[f] || f))];
   if (!validStyle(S.style)) S.style = GLOBAL_DEFAULTS.style;
@@ -3834,6 +3837,79 @@ void main() {
   };
 
   // ---------------------------------------------------------------------------
+  // Flow Line: EKG made soft. One smooth glowing line flows away from the
+  // album art; it rises and falls with where the sound sits in pitch and
+  // swells with the loudness, eased so it rolls rather than jumps. The bass
+  // makes it glow brighter and a little thicker.
+  DRAW.flowline = (v, p, dt) => {
+    const { ctx, w, h, U } = v;
+    const N = 160;
+    const st = v.flowline || (v.flowline = { ys: new Float32Array(N), acc: 0, pos: 0.5, lv: 0, avg: 0, y: 0, b: 0 });
+    let sum = 0, wsum = 0, lv = 0;
+    for (let i = 0; i < 40; i++) {
+      const b = bandAt(0.04 + (0.9 * i) / 39), q = b * b;
+      sum += q * (i / 39);
+      wsum += q;
+      lv += b / 40;
+    }
+    const ease = 1 - 0.7 * p.smoothing;
+    if (wsum > 1e-4) st.pos += (sum / wsum - st.pos) * Math.min(1, dt * 2.5 * ease);
+    st.lv += (lv - st.lv) * Math.min(1, dt * 6 * ease);
+    st.avg += (st.lv - st.avg) * Math.min(1, dt * 0.8);
+    const want = (st.pos - 0.5) * 1.3 + (st.lv - st.avg) * 2.2 * (0.6 + 0.4 * p.sensitivity);
+    st.y += (Math.max(-1, Math.min(1, want)) - st.y) * Math.min(1, dt * 4 * ease);
+    st.b += ((shared.bassPunch || 0) - st.b) * Math.min(1, dt * 4);
+    // shift the line along at a steady pace (Speed), newest point at the start
+    st.acc += dt * N / (5 / Math.max(0.3, p.speed));
+    while (st.acc >= 1) {
+      st.acc -= 1;
+      st.ys.copyWithin(1, 0, N - 1);
+      st.ys[0] = st.y;
+    }
+    st.ys[0] = st.y;
+    const art = v.artCircle && v.artCircle();
+    const fromRight = !!art && art.x > w / 2;
+    const cy = h * 0.55, amp = h * 0.2 * p.size;
+    const pt = (i) => [fromRight ? w * (1 - i / (N - 1)) : (w * i) / (N - 1), cy - st.ys[i] * amp];
+    const path = new Path2D();
+    let [px, py] = pt(0);
+    path.moveTo(px, py);
+    for (let i = 1; i < N; i++) {
+      const [x, y] = pt(i);
+      path.quadraticCurveTo(px, py, (px + x) / 2, (py + y) / 2);
+      px = x;
+      py = y;
+    }
+    path.lineTo(px, py);
+    // colour along the line, fading out at the far end
+    const [xs] = pt(0), [xe] = pt(N - 1);
+    const c0 = colorAt(0.2), c1 = colorAt(0.8);
+    const grad = (a) => {
+      const g = ctx.createLinearGradient(xs, 0, xe, 0);
+      g.addColorStop(0, v.rgba(c0, a));
+      g.addColorStop(0.6, v.rgba(c1, a * 0.8));
+      g.addColorStop(1, v.rgba(c1, 0));
+      return g;
+    };
+    ctx.save();
+    ctx.globalCompositeOperation = "lighter";
+    ctx.globalAlpha = A_(1, v);
+    ctx.lineCap = "round";
+    ctx.lineJoin = "round";
+    const glow = 0.6 + 0.6 * st.b;
+    for (const [lw, a] of [[22, 0.05], [11, 0.1], [5, 0.22]]) {
+      ctx.strokeStyle = grad(a * glow);
+      ctx.lineWidth = lw * U * (1 + 0.3 * st.b);
+      ctx.stroke(path);
+    }
+    ctx.strokeStyle = grad(0.9);
+    ctx.lineWidth = Math.max(1.5, 2 * U);
+    ctx.stroke(path);
+    v.soft(xs, pt(0)[1], 14 * U, mix(c0, WHITE, 0.4), 0.35 + 0.4 * st.b);
+    ctx.restore();
+  };
+
+  // ---------------------------------------------------------------------------
   // Water and sky scenes. All use the album's colours, which turn on the
   // beat (Change every); the bass and loudness move them and kicks light
   // them up a little.
@@ -5243,10 +5319,9 @@ float fbm3(vec2 p) {
 
   // ---------------------------------------------------------------------------
   // Aurora: northern lights over a starry sky. Three curtains of light in
-  // the album's colours drift slowly sideways, with fine rays running up
-  // them. It stays calm: the bass mostly brightens them (and lifts them a
-  // little), loudness makes them a touch brighter and quicker, kicks give a
-  // soft glow.
+  // the album's colours ripple sideways, with fine rays running up them; the
+  // bass lifts them higher and taller, loudness makes them brighter and
+  // faster, kicks make them flare.
   const AURORA_FS = `
 uniform float uT, uE, uBass, uKick;
 uniform vec3 uC0, uC1, uC2;
@@ -5257,14 +5332,14 @@ void main() {
   for (int L = 0; L < 3; L++) {
     float fl = float(L);
     float x = uv.x * asp * (0.9 + 0.35 * fl) + fl * 4.7;
-    float base = 0.4 + 0.1 * fl + 0.14 * sin(x * 1.1 + uT * 0.3 + fl * 2.) + 0.26 * (fbm3(vec2(x * 0.7, uT * 0.12 + fl * 3.)) - 0.5);
-    base -= 0.04 * uBass;
+    float base = 0.4 + 0.1 * fl + 0.1 * sin(x * 1.1 + uT * 0.3 + fl * 2.) + 0.18 * (fbm(vec2(x * 0.7, uT * 0.12 + fl * 3.)) - 0.5);
+    base -= 0.12 * uBass;
     float d = uv.y - base;
     float edge = smoothstep(-0.015, 0.02, d);
-    float tall = exp(-max(d, 0.) * (6. - 1.6 * uBass));
-    float rays = fbm(vec2(x * 7. + sin(uT * 0.2 + fl) * 2., uT * 0.3 + fl * 7.));
+    float tall = exp(-max(d, 0.) * (4.2 - 2.2 * uBass));
+    float rays = fbm(vec2(x * 7. + sin(uT * 0.2 + fl) * 2., uT * 0.5 + fl * 7.));
     rays = 0.25 + 1.4 * rays * rays;
-    float I = edge * tall * rays * (0.12 + 0.25 * uE + 0.75 * uBass + 0.3 * uKick) * (1. - 0.22 * fl);
+    float I = edge * tall * rays * (0.3 + 0.45 * uE + 0.5 * uKick) * (1. - 0.22 * fl);
     vec3 lo = fl < 0.5 ? uC0 : fl < 1.5 ? uC1 : uC2;
     vec3 hi = fl < 0.5 ? uC1 : fl < 1.5 ? uC2 : uC0;
     vec3 c = mix(lo, hi, smoothstep(0.0, 0.35, d));
@@ -5279,18 +5354,11 @@ void main() {
 }`;
   DRAW.aurora = (v, p, dt) => {
     const st = v.aurora || (v.aurora = {});
-    // Smoothing sets how it bounces: low = quicker, high = slow and floaty.
-    // Kept calm either way: time runs slowly and only speeds up a little
-    // with loudness, and the bass is eased so it glows rather than jumps.
-    const sm = Math.max(0, Math.min(1, p.smoothing));
     const T0 = st.T;
-    fxClock(st, p, dt, 0.2, 6 - 4 * sm, 1.6 - 0.9 * sm, 2.5 - 1 * sm);
-    st.e = (st.e || 0) + (shared.energy - (st.e || 0)) * Math.min(1, dt * 1.5);
-    if (T0 !== undefined) st.T = T0 + dt * p.speed * (0.22 + 0.18 * st.e);
-    const bt = Math.min(1, 0.6 * st.lift + 0.5 * st.punch);
-    st.b = (st.b || 0) + (bt - (st.b || 0)) * Math.min(1, dt * (bt > (st.b || 0) ? 5 - 2 * sm : 1.5 - 0.6 * sm));
+    fxClock(st, p, dt, 0.9);
+    if (T0 !== undefined) st.T = T0 + dt * p.speed * (0.35 + 0.9 * shared.energy); // v1 movement
     const pal = easePal(st, beatSteps(st, p), dt, 1.2);
-    fxDraw(v, "aurora", AURORA_FS, { uT: st.T, uE: st.e, uBass: st.b, uKick: st.flash * 0.6, uC0: rgb1(pal[0]), uC1: rgb1(pal[1]), uC2: rgb1(pal[2]) }, 1);
+    fxDraw(v, "aurora", AURORA_FS, { uT: st.T, uE: shared.energy, uBass: st.lift, uKick: st.flash, uC0: rgb1(pal[0]), uC1: rgb1(pal[1]), uC2: rgb1(pal[2]) }, 1);
   };
 
   // ---------------------------------------------------------------------------
@@ -5800,7 +5868,7 @@ void main() {
     body.querySelector(".lp-phead").appendChild(close);
     body.insertAdjacentHTML("beforeend", `<div class="lp-page" data-page="about">
       <div class="lp-group"><div class="lp-gtitle">Spicy Visualiser</div>
-        <div class="lp-note">Version ${VERSION}. A music visualiser for Spicy Lyrics: 45 styles drawn behind the lyrics, coloured from the album cover.</div>
+        <div class="lp-note">Version ${VERSION}. A music visualiser for Spicy Lyrics: 46 styles drawn behind the lyrics, coloured from the album cover.</div>
         <div class="lp-links"><a href="https://github.com/siamct/spicy-visualiser" target="_blank" rel="noopener">GitHub</a><a href="https://github.com/siamct/spicy-visualiser/blob/main/docs/STYLES.md" target="_blank" rel="noopener">Styles guide</a><a href="https://github.com/siamct/spicy-visualiser#install" target="_blank" rel="noopener">Full install</a></div></div>
       <div class="lp-group"><div class="lp-gtitle">Where to find it</div>
         <div class="lp-note">Open Spicy Lyrics and click the bars icon at the top right for quick settings while you watch. This window is in Spotify's profile menu.</div></div>
