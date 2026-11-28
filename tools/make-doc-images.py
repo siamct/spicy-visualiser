@@ -124,4 +124,16 @@ panel = Image.new("RGB", (pw * 4 + 12 * 3, ph), BG)
 for i, im in enumerate(tabs):
     panel.paste(im, (i * (pw + 12), 0))
 panel.save(os.path.join(DOCS, "panel.png"), optimize=True)
+
+# 6. lyric highlight looks, 2x2 with names (from test/shots-highlights.js)
+looks = [("soft", "Soft"), ("fade", "Fade"), ("sweep", "Sweep"), ("underline", "Underline")]
+if all(os.path.exists(os.path.join(SRC, f"hl-{n}.png")) for n, _ in looks):
+    (W, H), LB = Image.open(os.path.join(SRC, "hl-soft.png")).size, 40
+    hl = Image.new("RGB", (W * 2 + 12, (H + LB) * 2 + 12), BG)
+    d = ImageDraw.Draw(hl)
+    for i, (n, name) in enumerate(looks):
+        x, y = (i % 2) * (W + 12), (i // 2) * (H + LB + 12)
+        d.text((x + 4, y + 6), name, fill=(235, 235, 240), font=font(True, 22))
+        hl.paste(Image.open(os.path.join(SRC, f"hl-{n}.png")).convert("RGB"), (x, y + LB))
+    hl.save(os.path.join(DOCS, "highlights.png"), optimize=True)
 print("ok")
