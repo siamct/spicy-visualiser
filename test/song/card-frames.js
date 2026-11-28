@@ -1,5 +1,6 @@
-// Frames for the moving Marketplace card: a few styles playing the test
-// track, visualiser only, one frame every ~70 ms.
+// Frames for the moving Marketplace card: three styles, visualiser only, all
+// fed the same calm made-up signal (a soft wave rolling slowly across the
+// bands, no music, no beats), one frame every 125 ms for one 9 s loop.
 //   node test/song/card-frames.js  ->  test/out/card/<style>-<n>.png
 // then: python tools/make-card.py
 "use strict";
@@ -7,19 +8,10 @@ const { chromium } = require("playwright");
 const fs = require("fs");
 const path = require("path");
 const OUT = path.join(__dirname, "..", "out");
-const frames = JSON.parse(fs.readFileSync(path.join(OUT, "song-frames.json"), "utf8"));
 const harness = fs.readFileSync(path.join(__dirname, "..", "harness.html"), "utf8");
-const BEAT = 60 / 123;
+const LOOP = 9000; // ms: the signal repeats exactly, so the card loops cleanly
 
-const ALBUMS = [
-  { cover: ["#ff8a1f", "#ffd34a", "#e0402a"], bg: ["#3a1d08", "#0d0906"] }, // warm orange
-  { cover: ["#19c3b0", "#9ff2e0", "#1d5fa8"], bg: ["#07303a", "#050b10"] }, // teal / blue
-  { cover: ["#8a3cff", "#33d6ff", "#ff4fd8"], bg: ["#22104a", "#07061a"] }, // purple / cyan
-  { cover: ["#ff3355", "#ff9a8a", "#a01a50"], bg: ["#40101c", "#0f0508"] }, // red / rose
-  { cover: ["#6fd34a", "#e6f78a", "#1f8a6c"], bg: ["#12301a", "#050c07"] }, // green / lime
-];
-
-const HIDE = ".NowBar,.LyricsContainer,.ViewControls,.lp-nolyr{visibility:hidden!important}";
+const HIDE = ".LyricsContainer,.ViewControls,.lp-nolyr{visibility:hidden!important}.NowBar{display:none!important}";
 
 function page(album) {
   return harness
@@ -29,28 +21,33 @@ function page(album) {
     .replace('"../spicy-visualiser.js"', '"spicy-visualiser.js"');
 }
 
-async function open(b, js, album, atBar) {
+async function open(b, js, album) {
   const p = await b.newPage({ viewport: { width: 1280, height: 720 } });
   await p.route("http://song.test/**", (r) => {
     if (r.request().url().endsWith(".js")) return r.fulfill({ body: js, contentType: "text/javascript" });
     return r.fulfill({ body: page(album), contentType: "text/html" });
   });
-  const start = Math.max(0, Math.round((atBar * 4 * BEAT - 3) * 60));
-  await p.addInitScript(([frames]) => {
+  await p.addInitScript((LOOP) => {
+    // a soft wave rolling across the bands once per loop, breathing gently
+    window.__sigT0 = performance.now();
+    const sig = () => {
+      const ph = (((performance.now() - window.__sigT0) % LOOP) / LOOP) * Math.PI * 2;
+      const lv = 0.5 + 0.08 * Math.sin(ph * 2);
+      const wave = (x) => Math.max(0, Math.min(1, lv + 0.22 * Math.sin(x * Math.PI * 2 * 1.2 - ph)));
+      const b = Array.from({ length: 64 }, (_, i) => wave(i / 63));
+      const lo = Array.from({ length: 40 }, (_, i) => wave(i / 39));
+      return { b, lo, ld: lo.map((v) => 20 * Math.log10(Math.max(1e-4, v))), a: 0.2, l: lv, k: 0, s: 0 };
+    };
     window.WebSocket = class {
       constructor() {
         this.readyState = 1;
         setTimeout(() => this.onopen && this.onopen(), 10);
-        const t0 = performance.now();
-        this.iv = setInterval(() => {
-          const i = Math.floor((performance.now() - t0) / (1000 / 60));
-          this.onmessage && this.onmessage({ data: JSON.stringify(frames[i % frames.length]) });
-        }, 16);
+        this.iv = setInterval(() => this.onmessage && this.onmessage({ data: JSON.stringify(sig()) }), 16);
       }
       send() {}
       close() { clearInterval(this.iv); }
     };
-  }, [frames.slice(start, start + 60 * 12)]);
+  }, LOOP);
   p.on("pageerror", (e) => console.log("ERROR", e.message));
   await p.goto("http://song.test/index.html");
   await p.waitForTimeout(800);
@@ -59,16 +56,18 @@ async function open(b, js, album, atBar) {
 const setter = (p) => (k, v) => p.evaluate(([k, v]) => { const btn = document.querySelector(".lp-button"); btn.click(); document.querySelector(`[data-key=${k}] button[data-v=${v}]`).click(); btn.click(); }, [k, v]);
 
 
-const CARD = [["monstercat", 0, 22], ["ncs", 2, 23], ["aurora", 1, 23], ["plasma", 4, 18]];
-const N = 48;
+// all three in the same pinks, to match the card's top bar
+const ALBUM = { cover: ["#e8356f", "#ff6f9a", "#c42a62"], bg: ["#3a0f22", "#0d0609"] };
+const CARD = ["holospec", "ledm", "led"];
+const N = LOOP / 125; // pictures per style, one every 125 ms (the card plays them at that speed)
 
 (async () => {
   const b = await chromium.launch({ channel: process.env.LP_BROWSER || undefined, args: ["--use-gl=angle", "--use-angle=swiftshader", "--enable-unsafe-swiftshader"] });
   const js = fs.readFileSync(path.join(__dirname, "..", "..", "spicy-visualiser.js"));
   const dir = path.join(OUT, "card");
   fs.mkdirSync(dir, { recursive: true });
-  for (const [style, album, atBar] of CARD) {
-    const p = await open(b, js, ALBUMS[album], atBar);
+  for (const style of CARD) {
+    const p = await open(b, js, ALBUM);
     const set = setter(p);
     await set("lyricGlow", "off");
     await set("__style", style);
@@ -84,9 +83,14 @@ const N = 48;
     });
     await p.addStyleTag({ content: HIDE + ".lp-button,.lp-modal-wrap{display:none!important}" });
     await p.waitForTimeout(2500);
+    // start at the beginning of the wave, so all three styles are in step
+    await p.waitForTimeout(await p.evaluate((L) => L - ((performance.now() - window.__sigT0) % L), LOOP));
+    // evenly spaced in real time, so the card moves at the real speed
+    const t0 = Date.now();
     for (let i = 0; i < N; i++) {
+      const wait = t0 + i * 125 - Date.now();
+      if (wait > 0) await p.waitForTimeout(wait);
       await p.screenshot({ path: path.join(dir, `${style}-${i}.png`) });
-      await p.waitForTimeout(25);
     }
     console.log(style);
     await p.close();
