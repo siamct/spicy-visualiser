@@ -24,25 +24,24 @@
     ["ncs", "Sphere"],
     ["radial", "Radial Bars"],
     ["mirror", "Mirror Bars"],
-    ["ledm", "LED Meters"],
+    ["ledm", "Meters"],
     ["vu", "VU Meters"],
     ["scope", "Oscilloscope"],
-    ["holospec", "Holo Spectrum"],
+    ["holospec", "Spectrum"],
     ["holoring", "Holo Ring"],
-    ["revs", "Rev Counter"],
     ["crt", "CRT"],
     ["drumpads", "Drum Pads"],
     ["lanterns", "Lanterns"],
-    ["runes", "Magic Runes"],
+    ["runes", "Runes"],
     ["plasma", "Plasma"],
     ["ribbon", "Ribbon"],
-    ["rain", "Rain on Glass"],
+    ["rain", "Rain"],
     ["lava", "Lava Lamp"],
     ["smoke", "Smoke"],
     ["tunnel", "Starfield Tunnel"],
     ["aurora", "Aurora"],
     ["silk", "Silk"],
-    ["tvpixels", "TV Pixels"],
+    ["tvpixels", "TV"],
     ["oil", "Oil Slick"],
     ["galaxy", "Galaxy"],
     ["nebula", "Nebula Drift"],
@@ -50,17 +49,17 @@
     ["ombre", "Ombre"],
     ["warp", "Warp"],
     ["dnb", "Liquid"],
-    ["neuro", "Neuro Mesh"],
+    ["neuro", "Mesh"],
     ["ascii", "ASCII"],
     ["geometric", "Geometric"],
     ["bauhaus", "Bauhaus"],
     ["trap", "Trap"],
     ["sub", "Subwoofer"],
-    ["led", "LED Wall"],
-    ["ledplasma", "LED Plasma"],
+    ["led", "Wall"],
+    ["ledplasma", "LED"],
     ["ekg", "EKG"],
     ["flowline", "Flow Line"],
-    ["rgbsplit", "RGB Split"],
+    ["rgbsplit", "Chroma"],
     ["underwater", "Underwater"],
     ["sunset", "Sunset"],
     ["nightsky", "Night Sky"],
@@ -77,7 +76,6 @@
     constellations: '<path d="M4 17 9 11l5 2 3-7 3 3" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round" opacity=".6"/><circle cx="4" cy="17" r="1.6"/><circle cx="9" cy="11" r="1.6"/><circle cx="14" cy="13" r="1.4"/><circle cx="17" cy="6" r="1.8"/><circle cx="20" cy="9" r="1.2"/>',
     nightsky: '<path d="M15 3a8 8 0 1 0 6 12 6.5 6.5 0 0 1-6-12z"/><circle cx="5" cy="5" r="1"/><circle cx="9" cy="2.5" r=".8"/><circle cx="3" cy="11" r=".8"/>',
     holoring: '<g fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="1.8"><path d="M2.6 19.7L4.3 22.1M4.7 17.6L7.1 19.3M6 14.9L8.9 15.9M6.5 12L9.5 12M21.4 19.7L19.7 22.1M19.3 17.6L16.9 19.3M18 14.9L15.1 15.9M17.5 12L14.5 12"/><path d="M6 9.1L8.9 8.1M5.5 5.8L7.1 4.7M3.2 3.5L4.3 1.9M18 9.1L15.1 8.1M18.5 5.8L16.9 4.7M20.8 3.5L19.7 1.9" opacity=".3"/></g>',
-    revs: '<g fill="none" stroke="currentColor" stroke-linecap="round"><path d="M5 18a9 9 0 1 1 14 0" stroke-width="1.8"/><path d="M17 9.5a7 7 0 0 1 1.5 5" stroke-width="2.6" opacity=".6"/><path d="M12 14l4-6" stroke-width="2"/></g><circle cx="12" cy="14" r="1.6"/>',
     crt: '<rect x="2" y="4" width="20" height="15" rx="3" fill="none" stroke="currentColor" stroke-width="1.6"/><g opacity=".7"><rect x="5" y="7" width="14" height="1.2"/><rect x="5" y="10" width="14" height="1.2"/><rect x="5" y="13" width="14" height="1.2"/><rect x="5" y="16" width="14" height=".8" opacity=".5"/></g>',
     holospec: '<g>'+[[3,4],[7,6],[11,3],[15,5],[19,2]].map(([x,n])=>[...Array(n)].map((_,s)=>`<rect x="${x}" y="${19-s*3}" width="3" height="1.3" rx=".5" opacity="${(0.65+s*0.08).toFixed(2)}"/>`).join('')).join('')+'</g>',
     runes: '<g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10" stroke-width="1.4"/><circle cx="12" cy="12" r="5.5" stroke-width="1" opacity=".6"/><path d="M12 6.5 16.8 14.8H7.2zM12 17.5 7.2 9.2h9.6z" stroke-width="1" opacity=".7"/><path d="M12 1.8v2.6M10.8 2.8h2.4M20.6 9l-1.4 1M21 13.5h-2M4.5 17l1.5-1.2M3 10.5l2 .5" stroke-width="1.3"/></g>',
@@ -118,14 +116,14 @@
     off: '<circle cx="12" cy="12" r="8" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M6.5 17.5 17.5 6.5" stroke="currentColor" stroke-width="1.8"/>',
   };
   // The style picker shows the styles in groups, in this order (A-Z, but
-  // Plasma and LED Plasma side by side).
+  // Plasma and LED side by side).
   // Styles that still look right on Spotify's data (it has loudness and
   // beats, not a real spectrum). With that source they're listed first and
   // the rest fold away under "More styles".
   const SONG_DATA_OK = new Set(["constellations", "nebula", "lanterns", "underwater", "sunset", "nightsky", "silk", "tvpixels", "drumpads", "particles", "plasma", "ledplasma", "warp", "dnb", "ribbon", "rain", "lava", "smoke", "tunnel", "aurora", "oil", "galaxy", "prism", "ombre", "geometric", "bauhaus", "sub", "off"]);
   const STYLE_GROUPS = [
     ["Bars", ["monstercat", "mirror", "holospec", "ledm", "led", "ascii", "rgbsplit"]],
-    ["Meters & lines", ["vu", "revs", "scope", "crt", "ekg", "flowline", "ribbon", "dnb"]],
+    ["Meters & lines", ["vu", "scope", "crt", "ekg", "flowline", "ribbon", "dnb"]],
     ["Circles", ["radial", "ncs", "holoring", "sub", "trap", "tunnel"]],
     ["On the beat", ["drumpads", "geometric", "bauhaus", "particles"]],
     ["Liquid & water", ["plasma", "ledplasma", "tvpixels", "oil", "silk", "lava", "underwater"]],
@@ -138,7 +136,7 @@
   const MODEL = {};
   const USES = {
     barCount: ["rgbsplit", "holospec", "monstercat", "mirror", "radial"],
-    particles: ["particles", "monstercat", "warp", "dnb", "trap"],
+    particles: ["dnb", "particles", "monstercat", "warp", "trap"],
     position: ["monstercat", "mirror", "ascii"],
     variant: ["geometric"],
     beatEvery: ["nebula", "underwater", "sunset", "nightsky", "silk", "tvpixels", "geometric", "bauhaus", "plasma", "ledplasma", "sub", "trap", "neuro", "ribbon", "rain", "lava", "smoke", "tunnel", "aurora", "oil", "galaxy", "prism", "ombre"],
@@ -150,16 +148,15 @@
     ringOff: ["holoring"],
     ringLook: ["holoring"],
     bounce: ["vu", "holoring"],
-    gaugeLook: ["revs"],
     // styles that can sit beside the album art and be moved (not the
     // full-screen scenes)
-    fit: ["flowline", "runes", "holoring", "revs", "crt", "monstercat", "mirror", "holospec", "ledm", "led", "ascii", "rgbsplit", "scope", "ekg", "dnb", "radial", "ncs", "sub", "trap", "drumpads", "geometric", "bauhaus", "neuro"],
-    moveX: ["flowline", "runes", "vu", "holoring", "revs", "crt", "monstercat", "mirror", "holospec", "ledm", "led", "ascii", "rgbsplit", "scope", "ekg", "dnb", "radial", "ncs", "sub", "trap", "drumpads", "geometric", "bauhaus", "neuro"],
-    moveY: ["flowline", "runes", "vu", "holoring", "revs", "crt", "monstercat", "mirror", "holospec", "ledm", "led", "ascii", "rgbsplit", "scope", "ekg", "dnb", "radial", "ncs", "sub", "trap", "drumpads", "geometric", "bauhaus", "neuro"],
+    fit: ["flowline", "runes", "holoring", "crt", "monstercat", "mirror", "holospec", "ledm", "led", "ascii", "rgbsplit", "scope", "ekg", "dnb", "radial", "ncs", "sub", "trap", "drumpads", "geometric", "bauhaus", "neuro"],
+    moveX: ["flowline", "runes", "vu", "holoring", "crt", "monstercat", "mirror", "holospec", "ledm", "led", "ascii", "rgbsplit", "scope", "ekg", "dnb", "radial", "ncs", "sub", "trap", "drumpads", "geometric", "bauhaus", "neuro"],
+    moveY: ["flowline", "runes", "vu", "holoring", "crt", "monstercat", "mirror", "holospec", "ledm", "led", "ascii", "rgbsplit", "scope", "ekg", "dnb", "radial", "ncs", "sub", "trap", "drumpads", "geometric", "bauhaus", "neuro"],
     circleAt: ["runes", "trap", "radial", "ncs", "sub"],
     speed: ["flowline", "nebula", "runes", "lanterns", "crt", "ekg", "underwater", "sunset", "nightsky", "silk", "tvpixels", "scope", "trap", "neuro", "ribbon", "rain", "lava", "smoke", "tunnel", "aurora", "oil", "particles", "monstercat", "ncs", "radial", "plasma", "warp", "dnb", "ascii", "led", "ledplasma", "galaxy", "prism", "ombre"],
     bassBoost: ["rgbsplit", "underwater", "sunset", "nightsky", "silk", "tvpixels", "scope", "particles", "monstercat", "radial", "mirror", "ncs", "warp", "plasma", "dnb", "ascii", "geometric", "bauhaus", "led", "ledplasma", "sub", "trap", "ledm", "neuro", "ribbon", "rain", "lava", "smoke", "tunnel", "aurora", "oil", "galaxy", "prism", "ombre"],
-    smoothing: ["flowline", "holoring", "revs", "crt", "rgbsplit", "ekg", "particles", "monstercat", "radial", "mirror", "ncs", "warp", "plasma", "dnb", "ascii", "geometric", "bauhaus", "led", "ledplasma", "sub", "trap", "ledm", "neuro", "aurora", "vu", "drumpads", "holospec"],
+    smoothing: ["flowline", "holoring", "crt", "rgbsplit", "ekg", "particles", "monstercat", "radial", "mirror", "ncs", "warp", "plasma", "dnb", "ascii", "geometric", "bauhaus", "led", "ledplasma", "sub", "trap", "ledm", "neuro", "aurora", "vu", "drumpads", "holospec"],
   };
 
   const STYLE_BASE = {
@@ -179,7 +176,7 @@
     neuroLook: "mesh",
     mcColor: "flow", // Monstercat bar colour: flow | frequency | height (area) | bar | solid
     neuroLine: "rough", // Ridges look: rough (a little jagged) or smooth
-    neuroTwist: 0, // Neuro Mesh: how much it rolls along its length (0 = still)
+    neuroTwist: 0, // Mesh: how much it rolls along its length (0 = still)
     neuroMirror: "off",
     vuFace: "night", // VU Meters look: night (classic) | minimal | holo | hud
     vuMeters: "both", // VU Meters: both needles in one meter | split (bass left, highs right) | bass (one meter)
@@ -190,7 +187,6 @@
     ringLook: "holo", // Holo Ring: holo | glow | dots | lines | hud
     bounce: 0.75, // VU Meters / Holo Ring: how much the needles swing past (0 = none)
     ringOff: 0.5, // Holo Ring: how far off the edge the rings sit (more = less of them shows)
-    gaugeLook: "modern", // Rev Counter: modern | classic
     circleAt: "middle", // circle styles: middle of the view, or round the album art
     beatEvery: "1", // beat-stepping styles change every 1, 2, 4 or 8 beats
     colorMove: "move", // move = colours shift on the beat and drift; still = they stay put
@@ -239,7 +235,6 @@
     nightsky: { shake: 0 },
     holospec: { shake: 0 },
     holoring: { shake: 0, fit: "art" },
-    revs: { shake: 0, fit: "art" },
     crt: { shake: 0 },
     rgbsplit: { shake: 0, barCount: 48 },
   };
@@ -291,15 +286,15 @@
   if (!["soft", "fade", "sweep", "underline"].includes(S.glowStyle)) S.glowStyle = "soft";
   if (!["glide", "fade"].includes(S.glowMove)) S.glowMove = "glide";
   if (!Array.isArray(S.favs)) S.favs = [];
-  // Retro Bars became LED Meters.
+  // Retro Bars became Meters.
   // (and Drum Bars was taken out)
-  const MOVED = { retro: "ledm", drumbars: "drumpads", drums: "drumpads", holoradar: "holospec", holorings: "holospec", pitchtrail: "ekg", kaleido: "plasma", bubbles: "lava", chrome: "silk", ekgpitch: "ekg", ekgscroll: "ekg", pond: "underwater", ocean: "underwater", storm: "sunset", mercury: "silk", ekg3: "ekg", chipscope: "scope", drumwaves: "drumpads", trails: "particles", circuit: "particles", neon: "particles", grass: "lanterns", notes: "flowline" };
+  const MOVED = { retro: "ledm", drumbars: "drumpads", drums: "drumpads", holoradar: "holospec", holorings: "holospec", pitchtrail: "ekg", kaleido: "plasma", bubbles: "lava", chrome: "silk", ekgpitch: "ekg", ekgscroll: "ekg", pond: "underwater", ocean: "underwater", storm: "sunset", mercury: "silk", ekg3: "ekg", chipscope: "scope", drumwaves: "drumpads", trails: "particles", circuit: "particles", neon: "particles", grass: "lanterns", notes: "flowline", revs: "vu" };
   if (MOVED[S.style]) S.style = MOVED[S.style];
   S.favs = [...new Set(S.favs.map((f) => MOVED[f] || f))];
   if (!validStyle(S.style)) S.style = GLOBAL_DEFAULTS.style;
   if (S.source !== "spotify") S.source = "helper";
   if (!S.per || typeof S.per !== "object") S.per = {};
-  // Neuro Mesh Twist was Off / Low / High; it's a slider now.
+  // Mesh Twist was Off / Low / High; it's a slider now.
   if (S.per.neuro && typeof S.per.neuro.neuroTwist === "string") S.per.neuro.neuroTwist = { low: 0.3, high: 1 }[S.per.neuro.neuroTwist] || 0;
   // Settings that were taken out of the panel go back to their defaults.
   if (S.per.neuro) for (const k of ["neuroLine", "neuroTwist", "neuroMirror"]) delete S.per.neuro[k];
@@ -1651,7 +1646,7 @@
     v.soft(cx, cy, far * 0.35, colorAt(0.5), 0.05 + 0.12 * bass + 0.12 * k);
   };
 
-  // RGB Split: spectrum bars drawn three times, in red, green and blue
+  // Chroma: spectrum bars drawn three times, in red, green and blue
   // added together, so they're white where they line up. Kicks and the bass
   // pull the three apart sideways (and a little up and down), and they
   // slide back together.
@@ -1942,7 +1937,7 @@
   };
 
   // ---------------------------------------------------------------------------
-  // The music-driven fluid shared by LED Plasma (on LED dots) and Plasma
+  // The music-driven fluid shared by LED (on LED dots) and Plasma
   // (smooth). Fills `d` (cols x rows RGBA). The music sets how fast it flows
   // (loudness, bass, a surge on each kick), how hard it swirls (bass), how
   // fine it shimmers (treble) and how bright it is. On each step of the beat
@@ -2005,7 +2000,7 @@
     }
   }
 
-  // Plasma: the same fluid as LED Plasma, drawn smooth (no dots). Worked out
+  // Plasma: the same fluid as LED, drawn smooth (no dots). Worked out
   // on a small grid (about 96 across) and scaled up with smoothing.
   DRAW.plasma = (v, p, dt) => {
     const PW = 96, PH = Math.max(24, Math.min(96, Math.round((PW * v.h) / Math.max(1, v.w))));
@@ -3219,126 +3214,6 @@ void main() {
     if (p.ringLook === "holo" || !p.ringLook) for (const [sd] of sides) if (vis > 0) holoScan(ctx, sd < 0 ? 0 : w - vis, cy - R * 1.2, vis, R * 2.4, st.t);
   };
 
-  // Rev Counter: a car's rev counter. The needle follows the loudness (the
-  // bass pushes it harder), kicks blip it, and the shift light comes on in
-  // the red. Two looks (Look):
-  //  - Modern: flat glowing segments round the dial in the album's colours,
-  //    a thin needle and a big speed number in the middle;
-  //  - Classic: a plain round dial with printed numbers and a needle.
-  DRAW.revs = (v, p, dt) => {
-    const { ctx, w, h } = v;
-    const st = v.revs || (v.revs = { rpm: 0, vel: 0, spd: 0, t: 0, kickSeen: shared.beatSerial });
-    st.t += dt;
-    const sm = Math.max(0, Math.min(1, p.smoothing));
-    const want = Math.min(1.02, (0.08 + 0.5 * shared.energy + 0.25 * (shared.bassPunch || 0)) * p.sensitivity);
-    if (st.kickSeen !== shared.beatSerial) { st.kickSeen = shared.beatSerial; st.vel += 0.9 * Math.min(1, shared.kick + 0.2); }
-    // a weighted needle: springs towards the level, a little lag (Smoothing)
-    const k = 60 - 40 * sm, damp = 2 * Math.sqrt(k) * 0.6;
-    st.vel += (k * (want - st.rpm) - damp * st.vel) * Math.min(dt, 0.05);
-    st.rpm = Math.max(0, Math.min(1.04, st.rpm + st.vel * Math.min(dt, 0.05)));
-    st.spd += (shared.energy * 220 - st.spd) * Math.min(1, dt * 0.25);
-    const RED = 7 / 8, inRed = st.rpm > RED;
-    const R = Math.min(w * 0.3, h * 0.36) * p.size, cx = w / 2, cy = h / 2;
-    const a0 = Math.PI * 0.75, SW = Math.PI * 1.5, ang = (t) => a0 + SW * Math.max(0, Math.min(1, t));
-    const c1 = colorAt(0.2), c2 = colorAt(0.8), HOT = [255, 70, 60];
-    ctx.save();
-    ctx.globalAlpha = A_(1, v);
-    ctx.textAlign = "center";
-    ctx.textBaseline = "middle";
-    if (p.gaugeLook === "classic") {
-      ctx.globalCompositeOperation = "source-over";
-      ctx.fillStyle = "rgba(10,10,12,0.85)";
-      ctx.beginPath();
-      ctx.arc(cx, cy, R * 1.08, 0, Math.PI * 2);
-      ctx.fill();
-      ctx.strokeStyle = "rgba(255,255,255,0.25)";
-      ctx.lineWidth = Math.max(1, R * 0.012);
-      ctx.stroke();
-      ctx.strokeStyle = v.rgba(HOT, 0.85);
-      ctx.lineWidth = R * 0.05;
-      ctx.beginPath();
-      ctx.arc(cx, cy, R * 0.93, ang(RED), ang(1));
-      ctx.stroke();
-      for (let j = 0; j <= 40; j++) {
-        const big = j % 5 === 0, a = ang(j / 40);
-        ctx.strokeStyle = j / 40 > RED ? v.rgba(HOT, 1) : "rgba(240,240,240,0.9)";
-        ctx.lineWidth = Math.max(1, R * (big ? 0.022 : 0.01));
-        ctx.beginPath();
-        vuLine(ctx, cx, cy, a, R * (big ? 0.8 : 0.86), R * 0.96);
-        ctx.stroke();
-        if (big) {
-          ctx.fillStyle = j / 40 > RED ? v.rgba(HOT, 1) : "rgba(240,240,240,0.95)";
-          ctx.font = `600 ${Math.round(R * 0.13)}px ${UI_FONT}`;
-          ctx.fillText(String(j / 5), cx + Math.cos(a) * R * 0.66, cy + Math.sin(a) * R * 0.66);
-        }
-      }
-      ctx.fillStyle = "rgba(240,240,240,0.55)";
-      ctx.font = `600 ${Math.round(R * 0.07)}px ${UI_FONT}`;
-      ctx.fillText("RPM ×1000", cx, cy + R * 0.38);
-      ctx.fillStyle = inRed ? v.rgba(HOT, 0.9) : "rgba(255,255,255,0.08)";
-      ctx.beginPath();
-      ctx.arc(cx, cy - R * 0.36, R * 0.045, 0, Math.PI * 2);
-      ctx.fill();
-      ctx.strokeStyle = "rgb(255,120,40)";
-      ctx.lineCap = "round";
-      ctx.lineWidth = Math.max(2, R * 0.025);
-      ctx.beginPath();
-      vuLine(ctx, cx, cy, ang(st.rpm), -R * 0.12, R * 0.9);
-      ctx.stroke();
-      ctx.fillStyle = "rgb(30,30,34)";
-      ctx.beginPath();
-      ctx.arc(cx, cy, R * 0.09, 0, Math.PI * 2);
-      ctx.fill();
-    } else {
-      ctx.globalCompositeOperation = "lighter";
-      const NS = 48, segA = SW / NS;
-      ctx.lineCap = "butt";
-      ctx.lineWidth = R * 0.09;
-      for (let j = 0; j < NS; j++) {
-        const t = (j + 0.5) / NS, on = t <= st.rpm, hot = t > RED;
-        const c = hot ? HOT : mix(c1, c2, t);
-        ctx.strokeStyle = v.rgba(on ? mix(c, WHITE, 0.15) : c, on ? 0.9 : 0.08);
-        if (on) { ctx.shadowColor = v.rgba(c, 0.8); ctx.shadowBlur = R * 0.06; }
-        ctx.beginPath();
-        ctx.arc(cx, cy, R * 0.92, a0 + j * segA + segA * 0.2, a0 + (j + 1) * segA - segA * 0.2);
-        ctx.stroke();
-        ctx.shadowBlur = 0;
-      }
-      ctx.strokeStyle = v.rgba(mix(c1, c2, 0.5), 0.3);
-      ctx.lineWidth = 1;
-      ctx.beginPath();
-      for (let j = 0; j <= 8; j++) vuLine(ctx, cx, cy, ang(j / 8), R * 1.0, R * 1.06);
-      ctx.stroke();
-      ctx.font = `${Math.round(R * 0.08)}px ${UI_FONT}`;
-      for (let j = 0; j <= 8; j++) {
-        const a = ang(j / 8);
-        ctx.fillStyle = j / 8 > RED - 0.01 && j ? v.rgba(HOT, 0.8) : "rgba(255,255,255,0.5)";
-        ctx.fillText(String(j), cx + Math.cos(a) * R * 1.15, cy + Math.sin(a) * R * 1.15);
-      }
-      const na = ang(st.rpm), nc = inRed ? HOT : mix(c2, WHITE, 0.4);
-      ctx.strokeStyle = v.rgba(nc, 0.3);
-      ctx.lineWidth = Math.max(4, R * 0.035);
-      ctx.beginPath();
-      vuLine(ctx, cx, cy, na, R * 0.62, R * 1.02);
-      ctx.stroke();
-      ctx.strokeStyle = v.rgba(nc, 0.95);
-      ctx.lineWidth = Math.max(1.5, R * 0.01);
-      ctx.stroke();
-      ctx.fillStyle = "rgba(255,255,255,0.92)";
-      ctx.font = `200 ${Math.round(R * 0.42)}px ${UI_FONT}`;
-      ctx.fillText(String(Math.round(st.spd)), cx, cy - R * 0.02);
-      ctx.fillStyle = "rgba(255,255,255,0.45)";
-      ctx.font = `${Math.round(R * 0.07)}px ${UI_FONT}`;
-      ctx.fillText("km/h", cx, cy + R * 0.28);
-      if (inRed) {
-        ctx.fillStyle = v.rgba(HOT, 0.6 + 0.4 * (Math.sin(st.t * 30) > 0 ? 1 : 0));
-        ctx.font = `600 ${Math.round(R * 0.07)}px ${UI_FONT}`;
-        ctx.fillText("SHIFT", cx, cy + R * 0.5);
-      }
-    }
-    ctx.restore();
-  };
-
   // CRT: an old tube TV close up. The picture is the spectrum, mirrored
   // round the middle, drawn in glowing scanlines; a brighter band rolls
   // slowly down the screen, the corners fall dark, and a kick makes the
@@ -3458,86 +3333,146 @@ void main() {
     ctx.restore();
   };
 
-  // Magic Runes: a slowly turning circle of glowing made-up runes, in three
-  // rings that turn opposite ways, with a star of lines in the middle. Each
-  // rune lights up with its part of the spectrum, the rings glow with the
-  // bass, and a kick sends a ripple of light outwards.
-  function runeGlyph() {
-    // a made-up rune: two to four strokes between points on a small 3x3 grid
-    const pts = [];
-    for (let y = -1; y <= 1; y++) for (let x = -1; x <= 1; x++) pts.push([x * 0.5, y * 0.7]);
-    const P = new Path2D(), n = 2 + Math.floor(Math.random() * 3);
-    P.moveTo(pts[1][0], pts[1][1]);
-    P.lineTo(pts[7][0], pts[7][1]);
-    for (let i = 0; i < n; i++) {
-      const a = pts[Math.floor(Math.random() * 9)], b = pts[Math.floor(Math.random() * 9)];
-      if (a === b) continue;
-      P.moveTo(a[0], a[1]);
-      P.lineTo(b[0], b[1]);
+  // Runes: the 24 old Norse runes (Elder Futhark) in one plain ring, drawn
+  // like rough chalk: slightly wobbly doubled strokes with gaps where the
+  // chalk skipped. No glow. Each rune brightens with its part of the
+  // spectrum and takes on a little of the album's colour when it's lit; the
+  // ring turns slowly, the chalk circle round it gets brighter with the
+  // bass, and a kick lifts all the runes for a moment.
+  // Strokes on a box 1 wide and 2 tall (x -0.5..0.5, y -1..1, y down).
+  const FUTHARK = [
+    [[0, -1, 0, 1], [0, -0.55, 0.45, -1], [0, -0.05, 0.45, -0.5]], // fehu
+    [[-0.3, 1, -0.3, -1], [-0.3, -1, 0.35, -0.45], [0.35, -0.45, 0.35, 1]], // uruz
+    [[0, -1, 0, 1], [0, -0.45, 0.4, 0], [0.4, 0, 0, 0.45]], // thurisaz
+    [[0, -1, 0, 1], [0, -1, 0.4, -0.6], [0, -0.5, 0.4, -0.1]], // ansuz
+    [[-0.2, -1, -0.2, 1], [-0.2, -1, 0.3, -0.6], [0.3, -0.6, -0.2, -0.2], [-0.2, -0.2, 0.35, 1]], // raido
+    [[0.3, -0.6, -0.2, 0], [-0.2, 0, 0.3, 0.6]], // kaunan
+    [[-0.45, -1, 0.45, 1], [0.45, -1, -0.45, 1]], // gebo
+    [[-0.15, -1, -0.15, 1], [-0.15, -1, 0.35, -0.6], [0.35, -0.6, -0.15, -0.2]], // wunjo
+    [[-0.35, -1, -0.35, 1], [0.35, -1, 0.35, 1], [-0.35, -0.3, 0.35, 0.3]], // hagalaz
+    [[0, -1, 0, 1], [-0.35, -0.25, 0.35, 0.25]], // naudiz
+    [[0, -1, 0, 1]], // isaz
+    [[-0.05, -0.8, -0.45, -0.3], [-0.45, -0.3, -0.05, 0.2], [0.05, -0.2, 0.45, 0.3], [0.45, 0.3, 0.05, 0.8]], // jera
+    [[0, -1, 0, 1], [0, -1, 0.35, -0.7], [0, 1, -0.35, 0.7]], // eihwaz
+    [[-0.3, -1, -0.3, 1], [-0.3, -1, 0.3, -0.55], [0.3, -0.55, 0.3, -0.25], [-0.3, 1, 0.3, 0.55], [0.3, 0.55, 0.3, 0.25]], // perthro
+    [[0, -0.2, 0, 1], [0, -0.2, -0.45, -1], [0, -0.2, 0, -1], [0, -0.2, 0.45, -1]], // algiz
+    [[0.3, -1, -0.3, -0.3], [-0.3, -0.3, 0.3, 0.3], [0.3, 0.3, -0.3, 1]], // sowilo
+    [[0, -1, 0, 1], [0, -1, -0.45, -0.5], [0, -1, 0.45, -0.5]], // tiwaz
+    [[-0.3, -1, -0.3, 1], [-0.3, -1, 0.35, -0.5], [0.35, -0.5, -0.3, 0], [-0.3, 0, 0.35, 0.5], [0.35, 0.5, -0.3, 1]], // berkanan
+    [[-0.35, 1, -0.35, -1], [-0.35, -1, 0, -0.4], [0, -0.4, 0.35, -1], [0.35, -1, 0.35, 1]], // ehwaz
+    [[-0.35, 1, -0.35, -1], [0.35, 1, 0.35, -1], [-0.35, -1, 0.35, -0.3], [0.35, -1, -0.35, -0.3]], // mannaz
+    [[0, -1, 0, 1], [0, -1, 0.4, -0.6]], // laguz
+    [[0, -0.5, 0.35, 0], [0.35, 0, 0, 0.5], [0, 0.5, -0.35, 0], [-0.35, 0, 0, -0.5]], // ingwaz
+    [[-0.4, -1, -0.4, 1], [-0.4, -1, 0.4, 1], [0.4, 1, 0.4, -1], [0.4, -1, -0.4, 1]], // dagaz
+    [[-0.45, 1, 0.3, -0.1], [0.3, -0.1, 0, -0.7], [0, -0.7, -0.3, -0.1], [-0.3, -0.1, 0.45, 1]], // othala
+  ];
+  // One chalk drawing of a rune (white), made once per size: each stroke
+  // drawn twice with a little wobble, then flecks rubbed out of it.
+  function chalkRune(strokes, size) {
+    const W = Math.ceil(size * 0.75), H = Math.ceil(size * 1.25);
+    const c = document.createElement("canvas");
+    c.width = W;
+    c.height = H;
+    const g = c.getContext("2d");
+    const sx = (x) => W / 2 + x * size * 0.5, sy = (y) => H / 2 + y * size * 0.5;
+    const j = () => (Math.random() - 0.5) * size * 0.05;
+    g.lineCap = "round";
+    g.strokeStyle = "#fff";
+    for (const [x0, y0, x1, y1] of strokes) {
+      for (let pass = 0; pass < 3; pass++) {
+        g.globalAlpha = pass ? 0.5 : 0.85;
+        g.lineWidth = Math.max(1.2, size * (pass ? 0.045 : 0.08));
+        g.beginPath();
+        g.moveTo(sx(x0) + j(), sy(y0) + j());
+        const mx = (sx(x0) + sx(x1)) / 2 + j() * 1.5, my = (sy(y0) + sy(y1)) / 2 + j() * 1.5;
+        g.quadraticCurveTo(mx, my, sx(x1) + j(), sy(y1) + j());
+        g.stroke();
+      }
     }
-    return P;
+    // where the chalk skipped
+    g.globalCompositeOperation = "destination-out";
+    g.globalAlpha = 1;
+    const n = Math.round(W * H * 0.11);
+    for (let i = 0; i < n; i++) {
+      const r = 0.6 + Math.random() * Math.max(0.8, size * 0.03);
+      g.fillRect(Math.random() * W, Math.random() * H, r, r);
+    }
+    return c;
   }
   DRAW.runes = (v, p, dt) => {
-    const { ctx, w, h, U } = v;
-    const st = v.runes || (v.runes = { t: 0, b: 0, rip: [], beatSeen: shared.beatSerial, rings: [[18, 0.62], [26, 0.82], [34, 1.0]].map(([n, r]) => ({ r, n, glyphs: Array.from({ length: n }, runeGlyph), band: Math.random() })) });
+    const { ctx, U } = v;
+    const st = v.runes || (v.runes = { t: 0, b: 0, lift: 0, beatSeen: shared.beatSerial, lv: new Float32Array(24), size: 0, sprites: null, ring: null });
     st.t += dt * p.speed;
     st.b += ((shared.bassPunch || 0) - st.b) * Math.min(1, dt * 5);
-    if (st.beatSeen !== shared.beatSerial) { st.beatSeen = shared.beatSerial; if (shared.kick > 0.3) st.rip.push({ a: 0 }); }
-    st.rip = st.rip.filter((q) => (q.a += dt * 0.9) < 1);
-    const sp = circleSpot(v, p, 0.36), R = sp.art ? sp.r * 1.25 : sp.r, cx = sp.x, cy = sp.y;
-    const c0 = colorAt(0.15), c1 = colorAt(0.6), c2 = colorAt(0.95);
+    if (st.beatSeen !== shared.beatSerial) { st.beatSeen = shared.beatSerial; if (shared.kick > 0.3) st.lift = 1; }
+    st.lift *= Math.exp(-dt * 4);
+    const sp = circleSpot(v, p, 0.36), R = sp.art ? sp.r * 1.3 : sp.r, cx = sp.x, cy = sp.y;
+    const size = Math.max(10, Math.round(R * 0.2));
+    if (!st.sprites || Math.abs(size - st.size) > 3) {
+      st.size = size;
+      st.sprites = FUTHARK.map((f) => chalkRune(f, size));
+      // the rough wobble of the chalk circles, fixed so they don't shimmer
+      st.ring = Array.from({ length: 3 }, () => Array.from({ length: 96 }, () => (Math.random() - 0.5) * 0.012));
+    }
+    const ease = 1 - 0.6 * p.smoothing;
     ctx.save();
-    ctx.globalCompositeOperation = "lighter";
-    ctx.globalAlpha = A_(1, v);
+    ctx.globalCompositeOperation = "source-over";
+    const base = A_(1, v);
+    // two rough chalk circles, inside and outside the runes
     ctx.lineCap = "round";
-    ctx.lineJoin = "round";
-    // ring lines
-    for (const [rr, a] of [[0.5, 0.25], [0.72, 0.3], [0.92, 0.35], [1.1, 0.4]]) {
-      ctx.strokeStyle = v.rgba(mix(c0, c2, rr / 1.1), a * (0.5 + 0.8 * st.b));
-      ctx.lineWidth = Math.max(1, 1.4 * U);
+    [[0.78, 0], [1.22, 1], [1.24, 2]].forEach(([rr, k]) => {
+      ctx.strokeStyle = v.rgba(mix([235, 232, 222], colorAt(0.5), 0.2), base * (k === 2 ? 0.25 : 0.45) * (0.6 + 0.6 * st.b));
+      ctx.lineWidth = Math.max(1, (k === 2 ? 1 : 1.8) * U);
       ctx.beginPath();
-      ctx.arc(cx, cy, R * rr, 0, Math.PI * 2);
-      ctx.stroke();
-    }
-    // the star of lines in the middle (two triangles), turning slowly
-    ctx.strokeStyle = v.rgba(c1, 0.35 + 0.5 * st.b);
-    ctx.lineWidth = Math.max(1, 1.6 * U);
-    ctx.beginPath();
-    for (const off of [0, Math.PI]) for (let k = 0; k <= 3; k++) {
-      const a = off - Math.PI / 2 + (k * Math.PI * 2) / 3 + st.t * 0.1;
-      k ? ctx.lineTo(cx + Math.cos(a) * R * 0.5, cy + Math.sin(a) * R * 0.5) : ctx.moveTo(cx + Math.cos(a) * R * 0.5, cy + Math.sin(a) * R * 0.5);
-    }
-    ctx.stroke();
-    // the runes, each ring turning its own way
-    st.rings.forEach((rg, ri) => {
-      const turn = st.t * (ri % 2 ? -0.06 : 0.08) * (1 + ri * 0.2);
-      const gs = R * 0.07 * (1 - ri * 0.12);
-      for (let i = 0; i < rg.n; i++) {
-        const t = i / rg.n, a = turn + t * Math.PI * 2;
-        const lv = Math.min(1, bandAt((t + rg.band) % 1 * 0.9) * 1.3);
-        const c = mix(ri === 0 ? c0 : ri === 1 ? c1 : c2, WHITE, 0.3 * lv);
-        const x = cx + Math.cos(a) * R * (rg.r * 0.92 + 0.06), y = cy + Math.sin(a) * R * (rg.r * 0.92 + 0.06);
-        ctx.save();
-        ctx.translate(x, y);
-        ctx.rotate(a + Math.PI / 2);
-        ctx.scale(gs, gs);
-        ctx.strokeStyle = v.rgba(c, 0.2 + 0.8 * lv);
-        ctx.lineWidth = (Math.max(1.2, 1.8 * U) / gs) * (1 + 0.4 * lv);
-        ctx.stroke(rg.glyphs[i]);
-        ctx.restore();
+      const pts = st.ring[k];
+      for (let i = 0; i <= pts.length; i++) {
+        const a = (i / pts.length) * Math.PI * 2, r = R * (rr + pts[i % pts.length]);
+        i ? ctx.lineTo(cx + Math.cos(a) * r, cy + Math.sin(a) * r) : ctx.moveTo(cx + Math.cos(a) * r, cy + Math.sin(a) * r);
       }
-    });
-    // kick ripples
-    for (const q of st.rip) {
-      ctx.strokeStyle = v.rgba(mix(c1, WHITE, 0.4), 0.5 * (1 - q.a));
-      ctx.lineWidth = Math.max(1, 3 * U * (1 - q.a));
-      ctx.beginPath();
-      ctx.arc(cx, cy, R * (0.5 + 0.8 * q.a), 0, Math.PI * 2);
       ctx.stroke();
+    });
+    // the runes, upright along the ring and turning slowly with it
+    const turn = st.t * 0.05;
+    for (let i = 0; i < 24; i++) {
+      const t = i / 24, a = turn + t * Math.PI * 2 - Math.PI / 2;
+      const want = Math.min(1, bandAt(t * 0.9) * 1.3);
+      st.lv[i] += (want - st.lv[i]) * Math.min(1, dt * (8 * ease + 1));
+      const lv = Math.min(1, st.lv[i] + 0.35 * st.lift);
+      const spr = st.sprites[i];
+      const x = cx + Math.cos(a) * R, y = cy + Math.sin(a) * R;
+      ctx.save();
+      ctx.translate(x, y);
+      ctx.rotate(a + Math.PI / 2);
+      ctx.globalAlpha = base * (0.3 + 0.7 * lv);
+      ctx.drawImage(spr, -spr.width / 2, -spr.height / 2);
+      if (lv > 0.35) {
+        // lit: the same chalk again in the album colour on top (still flat)
+        ctx.globalAlpha = base * (lv - 0.35) * 0.9;
+        ctx.drawImage(tintedChalk(st, i, colorAt(t)), -spr.width / 2, -spr.height / 2);
+      }
+      ctx.restore();
     }
-    v.soft(cx, cy, R * 0.55, c1, 0.1 + 0.25 * st.b);
     ctx.restore();
   };
+  // A coloured copy of one chalk rune (made again only when the colour has
+  // clearly changed, so it isn't redrawn every frame).
+  function tintedChalk(st, i, col) {
+    st.tint = st.tint || [];
+    const prev = st.tint[i];
+    if (prev && prev.size === st.size && Math.abs(prev.c[0] - col[0]) + Math.abs(prev.c[1] - col[1]) + Math.abs(prev.c[2] - col[2]) < 30) return prev.cv;
+    const spr = st.sprites[i];
+    const cv = prev && prev.size === st.size ? prev.cv : document.createElement("canvas");
+    cv.width = spr.width;
+    cv.height = spr.height;
+    const g = cv.getContext("2d");
+    g.clearRect(0, 0, cv.width, cv.height);
+    g.drawImage(spr, 0, 0);
+    g.globalCompositeOperation = "source-in";
+    g.fillStyle = `rgb(${col[0] | 0},${col[1] | 0},${col[2] | 0})`;
+    g.fillRect(0, 0, cv.width, cv.height);
+    st.tint[i] = { cv, c: col.slice(), size: st.size };
+    return cv;
+  }
 
   // Nebula Drift: soft flat clouds of colour in the album's colours, with
   // darker lanes through them and stars behind, drifting very slowly. Calm
@@ -3639,7 +3574,7 @@ void main() {
   };
 
   // ---------------------------------------------------------------------------
-  // LED Meters: studio LED ladders (green, yellow, red) along the bottom, one
+  // Meters: studio LED ladders (green, yellow, red) along the bottom, one
   // per part of the spectrum, glowing, with a peak light that hangs, then
   // drops.
   DRAW.ledm = (v, p, dt) => {
@@ -3722,7 +3657,7 @@ void main() {
     ctx.shadowBlur = 0;
   }
 
-  // Holo Spectrum: Monstercat-style bars (bass on the left, neighbours
+  // Spectrum: Monstercat-style bars (bass on the left, neighbours
   // smoothed into hills), each a stack of short glowing holo ticks, with a
   // peak tick that hangs over each bar. Bar count sets how many.
   DRAW.holospec = (v, p, dt) => {
@@ -4058,7 +3993,7 @@ void main() {
     fxDraw(v, "silk", SILK_FS, { uT: st.t, uE: st.ce, uBass: Math.min(1, 0.6 * st.lift + 0.4 * st.punch), uKick: st.flash, uC0: rgb1(pal[0]), uC1: rgb1(pal[1]), uC2: rgb1(pal[2]) }, 1);
   };
 
-  // TV Pixels: a close-up of a TV screen, so you can see each pixel's red,
+  // TV: a close-up of a TV screen, so you can see each pixel's red,
   // green and blue strips. The picture on it is the album's colours
   // flowing like Plasma; loudness and kicks brighten it.
   const TVPIX_FS = `
@@ -4510,7 +4445,7 @@ void main() {
   };
 
   // ---------------------------------------------------------------------------
-  // Neuro Mesh (drum & bass): a wireframe landscape rolling towards you.
+  // Mesh (drum & bass): a wireframe landscape rolling towards you.
   // The spectrum is fed in at the front (bass in the middle) and scrolls
   // back, faster when it's loud. The whole mesh twists along its length,
   // wobbling at a rate set by the bass, like a reese bass; every snare
@@ -4725,7 +4660,7 @@ void main() {
   };
 
   // ---------------------------------------------------------------------------
-  // Rain on Glass: looking out of a rainy window at night. Blurred city
+  // Rain: looking out of a rainy window at night. Blurred city
   // lights in the album's colours glow behind the glass. Drops keep landing
   // on the glass (the bass sets how hard it rains, kicks bring a burst);
   // when drops touch they join up, and once one is heavy enough it runs
@@ -5491,11 +5426,11 @@ void main() {
   };
 
   // ---------------------------------------------------------------------------
-  // LED Wall: everything shown on a panel of round LEDs, with the unlit ones
+  // Wall: everything shown on a panel of round LEDs, with the unlit ones
   // faintly visible. Cheap: the picture is worked out at one pixel per LED
   // (a few thousand pixels), scaled up, cut into dots by a pre-drawn mask,
   // then a soft copy on top gives the bloom.
-  // Two styles share it: LED Wall (bars with falling peak dots) and LED
+  // Two styles share it: Wall (bars with falling peak dots) and LED
   // Plasma (a fluid whose flow, swirl and brightness follow the music).
   DRAW.led = (v, p, dt, t) => {
     const { ctx, w, h, U } = v;
@@ -5644,7 +5579,7 @@ void main() {
             <div class="lp-row"><div class="lp-label"><span>Colour changes</span></div>${seg("colorMove", [["move", "Moving"], ["still", "Still"]], "style")}</div>
             <div class="lp-colors" data-show-color><label><input type="color" data-key="color1" data-scope="style">Colour 1</label><label><input type="color" data-key="color2" data-scope="style">Colour 2</label></div>`)}
           ${group("Appearance", slider("opacity", "Opacity", 0.1, 1, 0.05, "style") + slider("blur", "Blur", 0, 20, 0.5, "style") + slider("brightness", "Brightness", 0.2, 1.6, 0.05, "style") + slider("size", "Size", 0.4, 2, 0.05, "style"))}
-          ${group("Layout", slider("barCount", "Bar count", 16, 128, 1, "style", u("barCount")) + `<div class="lp-row" data-uses="${u("position")}"><div class="lp-label"><span>Position</span></div>${seg("position", [["bottom", "Bottom"], ["top", "Top"], ["both", "Both"]], "style")}</div><div class="lp-row" data-uses="${u("variant")}"><div class="lp-label"><span>Look</span></div>${seg("variant", [["poster", "Poster"], ["brutalist", "Brutalist"]], "style")}</div><div class="lp-row" data-uses="${u("neuroLook")}"><div class="lp-label"><span>Look</span></div>${seg("neuroLook", [["mesh", "Mesh"], ["lines", "Lines"], ["ridges", "Ridges"]], "style")}</div><div class="lp-row" data-uses="${u("vuFace")}"><div class="lp-label"><span>Look</span></div>${seg("vuFace", [["night", "Classic"], ["minimal", "Minimal"], ["holo", "Holo"], ["hud", "HUD"]], "style")}</div><div class="lp-row" data-uses="${u("vuMeters")}"><div class="lp-label"><span>Meters</span></div>${seg("vuMeters", [["both", "Both"], ["split", "Split"], ["bass", "Bass only"]], "style")}</div><div class="lp-row" data-uses="${u("gaugeLook")}"><div class="lp-label"><span>Look</span></div>${seg("gaugeLook", [["modern", "Modern"], ["classic", "Classic"]], "style")}</div><div class="lp-row" data-uses="${u("ringSides")}"><div class="lp-label"><span>Sides</span></div>${seg("ringSides", [["both", "Both sides"], ["one", "One side"]], "style")}</div><div class="lp-row" data-uses="${u("ringLook")}"><div class="lp-label"><span>Look</span></div>${seg("ringLook", [["holo", "Holo"], ["glow", "Glow"], ["dots", "Dots"], ["lines", "Lines"], ["hud", "HUD"]], "style")}</div>${slider("ringOff", "Offset", 0, 1, 0.05, "style", u("ringOff"))}<div class="lp-row" data-uses="${u("fit")}"><div class="lp-label"><span>Fit</span></div>${seg("fit", [["full", "Full width"], ["art", "Beside art"]], "style")}</div>${slider("moveX", "Left / right", -1, 1, 0.05, "style", u("moveX"))}${slider("moveY", "Up / down", -1, 1, 0.05, "style", u("moveY"))}<div class="lp-row" data-uses="${u("circleAt")}"><div class="lp-label"><span>Circle at</span></div>${seg("circleAt", [["middle", "Middle"], ["art", "Album art"]], "style")}</div><div class="lp-row" data-uses="${u("mcColor")}"><div class="lp-label"><span>Bar colour</span></div>${seg("mcColor", [["flow", "Flow"], ["frequency", "Freq."], ["height", "Area"], ["bar", "Bar"], ["solid", "Solid"]], "style")}</div><div class="lp-row" data-uses="${u("beatEvery")}"><div class="lp-label"><span>Change every</span></div>${seg("beatEvery", [["1", "Beat"], ["2", "2"], ["4", "4"], ["8", "8 beats"]], "style")}</div>`, [...new Set([...USES.barCount, ...USES.position, ...USES.variant, ...USES.neuroLook, ...USES.vuFace, ...USES.vuMeters, ...USES.moveX, ...USES.gaugeLook, ...USES.ringSides, ...USES.ringLook, ...USES.circleAt, ...USES.mcColor, ...USES.beatEvery])].join(","))}
+          ${group("Layout", slider("barCount", "Bar count", 16, 128, 1, "style", u("barCount")) + `<div class="lp-row" data-uses="${u("position")}"><div class="lp-label"><span>Position</span></div>${seg("position", [["bottom", "Bottom"], ["top", "Top"], ["both", "Both"]], "style")}</div><div class="lp-row" data-uses="${u("variant")}"><div class="lp-label"><span>Look</span></div>${seg("variant", [["poster", "Poster"], ["brutalist", "Brutalist"]], "style")}</div><div class="lp-row" data-uses="${u("neuroLook")}"><div class="lp-label"><span>Look</span></div>${seg("neuroLook", [["mesh", "Mesh"], ["lines", "Lines"], ["ridges", "Ridges"]], "style")}</div><div class="lp-row" data-uses="${u("vuFace")}"><div class="lp-label"><span>Look</span></div>${seg("vuFace", [["night", "Classic"], ["minimal", "Minimal"], ["holo", "Holo"], ["hud", "HUD"]], "style")}</div><div class="lp-row" data-uses="${u("vuMeters")}"><div class="lp-label"><span>Meters</span></div>${seg("vuMeters", [["both", "Both"], ["split", "Split"], ["bass", "Bass only"]], "style")}</div><div class="lp-row" data-uses="${u("ringSides")}"><div class="lp-label"><span>Sides</span></div>${seg("ringSides", [["both", "Both sides"], ["one", "One side"]], "style")}</div><div class="lp-row" data-uses="${u("ringLook")}"><div class="lp-label"><span>Look</span></div>${seg("ringLook", [["holo", "Holo"], ["glow", "Glow"], ["dots", "Dots"], ["lines", "Lines"], ["hud", "HUD"]], "style")}</div>${slider("ringOff", "Offset", 0, 1, 0.05, "style", u("ringOff"))}<div class="lp-row" data-uses="${u("fit")}"><div class="lp-label"><span>Fit</span></div>${seg("fit", [["full", "Full width"], ["art", "Beside art"]], "style")}</div>${slider("moveX", "Left / right", -1, 1, 0.05, "style", u("moveX"))}${slider("moveY", "Up / down", -1, 1, 0.05, "style", u("moveY"))}<div class="lp-row" data-uses="${u("circleAt")}"><div class="lp-label"><span>Circle at</span></div>${seg("circleAt", [["middle", "Middle"], ["art", "Album art"]], "style")}</div><div class="lp-row" data-uses="${u("mcColor")}"><div class="lp-label"><span>Bar colour</span></div>${seg("mcColor", [["flow", "Flow"], ["frequency", "Freq."], ["height", "Area"], ["bar", "Bar"], ["solid", "Solid"]], "style")}</div><div class="lp-row" data-uses="${u("beatEvery")}"><div class="lp-label"><span>Change every</span></div>${seg("beatEvery", [["1", "Beat"], ["2", "2"], ["4", "4"], ["8", "8 beats"]], "style")}</div>`, [...new Set([...USES.barCount, ...USES.position, ...USES.variant, ...USES.neuroLook, ...USES.vuFace, ...USES.vuMeters, ...USES.moveX, ...USES.ringSides, ...USES.ringLook, ...USES.circleAt, ...USES.mcColor, ...USES.beatEvery])].join(","))}
         </div>
         ${group("Background", slider("bgDim", "Darken background", 0, 0.9, 0.05, "global") + `<div class="lp-note">Calms Spicy Lyrics' moving background so the visual stands out. The lyrics and album art aren't touched.</div>`)}
       </div>
@@ -5868,7 +5803,7 @@ void main() {
     body.querySelector(".lp-phead").appendChild(close);
     body.insertAdjacentHTML("beforeend", `<div class="lp-page" data-page="about">
       <div class="lp-group"><div class="lp-gtitle">Spicy Visualiser</div>
-        <div class="lp-note">Version ${VERSION}. A music visualiser for Spicy Lyrics: 46 styles drawn behind the lyrics, coloured from the album cover.</div>
+        <div class="lp-note">Version ${VERSION}. A music visualiser for Spicy Lyrics: 45 styles drawn behind the lyrics, coloured from the album cover.</div>
         <div class="lp-links"><a href="https://github.com/siamct/spicy-visualiser" target="_blank" rel="noopener">GitHub</a><a href="https://github.com/siamct/spicy-visualiser/blob/main/docs/STYLES.md" target="_blank" rel="noopener">Styles guide</a><a href="https://github.com/siamct/spicy-visualiser#install" target="_blank" rel="noopener">Full install</a></div></div>
       <div class="lp-group"><div class="lp-gtitle">Where to find it</div>
         <div class="lp-note">Open Spicy Lyrics and click the bars icon at the top right for quick settings while you watch. This window is in Spotify's profile menu.</div></div>

@@ -40,18 +40,18 @@ The spectrum as a row of bars, with bass on the left and treble on the right. Ba
 
 Bars reflected up and down from a centre line, with the bass in the middle. Thin and calm, so it suits busy lyric pages.
 
-### Holo Spectrum
-![Holo Spectrum](screenshots/styles/holospec.jpg)
+### Spectrum
+![Spectrum](screenshots/styles/holospec.jpg)
 
 Monstercat-style bars (bass on the left, neighbours smoothed into hills), each a stack of short glowing ticks, with a peak tick that hangs over each bar. It has the look of the VU Meters' Holo face: ticks that glow when lit and stay faintly visible when not, a slow shimmer and drifting scanlines. **Bar count** sets how many.
 
-### LED Meters
-![LED Meters](screenshots/styles/ledm.jpg)
+### Meters
+![Meters](screenshots/styles/ledm.jpg)
 
 Studio LED ladders along the bottom, one per part of the spectrum: green, then yellow, then red at the top, each lit segment glowing. A peak light hangs for a moment, then drops.
 
-### LED Wall
-![LED Wall](screenshots/styles/led.jpg)
+### Wall
+![Wall](screenshots/styles/led.jpg)
 
 A panel of LED dots. Unlit dots stay faintly visible, so it reads like real hardware. Spectrum bars light up, with falling peak dots.
 
@@ -60,8 +60,8 @@ A panel of LED dots. Unlit dots stay faintly visible, so it reads like real hard
 
 A terminal-style spectrum made of characters, with falling peak markers.
 
-### RGB Split
-![RGB Split](screenshots/styles/rgbsplit.jpg)
+### Chroma
+![Chroma](screenshots/styles/rgbsplit.jpg)
 
 Monstercat-style bars drawn three times, in red, green and blue added together, so they're white where they line up. Kicks and the bass pull the three apart sideways, and they slide back together. **Bar count** sets how many.
 
@@ -79,13 +79,6 @@ One meter with two needles, like a stereo meter: one for the bass (low), one for
 - **HUD**: a sci-fi gauge, two segmented level arcs inside a slowly turning ring.
 
 **Meters** picks how they're laid out: **Both** needles in one meter, **Split** into two meters (bass on the left, highs on the right), or **Bass only**. **Left / right** and **Up / down** move it anywhere on the screen, and **Size** makes it bigger or smaller.
-
-### Rev Counter
-![Rev Counter](screenshots/styles/revs.jpg)
-
-A car's rev counter. The needle follows how loud it is (the bass pushes it harder), each kick blips it, and in the red the shift light comes on. **Smoothing** sets how heavy the needle feels. Two looks (**Look**):
-- **Modern**: flat glowing segments round the dial in the album's colours, a thin needle and a big speed number in the middle that rises slowly with the song;
-- **Classic**: a plain round dial with printed numbers, a red zone and an orange needle.
 
 ### Oscilloscope
 ![Oscilloscope](screenshots/styles/scope.jpg)
@@ -207,13 +200,13 @@ A field of light that drifts in a gentle flow and links up into constellations. 
 
 A smooth glowing fluid. It flows faster, swirls harder and glows brighter as the music builds, surges on kicks, and its colours sweep round on the beat. The quietest style, good when you mainly want the lyrics.
 
-### LED Plasma
-![LED Plasma](screenshots/styles/ledplasma.jpg)
+### LED
+![LED](screenshots/styles/ledplasma.jpg)
 
 The same fluid as Plasma, shown on the LED dot panel.
 
-### TV Pixels
-![TV Pixels](screenshots/styles/tvpixels.jpg)
+### TV
+![TV](screenshots/styles/tvpixels.jpg)
 
 A close-up of a TV screen, close enough to see each pixel's red, green and blue strips. The picture on it is the album's colours flowing like Plasma; loudness and kicks brighten it.
 
@@ -252,10 +245,10 @@ Looking up from under the sea: rippling nets of light wobble across, with soft s
 
 Paper lanterns floating slowly up into the night, swaying a little as they go. Each glows with its own part of the spectrum, kicks send a new one up from the bottom, and louder parts send them up faster.
 
-### Magic Runes
-![Magic Runes](screenshots/styles/runes.jpg)
+### Runes
+![Runes](screenshots/styles/runes.jpg)
 
-A slowly turning circle of glowing made-up runes in three rings that turn opposite ways, with a star of lines in the middle. Each rune lights up with its part of the spectrum, the rings glow with the bass, and a kick sends a ripple of light outwards. It starts on **Fit: Beside art**; **Circle at** can put it round the album art.
+The 24 old Norse runes (Elder Futhark) in one plain ring, drawn like rough chalk: slightly wobbly strokes with gaps where the chalk skipped, and no glow. Each rune gets brighter with its part of the spectrum and takes on a little of the album's colour when lit, the ring turns slowly, the chalk circles get brighter with the bass, and a kick lifts all the runes for a moment. It starts on **Fit: Beside art**; **Circle at** can put it round the album art.
 
 ---
 
@@ -316,8 +309,8 @@ A dark, slightly mossy stone surface with little flecks of rainbow shimmer scatt
 - the stone slowly drifts and warps, and a slow wave of light travels over it, bringing flecks out in new places while others fade back; the rainbow keeps sliding through them; louder parts and the bass bring out more of them, kicks make them flare;
 - **Colours: Classic** (default) is the rainbow shimmer; the other colour modes tint it.
 
-### Rain on Glass
-![Rain on Glass](screenshots/styles/rain.jpg)
+### Rain
+![Rain](screenshots/styles/rain.jpg)
 
 Looking out of a rainy window at night:
 - big, soft out-of-focus lights in the album's colours glow behind the glass;
@@ -332,8 +325,8 @@ Soft coloured smoke curling up from the bottom:
 - the bass stirs it into curls, and kicks puff out a burst from below;
 - the colours turn on the beat.
 
-### Neuro Mesh
-![Neuro Mesh](screenshots/styles/neuro.jpg)
+### Mesh
+![Mesh](screenshots/styles/neuro.jpg)
 
 A wireframe landscape rolling towards you, shaped by the spectrum. It glitches on snares.
 
