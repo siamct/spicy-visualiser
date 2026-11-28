@@ -59,7 +59,6 @@
     ["led", "LED Wall"],
     ["ledplasma", "LED Plasma"],
     ["ekg", "EKG"],
-    ["notes", "Pitch Notes"],
     ["flowline", "Flow Line"],
     ["rgbsplit", "RGB Split"],
     ["underwater", "Underwater"],
@@ -71,7 +70,6 @@
   // Little pictures for the style picker.
   const STYLE_ICON = {
     flowline: '<path d="M1 14c3 0 4-6 7-6s3.5 9 7 9 4-7 8-7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M1 14c3 0 4-6 7-6s3.5 9 7 9 4-7 8-7" fill="none" stroke="currentColor" stroke-width="5" stroke-linecap="round" opacity=".2"/>',
-    notes: '<path d="M3 17h5M9 12h4M14 8h6M10 19h5" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/><path d="M2 21h20" stroke="currentColor" stroke-width="1" opacity=".35"/>',
     ekg: '<path d="M1 13h5l2-3 2.5 9L14 4l2.5 9H23" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round"/>',
     rgbsplit: '<g style="mix-blend-mode:screen"><path d="M3 21V12h3v9zm5 0V6h3v15zm5 0V9h3v12zm5 0V4h3v17z" opacity=".55" transform="translate(-1 0)"/><path d="M3 21V12h3v9zm5 0V6h3v15zm5 0V9h3v12zm5 0V4h3v17z" opacity=".55" transform="translate(1 1)"/></g>',
     underwater: '<g fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M1 5c3-2 5 2 8 0s5 2 8 0 4 1 6 0"/><path d="M6 21l2.5-12M12 21V9M18 21l-2.5-12" opacity=".45"/></g><circle cx="9" cy="15" r="1.2"/><circle cx="15" cy="12" r="1"/>',
@@ -127,7 +125,7 @@
   const SONG_DATA_OK = new Set(["constellations", "nebula", "lanterns", "underwater", "sunset", "nightsky", "silk", "tvpixels", "drumpads", "particles", "plasma", "ledplasma", "warp", "dnb", "ribbon", "rain", "lava", "smoke", "tunnel", "aurora", "oil", "galaxy", "prism", "ombre", "geometric", "bauhaus", "sub", "off"]);
   const STYLE_GROUPS = [
     ["Bars", ["monstercat", "mirror", "holospec", "ledm", "led", "ascii", "rgbsplit"]],
-    ["Meters & lines", ["vu", "revs", "scope", "crt", "ekg", "notes", "flowline", "ribbon", "dnb"]],
+    ["Meters & lines", ["vu", "revs", "scope", "crt", "ekg", "flowline", "ribbon", "dnb"]],
     ["Circles", ["radial", "ncs", "holoring", "sub", "trap", "tunnel"]],
     ["On the beat", ["drumpads", "geometric", "bauhaus", "particles"]],
     ["Liquid & water", ["plasma", "ledplasma", "tvpixels", "oil", "silk", "lava", "underwater"]],
@@ -155,13 +153,13 @@
     gaugeLook: ["revs"],
     // styles that can sit beside the album art and be moved (not the
     // full-screen scenes)
-    fit: ["flowline", "notes", "runes", "holoring", "revs", "crt", "monstercat", "mirror", "holospec", "ledm", "led", "ascii", "rgbsplit", "scope", "ekg", "dnb", "radial", "ncs", "sub", "trap", "drumpads", "geometric", "bauhaus", "neuro"],
-    moveX: ["flowline", "notes", "runes", "vu", "holoring", "revs", "crt", "monstercat", "mirror", "holospec", "ledm", "led", "ascii", "rgbsplit", "scope", "ekg", "dnb", "radial", "ncs", "sub", "trap", "drumpads", "geometric", "bauhaus", "neuro"],
-    moveY: ["flowline", "notes", "runes", "vu", "holoring", "revs", "crt", "monstercat", "mirror", "holospec", "ledm", "led", "ascii", "rgbsplit", "scope", "ekg", "dnb", "radial", "ncs", "sub", "trap", "drumpads", "geometric", "bauhaus", "neuro"],
+    fit: ["flowline", "runes", "holoring", "revs", "crt", "monstercat", "mirror", "holospec", "ledm", "led", "ascii", "rgbsplit", "scope", "ekg", "dnb", "radial", "ncs", "sub", "trap", "drumpads", "geometric", "bauhaus", "neuro"],
+    moveX: ["flowline", "runes", "vu", "holoring", "revs", "crt", "monstercat", "mirror", "holospec", "ledm", "led", "ascii", "rgbsplit", "scope", "ekg", "dnb", "radial", "ncs", "sub", "trap", "drumpads", "geometric", "bauhaus", "neuro"],
+    moveY: ["flowline", "runes", "vu", "holoring", "revs", "crt", "monstercat", "mirror", "holospec", "ledm", "led", "ascii", "rgbsplit", "scope", "ekg", "dnb", "radial", "ncs", "sub", "trap", "drumpads", "geometric", "bauhaus", "neuro"],
     circleAt: ["runes", "trap", "radial", "ncs", "sub"],
-    speed: ["flowline", "notes", "nebula", "runes", "lanterns", "crt", "ekg", "underwater", "sunset", "nightsky", "silk", "tvpixels", "scope", "trap", "neuro", "ribbon", "rain", "lava", "smoke", "tunnel", "aurora", "oil", "particles", "monstercat", "ncs", "radial", "plasma", "warp", "dnb", "ascii", "led", "ledplasma", "galaxy", "prism", "ombre"],
+    speed: ["flowline", "nebula", "runes", "lanterns", "crt", "ekg", "underwater", "sunset", "nightsky", "silk", "tvpixels", "scope", "trap", "neuro", "ribbon", "rain", "lava", "smoke", "tunnel", "aurora", "oil", "particles", "monstercat", "ncs", "radial", "plasma", "warp", "dnb", "ascii", "led", "ledplasma", "galaxy", "prism", "ombre"],
     bassBoost: ["rgbsplit", "underwater", "sunset", "nightsky", "silk", "tvpixels", "scope", "particles", "monstercat", "radial", "mirror", "ncs", "warp", "plasma", "dnb", "ascii", "geometric", "bauhaus", "led", "ledplasma", "sub", "trap", "ledm", "neuro", "ribbon", "rain", "lava", "smoke", "tunnel", "aurora", "oil", "galaxy", "prism", "ombre"],
-    smoothing: ["flowline", "notes", "holoring", "revs", "crt", "rgbsplit", "ekg", "particles", "monstercat", "radial", "mirror", "ncs", "warp", "plasma", "dnb", "ascii", "geometric", "bauhaus", "led", "ledplasma", "sub", "trap", "ledm", "neuro", "aurora", "vu", "drumpads", "holospec"],
+    smoothing: ["flowline", "holoring", "revs", "crt", "rgbsplit", "ekg", "particles", "monstercat", "radial", "mirror", "ncs", "warp", "plasma", "dnb", "ascii", "geometric", "bauhaus", "led", "ledplasma", "sub", "trap", "ledm", "neuro", "aurora", "vu", "drumpads", "holospec"],
   };
 
   const STYLE_BASE = {
@@ -202,7 +200,6 @@
   };
   const STYLE_DEFAULTS = {
     flowline: { shake: 0, fit: "art" },
-    notes: { shake: 0, fit: "art" },
     constellations: { shake: 0 },
     nebula: { shake: 0 },
     runes: { shake: 0, fit: "art" },
@@ -296,7 +293,7 @@
   if (!Array.isArray(S.favs)) S.favs = [];
   // Retro Bars became LED Meters.
   // (and Drum Bars was taken out)
-  const MOVED = { retro: "ledm", drumbars: "drumpads", drums: "drumpads", holoradar: "holospec", holorings: "holospec", pitchtrail: "ekg", kaleido: "plasma", bubbles: "lava", chrome: "silk", ekgpitch: "ekg", ekgscroll: "ekg", pond: "underwater", ocean: "underwater", storm: "sunset", mercury: "silk", ekg3: "ekg", chipscope: "scope", drumwaves: "drumpads", trails: "particles", circuit: "particles", neon: "particles", grass: "lanterns" };
+  const MOVED = { retro: "ledm", drumbars: "drumpads", drums: "drumpads", holoradar: "holospec", holorings: "holospec", pitchtrail: "ekg", kaleido: "plasma", bubbles: "lava", chrome: "silk", ekgpitch: "ekg", ekgscroll: "ekg", pond: "underwater", ocean: "underwater", storm: "sunset", mercury: "silk", ekg3: "ekg", chipscope: "scope", drumwaves: "drumpads", trails: "particles", circuit: "particles", neon: "particles", grass: "lanterns", notes: "flowline" };
   if (MOVED[S.style]) S.style = MOVED[S.style];
   S.favs = [...new Set(S.favs.map((f) => MOVED[f] || f))];
   if (!validStyle(S.style)) S.style = GLOBAL_DEFAULTS.style;
@@ -3840,86 +3837,6 @@ void main() {
   };
 
   // ---------------------------------------------------------------------------
-  // Pitch Notes: like a karaoke pitch guide. It finds the strongest note in
-  // the melody range (about 200 Hz to 2 kHz, so voices and lead lines) and
-  // draws it as a flat block: higher notes sit higher, held notes make long
-  // blocks, and a new block starts when the note changes. The blocks flow
-  // away from the album art. Rough: one row is about a semitone and a half
-  // (that's as fine as the bands go), and it follows whatever is loudest
-  // there, which is usually the voice.
-  const PN_LO = 18, PN_HI = 44; // bands covering ~200 Hz to ~2 kHz
-  DRAW.notes = (v, p, dt) => {
-    const { ctx, w, h, U } = v;
-    const st = v.notes || (v.notes = { t: 0, blocks: [], cand: -1, candT: 0, cur: null, lv: 0 });
-    st.t += dt;
-    const win = 7 / Math.max(0.3, p.speed); // seconds shown across the width
-    // the strongest band in the melody range, and how much it stands out
-    const sm = shared.smooth;
-    let best = -1, bv = 0, mean = 0;
-    for (let b = PN_LO; b <= PN_HI; b++) {
-      mean += sm[b];
-      if (sm[b] > bv && sm[b] >= sm[b - 1] && sm[b] >= sm[b + 1]) { bv = sm[b]; best = b; }
-    }
-    mean /= PN_HI - PN_LO + 1;
-    st.lv += (bv - st.lv) * Math.min(1, dt * 8);
-    const sounding = best >= 0 && bv > 0.12 && bv > mean * 1.25;
-    // a note has to hold for a moment before it counts (less wobble);
-    // Smoothing makes that moment longer
-    const hold = 0.04 + 0.12 * p.smoothing;
-    if (!sounding) {
-      st.cand = -1;
-      if (st.cur && st.t - st.cur.t1 > 0.12) st.cur = null;
-    } else if (st.cur && Math.abs(best - st.cur.row) <= 0.5) {
-      st.cand = -1;
-      st.cur.t1 = st.t;
-      st.cur.lv = Math.max(st.cur.lv * 0.98, bv);
-    } else {
-      if (best !== st.cand) { st.cand = best; st.candT = st.t; }
-      if (st.t - st.candT >= hold) {
-        st.cur = { row: best, t0: st.candT, t1: st.t, lv: bv };
-        st.blocks.push(st.cur);
-        st.cand = -1;
-      } else if (st.cur) st.cur.t1 = st.t;
-    }
-    st.blocks = st.blocks.filter((b) => st.t - b.t1 < win);
-    // layout: rows from low (bottom) to high (top), flowing away from the art
-    const art = v.artCircle && v.artCircle();
-    const fromRight = !!art && art.x > w / 2;
-    const top = h * (0.5 - 0.28 * p.size), bot = h * (0.5 + 0.28 * p.size);
-    const rows = PN_HI - PN_LO, rowH = (bot - top) / rows;
-    const yOf = (row) => bot - (row - PN_LO) * rowH;
-    const xOf = (t) => { const k = (st.t - t) / win; return fromRight ? w * (1 - k) : w * k; };
-    ctx.save();
-    ctx.globalAlpha = A_(1, v);
-    // faint guides: a line for every row, a little stronger once an octave
-    for (let r = 0; r <= rows; r++) {
-      const oct = (r % 8) === 0;
-      ctx.fillStyle = `rgba(255,255,255,${oct ? 0.07 : 0.025})`;
-      ctx.fillRect(0, Math.round(bot - r * rowH), w, oct ? Math.max(1, U) : 1);
-    }
-    // the "now" edge on the art side
-    ctx.fillStyle = "rgba(255,255,255,0.12)";
-    ctx.fillRect(fromRight ? w - Math.max(1.5, 2 * U) : 0, top - rowH, Math.max(1.5, 2 * U), bot - top + rowH * 2);
-    ctx.globalCompositeOperation = "lighter";
-    const bh = Math.max(4 * U, rowH * 0.8);
-    for (const b of st.blocks) {
-      const xa = xOf(b.t0), xb = xOf(b.t1);
-      const x = Math.min(xa, xb), bw = Math.max(bh, Math.abs(xb - xa));
-      const y = yOf(b.row) - bh / 2;
-      const c = colorAt((b.row - PN_LO) / rows);
-      const live = b === st.cur;
-      const fade = Math.min(1, (win - (st.t - b.t1)) / (win * 0.25)); // fades out near the far edge
-      const a = (0.45 + 0.55 * Math.min(1, b.lv * 1.4)) * fade;
-      v.soft(x + bw / 2, y + bh / 2, Math.max(bw * 0.6, bh * 2), c, (live ? 0.22 : 0.1) * a);
-      ctx.fillStyle = v.rgba(mix(c, WHITE, live ? 0.35 : 0.1), a);
-      ctx.beginPath();
-      ctx.roundRect ? ctx.roundRect(x, y, bw, bh, bh / 2) : ctx.rect(x, y, bw, bh);
-      ctx.fill();
-    }
-    ctx.restore();
-  };
-
-  // ---------------------------------------------------------------------------
   // Flow Line: EKG made soft. One smooth glowing line flows away from the
   // album art; it rises and falls with where the sound sits in pitch and
   // swells with the loudness, eased so it rolls rather than jumps. The bass
@@ -6278,7 +6195,7 @@ void main() {
     body.querySelector(".lp-phead").appendChild(close);
     body.insertAdjacentHTML("beforeend", `<div class="lp-page" data-page="about">
       <div class="lp-group"><div class="lp-gtitle">Spicy Visualiser</div>
-        <div class="lp-note">Version ${VERSION}. A music visualiser for Spicy Lyrics: 47 styles drawn behind the lyrics, coloured from the album cover.</div>
+        <div class="lp-note">Version ${VERSION}. A music visualiser for Spicy Lyrics: 46 styles drawn behind the lyrics, coloured from the album cover.</div>
         <div class="lp-links"><a href="https://github.com/siamct/spicy-visualiser" target="_blank" rel="noopener">GitHub</a><a href="https://github.com/siamct/spicy-visualiser/blob/main/docs/STYLES.md" target="_blank" rel="noopener">Styles guide</a><a href="https://github.com/siamct/spicy-visualiser#install" target="_blank" rel="noopener">Full install</a></div></div>
       <div class="lp-group"><div class="lp-gtitle">Where to find it</div>
         <div class="lp-note">Open Spicy Lyrics and click the bars icon at the top right for quick settings while you watch. This window is in Spotify's profile menu.</div></div>

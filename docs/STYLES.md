@@ -12,7 +12,7 @@ Every style:
 - gets a little fuller on songs with no lyrics, or with static lyrics that don't move.
 
 Styles that aren't full-screen scenes (bars, meters, lines, circles, drum pads, posters) also have, under **Look → Layout**:
-- **Fit**: **Full width**, or **Beside art**, which keeps it in the free space next to the album art, on whichever side the art is (in fullscreen you can move the art to either side). Circles, drum pads, EKG, Pitch Notes, Flow Line and the oscilloscope start on Beside art;
+- **Fit**: **Full width**, or **Beside art**, which keeps it in the free space next to the album art, on whichever side the art is (in fullscreen you can move the art to either side). Circles, drum pads, EKG, Flow Line and the oscilloscope start on Beside art;
 - **Left / right** and **Up / down**, to move it anywhere.
 
 On songs with no lyrics, the song name and artist take the place of Spicy Lyrics' "No lyrics" box, except in fullscreen, where Spicy's box is left alone (click it to see the box again; you can turn it off in the panel's settings).
@@ -104,11 +104,6 @@ An old tube TV up close. The picture is the spectrum, mirrored round a bright li
 ![EKG](screenshots/styles/ekg.jpg)
 
 A thin glowing line written across the screen like a heart monitor, with the third of the screen just ahead of it wiped clear. It has no made-up heartbeat shapes: its height follows where the sound sits in pitch (roughly), and it jumps up or down as the music gets louder or quieter than it just was. One sweep lasts 8 beats of the song, so faster songs sweep faster; **Speed** changes that, **Smoothing** calms the line.
-
-### Pitch Notes
-![Pitch Notes](screenshots/styles/notes.jpg)
-
-Like a karaoke pitch guide. It picks out the strongest note in the melody range (where voices and lead lines sit) and draws it as a flat block: higher notes sit higher, held notes make long blocks, and a new block starts when the note changes. The blocks flow away from the album art, over faint guide lines (a stronger one each octave). It's rough: one row is about a semitone and a half, and it follows whatever is loudest there, which is usually the voice. **Speed** sets how fast they flow, **Smoothing** how long a note has to hold before it counts.
 
 ### Flow Line
 ![Flow Line](screenshots/styles/flowline.jpg)
