@@ -5834,25 +5834,20 @@ void main() {
 :is(#SpicyLyricsPage, .lp-modal-wrap) .lp-panel .lp-cards .lp-fav-cat.lp-has { display: block !important; }
 :is(#SpicyLyricsPage, .lp-modal-wrap) .lp-panel .lp-cards .lp-fav-cat.lp-has ~ .lp-cat:not(.lp-fav-cat) { margin-top: 12px; }
 
-/* The one-time update note */
+/* The one-time update note: a plain dialog */
 :is(#SpicyLyricsPage, .lp-modal-wrap) .lp-panel.lp-news {
-  position: relative; inset: auto; top: auto; right: auto; width: min(400px, 100%); max-height: none;
-  padding: 18px 20px 20px; font-size: 14px; border-radius: 20px;
+  position: relative; inset: auto; top: auto; right: auto; width: min(380px, 100%); max-height: none;
+  padding: 16px 18px 18px; font-size: 14px; border-radius: 12px;
 }
-:is(#SpicyLyricsPage, .lp-modal-wrap) .lp-panel.lp-news .lp-news-head { display: flex; align-items: center; gap: 10px; }
-:is(#SpicyLyricsPage, .lp-modal-wrap) .lp-panel.lp-news .lp-news-head h3 { flex: 1; font-size: 14px; color: rgba(255,255,255,.75); }
-:is(#SpicyLyricsPage, .lp-modal-wrap) .lp-panel.lp-news .lp-news-title { margin: 18px 0 8px; font-size: 22px; font-weight: 700; }
-:is(#SpicyLyricsPage, .lp-modal-wrap) .lp-panel.lp-news .lp-news-text { margin: 0 0 6px; line-height: 1.45; }
-:is(#SpicyLyricsPage, .lp-modal-wrap) .lp-panel.lp-news .lp-news-dim { color: rgba(255,255,255,.6); }
-:is(#SpicyLyricsPage, .lp-modal-wrap) .lp-panel.lp-news .lp-news-btns { display: flex; gap: 8px; margin-top: 18px; }
+:is(#SpicyLyricsPage, .lp-modal-wrap) .lp-panel.lp-news .lp-news-head { display: flex; align-items: center; margin-bottom: 10px; }
+:is(#SpicyLyricsPage, .lp-modal-wrap) .lp-panel.lp-news .lp-news-head h3 { flex: 1; font-size: 15px; font-weight: 600; }
+:is(#SpicyLyricsPage, .lp-modal-wrap) .lp-panel.lp-news .lp-news-text { margin: 0 0 4px; line-height: 1.45; color: rgba(255,255,255,.8); }
+:is(#SpicyLyricsPage, .lp-modal-wrap) .lp-panel.lp-news .lp-news-btns { display: flex; gap: 8px; margin-top: 16px; }
 :is(#SpicyLyricsPage, .lp-modal-wrap) .lp-panel.lp-news .lp-news-btn {
-  flex: 1; display: block; padding: 10px 12px; border: 0; border-radius: 12px; cursor: pointer; text-align: center;
+  flex: 1; display: block; padding: 8px 12px; border: 0; border-radius: 8px; cursor: pointer; text-align: center;
   font-size: 13px; font-weight: 600; text-decoration: none; color: #fff; background: rgba(255,255,255,.1);
-  transition: background .15s;
 }
-:is(#SpicyLyricsPage, .lp-modal-wrap) .lp-panel.lp-news .lp-news-btn:hover { background: rgba(255,255,255,.18); }
-:is(#SpicyLyricsPage, .lp-modal-wrap) .lp-panel.lp-news .lp-news-main { background: #fff; color: #111; }
-:is(#SpicyLyricsPage, .lp-modal-wrap) .lp-panel.lp-news .lp-news-main:hover { background: rgba(255,255,255,.85); }
+:is(#SpicyLyricsPage, .lp-modal-wrap) .lp-panel.lp-news .lp-news-btn:hover { background: rgba(255,255,255,.17); }
 `;
   function ensureStyle(doc) {
     if (doc.getElementById(STYLE_ID)) return;
@@ -6834,12 +6829,11 @@ void main() {
     ensureStyle(document);
     const wrap = document.createElement("div");
     wrap.className = "lp-modal-wrap";
-    wrap.innerHTML = `<div class="lp-panel lp-open lp-news" role="dialog" aria-label="Spicy Visualiser update">
-      <div class="lp-news-head"><span class="lp-logo">${ICON}</span><h3>Spicy Visualiser</h3>
+    wrap.innerHTML = `<div class="lp-panel lp-open lp-news" role="dialog" aria-label="Spicy Visualiser updated">
+      <div class="lp-news-head"><h3>Spicy Visualiser updated</h3>
         <button class="lp-icon-btn lp-news-x" title="Close"><svg viewBox="0 0 24 24"><path d="M7 7l10 10M17 7 7 17" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button></div>
-      <h2 class="lp-news-title">New update!</h2>
       <p class="lp-news-text">New styles, new looks and a helper update. Hope you enjoy :D</p>
-      <p class="lp-news-text lp-news-dim">Any issues, please let me know!</p>
+      <p class="lp-news-text">Any issues, please let me know!</p>
       <div class="lp-news-btns"><a class="lp-news-btn" href="https://github.com/siamct/spicy-visualiser" target="_blank" rel="noopener">Open GitHub</a><button class="lp-news-btn lp-news-main">Close</button></div>
     </div>`;
     const shut = () => {

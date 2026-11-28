@@ -6502,12 +6502,11 @@ void main() {
     ensureStyle(document);
     const wrap = document.createElement("div");
     wrap.className = "lp-modal-wrap";
-    wrap.innerHTML = `<div class="lp-panel lp-open lp-news" role="dialog" aria-label="Spicy Visualiser update">
-      <div class="lp-news-head"><span class="lp-logo">${ICON}</span><h3>Spicy Visualiser</h3>
+    wrap.innerHTML = `<div class="lp-panel lp-open lp-news" role="dialog" aria-label="Spicy Visualiser updated">
+      <div class="lp-news-head"><h3>Spicy Visualiser updated</h3>
         <button class="lp-icon-btn lp-news-x" title="Close"><svg viewBox="0 0 24 24"><path d="M7 7l10 10M17 7 7 17" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button></div>
-      <h2 class="lp-news-title">New update!</h2>
       <p class="lp-news-text">New styles, new looks and a helper update. Hope you enjoy :D</p>
-      <p class="lp-news-text lp-news-dim">Any issues, please let me know!</p>
+      <p class="lp-news-text">Any issues, please let me know!</p>
       <div class="lp-news-btns"><a class="lp-news-btn" href="https://github.com/siamct/spicy-visualiser" target="_blank" rel="noopener">Open GitHub</a><button class="lp-news-btn lp-news-main">Close</button></div>
     </div>`;
     const shut = () => {
