@@ -1,5 +1,5 @@
 // NAME: Spicy Visualiser
-// VERSION: 0.9.0
+// VERSION: 1.0.0
 // DESCRIPTION: Add-on for Spicy Lyrics (needs the Spicy Lyrics extension). Music visualiser inside the Spicy Lyrics view (page, fullscreen, cinema and popout). Styles inspired by Monstercat, NCS and more. Reacts to the real music through the Spicy Visualiser helper.
 
 (function SpicyVisualiser() {
@@ -265,6 +265,7 @@
     source: "helper", // helper: the helper's real sound when it's running, else Spotify's data | spotify: Spotify's data only
     tab: "style",
     shakeScale: 2, // settings version for the shake slider
+    noteSeen: "", // the last update note shown (shown once per update)
     per: {},
   };
   // "Classic" colours: a bright rainbow run, white to green.
@@ -277,7 +278,9 @@
   const validStyle = (s) => STYLES.some((x) => x[0] === s);
 
   let S = JSON.parse(JSON.stringify(GLOBAL_DEFAULTS));
+  let hadSaved = false; // false on a fresh install
   try {
+    hadSaved = !!localStorage.getItem(STORE_KEY);
     const saved = JSON.parse(localStorage.getItem(STORE_KEY) || "{}");
     for (const k of Object.keys(GLOBAL_DEFAULTS)) if (k in saved && typeof saved[k] === typeof GLOBAL_DEFAULTS[k]) S[k] = saved[k];
     if (saved.useHelper === false && !("source" in saved)) S.source = "spotify"; // older "Use the helper: off"
@@ -6084,7 +6087,7 @@ void main() {
   // expand button in the panel. Same controls as the panel, laid out with a
   // sidebar like Spicy Lyrics' own settings.
   // ===========================================================================
-  const VERSION = "0.9.0";
+  const VERSION = "1.0.0";
   function openSettings(tab) {
     ensureStyle(document);
     if (tab) S.tab = tab;
@@ -6109,7 +6112,7 @@ void main() {
     body.querySelector(".lp-phead").appendChild(close);
     body.insertAdjacentHTML("beforeend", `<div class="lp-page" data-page="about">
       <div class="lp-group"><div class="lp-gtitle">Spicy Visualiser</div>
-        <div class="lp-note">Version ${VERSION}. A music visualiser for Spicy Lyrics: 19 styles drawn behind the lyrics, coloured from the album cover.</div>
+        <div class="lp-note">Version ${VERSION}. A music visualiser for Spicy Lyrics: 45 styles drawn behind the lyrics, coloured from the album cover.</div>
         <div class="lp-links"><a href="https://github.com/siamct/spicy-visualiser" target="_blank" rel="noopener">GitHub</a><a href="https://github.com/siamct/spicy-visualiser/blob/main/docs/STYLES.md" target="_blank" rel="noopener">Styles guide</a><a href="https://github.com/siamct/spicy-visualiser#install" target="_blank" rel="noopener">Full install</a></div></div>
       <div class="lp-group"><div class="lp-gtitle">Where to find it</div>
         <div class="lp-note">Open Spicy Lyrics and click the bars icon at the top right for quick settings while you watch. This window is in Spotify's profile menu.</div></div>
@@ -6802,6 +6805,23 @@ void main() {
     if (!box || box.querySelector(":scope > canvas.lp-canvas")) return;
     for (const inst of instances) if (inst.page === page) return;
     createInstance(page);
+  }
+
+  // A one-time note after an update. A fresh install doesn't get it (there's
+  // nothing "new" to them); it's just marked as seen.
+  const UPDATE_NOTE = "1.0.0";
+  if (S.noteSeen !== UPDATE_NOTE) {
+    S.noteSeen = UPDATE_NOTE;
+    save();
+    if (hadSaved) {
+      let tries = 0;
+      const show = () => {
+        const sp = window.Spicetify;
+        if (sp && sp.showNotification) sp.showNotification("Spicy Visualiser: new update! New styles, new looks and a helper update. Hope you enjoy :D Any issues, please let me know!", false, 10000);
+        else if (++tries < 20) setTimeout(show, 1000);
+      };
+      setTimeout(show, 4000);
+    }
   }
 
   setInterval(() => {
