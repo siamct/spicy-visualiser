@@ -114,7 +114,7 @@ Soft sheets of light rolling across the screen, like the wave on an old games-co
 ### Liquid
 ![Liquid](screenshots/styles/dnb.jpg)
 
-A flowing three-strand bass wave that pumps on kicks, with speed streaks racing past and a flash on every snare. Made with drum & bass in mind.
+Three flat layers of liquid in the album's colours sloshing on top of each other along the bottom, like a screen-printed poster: solid fills, no glow, no lines. The waves roll one swing every 2 beats and each beat gives them a push; the bass makes them taller and a snare lightens the front layer for a moment.
 
 ---
 
@@ -248,7 +248,7 @@ Paper lanterns floating slowly up into the night, swaying a little as they go. E
 ### Runes
 ![Runes](screenshots/styles/runes.jpg)
 
-A slowly turning circle of glowing made-up runes in three rings that turn opposite ways, with a star of lines in the middle. Each rune lights up with its part of the spectrum, the rings glow with the bass, and a kick sends a ripple of light outwards. It starts on **Fit: Beside art**; **Circle at** can put it round the album art.
+The 24 old Norse runes (Elder Futhark) in one plain ring, drawn like rough chalk: slightly wobbly strokes with gaps where the chalk skipped, and no glow. Each rune gets brighter with its part of the spectrum and takes on a little of the album's colour when lit, the ring turns slowly, the chalk circles get brighter with the bass, and a kick lifts all the runes for a moment. It starts on **Fit: Beside art**; **Circle at** can put it round the album art.
 
 ---
 

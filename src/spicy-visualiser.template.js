@@ -90,7 +90,7 @@
     mirror: '<g stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 10v4M8 7v10M12 5v14M16 8v8M20 10v4"/></g>',
     plasma: '<circle cx="9" cy="10" r="6" opacity=".45"/><circle cx="15.5" cy="14.5" r="6" opacity=".45"/><circle cx="15" cy="7.5" r="3.6" opacity=".7"/><circle cx="7.5" cy="17" r="2.6" opacity=".6"/>',
     warp: '<g stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M12 12 4 4M12 12l8-8M12 12l-8 8M12 12l8 8M12 12V2M12 12v10M12 12H2M12 12h10" opacity=".8"/></g>',
-    dnb: '<path d="M2 15c2-4 3 4 5 0s3-5 5-1 3 5 5 0 3-3 5-1" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><g stroke="currentColor" stroke-width="1.4" stroke-linecap="round" opacity=".6"><path d="M4 6h7M13 9h8M7 4h4"/></g>',
+    dnb: '<path d="M1 13c3-2 5 2 8 0s5-2 7 0 5 2 7 0v9H1z" fill="currentColor" opacity=".45"/><path d="M1 17c3-2 5 2 8 0s5-2 7 0 5 2 7 0v5H1z" fill="currentColor"/>',
     ascii: '<text x="2" y="10" font-size="8" font-family="monospace" font-weight="700">&gt;_</text><g opacity=".85"><rect x="3" y="15" width="2.5" height="6"/><rect x="7" y="12" width="2.5" height="9"/><rect x="11" y="16" width="2.5" height="5"/><rect x="15" y="13" width="2.5" height="8"/><rect x="19" y="17" width="2.5" height="4"/></g>',
     ledplasma: '<g>'+[4,8,12,16,20].map((x,i)=>[4,8,12,16,20].map((y,j)=>`<circle cx="${x}" cy="${y}" r="1.4" opacity="${(0.25+0.75*Math.abs(Math.sin(i*0.9+j*0.6))).toFixed(2)}"/>`).join('')).join('')+'</g>',
     led: '<g>'+[4,8,12,16,20].map((x,i)=>[20,16,12,8,4].map((y,j)=>`<circle cx="${x}" cy="${y}" r="1.4" opacity="${j<=[2,4,3,1,2][i]?1:.25}"/>`).join('')).join('')+'</g>',
@@ -136,7 +136,7 @@
   const MODEL = {};
   const USES = {
     barCount: ["rgbsplit", "holospec", "monstercat", "mirror", "radial"],
-    particles: ["particles", "monstercat", "warp", "dnb", "trap"],
+    particles: ["particles", "monstercat", "warp", "trap"],
     position: ["monstercat", "mirror", "ascii"],
     variant: ["geometric"],
     beatEvery: ["nebula", "underwater", "sunset", "nightsky", "silk", "tvpixels", "geometric", "bauhaus", "plasma", "ledplasma", "sub", "trap", "neuro", "ribbon", "rain", "lava", "smoke", "tunnel", "aurora", "oil", "galaxy", "prism", "ombre"],
@@ -2069,85 +2069,46 @@
   const cyc = (q) => 1 - Math.abs((((q % 2) + 2) % 2) - 1); // 0..1..0, no jumps
 
   // ---------------------------------------------------------------------------
-  // Drum & Bass: a growling "reese" bass wave (three detuned strands) that
-  // pumps on kicks, speed streaks racing past at breakbeat pace, and on every
-  // snare a white flash streak and a quick horizontal glitch.
+  // Liquid: three flat layers of liquid in the album's colours, sloshing on
+  // top of each other along the bottom like a screen-printed poster. Solid
+  // fills only (no glow, no lines). The waves roll one swing every 2 beats,
+  // each beat gives them a push, the bass makes them taller, and a snare
+  // lightens the front layer for a moment.
   DRAW.dnb = (v, p, dt, t) => {
     const { ctx, w, h, U } = v;
-    const e = shared.energy, bass = shared.bassPunch || 0, k = Math.min(1, shared.kick);
-    const st = v.dnb || (v.dnb = { streaks: [], flash: 0, glitch: 0, snareSeen: shared.snareSerial, phase: 0 });
-    // Streaks.
-    const want = Math.round(22 * p.particles); // was 60: too many lines
-    const S2 = st.streaks;
-    const spawn = (bright) => ({ x: w + Math.random() * w * (bright ? 0.1 : 1), y: Math.random() * h, len: (40 + Math.random() * 160) * U, z: bright ? 1 : 0.25 + Math.random() * 0.75, c: Math.random(), bright });
-    while (S2.filter((q) => !q.bright).length < want) S2.push(spawn(false));
-    if (st.snareSeen !== shared.snareSerial) {
-      st.snareSeen = shared.snareSerial;
-      st.flash = 1;
-      st.glitch = 1;
-      for (let i = 0; i < 3; i++) S2.push(spawn(true));
-    }
-    const sp = (500 + 1500 * e + 900 * k) * U * p.speed;
-    ctx.lineCap = "round";
-    for (let i = S2.length - 1; i >= 0; i--) {
-      const q = S2[i];
-      q.x -= sp * q.z * (q.bright ? 1.6 : 1) * dt;
-      if (q.x + q.len < -10) {
-        if (q.bright || S2.length > want + 10) S2.splice(i, 1);
-        else Object.assign(q, spawn(false), { x: w + Math.random() * 40 * U });
-        continue;
-      }
-      const col = q.bright ? WHITE : mix(WHITE, colorAt(q.c), 0.6);
-      ctx.strokeStyle = v.rgba(col, (q.bright ? 0.8 : 0.08 + 0.25 * q.z) * (0.6 + 0.6 * e));
-      ctx.lineWidth = (q.bright ? 2.2 : 0.6 + 1.4 * q.z) * U;
-      ctx.beginPath();
-      ctx.moveTo(q.x, q.y);
-      ctx.lineTo(q.x + q.len * (q.bright ? 1.5 : 1), q.y);
-      ctx.stroke();
-    }
-    // Reese bass wave.
-    const y0 = h * 0.74;
-    const A = h * 0.13 * p.size * (0.12 + 0.9 * bass + 0.45 * k);
-    // The wave rolls one full swing every 2 beats (locked to the tempo),
-    // with a push on each beat that settles before the next.
+    const e = shared.energy, k = Math.min(1, shared.kick);
+    const st = v.dnb || (v.dnb = { phase: 0, b: 0, snap: 0, snareSeen: shared.snareSerial });
+    st.b += ((shared.bassPunch || 0) - st.b) * Math.min(1, dt * (1 - 0.6 * p.smoothing) * 8);
+    if (st.snareSeen !== shared.snareSerial) { st.snareSeen = shared.snareSerial; st.snap = 1; }
+    st.snap *= Math.exp(-dt * 6);
     const lbp = beatPhase();
     if (st.tick !== shared.tickSerial) { st.tick = shared.tickSerial; st.push = 1; }
     st.push = (st.push || 0) * Math.exp(-dt * (4 / lbp.per));
-    st.phase += dt * ((Math.PI / lbp.per) * (0.8 + 0.4 * e) + 6 * st.push) * p.speed;
-    const growl = 0.4 + 1.6 * (shared.treble || 0) + 0.8 * e;
-    for (let strand = 0; strand < 3; strand++) {
-      const det = 1 + strand * 0.045; // detuned, like a reese
+    st.phase += dt * ((Math.PI / lbp.per) * (0.8 + 0.4 * e) + 3 * st.push) * p.speed;
+    const A = h * 0.07 * p.size * (0.35 + 1.1 * st.b + 0.3 * k);
+    ctx.save();
+    ctx.globalCompositeOperation = "source-over";
+    ctx.globalAlpha = A_(1, v);
+    // back to front: darker and slower at the back
+    const layers = [[0.6, 0.55, 0.45, 0.0], [0.69, 0.75, 0.8, 0.5], [0.78, 1, 1.15, 1.0]];
+    layers.forEach(([top, shade, spd, cpos], i) => {
+      const y0 = h * (1 - (1 - top) * p.size);
+      const ph = st.phase * spd + i * 2.1;
       ctx.beginPath();
-      for (let x = 0; x <= w; x += 4 * U) {
+      ctx.moveTo(0, h + 2);
+      for (let x = 0; x <= w + 4 * U; x += 4 * U) {
         const q = x / w;
-        const env = Math.sin(Math.PI * q);
-        const y = y0 + A * env * (Math.sin(q * 9 * det + st.phase * det) * 0.7 + Math.sin(q * 31 * det - st.phase * 2.3) * 0.3 * growl);
-        x ? ctx.lineTo(x, y) : ctx.moveTo(x, y);
+        const y = y0 + A * (0.6 + 0.25 * i) * (Math.sin(q * (5 + i * 1.5) + ph) * 0.7 + Math.sin(q * (11 + i * 2) - ph * 1.6) * 0.3);
+        ctx.lineTo(x, y);
       }
-      ctx.strokeStyle = v.rgba(strand === 0 ? WHITE : colorAt(strand / 2), strand === 0 ? 0.8 : 0.65);
-      ctx.lineWidth = (strand === 0 ? 2 : 3.5) * U * (1 + 0.6 * k);
-      ctx.stroke();
-    }
-    v.soft(w / 2, y0, Math.max(w, h) * 0.32, colorAt(0.5), 0.12 + 0.3 * bass + 0.25 * k);
-    // Snare: flash + glitch slices.
-    st.flash *= Math.exp(-dt * 9);
-    if (st.flash > 0.02) {
-      ctx.globalAlpha = A_(0.1 * st.flash, v);
-      ctx.drawImage(softSprite(WHITE), -w * 0.2, -h * 0.4, w * 1.4, h * 1.8);
-      ctx.globalAlpha = 1;
-    }
-    st.glitch *= Math.exp(-dt * 14);
-    if (st.glitch > 0.15) {
-      ctx.save();
-      ctx.setTransform(1, 0, 0, 1, 0, 0);
-      ctx.globalCompositeOperation = "source-over";
-      for (let i = 0; i < 3; i++) {
-        const sy = Math.random() * h, sh = h * (0.02 + Math.random() * 0.05);
-        const dx = (Math.random() - 0.5) * 40 * U * st.glitch;
-        ctx.drawImage(ctx.canvas, 0, sy, w, sh, dx, sy, w, sh);
-      }
-      ctx.restore();
-    }
+      ctx.lineTo(w + 4 * U, h + 2);
+      ctx.closePath();
+      let c = mix([8, 8, 12], colorAt(cpos), shade);
+      if (i === 2) c = mix(c, WHITE, 0.18 * st.snap);
+      ctx.fillStyle = v.rgba(c, 1);
+      ctx.fill();
+    });
+    ctx.restore();
   };
   const A_ = (a, v) => Math.max(0, Math.min(1, a * CP.brightness * (1 + 0.3 * shared.noLyr)));
 
@@ -3333,86 +3294,146 @@ void main() {
     ctx.restore();
   };
 
-  // Runes: a slowly turning circle of glowing made-up runes, in three
-  // rings that turn opposite ways, with a star of lines in the middle. Each
-  // rune lights up with its part of the spectrum, the rings glow with the
-  // bass, and a kick sends a ripple of light outwards.
-  function runeGlyph() {
-    // a made-up rune: two to four strokes between points on a small 3x3 grid
-    const pts = [];
-    for (let y = -1; y <= 1; y++) for (let x = -1; x <= 1; x++) pts.push([x * 0.5, y * 0.7]);
-    const P = new Path2D(), n = 2 + Math.floor(Math.random() * 3);
-    P.moveTo(pts[1][0], pts[1][1]);
-    P.lineTo(pts[7][0], pts[7][1]);
-    for (let i = 0; i < n; i++) {
-      const a = pts[Math.floor(Math.random() * 9)], b = pts[Math.floor(Math.random() * 9)];
-      if (a === b) continue;
-      P.moveTo(a[0], a[1]);
-      P.lineTo(b[0], b[1]);
+  // Runes: the 24 old Norse runes (Elder Futhark) in one plain ring, drawn
+  // like rough chalk: slightly wobbly doubled strokes with gaps where the
+  // chalk skipped. No glow. Each rune brightens with its part of the
+  // spectrum and takes on a little of the album's colour when it's lit; the
+  // ring turns slowly, the chalk circle round it gets brighter with the
+  // bass, and a kick lifts all the runes for a moment.
+  // Strokes on a box 1 wide and 2 tall (x -0.5..0.5, y -1..1, y down).
+  const FUTHARK = [
+    [[0, -1, 0, 1], [0, -0.55, 0.45, -1], [0, -0.05, 0.45, -0.5]], // fehu
+    [[-0.3, 1, -0.3, -1], [-0.3, -1, 0.35, -0.45], [0.35, -0.45, 0.35, 1]], // uruz
+    [[0, -1, 0, 1], [0, -0.45, 0.4, 0], [0.4, 0, 0, 0.45]], // thurisaz
+    [[0, -1, 0, 1], [0, -1, 0.4, -0.6], [0, -0.5, 0.4, -0.1]], // ansuz
+    [[-0.2, -1, -0.2, 1], [-0.2, -1, 0.3, -0.6], [0.3, -0.6, -0.2, -0.2], [-0.2, -0.2, 0.35, 1]], // raido
+    [[0.3, -0.6, -0.2, 0], [-0.2, 0, 0.3, 0.6]], // kaunan
+    [[-0.45, -1, 0.45, 1], [0.45, -1, -0.45, 1]], // gebo
+    [[-0.15, -1, -0.15, 1], [-0.15, -1, 0.35, -0.6], [0.35, -0.6, -0.15, -0.2]], // wunjo
+    [[-0.35, -1, -0.35, 1], [0.35, -1, 0.35, 1], [-0.35, -0.3, 0.35, 0.3]], // hagalaz
+    [[0, -1, 0, 1], [-0.35, -0.25, 0.35, 0.25]], // naudiz
+    [[0, -1, 0, 1]], // isaz
+    [[-0.05, -0.8, -0.45, -0.3], [-0.45, -0.3, -0.05, 0.2], [0.05, -0.2, 0.45, 0.3], [0.45, 0.3, 0.05, 0.8]], // jera
+    [[0, -1, 0, 1], [0, -1, 0.35, -0.7], [0, 1, -0.35, 0.7]], // eihwaz
+    [[-0.3, -1, -0.3, 1], [-0.3, -1, 0.3, -0.55], [0.3, -0.55, 0.3, -0.25], [-0.3, 1, 0.3, 0.55], [0.3, 0.55, 0.3, 0.25]], // perthro
+    [[0, -0.2, 0, 1], [0, -0.2, -0.45, -1], [0, -0.2, 0, -1], [0, -0.2, 0.45, -1]], // algiz
+    [[0.3, -1, -0.3, -0.3], [-0.3, -0.3, 0.3, 0.3], [0.3, 0.3, -0.3, 1]], // sowilo
+    [[0, -1, 0, 1], [0, -1, -0.45, -0.5], [0, -1, 0.45, -0.5]], // tiwaz
+    [[-0.3, -1, -0.3, 1], [-0.3, -1, 0.35, -0.5], [0.35, -0.5, -0.3, 0], [-0.3, 0, 0.35, 0.5], [0.35, 0.5, -0.3, 1]], // berkanan
+    [[-0.35, 1, -0.35, -1], [-0.35, -1, 0, -0.4], [0, -0.4, 0.35, -1], [0.35, -1, 0.35, 1]], // ehwaz
+    [[-0.35, 1, -0.35, -1], [0.35, 1, 0.35, -1], [-0.35, -1, 0.35, -0.3], [0.35, -1, -0.35, -0.3]], // mannaz
+    [[0, -1, 0, 1], [0, -1, 0.4, -0.6]], // laguz
+    [[0, -0.5, 0.35, 0], [0.35, 0, 0, 0.5], [0, 0.5, -0.35, 0], [-0.35, 0, 0, -0.5]], // ingwaz
+    [[-0.4, -1, -0.4, 1], [-0.4, -1, 0.4, 1], [0.4, 1, 0.4, -1], [0.4, -1, -0.4, 1]], // dagaz
+    [[-0.45, 1, 0.3, -0.1], [0.3, -0.1, 0, -0.7], [0, -0.7, -0.3, -0.1], [-0.3, -0.1, 0.45, 1]], // othala
+  ];
+  // One chalk drawing of a rune (white), made once per size: each stroke
+  // drawn twice with a little wobble, then flecks rubbed out of it.
+  function chalkRune(strokes, size) {
+    const W = Math.ceil(size * 0.75), H = Math.ceil(size * 1.25);
+    const c = document.createElement("canvas");
+    c.width = W;
+    c.height = H;
+    const g = c.getContext("2d");
+    const sx = (x) => W / 2 + x * size * 0.5, sy = (y) => H / 2 + y * size * 0.5;
+    const j = () => (Math.random() - 0.5) * size * 0.05;
+    g.lineCap = "round";
+    g.strokeStyle = "#fff";
+    for (const [x0, y0, x1, y1] of strokes) {
+      for (let pass = 0; pass < 3; pass++) {
+        g.globalAlpha = pass ? 0.5 : 0.85;
+        g.lineWidth = Math.max(1.2, size * (pass ? 0.045 : 0.08));
+        g.beginPath();
+        g.moveTo(sx(x0) + j(), sy(y0) + j());
+        const mx = (sx(x0) + sx(x1)) / 2 + j() * 1.5, my = (sy(y0) + sy(y1)) / 2 + j() * 1.5;
+        g.quadraticCurveTo(mx, my, sx(x1) + j(), sy(y1) + j());
+        g.stroke();
+      }
     }
-    return P;
+    // where the chalk skipped
+    g.globalCompositeOperation = "destination-out";
+    g.globalAlpha = 1;
+    const n = Math.round(W * H * 0.11);
+    for (let i = 0; i < n; i++) {
+      const r = 0.6 + Math.random() * Math.max(0.8, size * 0.03);
+      g.fillRect(Math.random() * W, Math.random() * H, r, r);
+    }
+    return c;
   }
   DRAW.runes = (v, p, dt) => {
-    const { ctx, w, h, U } = v;
-    const st = v.runes || (v.runes = { t: 0, b: 0, rip: [], beatSeen: shared.beatSerial, rings: [[18, 0.62], [26, 0.82], [34, 1.0]].map(([n, r]) => ({ r, n, glyphs: Array.from({ length: n }, runeGlyph), band: Math.random() })) });
+    const { ctx, U } = v;
+    const st = v.runes || (v.runes = { t: 0, b: 0, lift: 0, beatSeen: shared.beatSerial, lv: new Float32Array(24), size: 0, sprites: null, ring: null });
     st.t += dt * p.speed;
     st.b += ((shared.bassPunch || 0) - st.b) * Math.min(1, dt * 5);
-    if (st.beatSeen !== shared.beatSerial) { st.beatSeen = shared.beatSerial; if (shared.kick > 0.3) st.rip.push({ a: 0 }); }
-    st.rip = st.rip.filter((q) => (q.a += dt * 0.9) < 1);
-    const sp = circleSpot(v, p, 0.36), R = sp.art ? sp.r * 1.25 : sp.r, cx = sp.x, cy = sp.y;
-    const c0 = colorAt(0.15), c1 = colorAt(0.6), c2 = colorAt(0.95);
+    if (st.beatSeen !== shared.beatSerial) { st.beatSeen = shared.beatSerial; if (shared.kick > 0.3) st.lift = 1; }
+    st.lift *= Math.exp(-dt * 4);
+    const sp = circleSpot(v, p, 0.36), R = sp.art ? sp.r * 1.3 : sp.r, cx = sp.x, cy = sp.y;
+    const size = Math.max(10, Math.round(R * 0.2));
+    if (!st.sprites || Math.abs(size - st.size) > 3) {
+      st.size = size;
+      st.sprites = FUTHARK.map((f) => chalkRune(f, size));
+      // the rough wobble of the chalk circles, fixed so they don't shimmer
+      st.ring = Array.from({ length: 3 }, () => Array.from({ length: 96 }, () => (Math.random() - 0.5) * 0.012));
+    }
+    const ease = 1 - 0.6 * p.smoothing;
     ctx.save();
-    ctx.globalCompositeOperation = "lighter";
-    ctx.globalAlpha = A_(1, v);
+    ctx.globalCompositeOperation = "source-over";
+    const base = A_(1, v);
+    // two rough chalk circles, inside and outside the runes
     ctx.lineCap = "round";
-    ctx.lineJoin = "round";
-    // ring lines
-    for (const [rr, a] of [[0.5, 0.25], [0.72, 0.3], [0.92, 0.35], [1.1, 0.4]]) {
-      ctx.strokeStyle = v.rgba(mix(c0, c2, rr / 1.1), a * (0.5 + 0.8 * st.b));
-      ctx.lineWidth = Math.max(1, 1.4 * U);
+    [[0.78, 0], [1.22, 1], [1.24, 2]].forEach(([rr, k]) => {
+      ctx.strokeStyle = v.rgba(mix([235, 232, 222], colorAt(0.5), 0.2), base * (k === 2 ? 0.25 : 0.45) * (0.6 + 0.6 * st.b));
+      ctx.lineWidth = Math.max(1, (k === 2 ? 1 : 1.8) * U);
       ctx.beginPath();
-      ctx.arc(cx, cy, R * rr, 0, Math.PI * 2);
-      ctx.stroke();
-    }
-    // the star of lines in the middle (two triangles), turning slowly
-    ctx.strokeStyle = v.rgba(c1, 0.35 + 0.5 * st.b);
-    ctx.lineWidth = Math.max(1, 1.6 * U);
-    ctx.beginPath();
-    for (const off of [0, Math.PI]) for (let k = 0; k <= 3; k++) {
-      const a = off - Math.PI / 2 + (k * Math.PI * 2) / 3 + st.t * 0.1;
-      k ? ctx.lineTo(cx + Math.cos(a) * R * 0.5, cy + Math.sin(a) * R * 0.5) : ctx.moveTo(cx + Math.cos(a) * R * 0.5, cy + Math.sin(a) * R * 0.5);
-    }
-    ctx.stroke();
-    // the runes, each ring turning its own way
-    st.rings.forEach((rg, ri) => {
-      const turn = st.t * (ri % 2 ? -0.06 : 0.08) * (1 + ri * 0.2);
-      const gs = R * 0.07 * (1 - ri * 0.12);
-      for (let i = 0; i < rg.n; i++) {
-        const t = i / rg.n, a = turn + t * Math.PI * 2;
-        const lv = Math.min(1, bandAt((t + rg.band) % 1 * 0.9) * 1.3);
-        const c = mix(ri === 0 ? c0 : ri === 1 ? c1 : c2, WHITE, 0.3 * lv);
-        const x = cx + Math.cos(a) * R * (rg.r * 0.92 + 0.06), y = cy + Math.sin(a) * R * (rg.r * 0.92 + 0.06);
-        ctx.save();
-        ctx.translate(x, y);
-        ctx.rotate(a + Math.PI / 2);
-        ctx.scale(gs, gs);
-        ctx.strokeStyle = v.rgba(c, 0.2 + 0.8 * lv);
-        ctx.lineWidth = (Math.max(1.2, 1.8 * U) / gs) * (1 + 0.4 * lv);
-        ctx.stroke(rg.glyphs[i]);
-        ctx.restore();
+      const pts = st.ring[k];
+      for (let i = 0; i <= pts.length; i++) {
+        const a = (i / pts.length) * Math.PI * 2, r = R * (rr + pts[i % pts.length]);
+        i ? ctx.lineTo(cx + Math.cos(a) * r, cy + Math.sin(a) * r) : ctx.moveTo(cx + Math.cos(a) * r, cy + Math.sin(a) * r);
       }
-    });
-    // kick ripples
-    for (const q of st.rip) {
-      ctx.strokeStyle = v.rgba(mix(c1, WHITE, 0.4), 0.5 * (1 - q.a));
-      ctx.lineWidth = Math.max(1, 3 * U * (1 - q.a));
-      ctx.beginPath();
-      ctx.arc(cx, cy, R * (0.5 + 0.8 * q.a), 0, Math.PI * 2);
       ctx.stroke();
+    });
+    // the runes, upright along the ring and turning slowly with it
+    const turn = st.t * 0.05;
+    for (let i = 0; i < 24; i++) {
+      const t = i / 24, a = turn + t * Math.PI * 2 - Math.PI / 2;
+      const want = Math.min(1, bandAt(t * 0.9) * 1.3);
+      st.lv[i] += (want - st.lv[i]) * Math.min(1, dt * (8 * ease + 1));
+      const lv = Math.min(1, st.lv[i] + 0.35 * st.lift);
+      const spr = st.sprites[i];
+      const x = cx + Math.cos(a) * R, y = cy + Math.sin(a) * R;
+      ctx.save();
+      ctx.translate(x, y);
+      ctx.rotate(a + Math.PI / 2);
+      ctx.globalAlpha = base * (0.3 + 0.7 * lv);
+      ctx.drawImage(spr, -spr.width / 2, -spr.height / 2);
+      if (lv > 0.35) {
+        // lit: the same chalk again in the album colour on top (still flat)
+        ctx.globalAlpha = base * (lv - 0.35) * 0.9;
+        ctx.drawImage(tintedChalk(st, i, colorAt(t)), -spr.width / 2, -spr.height / 2);
+      }
+      ctx.restore();
     }
-    v.soft(cx, cy, R * 0.55, c1, 0.1 + 0.25 * st.b);
     ctx.restore();
   };
+  // A coloured copy of one chalk rune (made again only when the colour has
+  // clearly changed, so it isn't redrawn every frame).
+  function tintedChalk(st, i, col) {
+    st.tint = st.tint || [];
+    const prev = st.tint[i];
+    if (prev && prev.size === st.size && Math.abs(prev.c[0] - col[0]) + Math.abs(prev.c[1] - col[1]) + Math.abs(prev.c[2] - col[2]) < 30) return prev.cv;
+    const spr = st.sprites[i];
+    const cv = prev && prev.size === st.size ? prev.cv : document.createElement("canvas");
+    cv.width = spr.width;
+    cv.height = spr.height;
+    const g = cv.getContext("2d");
+    g.clearRect(0, 0, cv.width, cv.height);
+    g.drawImage(spr, 0, 0);
+    g.globalCompositeOperation = "source-in";
+    g.fillStyle = `rgb(${col[0] | 0},${col[1] | 0},${col[2] | 0})`;
+    g.fillRect(0, 0, cv.width, cv.height);
+    st.tint[i] = { cv, c: col.slice(), size: st.size };
+    return cv;
+  }
 
   // Nebula Drift: soft flat clouds of colour in the album's colours, with
   // darker lanes through them and stars behind, drifting very slowly. Calm

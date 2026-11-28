@@ -24,7 +24,7 @@
 
 ## Highlights
 
-- **45 styles:** bars, LED meters and LED spectrums, VU meters (holo, classic, minimal and HUD looks), a glowing holo spectrum, heart-monitor style lines, a soft flowing line, an oscilloscope, an old CRT screen, RGB split bars, circles and a subwoofer, drum hits, floating lanterns, a circle of glowing runes, poster shapes, fluids, wave ribbons, rain on glass, a lava lamp, smoke, a starfield tunnel, an aurora, flowing silk, a close-up of TV pixels, an oil slick, a galaxy, a drifting nebula, constellations drawn on the beat, an underwater view, sunset and night skies, iridescent stone, ombre gradients, particles and a 3D mesh landscape.
+- **45 styles:** bars, LED meters and LED spectrums, VU meters (holo, classic, minimal and HUD looks), a glowing holo spectrum, heart-monitor style lines, a soft flowing line, an oscilloscope, an old CRT screen, RGB split bars, circles and a subwoofer, drum hits, floating lanterns, a ring of chalk runes, poster shapes, fluids, wave ribbons, rain on glass, a lava lamp, smoke, a starfield tunnel, an aurora, flowing silk, a close-up of TV pixels, an oil slick, a galaxy, a drifting nebula, constellations drawn on the beat, an underwater view, sunset and night skies, iridescent stone, ombre gradients, particles and a 3D mesh landscape.
 - **Album colours:** every song gets its own palette from its cover, shifting on the beat or holding still, as you like. Or pick your own, rainbow, or each style's classic look.
 - **Fully customisable:** opacity, size, blur, brightness, bar count, position, sensitivity, bass boost, speed, shake and more. Each style remembers its own settings.
 - **Works out of the box:** runs on Spotify's own song data straight from the Marketplace.
