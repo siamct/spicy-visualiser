@@ -6,7 +6,7 @@ styles stay still, so nothing flickers).
   node test/song/card-frames.js && python tools/make-card.py"""
 import math
 import os
-from PIL import Image, ImageDraw, ImageFont
+from PIL import Image, ImageChops, ImageDraw, ImageFont
 
 ROOT = os.path.join(os.path.dirname(__file__), "..")
 SRC = os.path.join(ROOT, "test", "out", "card")
@@ -50,13 +50,40 @@ def masks(W, H, n):
 H = S - BH
 MASKS = masks(S, H, len(IDS))
 F = font(34)
+FLOOR = H - 26  # where every style's drawing ends, so they line up along the bottom
+
+
+def content_bottom(im):
+    """The lowest row with clearly bright pixels in it (the bottom of the drawing)."""
+    r, g_, b_ = im.split()
+    g = ImageChops.lighter(ImageChops.lighter(r, g_), b_).point(lambda v: 255 if v > 120 else 0)  # brightest channel, so dark greens count
+    px, (W2, H2) = g.load(), g.size
+    for y in range(H2 - 1, -1, -1):
+        if sum(1 for x in range(0, W2, 3) if px[x, y]) > W2 / 3 * 0.02:
+            return y
+    return H2 - 1
+
+
+def aligned(im):
+    """Shift the picture up or down so its drawing ends on FLOOR; the space
+    that opens up is filled with the picture's own dark background."""
+    dy = FLOOR - content_bottom(im)
+    out = Image.new("RGB", im.size)
+    out.paste(im, (0, dy))
+    if dy > 0:
+        out.paste(im.crop((0, 0, im.width, 1)).resize((im.width, dy)), (0, 0))
+    elif dy < 0:
+        out.paste(im.crop((0, 0, im.width, 1)).resize((im.width, -dy)), (0, im.height + dy))  # dark background, not the bars
+    return out
+
+
 still = Image.new("RGB", (S, S), BG)
 for (x0, w, m), sid in zip(MASKS, IDS):
     im = Image.open(os.path.join(SRC, f"{sid}-24.png")).convert("RGB")
     s = H / im.height
     im = im.resize((round(im.width * s), H), Image.LANCZOS)
     left = max(0, min(im.width - w, round(im.width * FOCUS[sid] - w / 2)))
-    still.paste(im.crop((left, 0, left + w, H)), (x0, BH), m)
+    still.paste(aligned(im.crop((left, 0, left + w, H))), (x0, BH), m)
 frames = []
 for k in range(N):
     card = still.copy()
