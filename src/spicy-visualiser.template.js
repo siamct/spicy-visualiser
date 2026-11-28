@@ -32,7 +32,11 @@
     ["revs", "Rev Counter"],
     ["crt", "CRT"],
     ["drumpads", "Drum Pads"],
-    ["trails", "Light Trails"],
+    ["circuit", "Circuit Board"],
+    ["neon", "Neon Signs"],
+    ["grass", "Swaying Grass"],
+    ["lanterns", "Lanterns"],
+    ["runes", "Magic Runes"],
     ["plasma", "Plasma"],
     ["ribbon", "Ribbon"],
     ["rain", "Rain on Glass"],
@@ -74,7 +78,11 @@
     revs: '<g fill="none" stroke="currentColor" stroke-linecap="round"><path d="M5 18a9 9 0 1 1 14 0" stroke-width="1.8"/><path d="M17 9.5a7 7 0 0 1 1.5 5" stroke-width="2.6" opacity=".6"/><path d="M12 14l4-6" stroke-width="2"/></g><circle cx="12" cy="14" r="1.6"/>',
     crt: '<rect x="2" y="4" width="20" height="15" rx="3" fill="none" stroke="currentColor" stroke-width="1.6"/><g opacity=".7"><rect x="5" y="7" width="14" height="1.2"/><rect x="5" y="10" width="14" height="1.2"/><rect x="5" y="13" width="14" height="1.2"/><rect x="5" y="16" width="14" height=".8" opacity=".5"/></g>',
     holospec: '<g>'+[[3,4],[7,6],[11,3],[15,5],[19,2]].map(([x,n])=>[...Array(n)].map((_,s)=>`<rect x="${x}" y="${19-s*3}" width="3" height="1.3" rx=".5" opacity="${(0.65+s*0.08).toFixed(2)}"/>`).join('')).join('')+'</g>',
-    trails: '<path d="M3 3v18M9 3v18M15 3v18M21 3v18M3 9h18M3 15h18" fill="none" stroke="currentColor" stroke-width=".8" opacity=".35"/><path d="M3 15h6V9h6v6h6" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="miter"/><circle cx="21" cy="15" r="2"/>',
+    runes: '<g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10" stroke-width="1.4"/><circle cx="12" cy="12" r="5.5" stroke-width="1" opacity=".6"/><path d="M12 6.5 16.8 14.8H7.2zM12 17.5 7.2 9.2h9.6z" stroke-width="1" opacity=".7"/><path d="M12 1.8v2.6M10.8 2.8h2.4M20.6 9l-1.4 1M21 13.5h-2M4.5 17l1.5-1.2M3 10.5l2 .5" stroke-width="1.3"/></g>',
+    lanterns: '<g><path d="M6.5 6.5Q9 5 11.5 6.5L12 15Q9 16.2 6 15z" opacity=".85"/><path d="M14 4Q16.5 2.5 19 4l.5 7Q16.5 12.2 13.5 11z" opacity=".55"/><path d="M8 18.5h3M15 13.5h3" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" opacity=".6"/></g>',
+    grass: '<path d="M3 21C4 15 3 11 1.5 8 4 11 5.5 15 5.5 21M8 21c.5-6 2-10 4-14-1 4-2 9-1.5 14M14 21c0-5-1-8-3-10 3 2 5 5 5.5 10M19 21c.5-5 2-8 4-10-1.5 3-2 7-2 10"/><circle cx="12" cy="6" r="2" opacity=".7"/>',
+    neon: '<g fill="none" stroke="currentColor" stroke-linejoin="round" stroke-linecap="round" stroke-width="1.7"><circle cx="7" cy="8" r="4"/><path d="M15 3l-3 6h4l-3 6" /><path d="M3 18c2-2 3 2 5 0s3 2 5 0 3 2 5 0 2 1 3 0" opacity=".7"/></g>',
+    circuit: '<g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><rect x="8" y="8" width="8" height="8" rx="1" stroke-width="1.6"/><path d="M8 11H5l-2-2M8 14H3M16 11h3l2-2M16 14h2l3 3M11 8V3M13 16v3l-2 2" stroke-width="1.3"/></g><circle cx="3" cy="9" r="1.2"/><circle cx="21" cy="9" r="1.2"/><circle cx="21" cy="17" r="1.2"/><circle cx="11" cy="3" r="1.2"/>',
     drumpads: '<rect x="3" y="3" width="8" height="8" rx="1.6"/><rect x="13" y="3" width="8" height="8" rx="1.6" opacity=".4"/><rect x="3" y="13" width="8" height="8" rx="1.6" opacity=".4"/><rect x="13" y="13" width="8" height="8" rx="1.6"/>',
     scope: '<g fill="none" stroke="currentColor"><rect x="2.5" y="4.5" width="19" height="15" rx="2" stroke-width="1.5"/><path d="M4.5 12c1.5 0 1.8-4 3.2-4s1.7 8 3.3 8 1.8-6 3.3-6 1.6 3 3 3 1.2-1 2.2-1" stroke-width="1.6" stroke-linecap="round"/></g>',
     vu: '<g fill="none" stroke="currentColor" stroke-linecap="round"><rect x="2.5" y="5" width="19" height="14" rx="1.5" stroke-width="1.5"/><path d="M6 13.5a7 7 0 0 1 12 0" stroke-width="1.4"/><path d="M12 17l3.5-6.5" stroke-width="1.6"/></g>',
@@ -114,13 +122,14 @@
   // Styles that still look right on Spotify's data (it has loudness and
   // beats, not a real spectrum). With that source they're listed first and
   // the rest fold away under "More styles".
-  const SONG_DATA_OK = new Set(["trails", "underwater", "sunset", "nightsky", "silk", "tvpixels", "drumpads", "particles", "plasma", "ledplasma", "warp", "dnb", "ribbon", "rain", "lava", "smoke", "tunnel", "aurora", "oil", "galaxy", "prism", "ombre", "geometric", "bauhaus", "sub", "off"]);
+  const SONG_DATA_OK = new Set(["lanterns", "grass", "underwater", "sunset", "nightsky", "silk", "tvpixels", "drumpads", "particles", "plasma", "ledplasma", "warp", "dnb", "ribbon", "rain", "lava", "smoke", "tunnel", "aurora", "oil", "galaxy", "prism", "ombre", "geometric", "bauhaus", "sub", "off"]);
   const STYLE_GROUPS = [
     ["Bars", ["monstercat", "mirror", "holospec", "ledm", "led", "ascii", "rgbsplit"]],
     ["Meters & lines", ["vu", "revs", "scope", "crt", "ekg", "ribbon", "dnb"]],
     ["Circles", ["radial", "ncs", "holoring", "sub", "trap", "tunnel"]],
-    ["On the beat", ["drumpads", "trails", "geometric", "bauhaus", "particles"]],
+    ["On the beat", ["drumpads", "circuit", "neon", "geometric", "bauhaus", "particles"]],
     ["Liquid & water", ["plasma", "ledplasma", "tvpixels", "oil", "silk", "lava", "underwater"]],
+    ["Nature & magic", ["grass", "lanterns", "runes"]],
     ["Sky & space", ["aurora", "galaxy", "sunset", "nightsky", "warp", "ombre"]],
     ["Textures", ["prism", "rain", "smoke", "neuro"]],
     ["", ["off"]],
@@ -144,11 +153,11 @@
     gaugeLook: ["revs"],
     // styles that can sit beside the album art and be moved (not the
     // full-screen scenes)
-    fit: ["holoring", "revs", "crt", "monstercat", "mirror", "holospec", "ledm", "led", "ascii", "rgbsplit", "scope", "ekg", "dnb", "radial", "ncs", "sub", "trap", "drumpads", "geometric", "bauhaus", "neuro"],
-    moveX: ["vu", "holoring", "revs", "crt", "monstercat", "mirror", "holospec", "ledm", "led", "ascii", "rgbsplit", "scope", "ekg", "dnb", "radial", "ncs", "sub", "trap", "drumpads", "geometric", "bauhaus", "neuro"],
-    moveY: ["vu", "holoring", "revs", "crt", "monstercat", "mirror", "holospec", "ledm", "led", "ascii", "rgbsplit", "scope", "ekg", "dnb", "radial", "ncs", "sub", "trap", "drumpads", "geometric", "bauhaus", "neuro"],
-    circleAt: ["trap", "radial", "ncs", "sub"],
-    speed: ["trails", "crt", "ekg", "underwater", "sunset", "nightsky", "silk", "tvpixels", "scope", "trap", "neuro", "ribbon", "rain", "lava", "smoke", "tunnel", "aurora", "oil", "particles", "monstercat", "ncs", "radial", "plasma", "warp", "dnb", "ascii", "led", "ledplasma", "galaxy", "prism", "ombre"],
+    fit: ["runes", "holoring", "revs", "crt", "monstercat", "mirror", "holospec", "ledm", "led", "ascii", "rgbsplit", "scope", "ekg", "dnb", "radial", "ncs", "sub", "trap", "drumpads", "geometric", "bauhaus", "neuro"],
+    moveX: ["runes", "vu", "holoring", "revs", "crt", "monstercat", "mirror", "holospec", "ledm", "led", "ascii", "rgbsplit", "scope", "ekg", "dnb", "radial", "ncs", "sub", "trap", "drumpads", "geometric", "bauhaus", "neuro"],
+    moveY: ["runes", "vu", "holoring", "revs", "crt", "monstercat", "mirror", "holospec", "ledm", "led", "ascii", "rgbsplit", "scope", "ekg", "dnb", "radial", "ncs", "sub", "trap", "drumpads", "geometric", "bauhaus", "neuro"],
+    circleAt: ["runes", "trap", "radial", "ncs", "sub"],
+    speed: ["runes", "lanterns", "grass", "circuit", "crt", "ekg", "underwater", "sunset", "nightsky", "silk", "tvpixels", "scope", "trap", "neuro", "ribbon", "rain", "lava", "smoke", "tunnel", "aurora", "oil", "particles", "monstercat", "ncs", "radial", "plasma", "warp", "dnb", "ascii", "led", "ledplasma", "galaxy", "prism", "ombre"],
     bassBoost: ["rgbsplit", "underwater", "sunset", "nightsky", "silk", "tvpixels", "scope", "particles", "monstercat", "radial", "mirror", "ncs", "warp", "plasma", "dnb", "ascii", "geometric", "bauhaus", "led", "ledplasma", "sub", "trap", "ledm", "neuro", "ribbon", "rain", "lava", "smoke", "tunnel", "aurora", "oil", "galaxy", "prism", "ombre"],
     smoothing: ["holoring", "revs", "crt", "rgbsplit", "ekg", "particles", "monstercat", "radial", "mirror", "ncs", "warp", "plasma", "dnb", "ascii", "geometric", "bauhaus", "led", "ledplasma", "sub", "trap", "ledm", "neuro", "aurora", "vu", "drumpads", "holospec"],
   };
@@ -190,6 +199,11 @@
     color2: "#5b8cff",
   };
   const STYLE_DEFAULTS = {
+    runes: { shake: 0, fit: "art" },
+    lanterns: { shake: 0 },
+    grass: { shake: 0 },
+    neon: { shake: 0 },
+    circuit: { shake: 0 },
     radial: { fit: "art" },
     ncs: { fit: "art" },
     mirror: { barCount: 56, bassBoost: 0.6 },
@@ -227,7 +241,6 @@
     holoring: { shake: 0, fit: "art" },
     revs: { shake: 0, fit: "art" },
     crt: { shake: 0 },
-    trails: { shake: 0 },
     rgbsplit: { shake: 0, barCount: 48 },
   };
   const GLOBAL_DEFAULTS = {
@@ -277,7 +290,7 @@
   if (!Array.isArray(S.favs)) S.favs = [];
   // Retro Bars became LED Meters.
   // (and Drum Bars was taken out)
-  const MOVED = { retro: "ledm", drumbars: "drumpads", drums: "drumpads", holoradar: "holospec", holorings: "holospec", pitchtrail: "ekg", kaleido: "plasma", bubbles: "lava", chrome: "silk", ekgpitch: "ekg", ekgscroll: "ekg", pond: "underwater", ocean: "underwater", storm: "sunset", mercury: "silk", ekg3: "ekg", chipscope: "scope", drumwaves: "drumpads" };
+  const MOVED = { retro: "ledm", drumbars: "drumpads", drums: "drumpads", holoradar: "holospec", holorings: "holospec", pitchtrail: "ekg", kaleido: "plasma", bubbles: "lava", chrome: "silk", ekgpitch: "ekg", ekgscroll: "ekg", pond: "underwater", ocean: "underwater", storm: "sunset", mercury: "silk", ekg3: "ekg", chipscope: "scope", drumwaves: "drumpads", trails: "circuit" };
   if (MOVED[S.style]) S.style = MOVED[S.style];
   S.favs = [...new Set(S.favs.map((f) => MOVED[f] || f))];
   if (!validStyle(S.style)) S.style = GLOBAL_DEFAULTS.style;
@@ -3392,104 +3405,383 @@ void main() {
     ctx.restore();
   };
 
-  // Light Trails: seen from straight above, glowing trails of light race
-  // along a dark neon grid, leaving a line behind them and turning sharp
-  // corners on the beat. Louder parts make them faster and their trails
-  // longer, kicks send a new one out, and the bass makes the grid glow.
-  DRAW.trails = (v, p, dt) => {
+  // Circuit Board: glowing traces branch across the screen like a circuit
+  // board, ending in round pads, with a few chips in between. Pulses of
+  // light run along the traces on the beat (more when it's loud), each pad
+  // glows with its part of the spectrum, and the chips light up with the
+  // bass.
+  function circuitLayout(w, h, U) {
+    const g = Math.max(14 * U, h / 28);
+    const rnd = (a, b) => a + Math.random() * (b - a);
+    const chips = [];
+    for (let i = 0; i < 3; i++) chips.push({ x: rnd(0.2, 0.75) * w, y: rnd(0.2, 0.7) * h, cw: g * rnd(4, 7), ch: g * rnd(3, 5) });
+    const traces = [];
+    const DIRS = [[1, 0], [1, 1], [0, 1], [-1, 1], [-1, 0], [-1, -1], [0, -1], [1, -1]];
+    for (let i = 0; i < 34; i++) {
+      // start from a chip's side or from an edge, then wander with 45° turns
+      let x, y, d;
+      if (i < 18) {
+        const c = chips[i % chips.length], side = Math.floor(Math.random() * 4);
+        x = side === 0 ? c.x - c.cw / 2 : side === 1 ? c.x + c.cw / 2 : c.x + rnd(-0.4, 0.4) * c.cw;
+        y = side === 2 ? c.y - c.ch / 2 : side === 3 ? c.y + c.ch / 2 : c.y + rnd(-0.35, 0.35) * c.ch;
+        d = [4, 0, 6, 2][side];
+      } else {
+        const side = Math.floor(Math.random() * 4);
+        x = side === 0 ? 0 : side === 1 ? w : rnd(0.05, 0.95) * w;
+        y = side === 2 ? 0 : side === 3 ? h : rnd(0.05, 0.95) * h;
+        d = [0, 4, 2, 6][side];
+      }
+      const pts = [{ x, y }];
+      const steps = 2 + Math.floor(Math.random() * 4);
+      for (let s = 0; s < steps; s++) {
+        const L = g * rnd(2, 8) * (d % 2 ? 0.7 : 1);
+        x += DIRS[d][0] * L;
+        y += DIRS[d][1] * L;
+        pts.push({ x, y });
+        d = (d + (Math.random() < 0.5 ? 1 : 7)) % 8;
+      }
+      let len = 0;
+      const cum = [0];
+      for (let k = 1; k < pts.length; k++) cum.push((len += Math.hypot(pts[k].x - pts[k - 1].x, pts[k].y - pts[k - 1].y)));
+      const path = new Path2D();
+      pts.forEach((q, k) => (k ? path.lineTo(q.x, q.y) : path.moveTo(q.x, q.y)));
+      traces.push({ pts, cum, len, path, band: Math.random() * 0.9, c: Math.random() });
+    }
+    return { w, h, g, chips, traces, pulses: [] };
+  }
+  DRAW.circuit = (v, p, dt) => {
     const { ctx, w, h, U } = v;
-    const cell = Math.max(24 * U, h / 12);
-    const st = v.trails || (v.trails = { cy: [], beatSeen: shared.beatSerial, e: 0, b: 0, t: 0 });
+    let st = v.circuit;
+    if (!st || st.w !== w || st.h !== h) st = v.circuit = { ...circuitLayout(w, h, U), beatSeen: shared.beatSerial, t: 0, b: 0 };
     st.t += dt;
-    st.e += (shared.energy - st.e) * Math.min(1, dt * 1.5);
-    st.b += ((shared.bassPunch || 0) - st.b) * Math.min(1, dt * 4);
-    const nx = Math.floor(w / cell), ny = Math.floor(h / cell);
-    const gx0 = (w - nx * cell) / 2, gy0 = (h - ny * cell) / 2;
-    const DX = [1, 0, -1, 0], DY = [0, 1, 0, -1];
-    const spawn = () => {
-      const ix = 1 + Math.floor(Math.random() * Math.max(1, nx - 1)), iy = 1 + Math.floor(Math.random() * Math.max(1, ny - 1));
-      const x = gx0 + ix * cell, y = gy0 + iy * cell;
-      st.cy.push({ x, y, dir: Math.floor(Math.random() * 4), pts: [{ x, y }], c: Math.random(), turn: 0, life: 0 });
-      if (st.cy.length > 7) st.cy.shift();
-    };
-    while (st.cy.length < 3) spawn();
+    st.b += ((shared.bassPunch || 0) - st.b) * Math.min(1, dt * 5);
     if (st.beatSeen !== shared.beatSerial) {
       st.beatSeen = shared.beatSerial;
-      if (shared.kick > 0.5 && Math.random() < 0.5) spawn();
-      for (const q of st.cy) if (Math.random() < 0.55) q.turn = Math.random() < 0.5 ? 1 : 3;
-    }
-    const speed = cell * (1.6 + 5 * st.e) * p.speed;
-    const maxLen = cell * (5 + 20 * st.e);
-    for (const q of st.cy) {
-      q.life += dt;
-      let left = speed * dt;
-      while (left > 0) {
-        // distance to the next grid crossing along the way it's going
-        const along = q.dir % 2 === 0 ? q.x - gx0 : q.y - gy0;
-        const s = q.dir < 2 ? 1 : -1;
-        let next = (Math.floor(along / cell + (s > 0 ? 1e-6 : -1e-6)) + (s > 0 ? 1 : 0)) * cell;
-        let dist = Math.abs(next - along);
-        if (dist < 1e-6) dist = cell;
-        if (dist > left) { q.x += DX[q.dir] * left; q.y += DY[q.dir] * left; break; }
-        q.x += DX[q.dir] * dist;
-        q.y += DY[q.dir] * dist;
-        left -= dist;
-        // at a crossing: turn if a beat asked it to, or if the edge is next
-        const ahead = { x: q.x + DX[q.dir] * cell, y: q.y + DY[q.dir] * cell };
-        const out = ahead.x < gx0 + 0.5 || ahead.x > gx0 + nx * cell - 0.5 || ahead.y < gy0 + 0.5 || ahead.y > gy0 + ny * cell - 0.5;
-        if (q.turn || out) {
-          let nd = (q.dir + (q.turn || (Math.random() < 0.5 ? 1 : 3))) % 4;
-          const ok = (d) => { const ax = q.x + DX[d] * cell, ay = q.y + DY[d] * cell; return ax >= gx0 - 0.5 && ax <= gx0 + nx * cell + 0.5 && ay >= gy0 - 0.5 && ay <= gy0 + ny * cell + 0.5; };
-          if (!ok(nd)) nd = (nd + 2) % 4;
-          if (!ok(nd)) nd = (q.dir + 2) % 4;
-          q.dir = nd;
-          q.turn = 0;
-          q.pts.push({ x: q.x, y: q.y });
-        }
+      const n = 2 + Math.round(4 * shared.energy * p.sensitivity);
+      for (let i = 0; i < n; i++) {
+        const tr = st.traces[Math.floor(Math.random() * st.traces.length)];
+        st.pulses.push({ tr, s: 0, sp: (0.6 + Math.random() * 0.5) * st.g * 14 });
       }
-      // keep the trail to its length, cutting from the tail
-      let len = 0, px = q.x, py = q.y;
-      for (let i = q.pts.length - 1; i >= 0; i--) {
-        const seg = Math.abs(q.pts[i].x - px) + Math.abs(q.pts[i].y - py);
-        if (len + seg > maxLen) {
-          const f = (maxLen - len) / seg;
-          q.pts[i] = { x: px + (q.pts[i].x - px) * f, y: py + (q.pts[i].y - py) * f };
-          q.pts.splice(0, i);
-          break;
-        }
-        len += seg;
-        px = q.pts[i].x;
-        py = q.pts[i].y;
-      }
+      if (st.pulses.length > 40) st.pulses.splice(0, st.pulses.length - 40);
     }
     ctx.save();
     ctx.globalCompositeOperation = "lighter";
     ctx.globalAlpha = A_(1, v);
-    // the grid, glowing with the bass
-    const gc = colorAt(0.5);
-    const grid = new Path2D();
-    for (let i = 0; i <= nx; i++) { grid.moveTo(gx0 + i * cell, gy0); grid.lineTo(gx0 + i * cell, gy0 + ny * cell); }
-    for (let j = 0; j <= ny; j++) { grid.moveTo(gx0, gy0 + j * cell); grid.lineTo(gx0 + nx * cell, gy0 + j * cell); }
-    ctx.strokeStyle = v.rgba(gc, 0.06 + 0.1 * st.b);
-    ctx.lineWidth = 1;
-    ctx.stroke(grid);
-    // the trails: a soft glow under a bright thin core
-    ctx.lineJoin = "miter";
-    ctx.lineCap = "butt";
-    for (const q of st.cy) {
-      const c = colorAt(q.c), fade = Math.min(1, q.life * 2);
-      const path = new Path2D();
-      path.moveTo(q.pts[0].x, q.pts[0].y);
-      for (let i = 1; i < q.pts.length; i++) path.lineTo(q.pts[i].x, q.pts[i].y);
-      path.lineTo(q.x, q.y);
-      ctx.strokeStyle = v.rgba(c, 0.22 * fade);
-      ctx.lineWidth = 10 * U;
-      ctx.stroke(path);
-      ctx.strokeStyle = v.rgba(mix(c, WHITE, 0.35), 0.95 * fade);
-      ctx.lineWidth = Math.max(1.8, 2.6 * U);
-      ctx.stroke(path);
-      v.glow(q.x, q.y, (10 + 8 * st.b) * U, mix(c, WHITE, 0.4), 0.8 * fade);
+    ctx.lineJoin = "round";
+    ctx.lineCap = "round";
+    // the traces, dim
+    for (const tr of st.traces) {
+      ctx.strokeStyle = v.rgba(colorAt(tr.c), 0.16);
+      ctx.lineWidth = Math.max(1.2, 1.6 * U);
+      ctx.stroke(tr.path);
     }
+    // the pads at the ends, glowing with their band
+    for (const tr of st.traces) {
+      const e = tr.pts[tr.pts.length - 1], lv = Math.min(1, bandAt(tr.band) * 1.2);
+      const c = colorAt(tr.c);
+      ctx.strokeStyle = v.rgba(mix(c, WHITE, 0.3 * lv), 0.3 + 0.65 * lv);
+      ctx.lineWidth = Math.max(1.2, 1.5 * U);
+      ctx.beginPath();
+      ctx.arc(e.x, e.y, st.g * 0.32, 0, Math.PI * 2);
+      ctx.stroke();
+      if (lv > 0.25) v.glow(e.x, e.y, st.g * (0.6 + 0.8 * lv), c, 0.5 * lv);
+    }
+    // the chips: dark bodies with pins, their outline lit by the bass
+    for (const c of st.chips) {
+      const col = colorAt(0.5);
+      ctx.globalCompositeOperation = "source-over";
+      ctx.fillStyle = "rgba(6,8,10,0.75)";
+      ctx.fillRect(c.x - c.cw / 2, c.y - c.ch / 2, c.cw, c.ch);
+      ctx.globalCompositeOperation = "lighter";
+      ctx.strokeStyle = v.rgba(mix(col, WHITE, 0.2), 0.25 + 0.6 * st.b);
+      ctx.lineWidth = Math.max(1, 1.4 * U);
+      ctx.strokeRect(c.x - c.cw / 2, c.y - c.ch / 2, c.cw, c.ch);
+      ctx.fillStyle = v.rgba(col, 0.25 + 0.4 * st.b);
+      const pin = st.g * 0.18;
+      for (let k = 1; k < 6; k++) {
+        const px = c.x - c.cw / 2 + (c.cw * k) / 6;
+        ctx.fillRect(px - pin / 2, c.y - c.ch / 2 - pin * 2, pin, pin * 1.6);
+        ctx.fillRect(px - pin / 2, c.y + c.ch / 2 + pin * 0.4, pin, pin * 1.6);
+      }
+    }
+    // the pulses: a short bright stretch running along its trace
+    st.pulses = st.pulses.filter((q) => (q.s += q.sp * dt * p.speed) < q.tr.len + st.g * 3);
+    for (const q of st.pulses) {
+      const tr = q.tr, c = mix(colorAt(tr.c), WHITE, 0.35), tail = st.g * 3;
+      const path = new Path2D();
+      let started = false;
+      const at = (d) => {
+        d = Math.max(0, Math.min(tr.len, d));
+        let k = 1;
+        while (k < tr.cum.length - 1 && tr.cum[k] < d) k++;
+        const f = (d - tr.cum[k - 1]) / Math.max(1e-6, tr.cum[k] - tr.cum[k - 1]);
+        return { x: tr.pts[k - 1].x + (tr.pts[k].x - tr.pts[k - 1].x) * f, y: tr.pts[k - 1].y + (tr.pts[k].y - tr.pts[k - 1].y) * f, k };
+      };
+      const a = at(q.s - tail), b = at(q.s);
+      path.moveTo(a.x, a.y);
+      for (let k = a.k; k < b.k; k++) path.lineTo(tr.pts[k].x, tr.pts[k].y);
+      path.lineTo(b.x, b.y);
+      started = true;
+      if (!started) continue;
+      ctx.strokeStyle = v.rgba(c, 0.25);
+      ctx.lineWidth = 6 * U;
+      ctx.stroke(path);
+      ctx.strokeStyle = v.rgba(c, 0.95);
+      ctx.lineWidth = Math.max(1.5, 2.2 * U);
+      ctx.stroke(path);
+      if (q.s <= tr.len) v.glow(b.x, b.y, 7 * U, c, 0.8);
+    }
+    ctx.restore();
+  };
+
+  // Neon Signs: flat neon tube shapes (a circle, a triangle, a lightning
+  // bolt, a wave, a star) like a shop window at night. Each is tied to a
+  // part of the spectrum and glows brighter when it's playing; quiet ones
+  // flicker and buzz, and a kick makes one of them flash. Unlit tubes stay
+  // faintly visible, like real glass.
+  const NEON_SHAPES = {
+    circle: (P, s) => P.arc(0, 0, s, 0, Math.PI * 2),
+    tri: (P, s) => { P.moveTo(0, -s); P.lineTo(s * 0.92, s * 0.62); P.lineTo(-s * 0.92, s * 0.62); P.closePath(); },
+    bolt: (P, s) => { P.moveTo(s * 0.25, -s); P.lineTo(-s * 0.45, s * 0.1); P.lineTo(s * 0.05, s * 0.1); P.lineTo(-s * 0.25, s); P.lineTo(s * 0.5, -s * 0.15); P.lineTo(0, -s * 0.15); P.closePath(); },
+    wave: (P, s) => { P.moveTo(-s * 1.3, 0); for (let i = 1; i <= 24; i++) { const x = -s * 1.3 + (s * 2.6 * i) / 24; P.lineTo(x, Math.sin((i / 24) * Math.PI * 3) * s * 0.35); } },
+    star: (P, s) => { for (let i = 0; i < 10; i++) { const a = -Math.PI / 2 + (i * Math.PI) / 5, r = i % 2 ? s * 0.45 : s; i ? P.lineTo(Math.cos(a) * r, Math.sin(a) * r) : P.moveTo(Math.cos(a) * r, Math.sin(a) * r); } P.closePath(); },
+    square: (P, s) => P.rect(-s * 0.8, -s * 0.8, s * 1.6, s * 1.6),
+  };
+  DRAW.neon = (v, p, dt) => {
+    const { ctx, w, h, U } = v;
+    const st = v.neon || (v.neon = {
+      t: 0, beatSeen: shared.beatSerial,
+      signs: [["circle", 0.2, 0.36, 0.05], ["bolt", 0.42, 0.62, 0.3], ["tri", 0.64, 0.34, 0.5], ["wave", 0.82, 0.66, 0.7], ["star", 0.3, 0.72, 0.85], ["square", 0.86, 0.3, 0.18]]
+        .map(([shape, x, y, band], i) => ({ shape, x, y, band, c: i / 5, lv: 0, fl: 1, flash: 0, rot: (Math.random() - 0.5) * 0.3 })),
+    });
+    st.t += dt;
+    if (st.beatSeen !== shared.beatSerial) {
+      st.beatSeen = shared.beatSerial;
+      st.signs[Math.floor(Math.random() * st.signs.length)].flash = Math.min(1, shared.kick + 0.3);
+    }
+    const S0 = Math.min(w, h) * 0.13 * p.size;
+    ctx.save();
+    ctx.globalCompositeOperation = "lighter";
+    ctx.globalAlpha = A_(1, v);
+    ctx.lineJoin = "round";
+    ctx.lineCap = "round";
+    for (const sg of st.signs) {
+      const want = Math.min(1, bandAt(sg.band) * 1.3 * p.sensitivity);
+      sg.lv += (want - sg.lv) * Math.min(1, dt * (want > sg.lv ? 10 : 3));
+      sg.flash *= Math.exp(-dt * 4);
+      // quiet tubes flicker now and then, like a failing starter
+      if (sg.lv < 0.35 && Math.random() < dt * 2) sg.fl = 0.2;
+      sg.fl += (1 - sg.fl) * Math.min(1, dt * 8);
+      const on = Math.min(1, (0.15 + 0.85 * sg.lv) * sg.fl + sg.flash) * (0.94 + 0.06 * Math.sin(st.t * 120 + sg.c * 9));
+      const P = new Path2D();
+      const m = new DOMMatrix().translate(sg.x * w, sg.y * h).rotate((sg.rot * 180) / Math.PI);
+      const raw = new Path2D();
+      NEON_SHAPES[sg.shape](raw, S0 * (sg.shape === "wave" ? 1 : 0.9));
+      P.addPath(raw, m);
+      const c = colorAt(sg.c);
+      // the glass tube, faintly there even when off
+      ctx.strokeStyle = "rgba(255,255,255,0.05)";
+      ctx.lineWidth = Math.max(3, 5 * U);
+      ctx.stroke(P);
+      ctx.strokeStyle = v.rgba(c, 0.12 * on);
+      ctx.lineWidth = 22 * U;
+      ctx.stroke(P);
+      ctx.strokeStyle = v.rgba(c, 0.3 * on);
+      ctx.lineWidth = 9 * U;
+      ctx.stroke(P);
+      ctx.strokeStyle = v.rgba(mix(c, WHITE, 0.55), 0.95 * on);
+      ctx.lineWidth = Math.max(1.5, 2.6 * U);
+      ctx.stroke(P);
+    }
+    ctx.restore();
+  };
+
+  // Swaying Grass: flat layers of grass along the bottom, with a few
+  // flowers in the album's colours, swaying like wind is blowing over them.
+  // Louder parts blow harder, and each bass hit sends a gust rolling across
+  // from one side to the other.
+  DRAW.grass = (v, p, dt) => {
+    const { ctx, w, h, U } = v;
+    let st = v.grass;
+    if (!st || st.w !== w || st.h !== h) {
+      const layers = [0, 1, 2].map((L) => {
+        const n = Math.round(w / ((7 - L * 1.5) * U));
+        return Array.from({ length: n }, () => ({ x: Math.random() * w, hh: (0.07 + 0.06 * L + Math.random() * 0.08) * h, ph: Math.random() * 6.28, lean: (Math.random() - 0.5) * 0.25, flower: L === 2 && Math.random() < 0.05 ? Math.random() : -1 }));
+      });
+      st = v.grass = { w, h, layers, t: 0, wind: 0, gusts: [], bassSeen: 0 };
+    }
+    st.t += dt * p.speed;
+    st.wind += (shared.energy - st.wind) * Math.min(1, dt * 1.2);
+    const bass = shared.bassPunch || 0;
+    if (bass > 0.55 && st.t - st.bassSeen > 0.5) { st.bassSeen = st.t; st.gusts.push({ x: -0.2 * w, s: Math.min(1, bass) }); }
+    st.gusts = st.gusts.filter((g) => (g.x += w * 0.45 * dt * p.speed) < w * 1.2);
+    const green = [[18, 40, 22], [30, 70, 34], [50, 110, 52]];
+    ctx.save();
+    ctx.globalCompositeOperation = "source-over";
+    ctx.globalAlpha = A_(0.95, v);
+    st.layers.forEach((blades, L) => {
+      const col = mix(green[L], colorAt(0.3 + L * 0.3), 0.08);
+      const path = new Path2D(), flowers = [];
+      const base = h + 2;
+      for (const b of blades) {
+        let gust = 0;
+        for (const g of st.gusts) gust += g.s * Math.exp(-Math.pow((b.x - g.x) / (w * 0.12), 2));
+        const sway = (Math.sin(st.t * (1.1 + L * 0.3) + b.ph + b.x * 0.004) * (0.08 + 0.35 * st.wind) + 0.5 * gust + b.lean) * (0.6 + 0.2 * L);
+        const tx = b.x + sway * b.hh, ty = base - b.hh * (1 - 0.25 * Math.abs(sway));
+        const bw = (1.4 + L * 0.6) * U;
+        path.moveTo(b.x - bw, base);
+        path.quadraticCurveTo(b.x - bw * 0.5 + sway * b.hh * 0.3, base - b.hh * 0.55, tx, ty);
+        path.quadraticCurveTo(b.x + bw * 0.5 + sway * b.hh * 0.3, base - b.hh * 0.55, b.x + bw, base);
+        if (b.flower >= 0) flowers.push([tx, ty, b.flower]);
+      }
+      ctx.fillStyle = v.rgba(col, 1);
+      ctx.fill(path);
+      for (const [x, y, c] of flowers) {
+        const fc = colorAt(c), r = 3.2 * U * (1 + 0.25 * shared.kick);
+        ctx.fillStyle = v.rgba(fc, 1);
+        for (let k = 0; k < 5; k++) {
+          const a = (k * Math.PI * 2) / 5 + st.t * 0.2;
+          ctx.beginPath();
+          ctx.arc(x + Math.cos(a) * r, y + Math.sin(a) * r, r * 0.75, 0, Math.PI * 2);
+          ctx.fill();
+        }
+        ctx.fillStyle = "rgba(255,230,140,1)";
+        ctx.beginPath();
+        ctx.arc(x, y, r * 0.55, 0, Math.PI * 2);
+        ctx.fill();
+      }
+    });
+    ctx.restore();
+  };
+
+  // Lanterns: paper lanterns floating slowly up into the night, swaying a
+  // little as they go. Each glows with its own part of the spectrum, kicks
+  // send a new one up from the bottom, and loud parts send them up faster.
+  DRAW.lanterns = (v, p, dt) => {
+    const { ctx, w, h, U } = v;
+    const st = v.lanterns || (v.lanterns = { list: [], beatSeen: shared.beatSerial, e: 0, t: 0 });
+    st.t += dt;
+    st.e += (shared.energy - st.e) * Math.min(1, dt * 1.5);
+    const add = (y) => st.list.push({ x: (0.08 + Math.random() * 0.84) * w, y, z: 0.45 + Math.random() * 0.55, band: Math.random() * 0.8, ph: Math.random() * 6.3, lv: 0 });
+    if (!st.list.length) for (let i = 0; i < 10; i++) add(Math.random() * h);
+    if (st.beatSeen !== shared.beatSerial) {
+      st.beatSeen = shared.beatSerial;
+      if (Math.random() < 0.6 && st.list.length < 22) add(h + 40 * U);
+    }
+    if (st.list.length < 6) add(h + 40 * U);
+    st.list.sort((a, b) => a.z - b.z);
+    ctx.save();
+    ctx.globalAlpha = A_(1, v);
+    for (const L of st.list) {
+      L.y -= dt * p.speed * (14 + 40 * st.e) * U * L.z;
+      const want = Math.min(1, bandAt(L.band) * 1.3);
+      L.lv += (want - L.lv) * Math.min(1, dt * 4);
+      const x = L.x + Math.sin(st.t * 0.6 + L.ph) * 10 * U * L.z;
+      const s = 26 * U * L.z * p.size, warm = mix([255, 135, 45], colorAt(L.band), 0.15);
+      const glow = 0.35 + 0.65 * L.lv;
+      ctx.globalCompositeOperation = "lighter";
+      v.soft(x, L.y, s * (2.2 + 1.2 * glow), warm, 0.25 * glow * L.z);
+      ctx.globalCompositeOperation = "source-over";
+      // the paper body: rounded at the top, a little wider at the bottom
+      const bw = s * 0.62, bh = s * 0.9;
+      const g = ctx.createLinearGradient(0, L.y - bh, 0, L.y + bh);
+      g.addColorStop(0, v.rgba(mix(warm, [40, 15, 5], 0.55), 0.95));
+      g.addColorStop(0.6, v.rgba(warm.map((x) => x * (0.65 + 0.35 * glow)), 0.95));
+      g.addColorStop(1, v.rgba(mix(warm, [255, 215, 140], 0.35 * glow), 0.95));
+      ctx.fillStyle = g;
+      ctx.beginPath();
+      ctx.moveTo(x - bw * 0.8, L.y - bh);
+      ctx.quadraticCurveTo(x, L.y - bh * 1.18, x + bw * 0.8, L.y - bh);
+      ctx.lineTo(x + bw, L.y + bh * 0.85);
+      ctx.quadraticCurveTo(x, L.y + bh * 1.02, x - bw, L.y + bh * 0.85);
+      ctx.closePath();
+      ctx.fill();
+      // the flame inside, peeking out at the bottom
+      ctx.globalCompositeOperation = "lighter";
+      v.glow(x, L.y + bh * 0.75, s * (0.25 + 0.2 * glow), [255, 200, 120], 0.9);
+    }
+    st.list = st.list.filter((L) => L.y > -60 * U);
+    ctx.restore();
+  };
+
+  // Magic Runes: a slowly turning circle of glowing made-up runes, in three
+  // rings that turn opposite ways, with a star of lines in the middle. Each
+  // rune lights up with its part of the spectrum, the rings glow with the
+  // bass, and a kick sends a ripple of light outwards.
+  function runeGlyph() {
+    // a made-up rune: two to four strokes between points on a small 3x3 grid
+    const pts = [];
+    for (let y = -1; y <= 1; y++) for (let x = -1; x <= 1; x++) pts.push([x * 0.5, y * 0.7]);
+    const P = new Path2D(), n = 2 + Math.floor(Math.random() * 3);
+    P.moveTo(pts[1][0], pts[1][1]);
+    P.lineTo(pts[7][0], pts[7][1]);
+    for (let i = 0; i < n; i++) {
+      const a = pts[Math.floor(Math.random() * 9)], b = pts[Math.floor(Math.random() * 9)];
+      if (a === b) continue;
+      P.moveTo(a[0], a[1]);
+      P.lineTo(b[0], b[1]);
+    }
+    return P;
+  }
+  DRAW.runes = (v, p, dt) => {
+    const { ctx, w, h, U } = v;
+    const st = v.runes || (v.runes = { t: 0, b: 0, rip: [], beatSeen: shared.beatSerial, rings: [[18, 0.62], [26, 0.82], [34, 1.0]].map(([n, r]) => ({ r, n, glyphs: Array.from({ length: n }, runeGlyph), band: Math.random() })) });
+    st.t += dt * p.speed;
+    st.b += ((shared.bassPunch || 0) - st.b) * Math.min(1, dt * 5);
+    if (st.beatSeen !== shared.beatSerial) { st.beatSeen = shared.beatSerial; if (shared.kick > 0.3) st.rip.push({ a: 0 }); }
+    st.rip = st.rip.filter((q) => (q.a += dt * 0.9) < 1);
+    const sp = circleSpot(v, p, 0.36), R = sp.art ? sp.r * 1.25 : sp.r, cx = sp.x, cy = sp.y;
+    const c0 = colorAt(0.15), c1 = colorAt(0.6), c2 = colorAt(0.95);
+    ctx.save();
+    ctx.globalCompositeOperation = "lighter";
+    ctx.globalAlpha = A_(1, v);
+    ctx.lineCap = "round";
+    ctx.lineJoin = "round";
+    // ring lines
+    for (const [rr, a] of [[0.5, 0.25], [0.72, 0.3], [0.92, 0.35], [1.1, 0.4]]) {
+      ctx.strokeStyle = v.rgba(mix(c0, c2, rr / 1.1), a * (0.5 + 0.8 * st.b));
+      ctx.lineWidth = Math.max(1, 1.4 * U);
+      ctx.beginPath();
+      ctx.arc(cx, cy, R * rr, 0, Math.PI * 2);
+      ctx.stroke();
+    }
+    // the star of lines in the middle (two triangles), turning slowly
+    ctx.strokeStyle = v.rgba(c1, 0.35 + 0.5 * st.b);
+    ctx.lineWidth = Math.max(1, 1.6 * U);
+    ctx.beginPath();
+    for (const off of [0, Math.PI]) for (let k = 0; k <= 3; k++) {
+      const a = off - Math.PI / 2 + (k * Math.PI * 2) / 3 + st.t * 0.1;
+      k ? ctx.lineTo(cx + Math.cos(a) * R * 0.5, cy + Math.sin(a) * R * 0.5) : ctx.moveTo(cx + Math.cos(a) * R * 0.5, cy + Math.sin(a) * R * 0.5);
+    }
+    ctx.stroke();
+    // the runes, each ring turning its own way
+    st.rings.forEach((rg, ri) => {
+      const turn = st.t * (ri % 2 ? -0.06 : 0.08) * (1 + ri * 0.2);
+      const gs = R * 0.07 * (1 - ri * 0.12);
+      for (let i = 0; i < rg.n; i++) {
+        const t = i / rg.n, a = turn + t * Math.PI * 2;
+        const lv = Math.min(1, bandAt((t + rg.band) % 1 * 0.9) * 1.3);
+        const c = mix(ri === 0 ? c0 : ri === 1 ? c1 : c2, WHITE, 0.3 * lv);
+        const x = cx + Math.cos(a) * R * (rg.r * 0.92 + 0.06), y = cy + Math.sin(a) * R * (rg.r * 0.92 + 0.06);
+        ctx.save();
+        ctx.translate(x, y);
+        ctx.rotate(a + Math.PI / 2);
+        ctx.scale(gs, gs);
+        ctx.strokeStyle = v.rgba(c, 0.2 + 0.8 * lv);
+        ctx.lineWidth = (Math.max(1.2, 1.8 * U) / gs) * (1 + 0.4 * lv);
+        ctx.stroke(rg.glyphs[i]);
+        ctx.restore();
+      }
+    });
+    // kick ripples
+    for (const q of st.rip) {
+      ctx.strokeStyle = v.rgba(mix(c1, WHITE, 0.4), 0.5 * (1 - q.a));
+      ctx.lineWidth = Math.max(1, 3 * U * (1 - q.a));
+      ctx.beginPath();
+      ctx.arc(cx, cy, R * (0.5 + 0.8 * q.a), 0, Math.PI * 2);
+      ctx.stroke();
+    }
+    v.soft(cx, cy, R * 0.55, c1, 0.1 + 0.25 * st.b);
     ctx.restore();
   };
 

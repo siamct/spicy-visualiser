@@ -188,10 +188,18 @@ A poster grid of flat circles, half circles, quarter circles and triangles.
 - Shapes grow with their part of the spectrum.
 - Tiles turn a quarter on the beat and the colours step round.
 
-### Light Trails
-![Light Trails](screenshots/styles/trails.jpg)
+### Circuit Board
+![Circuit Board](screenshots/styles/circuit.jpg)
 
-Seen from straight above: glowing trails of light race along a dark neon grid, leaving a line behind them and turning sharp corners on the beat. Louder parts make them faster and their trails longer, kicks send a new one out, and the bass makes the grid glow. **Speed** sets how fast they go.
+Glowing traces branch across the screen like a circuit board, ending in round pads, with a few chips in between:
+- pulses of light run along the traces on every beat, more of them when it's loud (**Speed** sets how fast they run);
+- each pad glows with its own part of the spectrum;
+- the chips' outlines light up with the bass.
+
+### Neon Signs
+![Neon Signs](screenshots/styles/neon.jpg)
+
+Flat neon tubes (a circle, a triangle, a lightning bolt, a wave, a star, a square) like a shop window at night, in the album's colours. Each is tied to a part of the spectrum and glows brighter while it's playing; quiet ones flicker and buzz, and a kick makes one of them flash. Unlit tubes stay faintly visible, like real glass.
 
 ### Particles
 ![Particles](screenshots/styles/particles.jpg)
@@ -242,6 +250,25 @@ Lumpy blobs of colour rising and sinking, stretching, merging and splitting:
 ![Underwater](screenshots/styles/underwater.jpg)
 
 Looking up from under the sea: rippling nets of light wobble across, with soft shafts of light from the surface. The bass makes the light wobble harder; loudness and kicks brighten it.
+
+---
+
+## Nature & magic
+
+### Swaying Grass
+![Swaying Grass](screenshots/styles/grass.jpg)
+
+Flat layers of grass along the bottom, with a few flowers in the album's colours, swaying as if wind is blowing over them. Louder parts blow harder, and each bass hit sends a gust rolling across from one side to the other. **Speed** sets how fast it sways.
+
+### Lanterns
+![Lanterns](screenshots/styles/lanterns.jpg)
+
+Paper lanterns floating slowly up into the night, swaying a little as they go. Each glows with its own part of the spectrum, kicks send a new one up from the bottom, and louder parts send them up faster.
+
+### Magic Runes
+![Magic Runes](screenshots/styles/runes.jpg)
+
+A slowly turning circle of glowing made-up runes in three rings that turn opposite ways, with a star of lines in the middle. Each rune lights up with its part of the spectrum, the rings glow with the bass, and a kick sends a ripple of light outwards. It starts on **Fit: Beside art**; **Circle at** can put it round the album art.
 
 ---
 
