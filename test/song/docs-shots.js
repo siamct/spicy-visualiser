@@ -32,7 +32,7 @@ const SHOTS = [
   ["prism", 22], ["rain", 19], ["smoke", 24], ["lava", 20], ["neuro", 14],
 ];
 
-const HIDE = ".NowBar,.LyricsContainer,.ViewControls,.lp-nolyr{visibility:hidden!important}";
+const HIDE = ".LyricsContainer,.ViewControls,.lp-nolyr{visibility:hidden!important}.NowBar{display:none!important}";
 
 function page(album) {
   return harness
@@ -43,7 +43,7 @@ function page(album) {
 }
 
 async function open(b, js, album, atBar) {
-  const p = await b.newPage({ viewport: { width: 1280, height: 720 } });
+  const p = await b.newPage({ viewport: { width: 960, height: 960 } }); // square pictures
   await p.route("http://song.test/**", (r) => {
     if (r.request().url().endsWith(".js")) return r.fulfill({ body: js, contentType: "text/javascript" });
     return r.fulfill({ body: page(album), contentType: "text/html" });
@@ -84,7 +84,17 @@ const setter = (p) => (k, v) => p.evaluate(([k, v]) => { const btn = document.qu
     const set = setter(p);
     await set("lyricGlow", "off");
     await set("__style", style);
-    await p.addStyleTag({ content: HIDE });
+    // show each style at full strength (no 60% opacity, no dimming behind the hidden lyrics)
+    await p.evaluate(() => {
+      document.querySelector(".lp-button").click();
+      for (const [k, v] of [["opacity", 1], ["lyricDim", 0]]) {
+        const i = document.querySelector(`input[data-key=${k}]`);
+        i.value = v;
+        i.dispatchEvent(new Event("input", { bubbles: true }));
+      }
+      document.querySelector(".lp-button").click();
+    });
+    await p.addStyleTag({ content: HIDE + ".lp-modal-wrap{display:none!important}" });
     await p.waitForTimeout(["rain", "lava", "ekg"].includes(style) ? 6000 : 2600);
     const out = path.join(OUT, `doc-${style}.png`);
     await p.screenshot({ path: out });
@@ -103,7 +113,7 @@ const setter = (p) => (k, v) => p.evaluate(([k, v]) => { const btn = document.qu
       await p.waitForTimeout(400);
       const box = await p.evaluate(() => { const r = document.querySelector(".lp-panel").getBoundingClientRect(); return { x: r.x, y: r.y, width: r.width, height: r.height }; });
       const out = path.join(OUT, `doc-panel-${tab}.png`);
-      await p.screenshot({ path: out, clip: { x: box.x - 16, y: box.y - 6, width: box.width + 32, height: Math.min(720 - box.y + 6, box.height + 22) } });
+      await p.screenshot({ path: out, clip: { x: box.x - 16, y: box.y - 6, width: box.width + 32, height: Math.min(960 - box.y + 6, box.height + 22) } });
       console.log(out, JSON.stringify(box));
       await p.evaluate(() => document.querySelector(".lp-button").click());
     }

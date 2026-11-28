@@ -3,8 +3,6 @@ test/song/docs-shots.js):
   docs/screenshots/styles/<style>.jpg   one per style (styles guide)
   docs/screenshots/all-styles.jpg       labelled grid of every style
   docs/screenshots/styles.jpg           README header: styles blending into each other, with the name
-  docs/screenshots/card.png             Marketplace card: solid bar with the icon and name on top
-                                        (like the other Spicy add-ons' cards), styles blending below
   docs/screenshots/panel.png            settings panel tabs side by side
   node test/song/docs-shots.js && python tools/make-doc-images.py"""
 import os
@@ -44,10 +42,10 @@ def shot(sid):
 os.makedirs(os.path.join(DOCS, "styles"), exist_ok=True)
 for _, items in GROUPS:
     for sid, _ in items:
-        shot(sid).resize((960, 540), Image.LANCZOS).save(os.path.join(DOCS, "styles", f"{sid}.jpg"), quality=84)
+        shot(sid).resize((720, 720), Image.LANCZOS).save(os.path.join(DOCS, "styles", f"{sid}.jpg"), quality=84)
 
 # 2. labelled grid, in the panel's group order
-TW, TH, COLS, LAB, PAD = 360, 203, 4, 34, 10
+TW, TH, COLS, LAB, PAD = 280, 280, 5, 34, 10
 cells = [(sid, name) for _, items in GROUPS for sid, name in items]
 rows = (len(cells) + COLS - 1) // COLS
 sheet = Image.new("RGB", (COLS * (TW + PAD) + PAD, rows * (TH + LAB + PAD) + PAD), BG)
@@ -117,18 +115,7 @@ FOCUS = {"monstercat": 0.3, "aurora": 0.45, "ncs": 0.5, "aurora": 0.5, "oil": 0.
 # 3. README header
 head = blend(["monstercat", "ncs", "galaxy", "aurora", "oil"], 1760, 440, FOCUS)
 title(head, 96, 30, "A music visualiser for Spicy Lyrics").save(os.path.join(DOCS, "styles.jpg"), quality=88)
-# 4. Marketplace card (square): coloured bar on top with the icon and name
-S, BH, PINK = 1000, 190, (232, 53, 111)
-card = Image.new("RGB", (S, S), BG)
-card.paste(blend(["monstercat", "ncs", "aurora", "oil"], S, S - BH, FOCUS), (0, BH))
-d = ImageDraw.Draw(card)
-d.rectangle((0, 0, S, BH), fill=PINK)
-for i, hh in enumerate((52, 88, 64, 104, 40)):
-    x = 72 + i * 24
-    d.rounded_rectangle((x, BH // 2 + 52 - hh, x + 15, BH // 2 + 52), 6, fill=(255, 255, 255))
-f = font(False, 96)
-d.text((232, BH // 2), "Spicy Visualiser", fill=(255, 255, 255), font=f, anchor="lm")
-card.resize((600, 600), Image.LANCZOS).save(os.path.join(DOCS, "card.png"), optimize=True)
+# 4. The Marketplace card is made by tools/make-card.py (it moves).
 
 # 5. settings panel tabs side by side
 tabs = [Image.open(os.path.join(SRC, f"doc-panel-{t}.png")).convert("RGB") for t in ("style", "look", "sound", "more")]
@@ -137,4 +124,16 @@ panel = Image.new("RGB", (pw * 4 + 12 * 3, ph), BG)
 for i, im in enumerate(tabs):
     panel.paste(im, (i * (pw + 12), 0))
 panel.save(os.path.join(DOCS, "panel.png"), optimize=True)
+
+# 6. lyric highlight looks, 2x2 with names (from test/shots-highlights.js)
+looks = [("soft", "Soft"), ("fade", "Fade"), ("sweep", "Sweep"), ("underline", "Underline")]
+if all(os.path.exists(os.path.join(SRC, f"hl-{n}.png")) for n, _ in looks):
+    (W, H), LB = Image.open(os.path.join(SRC, "hl-soft.png")).size, 40
+    hl = Image.new("RGB", (W * 2 + 12, (H + LB) * 2 + 12), BG)
+    d = ImageDraw.Draw(hl)
+    for i, (n, name) in enumerate(looks):
+        x, y = (i % 2) * (W + 12), (i // 2) * (H + LB + 12)
+        d.text((x + 4, y + 6), name, fill=(235, 235, 240), font=font(True, 22))
+        hl.paste(Image.open(os.path.join(SRC, f"hl-{n}.png")).convert("RGB"), (x, y + LB))
+    hl.save(os.path.join(DOCS, "highlights.png"), optimize=True)
 print("ok")
