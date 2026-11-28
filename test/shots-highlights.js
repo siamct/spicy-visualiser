@@ -24,7 +24,7 @@ const AT = { soft: [1, 2], fade: [0, 4], sweep: [2, 2], underline: [3, 1] };
       }
       btn.click();
     }, look);
-    await p.addStyleTag({ content: ".lp-modal-wrap{display:none!important}#SpicyLyricsPage .lp-canvas{filter:brightness(3.2) saturate(1.6)!important;opacity:1!important}" });
+    await p.addStyleTag({ content: ".lp-modal-wrap{display:none!important}#SpicyLyricsPage .lp-canvas{filter:brightness(1.8) saturate(1.3)!important;opacity:1!important}" });
     await p.waitForTimeout(1000);
     await p.evaluate(([li, wi]) => {
       window.__hold = true;
