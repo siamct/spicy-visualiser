@@ -90,7 +90,7 @@
     mirror: '<g stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 10v4M8 7v10M12 5v14M16 8v8M20 10v4"/></g>',
     plasma: '<circle cx="9" cy="10" r="6" opacity=".45"/><circle cx="15.5" cy="14.5" r="6" opacity=".45"/><circle cx="15" cy="7.5" r="3.6" opacity=".7"/><circle cx="7.5" cy="17" r="2.6" opacity=".6"/>',
     warp: '<g stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M12 12 4 4M12 12l8-8M12 12l-8 8M12 12l8 8M12 12V2M12 12v10M12 12H2M12 12h10" opacity=".8"/></g>',
-    dnb: '<path d="M1 13c3-2 5 2 8 0s5-2 7 0 5 2 7 0v9H1z" fill="currentColor" opacity=".45"/><path d="M1 17c3-2 5 2 8 0s5-2 7 0 5 2 7 0v5H1z" fill="currentColor"/>',
+    dnb: '<path d="M2 15c2-4 3 4 5 0s3-5 5-1 3 5 5 0 3-3 5-1" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><g stroke="currentColor" stroke-width="1.4" stroke-linecap="round" opacity=".6"><path d="M4 6h7M13 9h8M7 4h4"/></g>',
     ascii: '<text x="2" y="10" font-size="8" font-family="monospace" font-weight="700">&gt;_</text><g opacity=".85"><rect x="3" y="15" width="2.5" height="6"/><rect x="7" y="12" width="2.5" height="9"/><rect x="11" y="16" width="2.5" height="5"/><rect x="15" y="13" width="2.5" height="8"/><rect x="19" y="17" width="2.5" height="4"/></g>',
     ledplasma: '<g>'+[4,8,12,16,20].map((x,i)=>[4,8,12,16,20].map((y,j)=>`<circle cx="${x}" cy="${y}" r="1.4" opacity="${(0.25+0.75*Math.abs(Math.sin(i*0.9+j*0.6))).toFixed(2)}"/>`).join('')).join('')+'</g>',
     led: '<g>'+[4,8,12,16,20].map((x,i)=>[20,16,12,8,4].map((y,j)=>`<circle cx="${x}" cy="${y}" r="1.4" opacity="${j<=[2,4,3,1,2][i]?1:.25}"/>`).join('')).join('')+'</g>',
@@ -2069,46 +2069,69 @@
   const cyc = (q) => 1 - Math.abs((((q % 2) + 2) % 2) - 1); // 0..1..0, no jumps
 
   // ---------------------------------------------------------------------------
-  // Liquid: three flat layers of liquid in the album's colours, sloshing on
-  // top of each other along the bottom like a screen-printed poster. Solid
-  // fills only (no glow, no lines). The waves roll one swing every 2 beats,
-  // each beat gives them a push, the bass makes them taller, and a snare
-  // lightens the front layer for a moment.
+  // Liquid (Drum & Bass): a growling "reese" bass wave (three detuned
+  // strands) that pumps on kicks, over a few wide flat colour bands sliding
+  // slowly past like the stripes on a tape deck (no thin lines, no glow).
+  // On every snare the bands brighten for a moment and there's a quick
+  // horizontal glitch.
   DRAW.dnb = (v, p, dt, t) => {
     const { ctx, w, h, U } = v;
-    const e = shared.energy, k = Math.min(1, shared.kick);
-    const st = v.dnb || (v.dnb = { phase: 0, b: 0, snap: 0, snareSeen: shared.snareSerial });
-    st.b += ((shared.bassPunch || 0) - st.b) * Math.min(1, dt * (1 - 0.6 * p.smoothing) * 8);
-    if (st.snareSeen !== shared.snareSerial) { st.snareSeen = shared.snareSerial; st.snap = 1; }
-    st.snap *= Math.exp(-dt * 6);
+    const e = shared.energy, bass = shared.bassPunch || 0, k = Math.min(1, shared.kick);
+    const st = v.dnb || (v.dnb = { flash: 0, glitch: 0, snareSeen: shared.snareSerial, phase: 0 });
+    // Flat bands: wide, dim, sliding slowly sideways (faster when loud).
+    if (!st.bands) st.bands = Array.from({ length: 5 }, (_, i) => ({ y: 0.12 + i * 0.17 + (Math.random() - 0.5) * 0.05, hh: 0.03 + Math.random() * 0.05, len: 0.35 + Math.random() * 0.5, x: Math.random(), sp: 0.03 + Math.random() * 0.05, c: i / 4 }));
+    if (st.snareSeen !== shared.snareSerial) {
+      st.snareSeen = shared.snareSerial;
+      st.flash = 1;
+      st.glitch = 1;
+    }
+    st.flash *= Math.exp(-dt * 7);
+    ctx.save();
+    ctx.globalCompositeOperation = "source-over";
+    for (const q of st.bands) {
+      q.x -= dt * q.sp * (0.6 + 1.2 * e) * p.speed;
+      if (q.x + q.len < 0) q.x += 1 + q.len;
+      const col = mix([10, 10, 14], colorAt(q.c), 0.26 + 0.22 * st.flash);
+      ctx.fillStyle = v.rgba(col, A_(0.4, v));
+      for (const xx of [q.x, q.x + 1 + q.len]) ctx.fillRect(xx * w, q.y * h, q.len * w, q.hh * h);
+    }
+    ctx.restore();
+    // Reese bass wave.
+    const y0 = h * 0.74;
+    const A = h * 0.13 * p.size * (0.12 + 0.9 * bass + 0.45 * k);
+    // The wave rolls one full swing every 2 beats (locked to the tempo),
+    // with a push on each beat that settles before the next.
     const lbp = beatPhase();
     if (st.tick !== shared.tickSerial) { st.tick = shared.tickSerial; st.push = 1; }
     st.push = (st.push || 0) * Math.exp(-dt * (4 / lbp.per));
-    st.phase += dt * ((Math.PI / lbp.per) * (0.8 + 0.4 * e) + 3 * st.push) * p.speed;
-    const A = h * 0.07 * p.size * (0.35 + 1.1 * st.b + 0.3 * k);
-    ctx.save();
-    ctx.globalCompositeOperation = "source-over";
-    ctx.globalAlpha = A_(1, v);
-    // back to front: darker and slower at the back
-    const layers = [[0.6, 0.55, 0.45, 0.0], [0.69, 0.75, 0.8, 0.5], [0.78, 1, 1.15, 1.0]];
-    layers.forEach(([top, shade, spd, cpos], i) => {
-      const y0 = h * (1 - (1 - top) * p.size);
-      const ph = st.phase * spd + i * 2.1;
+    st.phase += dt * ((Math.PI / lbp.per) * (0.8 + 0.4 * e) + 6 * st.push) * p.speed;
+    const growl = 0.4 + 1.6 * (shared.treble || 0) + 0.8 * e;
+    for (let strand = 0; strand < 3; strand++) {
+      const det = 1 + strand * 0.045; // detuned, like a reese
       ctx.beginPath();
-      ctx.moveTo(0, h + 2);
-      for (let x = 0; x <= w + 4 * U; x += 4 * U) {
+      for (let x = 0; x <= w; x += 4 * U) {
         const q = x / w;
-        const y = y0 + A * (0.6 + 0.25 * i) * (Math.sin(q * (5 + i * 1.5) + ph) * 0.7 + Math.sin(q * (11 + i * 2) - ph * 1.6) * 0.3);
-        ctx.lineTo(x, y);
+        const env = Math.sin(Math.PI * q);
+        const y = y0 + A * env * (Math.sin(q * 9 * det + st.phase * det) * 0.7 + Math.sin(q * 31 * det - st.phase * 2.3) * 0.3 * growl);
+        x ? ctx.lineTo(x, y) : ctx.moveTo(x, y);
       }
-      ctx.lineTo(w + 4 * U, h + 2);
-      ctx.closePath();
-      let c = mix([8, 8, 12], colorAt(cpos), shade);
-      if (i === 2) c = mix(c, WHITE, 0.18 * st.snap);
-      ctx.fillStyle = v.rgba(c, 1);
-      ctx.fill();
-    });
-    ctx.restore();
+      ctx.strokeStyle = v.rgba(strand === 0 ? WHITE : colorAt(strand / 2), strand === 0 ? 0.8 : 0.65);
+      ctx.lineWidth = (strand === 0 ? 2 : 3.5) * U * (1 + 0.6 * k);
+      ctx.stroke();
+    }
+    // Snare: glitch slices.
+    st.glitch *= Math.exp(-dt * 14);
+    if (st.glitch > 0.15) {
+      ctx.save();
+      ctx.setTransform(1, 0, 0, 1, 0, 0);
+      ctx.globalCompositeOperation = "source-over";
+      for (let i = 0; i < 3; i++) {
+        const sy = Math.random() * h, sh = h * (0.02 + Math.random() * 0.05);
+        const dx = (Math.random() - 0.5) * 40 * U * st.glitch;
+        ctx.drawImage(ctx.canvas, 0, sy, w, sh, dx, sy, w, sh);
+      }
+      ctx.restore();
+    }
   };
   const A_ = (a, v) => Math.max(0, Math.min(1, a * CP.brightness * (1 + 0.3 * shared.noLyr)));
 

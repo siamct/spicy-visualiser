@@ -114,7 +114,7 @@ Soft sheets of light rolling across the screen, like the wave on an old games-co
 ### Liquid
 ![Liquid](screenshots/styles/dnb.jpg)
 
-Three flat layers of liquid in the album's colours sloshing on top of each other along the bottom, like a screen-printed poster: solid fills, no glow, no lines. The waves roll one swing every 2 beats and each beat gives them a push; the bass makes them taller and a snare lightens the front layer for a moment.
+A flowing three-strand bass wave that pumps on kicks, over a few wide, flat colour bands sliding slowly past like the stripes on a tape deck. On every snare the bands brighten for a moment and the picture glitches sideways. Made with drum & bass in mind.
 
 ---
 
