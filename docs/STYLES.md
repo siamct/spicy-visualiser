@@ -188,19 +188,6 @@ A poster grid of flat circles, half circles, quarter circles and triangles.
 - Shapes grow with their part of the spectrum.
 - Tiles turn a quarter on the beat and the colours step round.
 
-### Circuit Board
-![Circuit Board](screenshots/styles/circuit.jpg)
-
-Glowing traces branch across the screen like a circuit board, ending in round pads, with a few chips in between:
-- pulses of light run along the traces on every beat, more of them when it's loud (**Speed** sets how fast they run);
-- each pad glows with its own part of the spectrum;
-- the chips' outlines light up with the bass.
-
-### Neon Signs
-![Neon Signs](screenshots/styles/neon.jpg)
-
-Flat neon tubes (a circle, a triangle, a lightning bolt, a wave, a star, a square) like a shop window at night, in the album's colours. Each is tied to a part of the spectrum and glows brighter while it's playing; quiet ones flicker and buzz, and a kick makes one of them flash. Unlit tubes stay faintly visible, like real glass.
-
 ### Particles
 ![Particles](screenshots/styles/particles.jpg)
 
@@ -255,11 +242,6 @@ Looking up from under the sea: rippling nets of light wobble across, with soft s
 
 ## Nature & magic
 
-### Swaying Grass
-![Swaying Grass](screenshots/styles/grass.jpg)
-
-Flat layers of grass along the bottom, with a few flowers in the album's colours, swaying as if wind is blowing over them. Louder parts blow harder, and each bass hit sends a gust rolling across from one side to the other. **Speed** sets how fast it sways.
-
 ### Lanterns
 ![Lanterns](screenshots/styles/lanterns.jpg)
 
@@ -286,6 +268,11 @@ Northern lights over a starry sky:
 
 Drifting slowly through a coloured nebula, stars streaming past. One slow, smooth drive from the loudness and bass sets how fast it flies and how brightly the gas glows, easing up and down over a couple of seconds, so it never lurches on a hit or stalls in a quiet bit.
 
+### Nebula Drift
+![Nebula Drift](screenshots/styles/nebula.jpg)
+
+Soft flat clouds of colour in the album's colours, with darker lanes through them and stars behind, drifting very slowly. It stays calm, like Aurora: the bass makes the clouds glow brighter so they seem to breathe, loudness brightens them a touch, and kicks give a soft glow.
+
 ### Sunset
 ![Sunset](screenshots/styles/sunset.jpg)
 
@@ -295,6 +282,11 @@ A sky in the album's colours, warm at the horizon with the sun low in the middle
 ![Night Sky](screenshots/styles/nightsky.jpg)
 
 A dark sky with twinkling stars and a moon, and thin clouds drifting past it, silver at the edges near the moon. Kicks light the moon's glow and the cloud edges, the bass churns the clouds, and they drift much faster when the music is loud.
+
+### Constellations
+![Constellations](screenshots/styles/constellations.jpg)
+
+A calm, sparse night sky. On each beat a new star appears near the last one and a line is drawn out to it, joining them into a constellation. After a handful of stars it's finished: it glows for a few seconds, fades away, and a new one starts somewhere else. The stars twinkle with the hi-hats.
 
 ### Warp
 ![Warp](screenshots/styles/warp.jpg)
