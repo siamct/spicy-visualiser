@@ -1,7 +1,7 @@
 [
   {
     "name": "Spicy Visualiser",
-    "description": "(WIP) Music visualiser for Spicy Lyrics, 41 styles with album colours. Works straight away on Spotify's song data; for the real sound, add the optional helper (Windows) from the visualiser.",
+    "description": "(WIP) Music visualiser for Spicy Lyrics, 42 styles with album colours. Works straight away on Spotify's song data; for the real sound, add the optional helper (Windows) from the visualiser.",
     "preview": "docs/screenshots/card.png",
     "main": "spicy-visualiser.js",
     "readme": "README.md",

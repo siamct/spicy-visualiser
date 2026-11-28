@@ -4,6 +4,8 @@ A quick tour of every Spicy Visualiser style: what you're looking at, what it re
 
 Open the visualiser panel with the bars button at the top right of Spicy Lyrics. The **Style** tab picks the style. Most settings live in **Look**. **Sound** holds how it reacts and the beat options, including **Fit each song** (on by default), which learns each song's levels as it plays so quiet and loud songs both move well.
 
+Every style starts at 60% opacity (**Look → Opacity**), and fades out softly behind the line being sung so the lyrics stay easy to read (**Lyrics → Dim the visual**, 0 turns it off).
+
 Every style:
 - sits behind the lyrics, which stay on top and readable;
 - takes its colours from the album cover;
@@ -185,6 +187,11 @@ Bold, flat slanted bands like a modern poster, one per slice of the spectrum, sl
 A poster grid of flat circles, half circles, quarter circles and triangles.
 - Shapes grow with their part of the spectrum.
 - Tiles turn a quarter on the beat and the colours step round.
+
+### Light Trails
+![Light Trails](screenshots/styles/trails.jpg)
+
+Seen from straight above: glowing trails of light race along a dark neon grid, leaving a line behind them and turning sharp corners on the beat. Louder parts make them faster and their trails longer, kicks send a new one out, and the bass makes the grid glow. **Speed** sets how fast they go.
 
 ### Particles
 ![Particles](screenshots/styles/particles.jpg)

@@ -32,6 +32,7 @@
     ["revs", "Rev Counter"],
     ["crt", "CRT"],
     ["drumpads", "Drum Pads"],
+    ["trails", "Light Trails"],
     ["plasma", "Plasma"],
     ["ribbon", "Ribbon"],
     ["rain", "Rain on Glass"],
@@ -69,10 +70,11 @@
     underwater: '<g fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M1 5c3-2 5 2 8 0s5 2 8 0 4 1 6 0"/><path d="M6 21l2.5-12M12 21V9M18 21l-2.5-12" opacity=".45"/></g><circle cx="9" cy="15" r="1.2"/><circle cx="15" cy="12" r="1"/>',
     sunset: '<path d="M5 16a7 7 0 0 1 14 0z"/><g stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M1 19h22"/><path d="M4 22h16" opacity=".5"/></g><path d="M3 8c2-1.5 4-1.5 6 0s4 1.5 6 0" fill="none" stroke="currentColor" stroke-width="1.4" opacity=".6"/>',
     nightsky: '<path d="M15 3a8 8 0 1 0 6 12 6.5 6.5 0 0 1-6-12z"/><circle cx="5" cy="5" r="1"/><circle cx="9" cy="2.5" r=".8"/><circle cx="3" cy="11" r=".8"/>',
-    holoring: '<g fill="none" stroke="currentColor" stroke-linecap="round"><path d="M22 3a9 9 0 0 0 0 18" stroke-width="1.4" opacity=".5"/><path d="M13 12H8M13.6 8.2 9.4 6M13.6 15.8 9.4 18M15.5 5.2 13 2.5M15.5 18.8 13 21.5" stroke-width="2"/></g>',
+    holoring: '<g fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="1.8"><path d="M2.6 19.7L4.3 22.1M4.7 17.6L7.1 19.3M6 14.9L8.9 15.9M6.5 12L9.5 12M21.4 19.7L19.7 22.1M19.3 17.6L16.9 19.3M18 14.9L15.1 15.9M17.5 12L14.5 12"/><path d="M6 9.1L8.9 8.1M5.5 5.8L7.1 4.7M3.2 3.5L4.3 1.9M18 9.1L15.1 8.1M18.5 5.8L16.9 4.7M20.8 3.5L19.7 1.9" opacity=".3"/></g>',
     revs: '<g fill="none" stroke="currentColor" stroke-linecap="round"><path d="M5 18a9 9 0 1 1 14 0" stroke-width="1.8"/><path d="M17 9.5a7 7 0 0 1 1.5 5" stroke-width="2.6" opacity=".6"/><path d="M12 14l4-6" stroke-width="2"/></g><circle cx="12" cy="14" r="1.6"/>',
     crt: '<rect x="2" y="4" width="20" height="15" rx="3" fill="none" stroke="currentColor" stroke-width="1.6"/><g opacity=".7"><rect x="5" y="7" width="14" height="1.2"/><rect x="5" y="10" width="14" height="1.2"/><rect x="5" y="13" width="14" height="1.2"/><rect x="5" y="16" width="14" height=".8" opacity=".5"/></g>',
-    holospec: '<g>'+[[3,4],[7,6],[11,3],[15,5],[19,2]].map(([x,n])=>[...Array(n)].map((_,s)=>`<rect x="${x}" y="${19-s*3}" width="3" height="1.3" rx=".5" opacity="${(0.45+s*0.1).toFixed(2)}"/>`).join('')).join('')+'</g>',
+    holospec: '<g>'+[[3,4],[7,6],[11,3],[15,5],[19,2]].map(([x,n])=>[...Array(n)].map((_,s)=>`<rect x="${x}" y="${19-s*3}" width="3" height="1.3" rx=".5" opacity="${(0.65+s*0.08).toFixed(2)}"/>`).join('')).join('')+'</g>',
+    trails: '<path d="M3 3v18M9 3v18M15 3v18M21 3v18M3 9h18M3 15h18" fill="none" stroke="currentColor" stroke-width=".8" opacity=".35"/><path d="M3 15h6V9h6v6h6" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="miter"/><circle cx="21" cy="15" r="2"/>',
     drumpads: '<rect x="3" y="3" width="8" height="8" rx="1.6"/><rect x="13" y="3" width="8" height="8" rx="1.6" opacity=".4"/><rect x="3" y="13" width="8" height="8" rx="1.6" opacity=".4"/><rect x="13" y="13" width="8" height="8" rx="1.6"/>',
     scope: '<g fill="none" stroke="currentColor"><rect x="2.5" y="4.5" width="19" height="15" rx="2" stroke-width="1.5"/><path d="M4.5 12c1.5 0 1.8-4 3.2-4s1.7 8 3.3 8 1.8-6 3.3-6 1.6 3 3 3 1.2-1 2.2-1" stroke-width="1.6" stroke-linecap="round"/></g>',
     vu: '<g fill="none" stroke="currentColor" stroke-linecap="round"><rect x="2.5" y="5" width="19" height="14" rx="1.5" stroke-width="1.5"/><path d="M6 13.5a7 7 0 0 1 12 0" stroke-width="1.4"/><path d="M12 17l3.5-6.5" stroke-width="1.6"/></g>',
@@ -81,26 +83,26 @@
     ncs: '<g opacity=".9"><circle cx="12" cy="12" r="1"/><circle cx="8" cy="9" r=".9"/><circle cx="16" cy="9" r=".9"/><circle cx="8" cy="15" r=".9"/><circle cx="16" cy="15" r=".9"/><circle cx="12" cy="6" r=".8"/><circle cx="12" cy="18" r=".8"/><circle cx="5.5" cy="12" r=".7"/><circle cx="18.5" cy="12" r=".7"/><circle cx="7" cy="5.5" r=".5"/><circle cx="17" cy="5.5" r=".5"/><circle cx="7" cy="18.5" r=".5"/><circle cx="17" cy="18.5" r=".5"/></g>',
     radial: '<circle cx="12" cy="12" r="4.5" fill="none" stroke="currentColor" stroke-width="1.5"/><g stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M12 6V2.5M12 18v3.5M6 12H3M18 12h3.5M7.8 7.8 5.5 5.5M16.2 16.2l2 2M16.2 7.8l2.6-2.6M7.8 16.2 6 18"/></g>',
     mirror: '<g stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 10v4M8 7v10M12 5v14M16 8v8M20 10v4"/></g>',
-    plasma: '<path d="M3 7c4-4 8 4 12 0s6 2 6 2v10c-4 3-6-3-10 0s-8-2-8-2z" opacity=".75"/>',
+    plasma: '<circle cx="9" cy="10" r="6" opacity=".45"/><circle cx="15.5" cy="14.5" r="6" opacity=".45"/><circle cx="15" cy="7.5" r="3.6" opacity=".7"/><circle cx="7.5" cy="17" r="2.6" opacity=".6"/>',
     warp: '<g stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M12 12 4 4M12 12l8-8M12 12l-8 8M12 12l8 8M12 12V2M12 12v10M12 12H2M12 12h10" opacity=".8"/></g>',
     dnb: '<path d="M2 15c2-4 3 4 5 0s3-5 5-1 3 5 5 0 3-3 5-1" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><g stroke="currentColor" stroke-width="1.4" stroke-linecap="round" opacity=".6"><path d="M4 6h7M13 9h8M7 4h4"/></g>',
     ascii: '<text x="2" y="10" font-size="8" font-family="monospace" font-weight="700">&gt;_</text><g opacity=".85"><rect x="3" y="15" width="2.5" height="6"/><rect x="7" y="12" width="2.5" height="9"/><rect x="11" y="16" width="2.5" height="5"/><rect x="15" y="13" width="2.5" height="8"/><rect x="19" y="17" width="2.5" height="4"/></g>',
     ledplasma: '<g>'+[4,8,12,16,20].map((x,i)=>[4,8,12,16,20].map((y,j)=>`<circle cx="${x}" cy="${y}" r="1.4" opacity="${(0.25+0.75*Math.abs(Math.sin(i*0.9+j*0.6))).toFixed(2)}"/>`).join('')).join('')+'</g>',
     led: '<g>'+[4,8,12,16,20].map((x,i)=>[20,16,12,8,4].map((y,j)=>`<circle cx="${x}" cy="${y}" r="1.4" opacity="${j<=[2,4,3,1,2][i]?1:.25}"/>`).join('')).join('')+'</g>',
-    trap: '<path d="M12 3.5c2 2.5 3.5 1 5.5 3s.5 3.5 2.5 5.5-1 3.5-2.5 5.5-3.5.5-5.5 3c-2-2.5-3.5-1-5.5-3s.5-3.5-2.5-5.5 1-3.5 2.5-5.5 3.5-.5 5.5-3z" opacity=".55"/><circle cx="12" cy="12" r="4.6" fill="none" stroke="currentColor" stroke-width="1.6"/>',
+    trap: '<g fill="none" stroke="currentColor" stroke-linecap="round"><circle cx="12" cy="13" r="5" stroke-width="1.7"/><path d="M12 7L12 2M14.3 7.5L16.1 3.1M16.2 8.8L19 6M17.5 10.7L20.2 9.6M18 13L20 13M17.5 15.3L18.8 15.8M16.2 17.2L17 18M14.3 18.5L14.7 19.5M12 19L12 20M9.7 18.5L9.3 19.5M7.8 17.2L7 18M6.5 15.3L5.2 15.8M6 13L4 13M6.5 10.7L3.8 9.6M7.8 8.8L5 6M9.7 7.5L7.9 3.1" stroke-width="1.4" opacity=".75"/></g>',
     ledm: '<g>'+[[3,3],[7,5],[11,2],[15,4],[19,1]].map(([x,n])=>[0,1,2,3,4,5].slice(0,6-n+1).map((s)=>`<rect x="${x}" y="${19-s*3}" width="3" height="2" opacity="${(0.5+s*0.1).toFixed(2)}"/>`).join('')).join('')+'</g>',
-    neuro: '<g fill="none" stroke="currentColor" stroke-width="1.2"><path d="M2 18c4-3 6 1 10-2s6 1 10-2"/><path d="M4 13c3-2 5 1 8-1.5s5 1 8-1.5" opacity=".7"/><path d="M6 9c2-1.5 4 .5 6-1s4 .5 6-1" opacity=".45"/><path d="M7 18 9 9M12 16l.5-7.5M17 16.5 15 8.5" opacity=".5"/></g>',
+    neuro: '<g fill="none" stroke="currentColor" stroke-linejoin="round"><path d="M2 19l5-3 4 1.5 4-5 3.5 3 3.5-2" stroke-width="1.6"/><path d="M4 14l4-3 3 1 3.5-6 3 3 3.5-2" stroke-width="1.3" opacity=".7"/><path d="M7 16 8 11M11 17.5 11 12M15 12.5 14.5 6M18.5 15.5 17.5 9" stroke-width="1" opacity=".5"/></g>',
     rain: '<rect x="3" y="3" width="18" height="18" rx="3" fill="none" stroke="currentColor" stroke-width="1.4" opacity=".55"/><circle cx="8" cy="7.5" r="1.6"/><circle cx="15.5" cy="9" r="1"/><circle cx="11" cy="13" r="1.1"/><circle cx="16" cy="16.5" r="2"/><path d="M16 14.5V8.5" stroke="currentColor" stroke-width="1" opacity=".5"/><circle cx="7" cy="17" r=".8"/>',
     lava: '<path d="M8.5 2.5h7l1.5 4.5v10l-2 4.5H9l-2-4.5V7z" fill="none" stroke="currentColor" stroke-width="1.4" opacity=".6"/><circle cx="12" cy="9" r="2.1"/><path d="M8.6 17.5c1-2.4 5.8-2.4 6.8 0z"/><circle cx="13.2" cy="13.3" r="1.1"/>',
     smoke: '<g fill="none" stroke="currentColor" stroke-linecap="round"><path d="M9 21c-3-3 3-5 0-8s2-6 0-9" stroke-width="1.8"/><path d="M15 21c-3-3 3-5 0-8s2-5 1-7" stroke-width="1.3" opacity=".6"/></g>',
     aurora: '<path d="M2 15c3-6 5-9 7-9s2 5 4 5 4-6 6-6 3 3 3 3" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/><path d="M5 13v6M9 10v8M13 13v5M17 9v7" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" opacity=".5"/><circle cx="4" cy="4" r=".8"/><circle cx="20" cy="3" r=".8"/>',
     silk: '<path d="M2 7c4-4 7 4 11 0s6-3 9-1v5c-3-2-5-1-9 1s-7-4-11 0z" opacity=".45"/><path d="M2 15c4-4 7 4 11 0s6-3 9-1" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>',
     tvpixels: '<g><rect x="2" y="3" width="2.5" height="8" rx=".6"/><rect x="5.5" y="3" width="2.5" height="8" rx=".6" opacity=".7"/><rect x="9" y="3" width="2.5" height="8" rx=".6" opacity=".45"/><rect x="13" y="3" width="2.5" height="8" rx=".6"/><rect x="16.5" y="3" width="2.5" height="8" rx=".6" opacity=".7"/><rect x="20" y="3" width="2.5" height="8" rx=".6" opacity=".45"/><rect x="2" y="13" width="2.5" height="8" rx=".6" opacity=".7"/><rect x="5.5" y="13" width="2.5" height="8" rx=".6" opacity=".45"/><rect x="9" y="13" width="2.5" height="8" rx=".6"/><rect x="13" y="13" width="2.5" height="8" rx=".6" opacity=".7"/><rect x="16.5" y="13" width="2.5" height="8" rx=".6" opacity=".45"/><rect x="20" y="13" width="2.5" height="8" rx=".6"/></g>',
-    galaxy: '<circle cx="12" cy="12" r="9" opacity=".18"/><path d="M5 15c3-6 10-8 14-5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" opacity=".8"/><circle cx="6" cy="6" r="1"/><circle cx="18" cy="17" r="1.2"/><circle cx="16" cy="5" r=".7"/><circle cx="9" cy="18" r=".7"/>',
-    prism: '<path d="M5 9l4-4 7 1 3 6-3 6-8 1-4-5z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><path d="M10 10l2 1M13 14l2-1M9 15h1" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>',
+    galaxy: '<path d="M12 12c1.6-1.2 3.4.4 2.6 2.2-1 2.2-4.6 2.4-6.3.3-2.1-2.6-.4-6.6 3.2-7.3 4.5-.9 8.4 2.6 7.7 7" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/><circle cx="12" cy="12" r="1.6"/><circle cx="5" cy="6" r=".8"/><circle cx="19.5" cy="19" r=".8"/><circle cx="4" cy="17" r=".6"/>',
+    prism: '<path d="M4 10l5-5.5 8 1 3.5 6.5-3.5 6.5-9 1.5-4.5-5z" opacity=".3"/><path d="M9 9.5l1.2-2 1.2 2-1.2 2zM14.5 13l1-1.7 1 1.7-1 1.7zM9.5 15.5l.8-1.3.8 1.3-.8 1.3z"/>',
     ombre: '<rect x="3" y="3" width="18" height="18" rx="4" opacity=".25"/><rect x="3" y="11" width="18" height="10" rx="4" opacity=".5"/><rect x="3" y="16" width="18" height="5" rx="2.5"/>',
     oil: '<path d="M12 3C7 9 5 12 5 15a7 7 0 0 0 14 0c0-3-2-6-7-12z" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M8 15c1.5-2 3-.5 4-2s2.5-1 3.5.5" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" opacity=".7"/><path d="M8.5 18c2 1 5 1 7-1" fill="none" stroke="currentColor" stroke-width="1.1" stroke-linecap="round" opacity=".5"/>',
-    tunnel: '<g fill="none" stroke="currentColor"><circle cx="12" cy="12" r="10" stroke-width="1.6"/><circle cx="12.5" cy="11.5" r="6" stroke-width="1.3" opacity=".7"/><circle cx="13" cy="11" r="3" stroke-width="1" opacity=".5"/></g><circle cx="13.2" cy="10.8" r="1"/><circle cx="5" cy="6" r=".7"/><circle cx="19" cy="18" r=".7"/>',
+    tunnel: '<g fill="none" stroke="currentColor"><circle cx="12" cy="12" r="10" stroke-width="1.6"/><circle cx="13" cy="11" r="6.2" stroke-width="1.3" opacity=".7"/><circle cx="13.7" cy="10.4" r="3.4" stroke-width="1.1" opacity=".5"/><path d="M14 10 18.5 5.5M14.5 11.5l5 1.5M13 9.5 12 4M12.6 12 9 17.5" stroke-width="1.2" stroke-linecap="round" stroke-dasharray="1.6 1.6"/></g>',
     ribbon: '<g fill="none" stroke="currentColor" stroke-linecap="round"><path d="M2 12c4-6 8 5 12 0s6-3 8-1" stroke-width="2"/><path d="M2 15c4-5 8 4 12 0s6-2 8-.5" stroke-width="1.3" opacity=".6"/><path d="M2 9c4-5 8 4 12 0s6-2 8-.5" stroke-width="1" opacity=".4"/></g><circle cx="17.5" cy="9.8" r="1.1"/>',
     sub: '<circle cx="12" cy="12" r="10" fill="none" stroke="currentColor" stroke-width="1.5"/><circle cx="12" cy="12" r="7" fill="none" stroke="currentColor" stroke-width="1.2" opacity=".7"/><circle cx="12" cy="12" r="5" fill="none" stroke="currentColor" stroke-width="1" opacity=".45"/><circle cx="12" cy="12" r="2.8"/>',
     bauhaus: '<path d="M3 3h8A8 8 0 0 1 3 11z"/><path d="M13 11a4 4 0 0 1 8 0z" opacity=".6"/><circle cx="7" cy="17" r="3.6" opacity=".8"/><path d="M13 21h8L13 13z"/>',
@@ -112,12 +114,12 @@
   // Styles that still look right on Spotify's data (it has loudness and
   // beats, not a real spectrum). With that source they're listed first and
   // the rest fold away under "More styles".
-  const SONG_DATA_OK = new Set(["underwater", "sunset", "nightsky", "silk", "tvpixels", "drumpads", "particles", "plasma", "ledplasma", "warp", "dnb", "ribbon", "rain", "lava", "smoke", "tunnel", "aurora", "oil", "galaxy", "prism", "ombre", "geometric", "bauhaus", "sub", "off"]);
+  const SONG_DATA_OK = new Set(["trails", "underwater", "sunset", "nightsky", "silk", "tvpixels", "drumpads", "particles", "plasma", "ledplasma", "warp", "dnb", "ribbon", "rain", "lava", "smoke", "tunnel", "aurora", "oil", "galaxy", "prism", "ombre", "geometric", "bauhaus", "sub", "off"]);
   const STYLE_GROUPS = [
     ["Bars", ["monstercat", "mirror", "holospec", "ledm", "led", "ascii", "rgbsplit"]],
     ["Meters & lines", ["vu", "revs", "scope", "crt", "ekg", "ribbon", "dnb"]],
     ["Circles", ["radial", "ncs", "holoring", "sub", "trap", "tunnel"]],
-    ["On the beat", ["drumpads", "geometric", "bauhaus", "particles"]],
+    ["On the beat", ["drumpads", "trails", "geometric", "bauhaus", "particles"]],
     ["Liquid & water", ["plasma", "ledplasma", "tvpixels", "oil", "silk", "lava", "underwater"]],
     ["Sky & space", ["aurora", "galaxy", "sunset", "nightsky", "warp", "ombre"]],
     ["Textures", ["prism", "rain", "smoke", "neuro"]],
@@ -146,14 +148,14 @@
     moveX: ["vu", "holoring", "revs", "crt", "monstercat", "mirror", "holospec", "ledm", "led", "ascii", "rgbsplit", "scope", "ekg", "dnb", "radial", "ncs", "sub", "trap", "drumpads", "geometric", "bauhaus", "neuro"],
     moveY: ["vu", "holoring", "revs", "crt", "monstercat", "mirror", "holospec", "ledm", "led", "ascii", "rgbsplit", "scope", "ekg", "dnb", "radial", "ncs", "sub", "trap", "drumpads", "geometric", "bauhaus", "neuro"],
     circleAt: ["trap", "radial", "ncs", "sub"],
-    speed: ["crt", "ekg", "underwater", "sunset", "nightsky", "silk", "tvpixels", "scope", "trap", "neuro", "ribbon", "rain", "lava", "smoke", "tunnel", "aurora", "oil", "particles", "monstercat", "ncs", "radial", "plasma", "warp", "dnb", "ascii", "led", "ledplasma", "galaxy", "prism", "ombre"],
+    speed: ["trails", "crt", "ekg", "underwater", "sunset", "nightsky", "silk", "tvpixels", "scope", "trap", "neuro", "ribbon", "rain", "lava", "smoke", "tunnel", "aurora", "oil", "particles", "monstercat", "ncs", "radial", "plasma", "warp", "dnb", "ascii", "led", "ledplasma", "galaxy", "prism", "ombre"],
     bassBoost: ["rgbsplit", "underwater", "sunset", "nightsky", "silk", "tvpixels", "scope", "particles", "monstercat", "radial", "mirror", "ncs", "warp", "plasma", "dnb", "ascii", "geometric", "bauhaus", "led", "ledplasma", "sub", "trap", "ledm", "neuro", "ribbon", "rain", "lava", "smoke", "tunnel", "aurora", "oil", "galaxy", "prism", "ombre"],
     smoothing: ["holoring", "revs", "crt", "rgbsplit", "ekg", "particles", "monstercat", "radial", "mirror", "ncs", "warp", "plasma", "dnb", "ascii", "geometric", "bauhaus", "led", "ledplasma", "sub", "trap", "ledm", "neuro", "aurora", "vu", "drumpads", "holospec"],
   };
 
   const STYLE_BASE = {
     size: 1,
-    opacity: 1,
+    opacity: 0.6, // a bit see-through by default, so the lyrics read easily
     blur: 0,
     brightness: 1,
     sensitivity: 1,
@@ -193,8 +195,8 @@
     mirror: { barCount: 56, bassBoost: 0.6 },
     plasma: { shake: 0 },
     ascii: { colorMode: "classic" },
-    geometric: { shake: 0, opacity: 0.85 },
-    bauhaus: { shake: 0, opacity: 0.85, beatEvery: "4" },
+    geometric: { shake: 0 },
+    bauhaus: { shake: 0, beatEvery: "4" },
     sub: { shake: 0.4, fit: "art" },
     trap: { shake: 0.4, bassBoost: 0.7, colorMode: "classic", fit: "art" },
     neuro: { shake: 0.2, colorMode: "classic", neuroTwist: 0.05 },
@@ -225,6 +227,7 @@
     holoring: { shake: 0, fit: "art" },
     revs: { shake: 0, fit: "art" },
     crt: { shake: 0 },
+    trails: { shake: 0 },
     rgbsplit: { shake: 0, barCount: 48 },
   };
   const GLOBAL_DEFAULTS = {
@@ -238,6 +241,8 @@
     dimPaused: true,
     beatSens: 0.6, // Sound tab: how easily a hit counts as a beat, 0 (off) to 1 (lower = only clear kicks)
     beatScale: 2, // settings version for the beat sensitivity slider
+    opacityScale: 2, // settings version: opacity defaults dropped to 60%
+    lyricDim: 0.5, // Lyrics tab: how much the visual fades out behind the lyrics (0 = not at all)
     autoBeats: true, // Fit each song: learn each song's levels (band range, kick level, drum hits)
     favs: [], // favourite styles, pinned to the top of the Style tab
     noLyricsBoost: true, // brighter, fuller visuals on songs with no (or static) lyrics
@@ -293,6 +298,9 @@
     // Beat sensitivity used to go 40-200% with 100% as the default (far too
     // jumpy): it's 0 (off) to 100% now, the old 100% is the new 60%.
     if ("beatSens" in raw && raw.beatScale !== 2) S.beatSens = Math.max(0, Math.min(1, (Number(raw.beatSens) || 1) * 0.6));
+    // Opacity now starts at 60% so the lyrics read easily: bring everyone
+    // down to it once (anything already lower stays as it was).
+    if (raw.opacityScale !== 2) for (const k of Object.keys(S.per)) if (S.per[k] && typeof S.per[k].opacity === "number") S.per[k].opacity = Math.min(S.per[k].opacity, 0.6);
     if (raw.per && raw.shakeScale !== 2) {
       for (const k of Object.keys(S.per)) if (typeof S.per[k].shake === "number") S.per[k].shake = Math.min(1, S.per[k].shake / 0.4);
     }
@@ -3384,6 +3392,107 @@ void main() {
     ctx.restore();
   };
 
+  // Light Trails: seen from straight above, glowing trails of light race
+  // along a dark neon grid, leaving a line behind them and turning sharp
+  // corners on the beat. Louder parts make them faster and their trails
+  // longer, kicks send a new one out, and the bass makes the grid glow.
+  DRAW.trails = (v, p, dt) => {
+    const { ctx, w, h, U } = v;
+    const cell = Math.max(24 * U, h / 12);
+    const st = v.trails || (v.trails = { cy: [], beatSeen: shared.beatSerial, e: 0, b: 0, t: 0 });
+    st.t += dt;
+    st.e += (shared.energy - st.e) * Math.min(1, dt * 1.5);
+    st.b += ((shared.bassPunch || 0) - st.b) * Math.min(1, dt * 4);
+    const nx = Math.floor(w / cell), ny = Math.floor(h / cell);
+    const gx0 = (w - nx * cell) / 2, gy0 = (h - ny * cell) / 2;
+    const DX = [1, 0, -1, 0], DY = [0, 1, 0, -1];
+    const spawn = () => {
+      const ix = 1 + Math.floor(Math.random() * Math.max(1, nx - 1)), iy = 1 + Math.floor(Math.random() * Math.max(1, ny - 1));
+      const x = gx0 + ix * cell, y = gy0 + iy * cell;
+      st.cy.push({ x, y, dir: Math.floor(Math.random() * 4), pts: [{ x, y }], c: Math.random(), turn: 0, life: 0 });
+      if (st.cy.length > 7) st.cy.shift();
+    };
+    while (st.cy.length < 3) spawn();
+    if (st.beatSeen !== shared.beatSerial) {
+      st.beatSeen = shared.beatSerial;
+      if (shared.kick > 0.5 && Math.random() < 0.5) spawn();
+      for (const q of st.cy) if (Math.random() < 0.55) q.turn = Math.random() < 0.5 ? 1 : 3;
+    }
+    const speed = cell * (1.6 + 5 * st.e) * p.speed;
+    const maxLen = cell * (5 + 20 * st.e);
+    for (const q of st.cy) {
+      q.life += dt;
+      let left = speed * dt;
+      while (left > 0) {
+        // distance to the next grid crossing along the way it's going
+        const along = q.dir % 2 === 0 ? q.x - gx0 : q.y - gy0;
+        const s = q.dir < 2 ? 1 : -1;
+        let next = (Math.floor(along / cell + (s > 0 ? 1e-6 : -1e-6)) + (s > 0 ? 1 : 0)) * cell;
+        let dist = Math.abs(next - along);
+        if (dist < 1e-6) dist = cell;
+        if (dist > left) { q.x += DX[q.dir] * left; q.y += DY[q.dir] * left; break; }
+        q.x += DX[q.dir] * dist;
+        q.y += DY[q.dir] * dist;
+        left -= dist;
+        // at a crossing: turn if a beat asked it to, or if the edge is next
+        const ahead = { x: q.x + DX[q.dir] * cell, y: q.y + DY[q.dir] * cell };
+        const out = ahead.x < gx0 + 0.5 || ahead.x > gx0 + nx * cell - 0.5 || ahead.y < gy0 + 0.5 || ahead.y > gy0 + ny * cell - 0.5;
+        if (q.turn || out) {
+          let nd = (q.dir + (q.turn || (Math.random() < 0.5 ? 1 : 3))) % 4;
+          const ok = (d) => { const ax = q.x + DX[d] * cell, ay = q.y + DY[d] * cell; return ax >= gx0 - 0.5 && ax <= gx0 + nx * cell + 0.5 && ay >= gy0 - 0.5 && ay <= gy0 + ny * cell + 0.5; };
+          if (!ok(nd)) nd = (nd + 2) % 4;
+          if (!ok(nd)) nd = (q.dir + 2) % 4;
+          q.dir = nd;
+          q.turn = 0;
+          q.pts.push({ x: q.x, y: q.y });
+        }
+      }
+      // keep the trail to its length, cutting from the tail
+      let len = 0, px = q.x, py = q.y;
+      for (let i = q.pts.length - 1; i >= 0; i--) {
+        const seg = Math.abs(q.pts[i].x - px) + Math.abs(q.pts[i].y - py);
+        if (len + seg > maxLen) {
+          const f = (maxLen - len) / seg;
+          q.pts[i] = { x: px + (q.pts[i].x - px) * f, y: py + (q.pts[i].y - py) * f };
+          q.pts.splice(0, i);
+          break;
+        }
+        len += seg;
+        px = q.pts[i].x;
+        py = q.pts[i].y;
+      }
+    }
+    ctx.save();
+    ctx.globalCompositeOperation = "lighter";
+    ctx.globalAlpha = A_(1, v);
+    // the grid, glowing with the bass
+    const gc = colorAt(0.5);
+    const grid = new Path2D();
+    for (let i = 0; i <= nx; i++) { grid.moveTo(gx0 + i * cell, gy0); grid.lineTo(gx0 + i * cell, gy0 + ny * cell); }
+    for (let j = 0; j <= ny; j++) { grid.moveTo(gx0, gy0 + j * cell); grid.lineTo(gx0 + nx * cell, gy0 + j * cell); }
+    ctx.strokeStyle = v.rgba(gc, 0.06 + 0.1 * st.b);
+    ctx.lineWidth = 1;
+    ctx.stroke(grid);
+    // the trails: a soft glow under a bright thin core
+    ctx.lineJoin = "miter";
+    ctx.lineCap = "butt";
+    for (const q of st.cy) {
+      const c = colorAt(q.c), fade = Math.min(1, q.life * 2);
+      const path = new Path2D();
+      path.moveTo(q.pts[0].x, q.pts[0].y);
+      for (let i = 1; i < q.pts.length; i++) path.lineTo(q.pts[i].x, q.pts[i].y);
+      path.lineTo(q.x, q.y);
+      ctx.strokeStyle = v.rgba(c, 0.22 * fade);
+      ctx.lineWidth = 10 * U;
+      ctx.stroke(path);
+      ctx.strokeStyle = v.rgba(mix(c, WHITE, 0.35), 0.95 * fade);
+      ctx.lineWidth = Math.max(1.8, 2.6 * U);
+      ctx.stroke(path);
+      v.glow(q.x, q.y, (10 + 8 * st.b) * U, mix(c, WHITE, 0.4), 0.8 * fade);
+    }
+    ctx.restore();
+  };
+
   // ---------------------------------------------------------------------------
   // LED Meters: studio LED ladders (green, yellow, red) along the bottom, one
   // per part of the spectrum, glowing, with a peak light that hangs, then
@@ -5655,6 +5764,7 @@ void main() {
         ${group("Highlight", `${seg("lyricGlow", [["off", "Off"], ["word", "Word"], ["line", "Line"]], "global")}
           <div data-show-if="lyricGlow"><div class="lp-label"><span>Look</span></div>${seg("glowStyle", [["soft", "Soft"], ["fade", "Fade"], ["sweep", "Sweep"], ["underline", "Underline"]], "global")}<div class="lp-label"><span>Next line</span></div>${seg("glowMove", [["glide", "Glide"], ["fade", "Fade"]], "global")}
           ${slider("glowStrength", "Strength", 0.2, 2, 0.05, "global")}</div>`)}
+        ${group("Behind the lyrics", slider("lyricDim", "Dim the visual", 0, 1, 0.05, "global"))}
         <div class="lp-note">Drawn behind the lyrics, never on them, so Spicy Lyrics' own animation stays exactly as it is.</div>
       </div>
 
@@ -6309,6 +6419,40 @@ void main() {
       return { x: ((left + right) / 2 - br.left) * s, y: (r.top + r.height / 2 - br.top) * s, w: (right - left) * s, h: r.height * s };
     }
 
+    // Fade the visual out softly in an oval round the line being sung, so
+    // the lyrics stay easy to read (Lyrics tab: Dim the visual).
+    function dimBehindLyrics(dt) {
+      const amt = Math.max(0, Math.min(1, S.lyricDim)) * 0.85;
+      if (amt < 0.01 || v.lyrKind === "none") return;
+      if (!v.dimBox || v.frame - v.dimBox.f > 10) {
+        const lc = box.querySelector(".LyricsContainer"), br = box.getBoundingClientRect();
+        const r = lc && lc.getBoundingClientRect();
+        const lr = v.activeLine && v.activeLine.getBoundingClientRect();
+        v.dimBox = r && r.width ? {
+          f: v.frame,
+          x: (r.left + r.width / 2 - br.left) * v.scale,
+          y: lr && lr.height ? (lr.top + lr.height / 2 - br.top) * v.scale : (r.top + r.height * 0.45 - br.top) * v.scale,
+          rx: r.width * 0.55 * v.scale,
+          ry: Math.max(lr && lr.height ? lr.height * 2.2 : 0, r.height * 0.18) * v.scale,
+        } : { f: v.frame, x: v.w / 2, y: v.h / 2, rx: v.w * 0.35, ry: v.h * 0.25 };
+      }
+      const d = v.dimBox;
+      if (!v.dim) v.dim = { ...d };
+      const k = Math.min(1, dt * 5);
+      for (const q of ["x", "y", "rx", "ry"]) v.dim[q] += (d[q] - v.dim[q]) * k;
+      const m = v.dim;
+      ctx.save();
+      ctx.globalCompositeOperation = "destination-out";
+      ctx.translate(m.x, m.y);
+      ctx.scale(m.rx, m.ry);
+      const g = ctx.createRadialGradient(0, 0, 0, 0, 0, 1);
+      g.addColorStop(0, `rgba(0,0,0,${amt})`);
+      g.addColorStop(0.55, `rgba(0,0,0,${amt * 0.8})`);
+      g.addColorStop(1, "rgba(0,0,0,0)");
+      ctx.fillStyle = g;
+      ctx.fillRect(-1, -1, 2, 2);
+      ctx.restore();
+    }
     function focusPoint() {
       if (v.focusCache && v.frame - v.focusCache.f < 15) return { ...v.focusCache.val };
       const val = measureFocus();
@@ -6455,6 +6599,7 @@ void main() {
         }
         DRAW[style](vv, p, dt, t);
         ctx.setTransform(1, 0, 0, 1, 0, 0);
+        dimBehindLyrics(dt);
         ctx.globalCompositeOperation = "lighter";
         ctx.globalAlpha = 1;
         if (S.kickFlash && shared.kick > 0.05) {

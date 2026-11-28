@@ -18,7 +18,7 @@ GROUPS = [
     ("Bars", [("monstercat", "Monstercat"), ("mirror", "Mirror Bars"), ("holospec", "Holo Spectrum"), ("ledm", "LED Meters"), ("led", "LED Wall"), ("ascii", "ASCII"), ("rgbsplit", "RGB Split")]),
     ("Meters & lines", [("vu", "VU Meters"), ("revs", "Rev Counter"), ("scope", "Oscilloscope"), ("crt", "CRT"), ("ekg", "EKG"), ("ribbon", "Ribbon"), ("dnb", "Liquid")]),
     ("Circles", [("radial", "Radial Bars"), ("ncs", "Sphere"), ("holoring", "Holo Ring"), ("sub", "Subwoofer"), ("trap", "Trap"), ("tunnel", "Starfield Tunnel")]),
-    ("On the beat", [("drumpads", "Drum Pads"), ("geometric", "Geometric"), ("bauhaus", "Bauhaus"), ("particles", "Particles")]),
+    ("On the beat", [("drumpads", "Drum Pads"), ("trails", "Light Trails"), ("geometric", "Geometric"), ("bauhaus", "Bauhaus"), ("particles", "Particles")]),
     ("Liquid & water", [("plasma", "Plasma"), ("ledplasma", "LED Plasma"), ("tvpixels", "TV Pixels"), ("oil", "Oil Slick"), ("silk", "Silk"), ("lava", "Lava Lamp"), ("underwater", "Underwater")]),
     ("Sky & space", [("aurora", "Aurora"), ("galaxy", "Galaxy"), ("sunset", "Sunset"), ("nightsky", "Night Sky"), ("warp", "Warp"), ("ombre", "Ombre")]),
     ("Textures", [("prism", "Graphite"), ("rain", "Rain on Glass"), ("smoke", "Smoke"), ("neuro", "Neuro Mesh")]),
