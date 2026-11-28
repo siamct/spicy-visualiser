@@ -2,7 +2,7 @@
 made by test/song/card-frames.js: a coloured bar on top with the name and
 the bars icon, and below it one style at a time, each zooming in very
 slowly and then fading softly into the next. The style pictures themselves
-are still (no flicker); the icon's bars rise and fall slowly.
+play at their real speed while they show; the icon's bars rise and fall.
   node test/song/card-frames.js && python tools/make-card.py"""
 import math
 import os
@@ -11,10 +11,10 @@ from PIL import Image, ImageChops, ImageDraw, ImageFont
 ROOT = os.path.join(os.path.dirname(__file__), "..")
 SRC = os.path.join(ROOT, "test", "out", "card")
 OUT = os.path.join(ROOT, "docs", "screenshots", "card.webp")
-IDS = ["holospec", "ledm", "vu", "led"]  # Spectrum, Meters, VU Meters, Wall
-FOCUS = {"holospec": 0.35, "ledm": 0.5, "vu": 0.5, "led": 0.6}
-EACH, FADE = 24, 6  # frames per style and frames of fade into the next (125 ms each)
-N = EACH * 4  # the whole loop: 12 s
+IDS = ["holospec", "ledm", "led"]  # Spectrum, Meters, Wall
+FOCUS = {"holospec": 0.35, "ledm": 0.5, "led": 0.6}
+EACH, FADE = 36, 8  # frames per style and frames of fade into the next (125 ms each)
+N = EACH * len(IDS)  # the whole loop: 13.5 s
 ZOOM = 0.08  # how far each style zooms in while it's showing
 S = 600
 BH = 100  # the bar on top
@@ -86,21 +86,28 @@ for (x0, w, m), sid in zip(MASKS, IDS):
     im = im.resize((round(im.width * s), H), Image.LANCZOS)
     left = max(0, min(im.width - w, round(im.width * FOCUS[sid] - w / 2)))
     still.paste(aligned(im.crop((left, 0, left + w, H))), (x0, BH), m)
-# each style, cropped to fill the space under the bar (with room to zoom)
-FULL = []
-for sid in IDS:
-    im = Image.open(os.path.join(SRC, f"{sid}-24.png")).convert("RGB")
+# each style's pictures, cropped to fill the space under the bar (with room
+# to zoom), all moved by the same amount so every style ends on the same line
+def prep(sid, n):
+    im = Image.open(os.path.join(SRC, f"{sid}-{n}.png")).convert("RGB")
     sc = H * (1 + ZOOM) / im.height
     im = im.resize((round(im.width * sc), round(im.height * sc)), Image.LANCZOS)
     w = round(S * (1 + ZOOM))
     left = max(0, min(im.width - w, round(im.width * 0.5 - w / 2)))
-    im = im.crop((left, 0, left + w, im.height))
-    FULL.append(aligned(im, im.height - round(40 * (1 + ZOOM))))  # every style ends on the same line
+    return im.crop((left, 0, left + w, im.height))
 
 
-def view(i, z):
-    """Style i zoomed in by z (0..ZOOM), held to the bottom so the bars stay put."""
-    im = FULL[i]
+FULL = []
+for sid in IDS:
+    pics = [prep(sid, n) for n in range(EACH + FADE)]
+    ch = pics[0].height
+    dy = ch - round(40 * (1 + ZOOM)) - max(content_bottom(p) for p in pics)
+    FULL.append([aligned(p, content_bottom(p) + dy) for p in pics])
+
+
+def view(i, z, n):
+    """Style i, picture n, zoomed in by z (0..ZOOM), held to the bottom so the bars stay put."""
+    im = FULL[i][n]
     cw, ch = im.width / (1 + z), im.height / (1 + z)
     x0 = (im.width - cw) / 2
     return im.crop((round(x0), round(im.height - ch), round(x0 + cw), im.height)).resize((S, H), Image.LANCZOS)
@@ -114,9 +121,9 @@ frames = []
 for k in range(N):
     i, f = divmod(k, EACH)
     z = ZOOM * (f + FADE) / (EACH + FADE)  # zooms the whole time it shows, fade included
-    pic = view(i, z)
+    pic = view(i, z, f + FADE)
     if f >= EACH - FADE:  # fade into the next one, which starts zoomed out
-        nxt = view((i + 1) % len(IDS), ZOOM * (f - (EACH - FADE)) / (EACH + FADE))
+        nxt = view((i + 1) % len(IDS), ZOOM * (f - (EACH - FADE)) / (EACH + FADE), f - (EACH - FADE))
         pic = Image.blend(pic, nxt, ease((f - (EACH - FADE) + 1) / (FADE + 1)))
     card = Image.new("RGB", (S, S), BG)
     card.paste(pic, (0, BH))
@@ -125,12 +132,14 @@ for k in range(N):
     # the icon: five bars, each bouncing a little at its own pace (loops cleanly)
     base, bw, gap = BH // 2 + 22, 9, 5
     for i, (hh, sp, ph) in enumerate(((30, 1, 0.1), (48, 2, 1.7), (36, 1, 3.1), (54, 1, 4.4), (24, 2, 2.2))):
-        t = k / N * 2 * math.pi * 2  # two slow swings per loop
-        h = hh * (0.75 + 0.25 * (0.5 + 0.5 * math.sin(t * sp + ph)))
+        t = k / N * 2 * math.pi * 4  # four swings per loop
+        h = hh * (0.4 + 0.6 * (0.5 + 0.5 * math.sin(t * sp + ph)))
         x = 30 + i * (bw + gap)
         d.rounded_rectangle((x, base - h, x + bw, base), 3, fill=(255, 255, 255))
     d.text((112, BH // 2 + 1), "Spicy Visualiser", fill=(255, 255, 255), font=F, anchor="lm")
     frames.append(card)
-frames[0].save(OUT, save_all=True, append_images=frames[1:], duration=125, loop=0, quality=70, method=6)
+OUTS = 480  # saved size: the Marketplace shows cards small, and it keeps the file light
+small = [fr.resize((OUTS, OUTS), Image.LANCZOS) for fr in frames]
+small[0].save(OUT, save_all=True, append_images=small[1:], duration=125, loop=0, quality=70, method=6)
 frames[0].save(os.path.join(ROOT, "docs", "screenshots", "card.png"), optimize=True)
 print(OUT, os.path.getsize(OUT) // 1024, "KB")

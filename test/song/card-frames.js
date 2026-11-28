@@ -59,8 +59,8 @@ async function open(b, js, album, atBar) {
 const setter = (p) => (k, v) => p.evaluate(([k, v]) => { const btn = document.querySelector(".lp-button"); btn.click(); document.querySelector(`[data-key=${k}] button[data-v=${v}]`).click(); btn.click(); }, [k, v]);
 
 
-const CARD = [["holospec", 0, 24], ["ledm", 2, 12], ["vu", 1, 24], ["led", 4, 21]];
-const N = 25; // make-card.py uses picture 24 of each
+const CARD = [["holospec", 0, 24], ["ledm", 2, 12], ["led", 4, 21]];
+const N = 44; // pictures per style, one every 125 ms (the card plays them at that speed)
 
 (async () => {
   const b = await chromium.launch({ channel: process.env.LP_BROWSER || undefined, args: ["--use-gl=angle", "--use-angle=swiftshader", "--enable-unsafe-swiftshader"] });
@@ -84,9 +84,12 @@ const N = 25; // make-card.py uses picture 24 of each
     });
     await p.addStyleTag({ content: HIDE + ".lp-button,.lp-modal-wrap{display:none!important}" });
     await p.waitForTimeout(2500);
+    // evenly spaced in real time, so the card moves at the song's real speed
+    const t0 = Date.now();
     for (let i = 0; i < N; i++) {
+      const wait = t0 + i * 125 - Date.now();
+      if (wait > 0) await p.waitForTimeout(wait);
       await p.screenshot({ path: path.join(dir, `${style}-${i}.png`) });
-      await p.waitForTimeout(25);
     }
     console.log(style);
     await p.close();
