@@ -144,7 +144,7 @@ A speaker drawn in light:
 ### Holo Ring
 ![Holo Ring](screenshots/styles/holoring.jpg)
 
-The Holo VU's glowing ticks, but right round a circle whose middle sits on the edge of the screen, so only the half facing in shows. Each tick is a slice of the spectrum: the bass points straight in and the highs reach up and down. **Sides** puts it on one side (away from the album art) or one on each side.
+The Holo VU meter as two big rings sitting off the edges of the screen, so only the part facing in shows: the bass meter on the left, the highs on the right. Ticks light up along the arc from the bottom to a glowing needle line, the peak tick hangs for a moment, and ticks past 0 dB turn hot pink. **Sides**: both, or one side (just the bass, away from the album art). **Offset** sets how far off the edge the rings sit, so how much of them shows. It starts on **Fit: Beside art**, so the left ring sits just past the album art.
 
 ### Trap
 ![Trap](screenshots/styles/trap.jpg)

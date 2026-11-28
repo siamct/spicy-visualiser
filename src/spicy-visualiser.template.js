@@ -136,6 +136,7 @@
     vuFace: ["vu"],
     vuMeters: ["vu"],
     ringSides: ["holoring"],
+    ringOff: ["holoring"],
     gaugeLook: ["revs"],
     // styles that can sit beside the album art and be moved (not the
     // full-screen scenes)
@@ -172,7 +173,8 @@
     fit: "full", // full = the whole view; art = the free space beside the album art (either side)
     moveX: 0, // move left (-1) / right (+1)
     moveY: 0, // move down (-1) / up (+1)
-    ringSides: "one", // Holo Ring: one side (away from the album art) | both
+    ringSides: "both", // Holo Ring: both (bass left, highs right) | one (bass, away from the album art)
+    ringOff: 0.5, // Holo Ring: how far off the edge the rings sit (more = less of them shows)
     gaugeLook: "modern", // Rev Counter: modern | classic
     circleAt: "middle", // circle styles: middle of the view, or round the album art
     beatEvery: "1", // beat-stepping styles change every 1, 2, 4 or 8 beats
@@ -216,7 +218,7 @@
     sunset: { shake: 0 },
     nightsky: { shake: 0 },
     holospec: { shake: 0 },
-    holoring: { shake: 0 },
+    holoring: { shake: 0, fit: "art" },
     revs: { shake: 0, fit: "art" },
     crt: { shake: 0 },
     rgbsplit: { shake: 0, barCount: 48 },
@@ -2647,8 +2649,9 @@ void main() {
   const vuPos = (db) => (Math.pow(10, db / 20) - 0.1) / (Math.pow(10, 3 / 20) - 0.1); // 0..1 along the scale
   const vuDb = (t) => Math.max(-20, 20 * Math.log10(Math.max(1e-4, t * (Math.pow(10, 3 / 20) - 0.1) + 0.1)));
   const vuTxt = (db) => (db <= -19.95 ? "-20" : (db > 0 ? "+" : "") + db.toFixed(1));
-  DRAW.vu = (v, p, dt) => {
-    const st = v.vu || (v.vu = { t: 0, m: [0, 1].map(() => ({ a: 0, v: 0, lamp: 0, pk: 0, hold: 0 })) });
+  // The two needles (bass, then mids and highs), shared with Holo Ring.
+  // Returns where the red starts on the scale.
+  function vuNeedles(st, p, dt) {
     st.t += dt;
     const sens = p.sensitivity;
     let lo = 0, hi = 0;
@@ -2667,6 +2670,11 @@ void main() {
       if (m.a >= m.pk) { m.pk = m.a; m.hold = 1; }
       else if ((m.hold -= dt) < 0) m.pk = Math.max(m.a, m.pk - dt * 0.5);
     }
+    return red;
+  }
+  DRAW.vu = (v, p, dt) => {
+    const st = v.vu || (v.vu = { t: 0, m: [0, 1].map(() => ({ a: 0, v: 0, lamp: 0, pk: 0, hold: 0 })) });
+    const red = vuNeedles(st, p, dt);
     const look = VU_LOOKS[p.vuFace] || vuNight;
     const sp = freeSpot(v);
     sp.x += Math.max(-1, Math.min(1, +p.moveX || 0)) * v.w * 0.4;
@@ -3022,72 +3030,75 @@ void main() {
   }
   const VU_LOOKS = { night: vuNight, minimal: vuMinimal, holo: vuHolo, hud: vuHud };
 
-  // Holo Ring: the Holo VU's glowing ticks, but going all the way round a
-  // circle whose middle sits on the edge of the screen, so only the half
-  // facing in shows. Each tick is a slice of the spectrum: bass points
-  // straight in, the highs reach up and down. One side (away from the
-  // album art) or one on each side (Sides).
+  // Holo Ring: the Holo VU meter, but each meter is a big ring whose middle
+  // sits off the edge of the screen, so only the part facing in shows: the
+  // bass meter on the left, the highs on the right (or just the bass, on the
+  // side away from the album art: Sides). Ticks light up along the arc from
+  // the bottom to a glowing needle line, the peak tick hangs for a moment,
+  // and ticks past 0 dB turn hot pink. Offset sets how far off the edge the
+  // rings sit (how much of them shows).
   DRAW.holoring = (v, p, dt) => {
-    const { ctx, w, h, U } = v;
-    const st = v.hring || (v.hring = { t: 0 });
-    st.t += dt;
-    const N = 40;
-    holoLevels(st, N, dt, p, (i) => Math.min(1, bandAt((i / (N - 1)) * 0.9) * 1.1));
+    const { ctx, w, h } = v;
+    const st = v.hring || (v.hring = { t: 0, m: [0, 1].map(() => ({ a: 0, v: 0, lamp: 0, pk: 0, hold: 0 })) });
+    const red = vuNeedles(st, p, dt);
     const art = v.artCircle && v.artCircle();
-    const sides = p.ringSides === "both" ? [-1, 1] : [art && art.x > w / 2 ? -1 : 1];
-    const R = Math.min(h * 0.3, w * 0.3) * p.size, L = R * 0.75;
-    const cy = h / 2, pitch = Math.max(5, 4.5 * U), SEG = Math.max(6, Math.floor(L / pitch)), th = Math.max(1.5, pitch * 0.42);
+    const sides = p.ringSides === "one" ? [[art && art.x < w / 2 ? 1 : -1, 0]] : [[-1, 0], [1, 1]];
+    const R = h * 0.42 * p.size, cy = h / 2;
+    const off = R * (0.05 + 0.75 * Math.max(0, Math.min(1, p.ringOff)));
+    const HOT = [255, 80, 130];
+    // half the visible arc: what's on screen sideways, but never running
+    // off the top or bottom (the red end has to stay in view)
+    const span = Math.min(Math.acos(Math.min(0.95, off / (R * 1.08))) - 0.06, Math.asin(Math.min(1, (h * 0.46) / (R * 1.16))));
     ctx.save();
     ctx.globalCompositeOperation = "lighter";
     ctx.globalAlpha = A_(1, v);
-    ctx.lineCap = "butt";
-    for (const sd of sides) {
-      const cx = sd > 0 ? w : 0, inward = sd > 0 ? Math.PI : 0;
-      // faint guide rings
-      ctx.strokeStyle = v.rgba(colorAt(0.5), 0.18);
+    ctx.lineCap = "round";
+    for (const [sd, mi] of sides) {
+      const m = st.m[mi], lvl = Math.max(0, Math.min(1.12, m.a));
+      const cx = sd < 0 ? -off : w + off;
+      // t = 0 at the bottom of the visible arc, 1 at the top
+      const ang = sd < 0 ? (t) => span - 2 * span * t : (t) => Math.PI - span + 2 * span * t;
+      const c0 = mi ? colorAt(0.6) : colorAt(0.1), c1 = mi ? colorAt(0.95) : colorAt(0.45);
+      const n = Math.max(16, Math.round(34 * (span / 1.2)));
+      // faint guide arcs
+      ctx.strokeStyle = v.rgba(mix(c0, c1, 0.5), 0.22);
       ctx.lineWidth = 1;
-      for (const rr of [0.92, 1 + L / R + 0.06]) {
+      for (const rr of [0.8, 1.14]) {
         ctx.beginPath();
-        ctx.arc(cx, cy, R * rr, 0, Math.PI * 2);
+        if (sd < 0) ctx.arc(cx, cy, R * rr, -span - 0.03, span + 0.03);
+        else ctx.arc(cx, cy, R * rr, Math.PI - span - 0.03, Math.PI + span + 0.03);
         ctx.stroke();
       }
-      // each slice twice: once going up from the bass, once going down
-      for (let i = 0; i < N; i++) {
-        const c = colorAt(i / (N - 1)), lv = st.lv[i], top = Math.ceil(lv * SEG);
-        const pk = Math.min(SEG - 1, Math.floor(st.pk[i] * SEG));
-        for (const k of [-1, 1]) {
-          const a = inward + k * (i + 0.5) * (Math.PI / N), ca = Math.cos(a), sa = Math.sin(a);
-          const tw = Math.max(1.5, ((2 * Math.PI * R) / (2 * N)) * 0.5);
-          const lit = new Path2D(), off = new Path2D();
-          for (let s = 0; s < SEG; s++) {
-            const r0 = R + s * pitch, r1 = r0 + th;
-            (s < top ? lit : off).moveTo(cx + ca * r0, cy + sa * r0);
-            (s < top ? lit : off).lineTo(cx + ca * r1, cy + sa * r1);
-          }
-          ctx.lineWidth = tw;
-          ctx.strokeStyle = v.rgba(c, 0.07);
-          ctx.stroke(off);
-          if (top > 0) {
-            ctx.shadowColor = v.rgba(c, 0.9);
-            ctx.shadowBlur = th * 2.5;
-            ctx.strokeStyle = v.rgba(mix(c, WHITE, 0.2), 0.92 * holoShim(st.t, cy + sa * R));
-            ctx.stroke(lit);
-            ctx.shadowBlur = 0;
-          }
-          if (st.pk[i] > 0.04 && pk >= top) {
-            const r0 = R + pk * pitch;
-            ctx.strokeStyle = v.rgba(mix(c, WHITE, 0.3), 0.7);
-            ctx.beginPath();
-            ctx.moveTo(cx + ca * r0, cy + sa * r0);
-            ctx.lineTo(cx + ca * (r0 + th), cy + sa * (r0 + th));
-            ctx.stroke();
-          }
-        }
+      const tw = Math.max(2, ((R * 1.06 * 2 * span) / n) * 0.5);
+      ctx.lineWidth = tw;
+      const pkT = Math.min(n - 1, Math.floor((m.pk / 1.12) * n));
+      for (let j = 0; j < n; j++) {
+        const t = (j + 0.5) / n, a = ang(t);
+        const on = t * 1.12 <= lvl, isPk = j === pkT && m.pk > 0.05;
+        const c = t * 1.12 > red ? HOT : mix(c0, c1, t);
+        const y = cy + Math.sin(a) * R;
+        const shim = holoShim(st.t, y);
+        ctx.strokeStyle = v.rgba(on || isPk ? mix(c, WHITE, 0.2) : c, (on ? 0.95 : isPk ? 0.7 : 0.1) * shim);
+        if (on) { ctx.shadowColor = v.rgba(c, 0.9); ctx.shadowBlur = tw * 2.5; }
+        ctx.beginPath();
+        vuLine(ctx, cx, cy, a, R * 0.86, R * 1.06);
+        ctx.stroke();
+        ctx.shadowBlur = 0;
       }
+      // the glowing needle line across the ring
+      const na = ang(lvl / 1.12), nc = mix(c1, WHITE, 0.45);
+      ctx.strokeStyle = v.rgba(nc, 0.35);
+      ctx.lineWidth = Math.max(4, R * 0.03);
+      ctx.beginPath();
+      vuLine(ctx, cx, cy, na, R * 0.76, R * 1.16);
+      ctx.stroke();
+      ctx.strokeStyle = v.rgba(nc, 0.95);
+      ctx.lineWidth = Math.max(1.2, R * 0.006);
+      ctx.stroke();
     }
     ctx.restore();
-    const RR = R + L + 10;
-    for (const sd of sides) holoScan(ctx, sd > 0 ? w - RR : 0, cy - RR, RR, RR * 2, st.t);
+    const vis = R * 1.2 - off;
+    for (const [sd] of sides) if (vis > 0) holoScan(ctx, sd < 0 ? 0 : w - vis, cy - R * 1.2, vis, R * 2.4, st.t);
   };
 
   // Rev Counter: a car's rev counter. The needle follows the loudness (the
@@ -5220,7 +5231,7 @@ void main() {
             <div class="lp-row"><div class="lp-label"><span>Colour changes</span></div>${seg("colorMove", [["move", "Moving"], ["still", "Still"]], "style")}</div>
             <div class="lp-colors" data-show-color><label><input type="color" data-key="color1" data-scope="style">Colour 1</label><label><input type="color" data-key="color2" data-scope="style">Colour 2</label></div>`)}
           ${group("Appearance", slider("opacity", "Opacity", 0.1, 1, 0.05, "style") + slider("blur", "Blur", 0, 20, 0.5, "style") + slider("brightness", "Brightness", 0.2, 1.6, 0.05, "style") + slider("size", "Size", 0.4, 2, 0.05, "style"))}
-          ${group("Layout", slider("barCount", "Bar count", 16, 128, 1, "style", u("barCount")) + `<div class="lp-row" data-uses="${u("position")}"><div class="lp-label"><span>Position</span></div>${seg("position", [["bottom", "Bottom"], ["top", "Top"], ["both", "Both"]], "style")}</div><div class="lp-row" data-uses="${u("variant")}"><div class="lp-label"><span>Look</span></div>${seg("variant", [["poster", "Poster"], ["brutalist", "Brutalist"]], "style")}</div><div class="lp-row" data-uses="${u("neuroLook")}"><div class="lp-label"><span>Look</span></div>${seg("neuroLook", [["mesh", "Mesh"], ["lines", "Lines"], ["ridges", "Ridges"]], "style")}</div><div class="lp-row" data-uses="${u("vuFace")}"><div class="lp-label"><span>Look</span></div>${seg("vuFace", [["night", "Classic"], ["minimal", "Minimal"], ["holo", "Holo"], ["hud", "HUD"]], "style")}</div><div class="lp-row" data-uses="${u("vuMeters")}"><div class="lp-label"><span>Meters</span></div>${seg("vuMeters", [["both", "Both"], ["split", "Split"], ["bass", "Bass only"]], "style")}</div><div class="lp-row" data-uses="${u("gaugeLook")}"><div class="lp-label"><span>Look</span></div>${seg("gaugeLook", [["modern", "Modern"], ["classic", "Classic"]], "style")}</div><div class="lp-row" data-uses="${u("ringSides")}"><div class="lp-label"><span>Sides</span></div>${seg("ringSides", [["one", "One side"], ["both", "Both sides"]], "style")}</div><div class="lp-row" data-uses="${u("fit")}"><div class="lp-label"><span>Fit</span></div>${seg("fit", [["full", "Full width"], ["art", "Beside art"]], "style")}</div>${slider("moveX", "Left / right", -1, 1, 0.05, "style", u("moveX"))}${slider("moveY", "Up / down", -1, 1, 0.05, "style", u("moveY"))}<div class="lp-row" data-uses="${u("circleAt")}"><div class="lp-label"><span>Circle at</span></div>${seg("circleAt", [["middle", "Middle"], ["art", "Album art"]], "style")}</div><div class="lp-row" data-uses="${u("mcColor")}"><div class="lp-label"><span>Bar colour</span></div>${seg("mcColor", [["flow", "Flow"], ["frequency", "Freq."], ["height", "Area"], ["bar", "Bar"], ["solid", "Solid"]], "style")}</div><div class="lp-row" data-uses="${u("beatEvery")}"><div class="lp-label"><span>Change every</span></div>${seg("beatEvery", [["1", "Beat"], ["2", "2"], ["4", "4"], ["8", "8 beats"]], "style")}</div>`, [...new Set([...USES.barCount, ...USES.position, ...USES.variant, ...USES.neuroLook, ...USES.vuFace, ...USES.vuMeters, ...USES.moveX, ...USES.gaugeLook, ...USES.ringSides, ...USES.circleAt, ...USES.mcColor, ...USES.beatEvery])].join(","))}
+          ${group("Layout", slider("barCount", "Bar count", 16, 128, 1, "style", u("barCount")) + `<div class="lp-row" data-uses="${u("position")}"><div class="lp-label"><span>Position</span></div>${seg("position", [["bottom", "Bottom"], ["top", "Top"], ["both", "Both"]], "style")}</div><div class="lp-row" data-uses="${u("variant")}"><div class="lp-label"><span>Look</span></div>${seg("variant", [["poster", "Poster"], ["brutalist", "Brutalist"]], "style")}</div><div class="lp-row" data-uses="${u("neuroLook")}"><div class="lp-label"><span>Look</span></div>${seg("neuroLook", [["mesh", "Mesh"], ["lines", "Lines"], ["ridges", "Ridges"]], "style")}</div><div class="lp-row" data-uses="${u("vuFace")}"><div class="lp-label"><span>Look</span></div>${seg("vuFace", [["night", "Classic"], ["minimal", "Minimal"], ["holo", "Holo"], ["hud", "HUD"]], "style")}</div><div class="lp-row" data-uses="${u("vuMeters")}"><div class="lp-label"><span>Meters</span></div>${seg("vuMeters", [["both", "Both"], ["split", "Split"], ["bass", "Bass only"]], "style")}</div><div class="lp-row" data-uses="${u("gaugeLook")}"><div class="lp-label"><span>Look</span></div>${seg("gaugeLook", [["modern", "Modern"], ["classic", "Classic"]], "style")}</div><div class="lp-row" data-uses="${u("ringSides")}"><div class="lp-label"><span>Sides</span></div>${seg("ringSides", [["both", "Both sides"], ["one", "One side"]], "style")}</div>${slider("ringOff", "Offset", 0, 1, 0.05, "style", u("ringOff"))}<div class="lp-row" data-uses="${u("fit")}"><div class="lp-label"><span>Fit</span></div>${seg("fit", [["full", "Full width"], ["art", "Beside art"]], "style")}</div>${slider("moveX", "Left / right", -1, 1, 0.05, "style", u("moveX"))}${slider("moveY", "Up / down", -1, 1, 0.05, "style", u("moveY"))}<div class="lp-row" data-uses="${u("circleAt")}"><div class="lp-label"><span>Circle at</span></div>${seg("circleAt", [["middle", "Middle"], ["art", "Album art"]], "style")}</div><div class="lp-row" data-uses="${u("mcColor")}"><div class="lp-label"><span>Bar colour</span></div>${seg("mcColor", [["flow", "Flow"], ["frequency", "Freq."], ["height", "Area"], ["bar", "Bar"], ["solid", "Solid"]], "style")}</div><div class="lp-row" data-uses="${u("beatEvery")}"><div class="lp-label"><span>Change every</span></div>${seg("beatEvery", [["1", "Beat"], ["2", "2"], ["4", "4"], ["8", "8 beats"]], "style")}</div>`, [...new Set([...USES.barCount, ...USES.position, ...USES.variant, ...USES.neuroLook, ...USES.vuFace, ...USES.vuMeters, ...USES.moveX, ...USES.gaugeLook, ...USES.ringSides, ...USES.circleAt, ...USES.mcColor, ...USES.beatEvery])].join(","))}
         </div>
         ${group("Background", slider("bgDim", "Darken background", 0, 0.9, 0.05, "global") + `<div class="lp-note">Calms Spicy Lyrics' moving background so the visual stands out. The lyrics and album art aren't touched.</div>`)}
       </div>
