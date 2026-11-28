@@ -4,10 +4,16 @@ A quick tour of every Spicy Visualiser style: what you're looking at, what it re
 
 Open the visualiser panel with the bars button at the top right of Spicy Lyrics. The **Style** tab picks the style. Most settings live in **Look**. **Sound** holds how it reacts and the beat options, including **Fit each song** (on by default), which learns each song's levels as it plays so quiet and loud songs both move well.
 
+Every style starts at 60% opacity (**Look → Opacity**), and fades out softly behind the line being sung so the lyrics stay easy to read (**Lyrics → Dim the visual**, 0 turns it off).
+
 Every style:
 - sits behind the lyrics, which stay on top and readable;
 - takes its colours from the album cover;
 - gets a little fuller on songs with no lyrics, or with static lyrics that don't move.
+
+Styles that aren't full-screen scenes (bars, meters, lines, circles, drum pads, posters) also have, under **Look → Layout**:
+- **Fit**: **Full width**, or **Beside art**, which keeps it in the free space next to the album art, on whichever side the art is (in fullscreen you can move the art to either side). Circles, drum pads, EKG and the oscilloscope start on Beside art;
+- **Left / right** and **Up / down**, to move it anywhere.
 
 On songs with no lyrics, the song name and artist take the place of Spicy Lyrics' "No lyrics" box, except in fullscreen, where Spicy's box is left alone (click it to see the box again; you can turn it off in the panel's settings).
 
@@ -66,11 +72,20 @@ Monstercat-style bars drawn three times, in red, green and blue added together, 
 ### VU Meters
 ![VU Meters](screenshots/styles/vu.jpg)
 
-One meter with two needles, like a stereo meter: one for the bass (low), one for the mids and highs (high). It sits in the middle, or beside the album art when the art is showing. The needles are a little sluggish and swing past before settling (**Smoothing** sets how sluggish), and a peak light comes on when a needle goes into the red. Four looks (**Look**, Holo to start with):
+One meter with two needles, like a stereo meter: one for the bass (low), one for the mids and highs (high). It sits in the middle, or in the free space beside the album art when the art is showing (left or right). The needles are a little sluggish and swing past before settling (**Smoothing** sets how sluggish), and a peak light comes on when a needle goes into the red. **Bounce** (Sound tab) sets how far they swing past. Four looks (**Look**, Holo to start with):
 - **Classic**: night hi-fi, a face glowing warm amber from behind in a dark room, the print and needles as dark silhouettes (black is low, red is high);
 - **Minimal**: no box, just a thin scale in the album's colours, a red zone that glows (brighter when a needle's in it) and two thin needles in the album's colours;
 - **Holo** (above): two floating arcs of ticks (outer low, inner high) that light up to their needles, with a glowing needle line and a faint scanline shimmer. This is the look it starts with;
 - **HUD**: a sci-fi gauge, two segmented level arcs inside a slowly turning ring.
+
+**Meters** picks how they're laid out: **Both** needles in one meter, **Split** into two meters (bass on the left, highs on the right), or **Bass only**. **Left / right** and **Up / down** move it anywhere on the screen, and **Size** makes it bigger or smaller.
+
+### Rev Counter
+![Rev Counter](screenshots/styles/revs.jpg)
+
+A car's rev counter. The needle follows how loud it is (the bass pushes it harder), each kick blips it, and in the red the shift light comes on. **Smoothing** sets how heavy the needle feels. Two looks (**Look**):
+- **Modern**: flat glowing segments round the dial in the album's colours, a thin needle and a big speed number in the middle that rises slowly with the song;
+- **Classic**: a plain round dial with printed numbers, a red zone and an orange needle.
 
 ### Oscilloscope
 ![Oscilloscope](screenshots/styles/scope.jpg)
@@ -79,6 +94,11 @@ A glowing line tracing the sound like an old scope, over a faint grid:
 - quiet parts are a calm wave; as the music gets busy the trace curls round into looping figure shapes;
 - the line glows on for a moment after it passes, like a real scope screen;
 - **Colours: Classic** (default) is green phosphor; the other colour modes use those colours.
+
+### CRT
+![CRT](screenshots/styles/crt.jpg)
+
+An old tube TV up close. The picture is the spectrum, mirrored round a bright line through the middle, drawn in visible scanlines. A brighter band rolls slowly down the screen (**Speed**), the corners fall dark like curved glass, and on a kick the picture tears sideways for a moment with its red, green and blue splitting apart.
 
 ### EKG
 ![EKG](screenshots/styles/ekg.jpg)
@@ -122,6 +142,13 @@ A speaker drawn in light:
 - kicks punch the cone out and it springs back;
 - the surround wobbles with the bass;
 - the light ring fades to a new colour on the beat.
+
+### Holo Ring
+![Holo Ring](screenshots/styles/holoring.jpg)
+
+The Holo VU meter as two big rings sitting off the edges of the screen, so only the part facing in shows: the bass meter on the left, the highs on the right. Ticks light up along the arc from the bottom to a glowing needle line, the peak tick hangs for a moment, and ticks past 0 dB turn hot pink. **Sides**: both, or one side (just the bass, away from the album art). **Offset** sets how far off the edge the rings sit, so how much of them shows. It starts on **Fit: Beside art**, so the left ring sits just past the album art.
+
+**Look** changes how the rings are drawn: **Holo** (glowing ticks, the default), **Glow** (one smooth glowing band filling up the arc), **Dots** (round glowing dots like LEDs), **Lines** (thin sparse ticks, minimal) or **HUD** (chunky segments with a peak marker). In the **Sound** tab, **Bounce** sets how far the needles swing past before settling (0 = none); it works on VU Meters too.
 
 ### Trap
 ![Trap](screenshots/styles/trap.jpg)
@@ -213,19 +240,38 @@ Looking up from under the sea: rippling nets of light wobble across, with soft s
 
 ---
 
+## Nature & magic
+
+### Lanterns
+![Lanterns](screenshots/styles/lanterns.jpg)
+
+Paper lanterns floating slowly up into the night, swaying a little as they go. Each glows with its own part of the spectrum, kicks send a new one up from the bottom, and louder parts send them up faster.
+
+### Magic Runes
+![Magic Runes](screenshots/styles/runes.jpg)
+
+A slowly turning circle of glowing made-up runes in three rings that turn opposite ways, with a star of lines in the middle. Each rune lights up with its part of the spectrum, the rings glow with the bass, and a kick sends a ripple of light outwards. It starts on **Fit: Beside art**; **Circle at** can put it round the album art.
+
+---
+
 ## Sky & space
 
 ### Aurora
 ![Aurora](screenshots/styles/aurora.jpg)
 
 Northern lights over a starry sky:
-- three curtains of light in the album's colours ripple sideways, with fine rays running up them;
-- the bass lifts them higher and taller, loudness makes them brighter and faster, kicks make them flare.
+- three curtains of light in the album's colours drift slowly sideways, with fine rays running up them;
+- it stays calm: the bass mostly makes them glow brighter (and lifts them a little), loudness makes them a touch brighter and quicker, and kicks give a soft glow.
 
 ### Galaxy
 ![Galaxy](screenshots/styles/galaxy.jpg)
 
 Drifting slowly through a coloured nebula, stars streaming past. One slow, smooth drive from the loudness and bass sets how fast it flies and how brightly the gas glows, easing up and down over a couple of seconds, so it never lurches on a hit or stalls in a quiet bit.
+
+### Nebula Drift
+![Nebula Drift](screenshots/styles/nebula.jpg)
+
+Soft flat clouds of colour in the album's colours, with darker lanes through them and stars behind, drifting very slowly. It stays calm, like Aurora: the bass makes the clouds glow brighter so they seem to breathe, loudness brightens them a touch, and kicks give a soft glow.
 
 ### Sunset
 ![Sunset](screenshots/styles/sunset.jpg)
@@ -236,6 +282,11 @@ A sky in the album's colours, warm at the horizon with the sun low in the middle
 ![Night Sky](screenshots/styles/nightsky.jpg)
 
 A dark sky with twinkling stars and a moon, and thin clouds drifting past it, silver at the edges near the moon. Kicks light the moon's glow and the cloud edges, the bass churns the clouds, and they drift much faster when the music is loud.
+
+### Constellations
+![Constellations](screenshots/styles/constellations.jpg)
+
+A calm, sparse night sky. On each beat a new star appears near the last one and a line is drawn out to it, joining them into a constellation. After a handful of stars it's finished: it glows for a few seconds, fades away, and a new one starts somewhere else. The stars twinkle with the hi-hats.
 
 ### Warp
 ![Warp](screenshots/styles/warp.jpg)
