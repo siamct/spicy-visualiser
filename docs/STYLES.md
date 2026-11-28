@@ -70,7 +70,7 @@ Monstercat-style bars drawn three times, in red, green and blue added together, 
 ### VU Meters
 ![VU Meters](screenshots/styles/vu.jpg)
 
-One meter with two needles, like a stereo meter: one for the bass (low), one for the mids and highs (high). It sits in the middle, or in the free space beside the album art when the art is showing (left or right). The needles are a little sluggish and swing past before settling (**Smoothing** sets how sluggish), and a peak light comes on when a needle goes into the red. Four looks (**Look**, Holo to start with):
+One meter with two needles, like a stereo meter: one for the bass (low), one for the mids and highs (high). It sits in the middle, or in the free space beside the album art when the art is showing (left or right). The needles are a little sluggish and swing past before settling (**Smoothing** sets how sluggish), and a peak light comes on when a needle goes into the red. **Bounce** (Sound tab) sets how far they swing past. Four looks (**Look**, Holo to start with):
 - **Classic**: night hi-fi, a face glowing warm amber from behind in a dark room, the print and needles as dark silhouettes (black is low, red is high);
 - **Minimal**: no box, just a thin scale in the album's colours, a red zone that glows (brighter when a needle's in it) and two thin needles in the album's colours;
 - **Holo** (above): two floating arcs of ticks (outer low, inner high) that light up to their needles, with a glowing needle line and a faint scanline shimmer. This is the look it starts with;
@@ -145,6 +145,8 @@ A speaker drawn in light:
 ![Holo Ring](screenshots/styles/holoring.jpg)
 
 The Holo VU meter as two big rings sitting off the edges of the screen, so only the part facing in shows: the bass meter on the left, the highs on the right. Ticks light up along the arc from the bottom to a glowing needle line, the peak tick hangs for a moment, and ticks past 0 dB turn hot pink. **Sides**: both, or one side (just the bass, away from the album art). **Offset** sets how far off the edge the rings sit, so how much of them shows. It starts on **Fit: Beside art**, so the left ring sits just past the album art.
+
+**Look** changes how the rings are drawn: **Holo** (glowing ticks, the default), **Glow** (one smooth glowing band filling up the arc), **Dots** (round glowing dots like LEDs), **Lines** (thin sparse ticks, minimal) or **HUD** (chunky segments with a peak marker). In the **Sound** tab, **Bounce** sets how far the needles swing past before settling (0 = none); it works on VU Meters too.
 
 ### Trap
 ![Trap](screenshots/styles/trap.jpg)

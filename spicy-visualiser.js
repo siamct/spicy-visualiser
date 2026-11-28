@@ -137,6 +137,8 @@
     vuMeters: ["vu"],
     ringSides: ["holoring"],
     ringOff: ["holoring"],
+    ringLook: ["holoring"],
+    bounce: ["vu", "holoring"],
     gaugeLook: ["revs"],
     // styles that can sit beside the album art and be moved (not the
     // full-screen scenes)
@@ -174,6 +176,8 @@
     moveX: 0, // move left (-1) / right (+1)
     moveY: 0, // move down (-1) / up (+1)
     ringSides: "both", // Holo Ring: both (bass left, highs right) | one (bass, away from the album art)
+    ringLook: "holo", // Holo Ring: holo | glow | dots | lines | hud
+    bounce: 0.75, // VU Meters / Holo Ring: how much the needles swing past (0 = none)
     ringOff: 0.5, // Holo Ring: how far off the edge the rings sit (more = less of them shows)
     gaugeLook: "modern", // Rev Counter: modern | classic
     circleAt: "middle", // circle styles: middle of the view, or round the album art
@@ -2658,7 +2662,9 @@ void main() {
     for (let i = 0; i < 8; i++) { lo += bandAt((i / 7) * 0.25); hi += bandAt(0.3 + (i / 7) * 0.6); }
     const want = [Math.min(1.1, (lo / 8) * 1.25 * sens), Math.min(1.1, (hi / 8) * 1.9 * sens)];
     const sm = Math.max(0, Math.min(1, p.smoothing));
-    const k = 140 - 90 * sm, damp = 2 * Math.sqrt(k) * 0.42;
+    // Bounce: how far the needles swing past and wobble before settling
+    const bo = Math.max(0, Math.min(1, p.bounce === undefined ? 0.75 : p.bounce));
+    const k = 140 - 90 * sm, damp = 2 * Math.sqrt(k) * (1.05 - 0.85 * bo);
     const red = vuPos(0);
     for (let i = 0; i < 2; i++) {
       const m = st.m[i];
@@ -3069,36 +3075,124 @@ void main() {
         else ctx.arc(cx, cy, R * rr, Math.PI - span - 0.03, Math.PI + span + 0.03);
         ctx.stroke();
       }
-      const tw = Math.max(2, ((R * 1.06 * 2 * span) / n) * 0.5);
-      ctx.lineWidth = tw;
-      const pkT = Math.min(n - 1, Math.floor((m.pk / 1.12) * n));
-      for (let j = 0; j < n; j++) {
-        const t = (j + 0.5) / n, a = ang(t);
-        const on = t * 1.12 <= lvl, isPk = j === pkT && m.pk > 0.05;
-        const c = t * 1.12 > red ? HOT : mix(c0, c1, t);
-        const y = cy + Math.sin(a) * R;
-        const shim = holoShim(st.t, y);
-        ctx.strokeStyle = v.rgba(on || isPk ? mix(c, WHITE, 0.2) : c, (on ? 0.95 : isPk ? 0.7 : 0.1) * shim);
-        if (on) { ctx.shadowColor = v.rgba(c, 0.9); ctx.shadowBlur = tw * 2.5; }
-        ctx.beginPath();
-        vuLine(ctx, cx, cy, a, R * 0.86, R * 1.06);
+      const look = p.ringLook || "holo";
+      const lv = lvl / 1.12, rt = red / 1.12, pkt = Math.min(1, m.pk / 1.12);
+      // an arc of the ring from t0 to t1 (0 = bottom, 1 = top)
+      const arcT = (r, t0, t1) => { ctx.beginPath(); ctx.arc(cx, cy, r, ang(t0), ang(t1), sd < 0); };
+      if (look === "glow") {
+        // one smooth glowing band filling up the arc
+        ctx.lineCap = "butt";
+        ctx.lineWidth = R * 0.12;
+        ctx.strokeStyle = v.rgba(mix(c0, c1, 0.5), 0.08);
+        arcT(R * 0.96, 0, 1);
         ctx.stroke();
+        ctx.shadowBlur = R * 0.06;
+        const lo = Math.min(lv, rt);
+        if (lo > 0.002) {
+          const g = ctx.createLinearGradient(cx, cy + Math.sin(ang(0)) * R, cx, cy + Math.sin(ang(Math.max(lo, 0.01))) * R);
+          g.addColorStop(0, v.rgba(c0, 0.75));
+          g.addColorStop(1, v.rgba(mix(c1, WHITE, 0.25), 0.95));
+          ctx.strokeStyle = g;
+          ctx.shadowColor = v.rgba(c1, 0.8);
+          arcT(R * 0.96, 0, lo);
+          ctx.stroke();
+        }
+        if (lv > rt) {
+          ctx.strokeStyle = v.rgba(HOT, 0.9);
+          ctx.shadowColor = v.rgba(HOT, 0.8);
+          arcT(R * 0.96, rt, lv);
+          ctx.stroke();
+        }
         ctx.shadowBlur = 0;
+        if (pkt > lv + 0.01) {
+          ctx.lineWidth = R * 0.12;
+          ctx.strokeStyle = v.rgba(pkt > rt ? HOT : mix(c1, WHITE, 0.3), 0.7);
+          arcT(R * 0.96, pkt - 0.006, pkt);
+          ctx.stroke();
+        }
+        ctx.lineCap = "round";
+      } else if (look === "dots") {
+        // a row of round glowing dots, like LEDs
+        const nd = Math.max(12, Math.round(n * 0.8)), dr = Math.max(1.5, ((R * 2 * span) / nd) * 0.32);
+        const pkD = Math.min(nd - 1, Math.floor(pkt * nd));
+        for (let j = 0; j < nd; j++) {
+          const t = (j + 0.5) / nd, a = ang(t), on = t <= lv, isPk = j === pkD && m.pk > 0.05;
+          const c = t > rt ? HOT : mix(c0, c1, t);
+          ctx.fillStyle = v.rgba(on || isPk ? mix(c, WHITE, 0.25) : c, on ? 0.95 : isPk ? 0.7 : 0.1);
+          if (on) { ctx.shadowColor = v.rgba(c, 0.9); ctx.shadowBlur = dr * 3; }
+          ctx.beginPath();
+          ctx.arc(cx + Math.cos(a) * R * 0.96, cy + Math.sin(a) * R * 0.96, dr, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.shadowBlur = 0;
+        }
+      } else if (look === "lines") {
+        // thin sparse ticks, minimal
+        const nl = Math.max(10, Math.round(n * 0.55));
+        ctx.lineWidth = Math.max(1, R * 0.004);
+        for (let j = 0; j <= nl; j++) {
+          const t = j / nl, a = ang(t), on = t <= lv, big = j % 5 === 0;
+          const c = t > rt ? HOT : mix(c0, c1, t);
+          ctx.lineWidth = on ? Math.max(1.8, R * 0.009) : Math.max(1, R * 0.004);
+          ctx.strokeStyle = v.rgba(on ? mix(c, WHITE, 0.3) : c, on ? 0.95 : 0.16);
+          if (on) { ctx.shadowColor = v.rgba(c, 0.8); ctx.shadowBlur = R * 0.02; }
+          ctx.beginPath();
+          vuLine(ctx, cx, cy, a, R * (big ? 0.84 : 0.9), R * 1.04);
+          ctx.stroke();
+          ctx.shadowBlur = 0;
+        }
+      } else if (look === "hud") {
+        // chunky segments with a peak marker
+        const ns = Math.max(10, Math.round(n * 0.6));
+        ctx.lineCap = "butt";
+        ctx.lineWidth = R * 0.11;
+        for (let j = 0; j < ns; j++) {
+          const t0 = j / ns, t1 = (j + 1) / ns, t = (t0 + t1) / 2;
+          const c = t > rt ? HOT : mix(c0, c1, t);
+          ctx.strokeStyle = v.rgba(c, t <= lv ? 0.85 : 0.08);
+          arcT(R * 0.96, t0 + 0.18 / ns, t1 - 0.18 / ns);
+          ctx.stroke();
+        }
+        ctx.strokeStyle = v.rgba(pkt > rt ? HOT : c1, 0.9);
+        ctx.lineWidth = Math.max(2, R * 0.014);
+        ctx.beginPath();
+        vuLine(ctx, cx, cy, ang(pkt), R * 0.88, R * 1.04);
+        ctx.stroke();
+        ctx.lineCap = "round";
+      } else {
+        const tw = Math.max(2, ((R * 1.06 * 2 * span) / n) * 0.5);
+        ctx.lineWidth = tw;
+        const pkT = Math.min(n - 1, Math.floor((m.pk / 1.12) * n));
+        for (let j = 0; j < n; j++) {
+          const t = (j + 0.5) / n, a = ang(t);
+          const on = t * 1.12 <= lvl, isPk = j === pkT && m.pk > 0.05;
+          const c = t * 1.12 > red ? HOT : mix(c0, c1, t);
+          const y = cy + Math.sin(a) * R;
+          const shim = holoShim(st.t, y);
+          ctx.strokeStyle = v.rgba(on || isPk ? mix(c, WHITE, 0.2) : c, (on ? 0.95 : isPk ? 0.7 : 0.1) * shim);
+          if (on) { ctx.shadowColor = v.rgba(c, 0.9); ctx.shadowBlur = tw * 2.5; }
+          ctx.beginPath();
+          vuLine(ctx, cx, cy, a, R * 0.86, R * 1.06);
+          ctx.stroke();
+          ctx.shadowBlur = 0;
+        }
       }
-      // the glowing needle line across the ring
-      const na = ang(lvl / 1.12), nc = mix(c1, WHITE, 0.45);
-      ctx.strokeStyle = v.rgba(nc, 0.35);
-      ctx.lineWidth = Math.max(4, R * 0.03);
-      ctx.beginPath();
-      vuLine(ctx, cx, cy, na, R * 0.76, R * 1.16);
-      ctx.stroke();
-      ctx.strokeStyle = v.rgba(nc, 0.95);
-      ctx.lineWidth = Math.max(1.2, R * 0.006);
-      ctx.stroke();
+      // the glowing needle line across the ring (Lines: longer and thinner)
+      const na = ang(lv), nc = lv > rt ? mix(HOT, WHITE, 0.3) : mix(c1, WHITE, 0.45);
+      const [n0, n1] = look === "lines" ? [0.7, 1.12] : [0.76, 1.16];
+      if (look !== "hud") {
+        ctx.strokeStyle = v.rgba(nc, look === "lines" ? 0.2 : 0.35);
+        ctx.lineWidth = Math.max(4, R * 0.03);
+        ctx.beginPath();
+        vuLine(ctx, cx, cy, na, R * n0, R * n1);
+        ctx.stroke();
+        ctx.strokeStyle = v.rgba(nc, 0.95);
+        ctx.lineWidth = Math.max(1.2, R * 0.006);
+        ctx.stroke();
+      }
     }
     ctx.restore();
     const vis = R * 1.2 - off;
-    for (const [sd] of sides) if (vis > 0) holoScan(ctx, sd < 0 ? 0 : w - vis, cy - R * 1.2, vis, R * 2.4, st.t);
+    if (p.ringLook === "holo" || !p.ringLook) for (const [sd] of sides) if (vis > 0) holoScan(ctx, sd < 0 ? 0 : w - vis, cy - R * 1.2, vis, R * 2.4, st.t);
   };
 
   // Rev Counter: a car's rev counter. The needle follows the loudness (the
@@ -5543,14 +5637,14 @@ void main() {
             <div class="lp-row"><div class="lp-label"><span>Colour changes</span></div>${seg("colorMove", [["move", "Moving"], ["still", "Still"]], "style")}</div>
             <div class="lp-colors" data-show-color><label><input type="color" data-key="color1" data-scope="style">Colour 1</label><label><input type="color" data-key="color2" data-scope="style">Colour 2</label></div>`)}
           ${group("Appearance", slider("opacity", "Opacity", 0.1, 1, 0.05, "style") + slider("blur", "Blur", 0, 20, 0.5, "style") + slider("brightness", "Brightness", 0.2, 1.6, 0.05, "style") + slider("size", "Size", 0.4, 2, 0.05, "style"))}
-          ${group("Layout", slider("barCount", "Bar count", 16, 128, 1, "style", u("barCount")) + `<div class="lp-row" data-uses="${u("position")}"><div class="lp-label"><span>Position</span></div>${seg("position", [["bottom", "Bottom"], ["top", "Top"], ["both", "Both"]], "style")}</div><div class="lp-row" data-uses="${u("variant")}"><div class="lp-label"><span>Look</span></div>${seg("variant", [["poster", "Poster"], ["brutalist", "Brutalist"]], "style")}</div><div class="lp-row" data-uses="${u("neuroLook")}"><div class="lp-label"><span>Look</span></div>${seg("neuroLook", [["mesh", "Mesh"], ["lines", "Lines"], ["ridges", "Ridges"]], "style")}</div><div class="lp-row" data-uses="${u("vuFace")}"><div class="lp-label"><span>Look</span></div>${seg("vuFace", [["night", "Classic"], ["minimal", "Minimal"], ["holo", "Holo"], ["hud", "HUD"]], "style")}</div><div class="lp-row" data-uses="${u("vuMeters")}"><div class="lp-label"><span>Meters</span></div>${seg("vuMeters", [["both", "Both"], ["split", "Split"], ["bass", "Bass only"]], "style")}</div><div class="lp-row" data-uses="${u("gaugeLook")}"><div class="lp-label"><span>Look</span></div>${seg("gaugeLook", [["modern", "Modern"], ["classic", "Classic"]], "style")}</div><div class="lp-row" data-uses="${u("ringSides")}"><div class="lp-label"><span>Sides</span></div>${seg("ringSides", [["both", "Both sides"], ["one", "One side"]], "style")}</div>${slider("ringOff", "Offset", 0, 1, 0.05, "style", u("ringOff"))}<div class="lp-row" data-uses="${u("fit")}"><div class="lp-label"><span>Fit</span></div>${seg("fit", [["full", "Full width"], ["art", "Beside art"]], "style")}</div>${slider("moveX", "Left / right", -1, 1, 0.05, "style", u("moveX"))}${slider("moveY", "Up / down", -1, 1, 0.05, "style", u("moveY"))}<div class="lp-row" data-uses="${u("circleAt")}"><div class="lp-label"><span>Circle at</span></div>${seg("circleAt", [["middle", "Middle"], ["art", "Album art"]], "style")}</div><div class="lp-row" data-uses="${u("mcColor")}"><div class="lp-label"><span>Bar colour</span></div>${seg("mcColor", [["flow", "Flow"], ["frequency", "Freq."], ["height", "Area"], ["bar", "Bar"], ["solid", "Solid"]], "style")}</div><div class="lp-row" data-uses="${u("beatEvery")}"><div class="lp-label"><span>Change every</span></div>${seg("beatEvery", [["1", "Beat"], ["2", "2"], ["4", "4"], ["8", "8 beats"]], "style")}</div>`, [...new Set([...USES.barCount, ...USES.position, ...USES.variant, ...USES.neuroLook, ...USES.vuFace, ...USES.vuMeters, ...USES.moveX, ...USES.gaugeLook, ...USES.ringSides, ...USES.circleAt, ...USES.mcColor, ...USES.beatEvery])].join(","))}
+          ${group("Layout", slider("barCount", "Bar count", 16, 128, 1, "style", u("barCount")) + `<div class="lp-row" data-uses="${u("position")}"><div class="lp-label"><span>Position</span></div>${seg("position", [["bottom", "Bottom"], ["top", "Top"], ["both", "Both"]], "style")}</div><div class="lp-row" data-uses="${u("variant")}"><div class="lp-label"><span>Look</span></div>${seg("variant", [["poster", "Poster"], ["brutalist", "Brutalist"]], "style")}</div><div class="lp-row" data-uses="${u("neuroLook")}"><div class="lp-label"><span>Look</span></div>${seg("neuroLook", [["mesh", "Mesh"], ["lines", "Lines"], ["ridges", "Ridges"]], "style")}</div><div class="lp-row" data-uses="${u("vuFace")}"><div class="lp-label"><span>Look</span></div>${seg("vuFace", [["night", "Classic"], ["minimal", "Minimal"], ["holo", "Holo"], ["hud", "HUD"]], "style")}</div><div class="lp-row" data-uses="${u("vuMeters")}"><div class="lp-label"><span>Meters</span></div>${seg("vuMeters", [["both", "Both"], ["split", "Split"], ["bass", "Bass only"]], "style")}</div><div class="lp-row" data-uses="${u("gaugeLook")}"><div class="lp-label"><span>Look</span></div>${seg("gaugeLook", [["modern", "Modern"], ["classic", "Classic"]], "style")}</div><div class="lp-row" data-uses="${u("ringSides")}"><div class="lp-label"><span>Sides</span></div>${seg("ringSides", [["both", "Both sides"], ["one", "One side"]], "style")}</div><div class="lp-row" data-uses="${u("ringLook")}"><div class="lp-label"><span>Look</span></div>${seg("ringLook", [["holo", "Holo"], ["glow", "Glow"], ["dots", "Dots"], ["lines", "Lines"], ["hud", "HUD"]], "style")}</div>${slider("ringOff", "Offset", 0, 1, 0.05, "style", u("ringOff"))}<div class="lp-row" data-uses="${u("fit")}"><div class="lp-label"><span>Fit</span></div>${seg("fit", [["full", "Full width"], ["art", "Beside art"]], "style")}</div>${slider("moveX", "Left / right", -1, 1, 0.05, "style", u("moveX"))}${slider("moveY", "Up / down", -1, 1, 0.05, "style", u("moveY"))}<div class="lp-row" data-uses="${u("circleAt")}"><div class="lp-label"><span>Circle at</span></div>${seg("circleAt", [["middle", "Middle"], ["art", "Album art"]], "style")}</div><div class="lp-row" data-uses="${u("mcColor")}"><div class="lp-label"><span>Bar colour</span></div>${seg("mcColor", [["flow", "Flow"], ["frequency", "Freq."], ["height", "Area"], ["bar", "Bar"], ["solid", "Solid"]], "style")}</div><div class="lp-row" data-uses="${u("beatEvery")}"><div class="lp-label"><span>Change every</span></div>${seg("beatEvery", [["1", "Beat"], ["2", "2"], ["4", "4"], ["8", "8 beats"]], "style")}</div>`, [...new Set([...USES.barCount, ...USES.position, ...USES.variant, ...USES.neuroLook, ...USES.vuFace, ...USES.vuMeters, ...USES.moveX, ...USES.gaugeLook, ...USES.ringSides, ...USES.ringLook, ...USES.circleAt, ...USES.mcColor, ...USES.beatEvery])].join(","))}
         </div>
         ${group("Background", slider("bgDim", "Darken background", 0, 0.9, 0.05, "global") + `<div class="lp-note">Calms Spicy Lyrics' moving background so the visual stands out. The lyrics and album art aren't touched.</div>`)}
       </div>
 
       <div class="lp-page" data-page="sound">
         <div class="lp-needs-style">
-          ${group("How it reacts", toggle("autoBeats", "Fit each song", "Learns each song's levels as it plays, so quiet and loud songs both move well and busy bass doesn't set off every beat (with the helper)") + slider("sensitivity", "Sensitivity", 0.3, 3, 0.05, "style") + slider("bassBoost", "Bass / kick boost", 0, 2, 0.05, "style", u("bassBoost")) + slider("smoothing", "Smoothing (fall speed)", 0, 1, 0.05, "style", u("smoothing")))}
+          ${group("How it reacts", toggle("autoBeats", "Fit each song", "Learns each song's levels as it plays, so quiet and loud songs both move well and busy bass doesn't set off every beat (with the helper)") + slider("sensitivity", "Sensitivity", 0.3, 3, 0.05, "style") + slider("bassBoost", "Bass / kick boost", 0, 2, 0.05, "style", u("bassBoost")) + slider("smoothing", "Smoothing (fall speed)", 0, 1, 0.05, "style", u("smoothing")) + slider("bounce", "Bounce", 0, 1, 0.05, "style", u("bounce")))}
           ${group("Beat effects", toggle("kickPulse", "Pulse on kicks", "The visual swells a little on each kick") + toggle("kickFlash", "Flash on kicks", "A soft flash of colour"))}
           ${group("Movement", slider("shake", "Shake", 0, 1, 0.05, "style", allBut) + slider("speed", "Speed", 0.1, 2.5, 0.05, "style", u("speed")) + slider("particles", "Particles", 0, 2.5, 0.05, "style", u("particles")))}
           <details class="lp-group lp-fine"><summary class="lp-gtitle">Fine-tune</summary>${slider("beatSens", "Beat sensitivity", 0, 1, 0.05, "global")}<div class="lp-beatrow"><button class="lp-tap">Tap to the beat</button><span class="lp-beatinfo"></span></div></details>
