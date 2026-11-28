@@ -26,6 +26,6 @@ window.Spicetify={Player:{data:{item:{uri:"spotify:track:x",name:"Neon Motorway"
  colorExtractor:async()=>({VIBRANT:"#e0408a",LIGHT_VIBRANT:"#7fd3ff",PROMINENT:"#6a4cff"}),
  getAudioData:async()=>{throw new Error("gone")},showNotification(m){console.log("NOTE",m)}};
 let wi=0;const lines=[...document.querySelectorAll('.line')];
-setInterval(()=>{const words=lines.flatMap(l=>[...l.querySelectorAll('.word')]);document.querySelectorAll('.Active').forEach(e=>e.classList.remove('Active'));
+setInterval(()=>{if(window.__hold)return;const words=lines.flatMap(l=>[...l.querySelectorAll('.word')]);document.querySelectorAll('.Active').forEach(e=>e.classList.remove('Active'));
  const w=words[wi%words.length];w.classList.add('Active');w.closest('.line').classList.add('Active');wi++;},350);
 </script><script src="../spicy-visualiser.js"></script></body></html>
