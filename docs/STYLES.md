@@ -114,7 +114,7 @@ Soft sheets of light rolling across the screen, like the wave on an old games-co
 ### Liquid
 ![Liquid](screenshots/styles/dnb.jpg)
 
-A flowing three-strand bass wave that pumps on kicks, over a few wide, flat colour bands sliding slowly past like the stripes on a tape deck. On every snare the bands brighten for a moment and the picture glitches sideways. Made with drum & bass in mind.
+A flowing three-strand bass wave that pumps on kicks, with speed streaks racing past and a flash on every snare. Made with drum & bass in mind.
 
 ---
 

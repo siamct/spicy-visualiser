@@ -136,7 +136,7 @@
   const MODEL = {};
   const USES = {
     barCount: ["rgbsplit", "holospec", "monstercat", "mirror", "radial"],
-    particles: ["particles", "monstercat", "warp", "trap"],
+    particles: ["dnb", "particles", "monstercat", "warp", "trap"],
     position: ["monstercat", "mirror", "ascii"],
     variant: ["geometric"],
     beatEvery: ["nebula", "underwater", "sunset", "nightsky", "silk", "tvpixels", "geometric", "bauhaus", "plasma", "ledplasma", "sub", "trap", "neuro", "ribbon", "rain", "lava", "smoke", "tunnel", "aurora", "oil", "galaxy", "prism", "ombre"],
@@ -2069,33 +2069,42 @@
   const cyc = (q) => 1 - Math.abs((((q % 2) + 2) % 2) - 1); // 0..1..0, no jumps
 
   // ---------------------------------------------------------------------------
-  // Liquid (Drum & Bass): a growling "reese" bass wave (three detuned
-  // strands) that pumps on kicks, over a few wide flat colour bands sliding
-  // slowly past like the stripes on a tape deck (no thin lines, no glow).
-  // On every snare the bands brighten for a moment and there's a quick
-  // horizontal glitch.
+  // Drum & Bass: a growling "reese" bass wave (three detuned strands) that
+  // pumps on kicks, speed streaks racing past at breakbeat pace, and on every
+  // snare a white flash streak and a quick horizontal glitch.
   DRAW.dnb = (v, p, dt, t) => {
     const { ctx, w, h, U } = v;
     const e = shared.energy, bass = shared.bassPunch || 0, k = Math.min(1, shared.kick);
-    const st = v.dnb || (v.dnb = { flash: 0, glitch: 0, snareSeen: shared.snareSerial, phase: 0 });
-    // Flat bands: wide, dim, sliding slowly sideways (faster when loud).
-    if (!st.bands) st.bands = Array.from({ length: 5 }, (_, i) => ({ y: 0.12 + i * 0.17 + (Math.random() - 0.5) * 0.05, hh: 0.03 + Math.random() * 0.05, len: 0.35 + Math.random() * 0.5, x: Math.random(), sp: 0.03 + Math.random() * 0.05, c: i / 4 }));
+    const st = v.dnb || (v.dnb = { streaks: [], flash: 0, glitch: 0, snareSeen: shared.snareSerial, phase: 0 });
+    // Streaks.
+    const want = Math.round(22 * p.particles); // was 60: too many lines
+    const S2 = st.streaks;
+    const spawn = (bright) => ({ x: w + Math.random() * w * (bright ? 0.1 : 1), y: Math.random() * h, len: (40 + Math.random() * 160) * U, z: bright ? 1 : 0.25 + Math.random() * 0.75, c: Math.random(), bright });
+    while (S2.filter((q) => !q.bright).length < want) S2.push(spawn(false));
     if (st.snareSeen !== shared.snareSerial) {
       st.snareSeen = shared.snareSerial;
       st.flash = 1;
       st.glitch = 1;
+      for (let i = 0; i < 3; i++) S2.push(spawn(true));
     }
-    st.flash *= Math.exp(-dt * 7);
-    ctx.save();
-    ctx.globalCompositeOperation = "source-over";
-    for (const q of st.bands) {
-      q.x -= dt * q.sp * (0.6 + 1.2 * e) * p.speed;
-      if (q.x + q.len < 0) q.x += 1 + q.len;
-      const col = mix([10, 10, 14], colorAt(q.c), 0.26 + 0.22 * st.flash);
-      ctx.fillStyle = v.rgba(col, A_(0.4, v));
-      for (const xx of [q.x, q.x + 1 + q.len]) ctx.fillRect(xx * w, q.y * h, q.len * w, q.hh * h);
+    const sp = (500 + 1500 * e + 900 * k) * U * p.speed;
+    ctx.lineCap = "round";
+    for (let i = S2.length - 1; i >= 0; i--) {
+      const q = S2[i];
+      q.x -= sp * q.z * (q.bright ? 1.6 : 1) * dt;
+      if (q.x + q.len < -10) {
+        if (q.bright || S2.length > want + 10) S2.splice(i, 1);
+        else Object.assign(q, spawn(false), { x: w + Math.random() * 40 * U });
+        continue;
+      }
+      const col = q.bright ? WHITE : mix(WHITE, colorAt(q.c), 0.6);
+      ctx.strokeStyle = v.rgba(col, (q.bright ? 0.8 : 0.08 + 0.25 * q.z) * (0.6 + 0.6 * e));
+      ctx.lineWidth = (q.bright ? 2.2 : 0.6 + 1.4 * q.z) * U;
+      ctx.beginPath();
+      ctx.moveTo(q.x, q.y);
+      ctx.lineTo(q.x + q.len * (q.bright ? 1.5 : 1), q.y);
+      ctx.stroke();
     }
-    ctx.restore();
     // Reese bass wave.
     const y0 = h * 0.74;
     const A = h * 0.13 * p.size * (0.12 + 0.9 * bass + 0.45 * k);
@@ -2119,7 +2128,14 @@
       ctx.lineWidth = (strand === 0 ? 2 : 3.5) * U * (1 + 0.6 * k);
       ctx.stroke();
     }
-    // Snare: glitch slices.
+    v.soft(w / 2, y0, Math.max(w, h) * 0.32, colorAt(0.5), 0.12 + 0.3 * bass + 0.25 * k);
+    // Snare: flash + glitch slices.
+    st.flash *= Math.exp(-dt * 9);
+    if (st.flash > 0.02) {
+      ctx.globalAlpha = A_(0.1 * st.flash, v);
+      ctx.drawImage(softSprite(WHITE), -w * 0.2, -h * 0.4, w * 1.4, h * 1.8);
+      ctx.globalAlpha = 1;
+    }
     st.glitch *= Math.exp(-dt * 14);
     if (st.glitch > 0.15) {
       ctx.save();
